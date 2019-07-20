@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
-</html>
+{# templates/common/about.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}About{% endblock %}
+
+{% block body %}
+    <h2>Wer ist Nakade?</h2>
+{% endblock %}
