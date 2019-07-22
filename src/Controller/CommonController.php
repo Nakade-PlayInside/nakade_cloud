@@ -24,27 +24,68 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Exception;
 
 /**
- * Class Common!
+ * Class Common Controller!
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class Common extends AbstractController
+class CommonController extends AbstractController
 {
     /**
      * The about page!
      *
      * @return Response
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @Route("/about", name="common_about")
      */
     public function about()
     {
-        //$number = random_int(0, 100);
-
         return $this->render('common/about.html.twig');
+    }
+
+    /**
+     * The imprint page!
+     *
+     * @return Response
+     *
+     * @throws Exception
+     *
+     * @Route("/imprint", name="common_imprint")
+     */
+    public function imprint()
+    {
+        return $this->render('common/imprint.html.twig');
+    }
+
+    /**
+     * The privacy statement!
+     *
+     * @return Response
+     *
+     * @throws Exception
+     *
+     * @Route("/privacy", name="common_privacy")
+     */
+    public function privacy()
+    {
+        return $this->render('common/privacy.html.twig');
+    }
+
+    /**
+     * The contact page!
+     *
+     * @return Response
+     *
+     * @throws Exception
+     *
+     * @Route("/contact", name="common_contact")
+     */
+    public function contact()
+    {
+        return $this->render('common/contact.html.twig');
     }
 }

@@ -10,8 +10,11 @@
         <div id="upperbar">
             {% block upperbar %}
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
+                    <li><a href="{{ path('homepage') }}">Home</a></li>
+                    <li><a href="{{ path('common_about') }}">About</a></li>
+                    <li><a href="{{ path('common_imprint') }}">Impressum</a></li>
+                    <li><a href="{{ path('common_contact') }}">Kontakt</a></li>
+                    <li><a href="{{ path('common_privacy') }}">Datenschutz</a></li>
                 </ul>
             {% endblock %}
         </div>
