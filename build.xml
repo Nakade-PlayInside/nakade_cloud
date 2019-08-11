@@ -26,9 +26,17 @@
     </target>
     <!-- END -->
 
-    <exec executable="phpunit" failonerror="true">
-        <arg line="--coverage-clover ${basedir}/build/logs/clover.xml
-                --coverage-html ${basedir}/build/coverage/
-                ."/>
-    </exec>
+    <!-- COMPOSER -->
+    <target name="composer">
+        <echo message="Running composer self-update ..." />
+        <exec executable="composer" checkreturn="true" passthru="true">
+            <arg value="self-update" />
+        </exec>
+        <echo message="Running composer install ..." />
+        <exec executable="composer" checkreturn="true" passthru="true">
+            <arg value="install" />
+            <arg value="--no-interaction" />
+        </exec>
+    </target>
+    <!-- END -->
 </project>
