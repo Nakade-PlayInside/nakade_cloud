@@ -2,11 +2,15 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/images/nakade_256x256.fe9b0659.png') }}">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
     </head>
 
     <body>
+    <img src="{{ asset('build/images/mumm.png') }}" alt="Symfony!"/>
         <div id="upperbar">
             {% block upperbar %}
                 <ul>
@@ -21,6 +25,8 @@
         <div id="content">
             {% block body %}{% endblock %}
         </div>
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
     </body>
 </html>
