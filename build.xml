@@ -29,11 +29,11 @@
     <!-- COMPOSER -->
     <target name="composer">
         <echo message="Running composer self-update ..." />
-        <exec executable="composer">
+        <exec executable="/var/lib/jenkins/composer">
             <arg value="self-update" />
         </exec>
         <echo message="Running composer install ..." />
-        <exec executable="composer">
+        <exec executable="/var/lib/jenkins/composer">
             <arg value="install" />
             <arg value="--no-interaction" />
         </exec>
