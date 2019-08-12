@@ -25,11 +25,11 @@
             <arg value="https://getcomposer.org/composer.phar" />
         </exec>
         <echo message="Running composer self-update ..." />
-        <exec executable="/var/lib/jenkins/composer">
+        <exec executable="${basedir}/composer.phar">
             <arg value="self-update" />
         </exec>
         <echo message="Running composer install ..." />
-        <exec executable="/var/lib/jenkins/composer" failonerror="true">
+        <exec executable="${basedir}/composer.phar" failonerror="true">
             <arg value="install" />
             <arg value="--no-interaction" />
         </exec>
