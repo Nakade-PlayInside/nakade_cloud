@@ -7,7 +7,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, list, composer" />
+    <target name="full-suite" depends="date, composer" />
     <!-- END -->
 
     <!-- DATE -->
@@ -17,23 +17,19 @@
     </target>
     <!-- END -->
 
-    <!-- LIST -->
-    <target name="list">
-        <echo message="Listing source folder ..."/>
-        <exec executable="ls">
-            <arg line="-l ${source}" />
-        </exec>
-    </target>
-    <!-- END -->
-
     <!-- COMPOSER -->
     <target name="composer">
+        <echo message="Download composer ..." />
+        <exec executable="wget" failonerror="true">
+            <arg value="-nc" />
+            <arg value="https://getcomposer.org/composer.phar" />
+        </exec>
         <echo message="Running composer self-update ..." />
         <exec executable="/var/lib/jenkins/composer">
             <arg value="self-update" />
         </exec>
         <echo message="Running composer install ..." />
-        <exec executable="/var/lib/jenkins/composer">
+        <exec executable="/var/lib/jenkins/composer" failonerror="true">
             <arg value="install" />
             <arg value="--no-interaction" />
         </exec>
