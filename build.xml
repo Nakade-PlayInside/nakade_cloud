@@ -29,7 +29,7 @@
     <!-- COMPOSER -->
     <target name="composer">
         <echo message="Running composer self-update ..." />
-        <exec executable="sudo composer">
+        <exec executable="composer">
             <arg value="self-update" />
         </exec>
         <echo message="Running composer install ..." />
