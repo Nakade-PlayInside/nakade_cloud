@@ -7,7 +7,13 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, prepare, lint, phploc, composer" />
+    <target name="full-suite" depends="date, analysis, composer" />
+    <!-- END -->
+
+    <!-- ANALYSIS -->
+    <target name="analysis"
+            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd"
+            description="Performs static analysis" />
     <!-- END -->
 
     <!-- DATE -->
@@ -87,6 +93,76 @@
     </target>
     <!-- END -->
 
+    <!-- PDEPEND -->
+    <target name="pdepend"
+            unless="pdepend.done"
+            depends="prepare"
+            description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within
+             a continuous integration environment.">
+        <echo message="Calculate software metrics ..." />
+        <exec executable="pdepend">
+            <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+            <arg path="${basedir}/src" />
+        </exec>
+        <property name="pdepend.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- PHPCS -->
+    <target name="phpcs"
+            unless="phpcs.done"
+            depends="prepare"
+            description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
+        <echo message="Check coding style ..." />
+        <exec executable="phpcs" output="/dev/null">
+            <arg value="--report=checkstyle" />
+            <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+            <arg value="--standard=PSR2" />
+            <arg value="--extensions=php" />
+            <arg value="--ignore=autoload.php" />
+            <arg path="${basedir}/src" />
+            <arg path="${basedir}/tests" />
+        </exec>
+
+        <property name="phpcs.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- PHPMD -->
+    <target name="phpmd"
+            unless="phpmd.done"
+            depends="prepare"
+            description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <echo message="Mess detection ..." />
+        <exec executable="phpmd">
+            <arg path="${basedir}/src" />
+            <arg value="xml" />
+            <arg path="${basedir}/build/phpmd.xml" />
+            <arg value="--reportfile" />
+            <arg path="${basedir}/build/logs/pmd.xml" />
+        </exec>
+        <property name="phpmd.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- PHPCPD -->
+    <target name="phpcpd"
+            unless="phpcpd.done"
+            depends="prepare"
+            description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <echo message="Copy and paste detection ..." />
+        <exec executable="phpcpd">
+            <arg value="--log-pmd" />
+            <arg path="${basedir}/build/logs/pmd-cpd.xml" />
+            <arg path="${basedir}/src" />
+        </exec>
+
+        <property name="phpcpd.done" value="true"/>
+    </target>
+    <!-- END -->
+
     <!-- COMPOSER -->
     <target name="composer" unless="composer.done" description="Install Vendor code ...">
         <echo message="Running composer self-update ..." />
@@ -101,7 +177,5 @@
         <property name="composer.done" value="true"/>
     </target>
     <!-- END -->
-
-
 
 </project>
