@@ -7,7 +7,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, lint, composer" />
+    <target name="full-suite" depends="date, prepare, lint, composer" />
     <!-- END -->
 
     <!-- DATE -->
@@ -17,10 +17,40 @@
     </target>
     <!-- END -->
 
+    <!-- CLEAN -->
+    <target name="clean"
+            unless="clean.done"
+            description="Cleanup build artifacts">
+        <delete dir="${basedir}/build/api"/>
+        <delete dir="${basedir}/build/coverage"/>
+        <delete dir="${basedir}/build/logs"/>
+        <delete dir="${basedir}/build/pdepend"/>
+        <delete dir="${basedir}/build/phpdox"/>
+        <property name="clean.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- PREPARE -->
+    <target name="prepare"
+            unless="prepare.done"
+            depends="clean"
+            description="Prepare for build">
+        <echo message="Create build directories ..." />
+        <mkdir dir="${basedir}/build/api"/>
+        <mkdir dir="${basedir}/build/coverage"/>
+        <mkdir dir="${basedir}/build/logs"/>
+        <mkdir dir="${basedir}/build/pdepend"/>
+        <mkdir dir="${basedir}/build/phpdox"/>
+        <property name="prepare.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- LINT -->
     <target name="lint"
             unless="lint.done"
             description="Perform syntax check of sourcecode files">
-        <apply executable="php" taskname="lint">
+        <echo message="Checking php syntax ..." />
+        <apply executable="php" taskname="lint" failonerror="true">
             <arg value="-l" />
 
             <fileset dir="${basedir}/src">
@@ -33,12 +63,12 @@
                 <modified />
             </fileset>
         </apply>
-
         <property name="lint.done" value="true"/>
     </target>
+    <!-- END -->
 
     <!-- COMPOSER -->
-    <target name="composer">
+    <target name="composer" unless="composer.done" description="Install Vendor code ...">
         <echo message="Running composer self-update ..." />
         <exec executable="/var/lib/jenkins/composer">
             <arg value="self-update" />
@@ -48,6 +78,7 @@
             <arg value="install" />
             <arg value="--no-interaction" />
         </exec>
+        <property name="composer.done" value="true"/>
     </target>
     <!-- END -->
 
