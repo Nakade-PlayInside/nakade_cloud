@@ -19,17 +19,12 @@
 
     <!-- COMPOSER -->
     <target name="composer">
-        <echo message="Download composer ..." />
-        <exec executable="wget" failonerror="true">
-            <arg value="-nc" />
-            <arg value="https://getcomposer.org/composer.phar" />
-        </exec>
         <echo message="Running composer self-update ..." />
-        <exec executable="${basedir}/composer.phar">
+        <exec executable="/var/lib/jenkins/composer">
             <arg value="self-update" />
         </exec>
         <echo message="Running composer install ..." />
-        <exec executable="${basedir}/composer.phar" failonerror="true">
+        <exec executable="/var/lib/jenkins/composer" failonerror="true">
             <arg value="install" />
             <arg value="--no-interaction" />
         </exec>
