@@ -29,11 +29,11 @@
     <!-- COMPOSER -->
     <target name="composer">
         <echo message="Running composer self-update ..." />
-        <exec executable="composer" checkreturn="true" passthru="true">
+        <exec executable="composer">
             <arg value="self-update" />
         </exec>
         <echo message="Running composer install ..." />
-        <exec executable="composer" checkreturn="true" passthru="true">
+        <exec executable="composer">
             <arg value="install" />
             <arg value="--no-interaction" />
         </exec>
