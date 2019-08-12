@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="nation" default="full-suite" basedir=".">
+<project name="nakade" default="full-suite" basedir=".">
 
     <!-- GLOBAL VARIABLES -->
     <property name="source" value="app" />
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, prepare, lint, composer" />
+    <target name="full-suite" depends="date, prepare, lint, phploc, composer" />
     <!-- END -->
 
     <!-- DATE -->
@@ -68,7 +68,7 @@
     <!-- END -->
 
     <!-- PHPLOC -->
-    <target name="phploc-ci"
+    <target name="phploc"
             unless="phploc.done"
             depends="prepare"
             description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within
