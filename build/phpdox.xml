@@ -20,7 +20,7 @@
                 <source type="pmd">
                     <file name="pmd.xml" />
                 </source>
-                <source type="checkstyle">
+                <source type="phpcs">
                     <file name="checkstyle.xml" />
                 </source>
                 </enrich>
