@@ -2,7 +2,7 @@
     <project name="Nakade v2" source="../src" workdir="phpdox">
         <collector publiconly="false">
             <include mask="*.php" />
-            <exclude mask="Kernel.*"/>
+            <exclude mask="**Kernel**"/>
 
             <inheritance resolve="true">
                 <!--  @resolve - Flag to enable/disable resolving of inheritance -->
@@ -14,7 +14,7 @@
 
         </collector>
 
-        <generator output="build">
+        <generator output="./">
             <build engine="html" enabled="true" output="api">
                 <file extension="html" />
             </build>
