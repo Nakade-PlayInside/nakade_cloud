@@ -2,6 +2,16 @@
     <project name="Nakade v2" source="../src" workdir="build/phpdox">
         <collector publiconly="false">
             <include mask="*.php" />
+            <exclude mask="Kernel.*"/>
+
+            <inheritance resolve="true">
+                <!--  @resolve - Flag to enable/disable resolving of inheritance -->
+
+                <!--  You can define multiple (external) dependencies to be included -->
+                <!--  <dependency  path="" -->
+                <!--    @path  - path to a directory containing an index.xml for a dependency project -->
+            </inheritance>
+
         </collector>
 
         <generator output="build">
