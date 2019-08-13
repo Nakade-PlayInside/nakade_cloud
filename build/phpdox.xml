@@ -4,12 +4,9 @@
             <include mask="*.php" />
             <exclude mask="**Kernel**"/>
 
-            <inheritance resolve="true">
+            <inheritance resolve="false">
                 <!--  @resolve - Flag to enable/disable resolving of inheritance -->
 
-                <!--  You can define multiple (external) dependencies to be included -->
-                <!--  <dependency  path="" -->
-                <!--    @path  - path to a directory containing an index.xml for a dependency project -->
             </inheritance>
 
         </collector>
