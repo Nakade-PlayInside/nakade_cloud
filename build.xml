@@ -130,8 +130,6 @@
     </target>
     <!-- END -->
 
-
-
         <!-- PHPMD -->
     <target name="phpmd"
             unless="phpmd.done"
