@@ -170,7 +170,7 @@
         <echo message="Unit tests ..." />
         <exec executable="phpunit" resultproperty="result.phpunit">
             <arg value="--configuration"/>
-            <arg path="${basedir}/build/phpunit.xml"/>
+            <arg path="${basedir}/phpunit.xml.dist"/>
         </exec>
 
         <property name="phpunit.done" value="true"/>
