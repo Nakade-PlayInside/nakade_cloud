@@ -20,6 +20,9 @@
                 <source type="pmd">
                     <file name="pmd.xml" />
                 </source>
+                <source type="checkstyle">
+                    <file name="checkstyle.xml" />
+                </source>
                 </enrich>
             <build engine="html" enabled="true" output="api">
                 <file extension="html" />
