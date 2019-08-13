@@ -17,8 +17,8 @@
                 <source type="phploc">
                     <file name="phploc.xml" />
                 </source>
-                <source type="phpmd">
-                    <file name="phpmd.xml" />
+                <source type="pmd">
+                    <file name="pmd.xml" />
                 </source>
                 </enrich>
             <build engine="html" enabled="true" output="api">

@@ -190,7 +190,7 @@
     <!-- END -->
 
     <!-- PHPDOX -->
-    <target name="phpdox" unless="phpdox.done" depends="phploc,phpcs,phpmd"
+    <target name="phpdox" unless="phpdox.done" depends="phploc,phpcs, phpmd"
             description="Generate project documentation using phpDox">
         <echo message="Generate documentation ..." />
         <exec executable="phpdox" dir="${basedir}/build"/>
