@@ -117,7 +117,6 @@
             description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
         <echo message="Check coding style ..." />
         <exec executable="phpcs" output="/dev/null">
-            <arg value="--report-full" />
             <arg value="--report=checkstyle" />
             <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
             <arg value="--standard=${basedir}/build/phpcs.xml" />
