@@ -12,6 +12,11 @@
         </collector>
 
         <generator output="./">
+            <enrich base="${basedir}/build/logs">
+                <source type="phploc">
+                    <file name="phploc.xml" />
+                </source>
+            </enrich>
             <build engine="html" enabled="true" output="api">
                 <file extension="html" />
             </build>
