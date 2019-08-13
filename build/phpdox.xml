@@ -12,7 +12,7 @@
         </collector>
 
         <generator output="./">
-            <enrich base="${basedir}/build/logs">
+            <enrich base="${basedir}/logs">
                 <source type="phploc">
                     <file name="phploc.xml" />
                 </source>
