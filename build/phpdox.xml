@@ -13,10 +13,14 @@
 
         <generator output="./">
             <enrich base="${basedir}/logs">
+                <source type="git" />
                 <source type="phploc">
                     <file name="phploc.xml" />
                 </source>
-            </enrich>
+                <source type="phpmd">
+                    <file name="phpmd.xml" />
+                </source>
+                </enrich>
             <build engine="html" enabled="true" output="api">
                 <file extension="html" />
             </build>
