@@ -12,7 +12,7 @@
 
     <!-- ANALYSIS -->
     <target name="analysis"
-            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd"
+            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, phpunit, phpdox, -check-failure"
             description="Performs static analysis" />
     <!-- END -->
 
@@ -130,7 +130,9 @@
     </target>
     <!-- END -->
 
-    <!-- PHPMD -->
+
+
+        <!-- PHPMD -->
     <target name="phpmd"
             unless="phpmd.done"
             depends="prepare"
@@ -160,6 +162,40 @@
         </exec>
 
         <property name="phpcpd.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- PHPUNIT -->
+    <target name="phpunit" unless="phpunit.done" depends="prepare" description="Run unit tests with PHPUnit">
+        <echo message="Unit tests ..." />
+        <exec executable="phpunit" resultproperty="result.phpunit">
+            <arg value="--configuration"/>
+            <arg path="${basedir}/build/phpunit.xml"/>
+        </exec>
+
+        <property name="phpunit.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- PHPUNIT CHECK FAILURE -->
+    <target name="-check-failure">
+        <fail message="PHPUnit did not finish successfully">
+            <condition>
+                <not>
+                    <equals arg1="${result.phpunit}" arg2="0"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+    <!-- END -->
+
+    <!-- PHPDOX -->
+    <target name="phpdox" unless="phpdox.done" depends="phploc,phpcs,phpmd"
+            description="Generate project documentation using phpDox">
+        <echo message="Generate documentation ..." />
+        <exec executable="phpdox" dir="${basedir}/build"/>
+
+        <property name="phpdox.done" value="true"/>
     </target>
     <!-- END -->
 

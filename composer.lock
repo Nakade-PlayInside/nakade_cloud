@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20c2ff41d1c6187807c4358dcfb2cbbf",
+    "content-hash": "e67b8bc6a49f16a2229d1f52ed1a050c",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -6095,7 +6095,7 @@
         },
         {
             "name": "escapestudios/symfony2-coding-standard",
-            "version": "3.8.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/djoos/Symfony-coding-standard.git",
@@ -6976,6 +6976,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "escapestudios/symfony2-coding-standard": 20,
         "friendsofphp/php-cs-fixer": 20,
         "phpmd/phpmd": 20
     },
