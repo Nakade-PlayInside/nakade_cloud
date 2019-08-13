@@ -7,12 +7,12 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, analysis, composer" />
+    <target name="full-suite" depends="date, analysis" />
     <!-- END -->
 
     <!-- ANALYSIS -->
     <target name="analysis"
-            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, phpunit, phpdox, -check-failure"
+            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, composer, phpunit, phpdox, -check-failure"
             description="Performs static analysis" />
     <!-- END -->
 
