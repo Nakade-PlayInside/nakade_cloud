@@ -184,7 +184,7 @@
         <exec executable="${basedir}/vendor/bin/simple-phpunit" resultproperty="result.phpunit">
             <arg value="--configuration"/>
             <arg path="${basedir}/phpunit.xml.dist"/>
-            <arg value="--coverage-html"/>
+            <arg value="--coverage-xml"/>
             <arg path="${basedir}/build/logs/coverage"/>
             <arg value="--coverage-clover"/>
             <arg path="${basedir}/build/logs/clover.xml"/>
