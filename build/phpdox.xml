@@ -23,7 +23,7 @@
                 <source type="checkstyle">
                     <file name="checkstyle.xml" />
                 </source>
-                <source type="php-unit">
+                <source type="phpunit">
                     <file name="crap4j.xml" />
                 </source>
             </enrich>
