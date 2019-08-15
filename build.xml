@@ -185,7 +185,7 @@
             <arg value="--configuration"/>
             <arg path="${basedir}/phpunit.xml.dist"/>
             <arg value="--coverage-html"/>
-            <arg path="${basedir}/build/coverage"/>
+            <arg path="${basedir}/build/logs/coverage"/>
             <arg value="--coverage-clover"/>
             <arg path="${basedir}/build/logs/clover.xml"/>
             <arg value="--coverage-crap4j"/>
