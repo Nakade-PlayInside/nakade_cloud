@@ -220,4 +220,20 @@
     </target>
     <!-- END -->
 
+    <!-- COPY FILES -->
+    <target name="copyToDeploy" description="Copy files to deploy folder.">
+        <copy todir="/var/www/stage">
+            <fileset dir="${basedir}">
+                <include name="**" />
+                <exclude name="**/_*/**" /> <!-- ignore files/folders starting with underscore -->
+                <exclude name="**/.git" />
+                <exclude name="**/tests" />
+                <exclude name="**/assets" />
+                <exclude name="build.xml" />
+            </fileset>
+        </copy>
+    </target>
+    <!-- END -->
+
+
 </project>
