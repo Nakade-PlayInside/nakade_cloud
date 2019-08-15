@@ -225,14 +225,14 @@
             unless="create.done"
             description="Create directory to deploy">
         <echo message="Create deploy directory ..." />
-        <mkdir dir="/var/www/stage"/>
+        <mkdir dir="/var/www/stage/test"/>
         <property name="create.done" value="true"/>
     </target>
     <!-- END -->
 
     <!-- COPY FILES -->
     <target name="copyToDeploy" depends="createDir" description="Copy files to deploy folder.">
-        <copy todir="/var/www/stage">
+        <copy todir="/var/www/stage/test">
             <fileset dir="${basedir}">
                 <include name="**" />
                 <exclude name="**/_*/**" /> <!-- ignore files/folders starting with underscore -->
