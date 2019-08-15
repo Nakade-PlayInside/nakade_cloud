@@ -7,7 +7,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, analysis" />
+    <target name="full-suite" depends="date, analysis, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
