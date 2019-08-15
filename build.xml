@@ -12,7 +12,7 @@
 
     <!-- ANALYSIS -->
     <target name="analysis"
-            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, composer, phpdox"
+            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, composer, phpunit, phpdox, -check-failure"
             description="Performs static analysis" />
     <!-- END -->
 
@@ -163,12 +163,35 @@
     </target>
     <!-- END -->
 
+    <!-- COMPOSER -->
+    <target name="composer" unless="composer.done" description="Install Vendor code ...">
+        <echo message="Running composer self-update ..." />
+        <exec executable="/var/lib/jenkins/composer">
+            <arg value="self-update" />
+        </exec>
+        <echo message="Running composer install ..." />
+        <exec executable="/var/lib/jenkins/composer" failonerror="true">
+            <arg value="install" />
+            <arg value="--no-interaction" />
+        </exec>
+        <property name="composer.done" value="true"/>
+    </target>
+    <!-- END -->
+
     <!-- PHPUNIT -->
     <target name="phpunit" unless="phpunit.done" depends="prepare" description="Run unit tests with PHPUnit">
         <echo message="Unit tests ..." />
-        <exec executable="phpunit" resultproperty="result.phpunit">
+        <exec executable="${basedir}/vendor/bin/simple-phpunit" resultproperty="result.phpunit">
             <arg value="--configuration"/>
             <arg path="${basedir}/phpunit.xml.dist"/>
+            <arg value="--coverage-html"/>
+            <arg path="${basedir}/build/coverage"/>
+            <arg value="--coverage-clover"/>
+            <arg path="${basedir}/build/logs/clover.xml"/>
+            <arg value="--coverage-crap4j"/>
+            <arg path="${basedir}/build/logs/crap4j.xml"/>
+            <arg value="--log-junit"/>
+            <arg path="${basedir}/build/logs/junit.xml"/>
         </exec>
 
         <property name="phpunit.done" value="true"/>
@@ -194,21 +217,6 @@
         <exec executable="phpdox" dir="${basedir}/build"/>
 
         <property name="phpdox.done" value="true"/>
-    </target>
-    <!-- END -->
-
-    <!-- COMPOSER -->
-    <target name="composer" unless="composer.done" description="Install Vendor code ...">
-        <echo message="Running composer self-update ..." />
-        <exec executable="/var/lib/jenkins/composer">
-            <arg value="self-update" />
-        </exec>
-        <echo message="Running composer install ..." />
-        <exec executable="/var/lib/jenkins/composer" failonerror="true">
-            <arg value="install" />
-            <arg value="--no-interaction" />
-        </exec>
-        <property name="composer.done" value="true"/>
     </target>
     <!-- END -->
 
