@@ -231,7 +231,7 @@
     <!-- END -->
 
     <!-- COPY FILES -->
-    <target name="copyToDeploy" description="Copy files to deploy folder.">
+    <target name="copyToDeploy" depends="createDir" description="Copy files to deploy folder.">
         <copy todir="/var/www/stage">
             <fileset dir="${basedir}">
                 <include name="**" />
