@@ -220,6 +220,16 @@
     </target>
     <!-- END -->
 
+    <!-- PREPARE -->
+    <target name="createDir"
+            unless="create.done"
+            description="Create directory to deploy">
+        <echo message="Create deploy directory ..." />
+        <mkdir dir="/var/www/stage"/>
+        <property name="create.done" value="true"/>
+    </target>
+    <!-- END -->
+
     <!-- COPY FILES -->
     <target name="copyToDeploy" description="Copy files to deploy folder.">
         <copy todir="/var/www/stage">
