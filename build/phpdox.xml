@@ -24,7 +24,7 @@
                     <file name="checkstyle.xml" />
                 </source>
                 <source type="phpunit">
-                    <file name="crap4j.xml" />
+                    <file name="../coverage/index.html" />
                 </source>
             </enrich>
             <build engine="html" enabled="true" output="api">
