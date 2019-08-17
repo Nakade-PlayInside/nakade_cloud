@@ -3,7 +3,7 @@
 <project name="nakade" default="full-suite" basedir=".">
 
     <!-- GLOBAL VARIABLES -->
-    <property name="source" value="app" />
+    <property name="deployDir" value="/var/www/produkt" />
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
@@ -220,19 +220,33 @@
     </target>
     <!-- END -->
 
+    <!-- YARN & ASSETS -->
+    <target name="createAssets"
+            unless="create.done"
+            description="Compile assets on production build">
+        <echo message="Compile assets ..." />
+        <exec executable="yarn">
+            <arg value="encore"/>
+            <arg value="production"/>
+        </exec>
+
+        <property name="create.done" value="true"/>
+    </target>
+    <!-- END -->
+
     <!-- PREPARE -->
     <target name="createDir"
             unless="create.done"
             description="Create directory to deploy">
-        <echo message="Create deploy directory ..." />
-        <mkdir dir="/var/www/stage/test"/>
+        <echo message="Create new deploy directory ..." />
+        <mkdir dir="${deployDir}/neu"/>
         <property name="create.done" value="true"/>
     </target>
     <!-- END -->
 
     <!-- COPY FILES -->
     <target name="copyToDeploy" depends="createDir" description="Copy files to deploy folder.">
-        <copy todir="/var/www/stage/test">
+        <copy todir="${deployDir}/neu">
             <fileset dir="${basedir}">
                 <include name="**" />
                 <exclude name="**/_*/**" /> <!-- ignore files/folders starting with underscore -->
