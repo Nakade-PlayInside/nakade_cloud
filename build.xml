@@ -260,7 +260,7 @@
 
     <!-- COPY FILES -->
     <target name="copyToDeploy" description="Copy files to deploy folder.">
-        <copy file="${project.basedir}/LICENSE" toFile="/var/www/produkt/neu/LICENSE">
+        <copy file="${basedir}/LICENSE" tofile="/var/www/produkt/neu/LICENSE">
         </copy>
     </target>
     <!-- END -->
