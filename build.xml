@@ -222,14 +222,14 @@
 
     <!-- YARN -->
     <target name="yarn"
-            unless="create.done"
+            unless="install.done"
             description="Install Yarn">
         <echo message="Install Yarn ..." />
         <exec executable="yarn">
             <arg value="install"/>
         </exec>
 
-        <property name="create.done" value="true"/>
+        <property name="install.done" value="true"/>
     </target>
     <!-- YARN & ASSETS -->
 
