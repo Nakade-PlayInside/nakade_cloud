@@ -236,7 +236,7 @@
     <!-- YARN & ASSETS -->
     <target name="createAssets"
             depends="yarn"
-            unless="create.done"
+            unless="createAssets.done"
             description="Compile assets on production build">
         <echo message="Compile assets ..." />
         <exec executable="yarn">
@@ -244,17 +244,17 @@
             <arg value="production"/>
         </exec>
 
-        <property name="create.done" value="true"/>
+        <property name="createAssets.done" value="true"/>
     </target>
     <!-- END -->
 
     <!-- PREPARE -->
     <target name="createDir"
-            unless="create.done"
+            unless="createDir.done"
             description="Create directory to deploy">
         <echo message="Create new deploy directory ..." />
         <mkdir dir="${deployDir}/neu"/>
-        <property name="create.done" value="true"/>
+        <property name="createDir.done" value="true"/>
     </target>
     <!-- END -->
 
