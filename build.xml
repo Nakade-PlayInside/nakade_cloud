@@ -260,14 +260,9 @@
 
     <!-- COPY FILES -->
     <target name="copyToDeploy" depends="createDir" description="Copy files to deploy folder.">
-        <copy todir="/var/www/produkt/neu">
+        <copy todir="/var/www/produkt/neu/">
             <fileset dir="${basedir}">
                 <include name="**" />
-                <exclude name="**/_*/**" /> <!-- ignore files/folders starting with underscore -->
-                <exclude name="**/.git" />
-                <exclude name="**/tests" />
-                <exclude name="**/assets" />
-                <exclude name="build.xml" />
             </fileset>
         </copy>
     </target>
