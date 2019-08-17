@@ -220,8 +220,22 @@
     </target>
     <!-- END -->
 
+    <!-- YARN -->
+    <target name="yarn"
+            unless="create.done"
+            description="Install Yarn">
+        <echo message="Install Yarn ..." />
+        <exec executable="yarn">
+            <arg value="install"/>
+        </exec>
+
+        <property name="create.done" value="true"/>
+    </target>
+    <!-- YARN & ASSETS -->
+
     <!-- YARN & ASSETS -->
     <target name="createAssets"
+            depends="yarn"
             unless="create.done"
             description="Compile assets on production build">
         <echo message="Compile assets ..." />
