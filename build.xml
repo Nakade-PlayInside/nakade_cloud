@@ -22,7 +22,8 @@
 
     <!-- DATE -->
     <target name="date">
-        <echo message="Printing system date ...${basedir}"/>
+        <property environment="env" />
+        <echo message="Printing system date ...${env.basedir}"/>
         <exec executable="date" />
     </target>
     <!-- END -->
