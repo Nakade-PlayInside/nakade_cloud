@@ -253,14 +253,14 @@
             unless="createDir.done"
             description="Create directory to deploy">
         <echo message="Create new deploy directory ..." />
-        <mkdir dir="/var/www/produkt/neu2"/>
+        <mkdir dir="/var/www/projekt/neu2"/>
         <property name="createDir.done" value="true"/>
     </target>
     <!-- END -->
 
     <!-- COPY FILES -->
-    <target name="copyToDeploy" description="Copy files to deploy folder.">
-        <copy file="${basedir}/LICENSE" tofile="/var/www/produkt/neu/LICENSE">
+    <target name="copyToDeploy" depends="createDir" description="Copy files to deploy folder.">
+        <copy file="${basedir}/LICENSE" tofile="/var/www/projekt/neu2/LICENSE">
         </copy>
     </target>
     <!-- END -->
