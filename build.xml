@@ -218,7 +218,7 @@
     <target name="phpdox" unless="phpdox.done" depends="phploc,phpcs, phpmd"
             description="Generate project documentation using phpDox">
         <echo message="Generate documentation ..." />
-        <exec executable="phpdox" dir="${env.basedir}/build"/>
+        <exec executable="phpdox" dir="${env.WORKSPACE}/build"/>
 
         <property name="phpdox.done" value="true"/>
     </target>
