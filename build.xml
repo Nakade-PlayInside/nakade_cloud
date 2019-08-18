@@ -7,11 +7,11 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, analysis, createAssets, copyToDeploy" />
+    <target name="full-suite" depends="date, analysis, deploy" />
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="preDeploy" depends="createAssets, copyToDeploy" />
+    <target name="deploy" depends="createAssets, copyToDeploy, chown" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -23,7 +23,7 @@
     <!-- DATE -->
     <target name="date">
         <property environment="env" />
-        <echo message="Printing system date ...${env.basedir}"/>
+        <echo message="Printing system date ...${env.WORKSPACE}"/>
         <exec executable="date" />
     </target>
     <!-- END -->
@@ -275,5 +275,15 @@
     </target>
     <!-- END -->
 
+    <!-- CHOWN -->
+    <target name="chown" depends="copyToDeploy" description="Change group owner.">
+        <property environment="env" />
+        <exec executable="chown -r jenkins:www-data">
+            <arg value="-r"/>
+            <arg value="jenkins:www-data"/>
+            <arg value="${deployDir}/${env.APP_VERSION}"/>
+        </exec>
+    </target>
+    <!-- END -->
 
 </project>
