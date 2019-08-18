@@ -256,6 +256,7 @@
     <target name="createDeploymentDir"
             unless="createDeploymentDir.done"
             description="Create directory to deploy">
+        <property environment="env" />
         <echo message="Create new deploy directory ..." />
         <mkdir dir="${deployDir}/${env.APP_VERSION}"/>
         <property name="createDeploymentDir.done" value="true"/>
@@ -264,6 +265,7 @@
 
     <!-- COPY FILES -->
     <target name="copyToDeploy" depends="createDeploymentDir" description="Copy files to deploy folder.">
+        <property environment="env" />
         <copy todir="${deployDir}/${env.APP_VERSION}">
             <fileset dir="${basedir}">
                 <exclude name="**/*.java"/>
