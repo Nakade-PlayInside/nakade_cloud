@@ -3,11 +3,15 @@
 <project name="nakade" default="full-suite" basedir=".">
 
     <!-- GLOBAL VARIABLES -->
-    <property name="deployDir" value="/var/www/produkt" />
+    <property name="deployDir" value="/var/www/projekt" />
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
     <target name="full-suite" depends="date, analysis, createAssets, copyToDeploy" />
+    <!-- END -->
+
+    <!-- AVAILABLE COMMANDS -->
+    <target name="preDeploy" depends="createAssets, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -214,7 +218,7 @@
     <target name="phpdox" unless="phpdox.done" depends="phploc,phpcs, phpmd"
             description="Generate project documentation using phpDox">
         <echo message="Generate documentation ..." />
-        <exec executable="phpdox" dir="${basedir}/build"/>
+        <exec executable="phpdox" dir="${env.basedir}/build"/>
 
         <property name="phpdox.done" value="true"/>
     </target>
@@ -222,14 +226,14 @@
 
     <!-- YARN -->
     <target name="yarn"
-            unless="install.done"
+            unless="yarn.done"
             description="Install Yarn">
         <echo message="Install Yarn ..." />
         <exec executable="yarn">
             <arg value="install"/>
         </exec>
 
-        <property name="install.done" value="true"/>
+        <property name="yarn.done" value="true"/>
     </target>
     <!-- YARN & ASSETS -->
 
@@ -248,19 +252,22 @@
     </target>
     <!-- END -->
 
-    <!-- PREPARE -->
-    <target name="createDir"
-            unless="createDir.done"
+    <!-- CREATE_DIR -->
+    <target name="createDeploymentDir"
+            unless="createDeploymentDir.done"
             description="Create directory to deploy">
         <echo message="Create new deploy directory ..." />
-        <mkdir dir="/var/www/projekt/neu2"/>
-        <property name="createDir.done" value="true"/>
+        <mkdir dir="${deployDir}/${env.APP_VERSION}"/>
+        <property name="createDeploymentDir.done" value="true"/>
     </target>
     <!-- END -->
 
     <!-- COPY FILES -->
-    <target name="copyToDeploy" depends="createDir" description="Copy files to deploy folder.">
-        <copy file="${basedir}/LICENSE" tofile="/var/www/projekt/neu2/LICENSE">
+    <target name="copyToDeploy" depends="createDeploymentDir" description="Copy files to deploy folder.">
+        <copy todir="${deployDir}/${env.APP_VERSION}">
+            <fileset dir="${env.basedir}">
+                <exclude name="**/*.java"/>
+            </fileset>
         </copy>
     </target>
     <!-- END -->
