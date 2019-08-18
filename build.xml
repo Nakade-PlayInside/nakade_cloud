@@ -22,7 +22,7 @@
 
     <!-- DATE -->
     <target name="date">
-        <echo message="Printing system date ..."/>
+        <echo message="Printing system date ...${basedir}"/>
         <exec executable="date" />
     </target>
     <!-- END -->
@@ -218,7 +218,7 @@
     <target name="phpdox" unless="phpdox.done" depends="phploc,phpcs, phpmd"
             description="Generate project documentation using phpDox">
         <echo message="Generate documentation ..." />
-        <exec executable="phpdox" dir="${env.WORKSPACE}/build"/>
+        <exec executable="phpdox" dir="${basedir}/build"/>
 
         <property name="phpdox.done" value="true"/>
     </target>
@@ -265,7 +265,7 @@
     <!-- COPY FILES -->
     <target name="copyToDeploy" depends="createDeploymentDir" description="Copy files to deploy folder.">
         <copy todir="${deployDir}/${env.APP_VERSION}">
-            <fileset dir="${env.basedir}">
+            <fileset dir="${basedir}">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
