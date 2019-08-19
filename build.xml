@@ -11,7 +11,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="deploy" depends="createAssets, copyToDeploy, a2ensite, finalReload" />
+    <target name="deploy" depends="createAssets, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -28,15 +28,23 @@
     </target>
     <!-- END -->
 
+    <!-- DATE -->
+    <target name="start">
+        <echo message="Toogle Website"/>
+        <exec executable="startJob.sh" />
+    </target>
+    <!-- END -->
+
     <!-- CLEAN -->
     <target name="clean"
             unless="clean.done"
             description="Cleanup build artifacts">
-        <delete dir="${basedir}/build/api"/>
-        <delete dir="${basedir}/build/coverage"/>
-        <delete dir="${basedir}/build/logs"/>
-        <delete dir="${basedir}/build/pdepend"/>
-        <delete dir="${basedir}/build/phpdox"/>
+        <property environment="env" />
+        <delete dir="${env.WORKSPACE}/build/api"/>
+        <delete dir="${env.WORKSPACE}/build/coverage"/>
+        <delete dir="${env.WORKSPACE}/build/logs"/>
+        <delete dir="${env.WORKSPACE}/build/pdepend"/>
+        <delete dir="${env.WORKSPACE}/build/phpdox"/>
         <property name="clean.done" value="true"/>
     </target>
     <!-- END -->
