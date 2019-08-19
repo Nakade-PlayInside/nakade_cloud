@@ -95,14 +95,15 @@
             description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within
              a continuous integration environment.">
         <echo message="Measure project size ..." />
+        <property environment="env" />
         <exec executable="phploc">
             <arg value="--count-tests" />
             <arg value="--log-csv" />
-            <arg path="${basedir}/build/logs/phploc.csv" />
+            <arg path="${env.WORKSPACE}/build/logs/phploc.csv" />
             <arg value="--log-xml" />
-            <arg path="${basedir}/build/logs/phploc.xml" />
-            <arg path="${basedir}/src" />
-            <arg path="${basedir}/tests" />
+            <arg path="${env.WORKSPACE}/build/logs/phploc.xml" />
+            <arg path="${env.WORKSPACE}/src" />
+            <arg path="${env.WORKSPACE}/tests" />
         </exec>
         <property name="phploc.done" value="true"/>
     </target>
@@ -115,11 +116,12 @@
             description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within
              a continuous integration environment.">
         <echo message="Calculate software metrics ..." />
+        <property environment="env" />
         <exec executable="pdepend">
-            <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
-            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
-            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
-            <arg path="${basedir}/src" />
+            <arg value="--jdepend-xml=${env.WORKSPACE}/build/logs/jdepend.xml" />
+            <arg value="--jdepend-chart=${env.WORKSPACE}/build/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${env.WORKSPACE}/build/pdepend/overview-pyramid.svg" />
+            <arg path="${env.WORKSPACE}/src" />
         </exec>
         <property name="pdepend.done" value="true"/>
     </target>
@@ -131,14 +133,15 @@
             depends="prepare"
             description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
         <echo message="Check coding style ..." />
+        <property environment="env" />
         <exec executable="phpcs" output="/dev/null">
             <arg value="--report=checkstyle" />
-            <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
-            <arg value="--standard=${basedir}/build/phpcs.xml" />
+            <arg value="--report-file=${env.WORKSPACE}/build/logs/checkstyle.xml" />
+            <arg value="--standard=${env.WORKSPACE}/build/phpcs.xml" />
             <arg value="--extensions=php" />
             <arg value="--ignore=autoload.php" />
-            <arg path="${basedir}/src" />
-            <arg path="${basedir}/tests" />
+            <arg path="${env.WORKSPACE}/src" />
+            <arg path="${env.WORKSPACE}/tests" />
         </exec>
 
         <property name="phpcs.done" value="true"/>
@@ -151,12 +154,13 @@
             depends="prepare"
             description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
         <echo message="Mess detection ..." />
+        <property environment="env" />
         <exec executable="phpmd">
-            <arg path="${basedir}/src" />
+            <arg path="${env.WORKSPACE}/src" />
             <arg value="xml" />
-            <arg path="${basedir}/build/phpmd.xml" />
+            <arg path="${env.WORKSPACE}/build/phpmd.xml" />
             <arg value="--reportfile" />
-            <arg path="${basedir}/build/logs/pmd.xml" />
+            <arg path="${env.WORKSPACE}/build/logs/pmd.xml" />
         </exec>
         <property name="phpmd.done" value="true"/>
     </target>
@@ -168,10 +172,11 @@
             depends="prepare"
             description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
         <echo message="Copy and paste detection ..." />
+        <property environment="env" />
         <exec executable="phpcpd">
             <arg value="--log-pmd" />
-            <arg path="${basedir}/build/logs/pmd-cpd.xml" />
-            <arg path="${basedir}/src" />
+            <arg path="${env.WORKSPACE}/build/logs/pmd-cpd.xml" />
+            <arg path="${env.WORKSPACE}/src" />
         </exec>
 
         <property name="phpcpd.done" value="true"/>
@@ -265,7 +270,9 @@
     </target>
     <!-- END -->
 
-    <!-- CREATE_DIR -->
+    <!-- RENAME OLD DIRECTORY IF BUILD SUCCESSFUL >
+
+     <!-- CREATE DIR -->
     <target name="createDeploymentDir"
             unless="createDeploymentDir.done"
             description="Create directory to deploy">
@@ -276,7 +283,7 @@
     </target>
     <!-- END -->
 
-    <!-- COPY FILES -->
+    <!-- DEPLOY FILES -->
     <target name="copyToDeploy" depends="createDeploymentDir" description="Copy files to deploy folder.">
         <property environment="env" />
         <copy todir="${deployDir}/${env.APP_VERSION}">
@@ -285,6 +292,9 @@
             </fileset>
         </copy>
     </target>
+    <!-- END -->
+
+    <!-- CHANGE OWNER -->
     <!-- END -->
 
     <!-- FINISH -->
@@ -301,23 +311,6 @@
             <arg value="-r"/>
             <arg value="jenkins:www-data"/>
             <arg value="${deployDir}/${env.APP_VERSION}"/>
-        </exec>
-    </target>
-    <!-- END -->
-
-    <!-- A2ENSITE -->
-    <target name="a2ensite" depends="copyToDeploy" description="Activate site.">
-        <property environment="env" />
-        <exec executable="/usr/bin/sudo /usr/sbin/a2ensite">
-            <arg value="nakade.conf"/>
-        </exec>
-    </target>
-    <!-- END -->
-
-    <!-- APACHE RELOAD -->
-    <target name="finalReload" depends="copyToDeploy" description="Reload Apache.">
-        <exec executable="/usr/bin/sudo /usr/sbin/service apache2">
-            <arg value="reload"/>
         </exec>
     </target>
     <!-- END -->
