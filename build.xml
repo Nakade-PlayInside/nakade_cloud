@@ -284,13 +284,17 @@
     <!-- END -->
 
     <!-- DEPLOY FILES -->
-    <target name="copyToDeploy" depends="createDeploymentDir" description="Copy files to deploy folder.">
+    <target name="copyToDeploy"
+            depends="createDeploymentDir"
+            unless="copyToDeploy.done"
+            description="Copy files to deploy folder.">
         <property environment="env" />
         <copy todir="${deployDir}/${env.APP_VERSION}">
             <fileset dir="${env.WORKSPACE}">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
+        <property name="copyToDeploy.done" value="true"/>
     </target>
     <!-- END -->
 
