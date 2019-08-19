@@ -184,13 +184,15 @@
     <!-- END -->
 
     <!-- COMPOSER -->
-    <target name="composer" unless="composer.done" description="Install Vendor code ...">
+    <target name="composer"
+            unless="composer.done"
+            description="Install Vendor code ...">
         <echo message="Running composer self-update ..." />
         <exec executable="/var/lib/jenkins/composer">
             <arg value="self-update" />
         </exec>
         <echo message="Running composer install ..." />
-        <exec executable="/var/lib/jenkins/composer" failonerror="true">
+        <exec executable="/var/lib/jenkins/composer">
             <arg value="install" />
             <arg value="--no-interaction" />
         </exec>
@@ -199,7 +201,11 @@
     <!-- END -->
 
     <!-- PHPUNIT -->
-    <target name="phpunit" unless="phpunit.done" depends="prepare" description="Run unit tests with PHPUnit">
+    <target name="phpunit"
+            unless="phpunit.done"
+            if="composer.done"
+            depends="prepare"
+            description="Run unit tests with PHPUnit">
         <echo message="Unit tests ..." />
         <property environment="env" />
         <exec executable="${env.WORKSPACE}/vendor/bin/simple-phpunit" resultproperty="result.phpunit">
@@ -279,7 +285,7 @@
         <property environment="env" />
         <echo message="Create new deploy directory ..." />
         <mkdir dir="${deployDir}/${env.APP_VERSION}"/>
-        <mkdir dir="${deployDir}/OLDER"/>
+        <mkdir dir="${deployDir}/LAST"/>
         <property name="createDeploymentDir.done" value="true"/>
     </target>
     <!-- END -->
@@ -290,7 +296,7 @@
             unless="moveOldVersion.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
-        <move todir="${deployDir}/OLDER">
+        <move todir="${deployDir}/LAST">
             <fileset dir="${deployDir}/190819-2">
             </fileset>
         </move>
