@@ -4,6 +4,10 @@
 
     <!-- GLOBAL VARIABLES -->
     <property name="deployDir" value="/var/www/projekt" />
+    <!-- version -->
+    <property environment="env"/>
+    <property name="MINOR" value="0"/>
+    <property name="VERSION" value="v3.${MINOR}.${env.APP_VERSION}" />
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
