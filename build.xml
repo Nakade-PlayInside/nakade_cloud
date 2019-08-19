@@ -11,7 +11,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="deploy" depends="createAssets, copyToDeploy, chown" />
+    <target name="deploy" depends="createAssets, copyToDeploy, a2ensite, finalReload" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -282,6 +282,23 @@
             <arg value="-r"/>
             <arg value="jenkins:www-data"/>
             <arg value="${deployDir}/${env.APP_VERSION}"/>
+        </exec>
+    </target>
+    <!-- END -->
+
+    <!-- A2ENSITE -->
+    <target name="a2ensite" depends="copyToDeploy" description="Activate site.">
+        <property environment="env" />
+        <exec executable="sudo a2ensite">
+            <arg value="nakade.conf"/>
+        </exec>
+    </target>
+    <!-- END -->
+
+    <!-- APACHE RELOAD -->
+    <target name="finalReload" depends="copyToDeploy" description="Reload Apache.">
+        <exec executable="sudo service apache2">
+            <arg value="reload"/>
         </exec>
     </target>
     <!-- END -->
