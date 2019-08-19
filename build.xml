@@ -289,7 +289,7 @@
     <!-- A2ENSITE -->
     <target name="a2ensite" depends="copyToDeploy" description="Activate site.">
         <property environment="env" />
-        <exec executable="sudo a2ensite">
+        <exec executable="sudo /usr/sbin/a2ensite">
             <arg value="nakade.conf"/>
         </exec>
     </target>
@@ -297,7 +297,7 @@
 
     <!-- APACHE RELOAD -->
     <target name="finalReload" depends="copyToDeploy" description="Reload Apache.">
-        <exec executable="sudo service apache2">
+        <exec executable="sudo /usr/sbin/service apache2">
             <arg value="reload"/>
         </exec>
     </target>
