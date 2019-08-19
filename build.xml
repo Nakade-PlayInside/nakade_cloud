@@ -303,10 +303,11 @@
     </target>
     <!-- END -->
 
-    <condition property="oldVersion.exist" else="false">
+    <condition property="oldVersion.dir" else="false">
         <available file="${deployDir}/nakade" type="dir"/>
     </condition>
 
+    <echo message="oldVersion.dir"/>
     <!-- MOVE OLD FILES -->
     <target name="moveOldVersion"
             depends="deleteLastDir"
