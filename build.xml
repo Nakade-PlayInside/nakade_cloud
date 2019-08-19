@@ -31,7 +31,7 @@
     <!-- START -->
     <target name="start" description="Start script for enabling working site.">
         <echo message="Toogle Website"/>
-        <exec executable="startJob" />
+        <exec executable="startJob.sh" />
     </target>
     <!-- END -->
 
@@ -70,15 +70,16 @@
             unless="lint.done"
             description="Perform syntax check of sourcecode files">
         <echo message="Checking php syntax ..." />
+        <property environment="env" />
         <apply executable="php" taskname="lint" failonerror="true">
             <arg value="-l" />
 
-            <fileset dir="${basedir}/src">
+            <fileset dir="${env.WORKSPACE}/src">
                 <include name="**/*.php" />
                 <modified />
             </fileset>
 
-            <fileset dir="${basedir}/tests">
+            <fileset dir="${env.WORKSPACE}/tests">
                 <include name="**/*.php" />
                 <modified />
             </fileset>
@@ -195,17 +196,18 @@
     <!-- PHPUNIT -->
     <target name="phpunit" unless="phpunit.done" depends="prepare" description="Run unit tests with PHPUnit">
         <echo message="Unit tests ..." />
-        <exec executable="${basedir}/vendor/bin/simple-phpunit" resultproperty="result.phpunit">
+        <property environment="env" />
+        <exec executable="${env.WORKSPACE}/vendor/bin/simple-phpunit" resultproperty="result.phpunit">
             <arg value="--configuration"/>
-            <arg path="${basedir}/phpunit.xml.dist"/>
+            <arg path="${env.WORKSPACE}/phpunit.xml.dist"/>
             <arg value="--coverage-xml"/>
-            <arg path="${basedir}/build/logs/coverage"/>
+            <arg path="${env.WORKSPACE}/build/logs/coverage"/>
             <arg value="--coverage-clover"/>
-            <arg path="${basedir}/build/logs/clover.xml"/>
+            <arg path="${env.WORKSPACE}/build/logs/clover.xml"/>
             <arg value="--coverage-crap4j"/>
-            <arg path="${basedir}/build/logs/crap4j.xml"/>
+            <arg path="${env.WORKSPACE}/build/logs/crap4j.xml"/>
             <arg value="--log-junit"/>
-            <arg path="${basedir}/build/logs/junit.xml"/>
+            <arg path="${env.WORKSPACE}/build/logs/junit.xml"/>
         </exec>
 
         <property name="phpunit.done" value="true"/>
@@ -227,8 +229,9 @@
     <!-- PHPDOX -->
     <target name="phpdox" unless="phpdox.done" depends="phploc,phpcs, phpmd"
             description="Generate project documentation using phpDox">
+        <property environment="env" />
         <echo message="Generate documentation ..." />
-        <exec executable="phpdox" dir="${basedir}/build"/>
+        <exec executable="phpdox" dir="${env.WORKSPACE}/build"/>
 
         <property name="phpdox.done" value="true"/>
     </target>
@@ -277,7 +280,7 @@
     <target name="copyToDeploy" depends="createDeploymentDir" description="Copy files to deploy folder.">
         <property environment="env" />
         <copy todir="${deployDir}/${env.APP_VERSION}">
-            <fileset dir="${basedir}">
+            <fileset dir="${env.WORKSPACE}">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -287,7 +290,7 @@
     <!-- FINISH -->
     <target name="finish" description="Finish script for enabling nakade site.">
         <echo message="Toogle Website"/>
-        <exec executable="finishJob" />
+        <exec executable="finishJob.sh" />
     </target>
     <!-- END -->
 
