@@ -314,7 +314,7 @@
             unless="moveOldVersion.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
-        <move todir="${deployDir}/LAST">
+        <move todir="${deployDir}/LAST" includeemptydirs="true">
             <fileset dir="${deployDir}/190819-3">
             </fileset>
         </move>
@@ -330,7 +330,7 @@
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
-        <copy todir="${deployDir}/${env.APP_VERSION}">
+        <copy todir="${deployDir}/nakade" includeemptydirs="true" overwrite="true">
             <fileset dir="${env.WORKSPACE}">
                 <exclude name="**/*.java"/>
             </fileset>
