@@ -11,7 +11,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="deploy" depends="createAssets, createLastDir, deleteLastDir, moveOldVersion, copyToDeploy" />
+    <target name="deploy" depends="createAssets, moveOldVersion, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -278,14 +278,8 @@
     </target>
     <!-- END -->
 
-    <!-- CONDITION TO CREATE LAST VERSION DIR -->
-    <condition property="lastDir.exists" else="true" value="false">
-        <available file="${deployDir}/LAST" type="dir" />
-    </condition>
-
     <!-- CREATE LAST VERSION DIR -->
     <target name="createLastDir"
-            if="lastDir.exists"
             unless="createLastDir.done"
             description="Create directory to save last version">
         <echo message="Create last version directory ..." />
@@ -296,7 +290,8 @@
 
     <!-- DELETE LAST VERSION DIR -->
     <target name="deleteLastDir"
-            if="yarn.done"
+            depends="createLastDir"
+            if="createAssets.done"
             unless="deleteLastDir.done"
             description="Delete directory of previous last version">
         <echo message="Remove previous last version directory ..." />
@@ -310,7 +305,8 @@
 
     <!-- MOVE OLD FILES -->
     <target name="moveOldVersion"
-            if="yarn.done"
+            depends="deleteLastDir"
+            if="createAssets.done"
             unless="moveOldVersion.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
@@ -324,18 +320,18 @@
 
     <!-- CREATE LAST VERSION DIR -->
     <target name="createDeployDir"
-            if="lastDir.exists"
             unless="createDeployDir.done"
             description="Create directory to save last version">
         <echo message="Create last version directory ..." />
-        <mkdir dir="${deployDir}/nakade"/>
+        <mkdir dir="${deployDir}/nakade" />
         <property name="createDeployDir.done" value="true"/>
     </target>
     <!-- END -->
 
     <!-- DEPLOY FILES -->
     <target name="copyToDeploy"
-            if="yarn.done"
+            depends="createDeployDir"
+            if="createAssets.done"
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
