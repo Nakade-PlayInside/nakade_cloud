@@ -11,7 +11,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="deploy" depends="createAssets, createLastDir, deleteLastDir, moveOldVersion" />
+    <target name="deploy" depends="createAssets, createLastDir, deleteLastDir, moveOldVersion, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -322,7 +322,16 @@
     </target>
     <!-- END -->
 
-    <!-- RENAME OLD DIRECTORY IF BUILD SUCCESSFUL -->
+    <!-- CREATE LAST VERSION DIR -->
+    <target name="createDeployDir"
+            if="lastDir.exists"
+            unless="createDeployDir.done"
+            description="Create directory to save last version">
+        <echo message="Create last version directory ..." />
+        <mkdir dir="${deployDir}/nakade"/>
+        <property name="createDeployDir.done" value="true"/>
+    </target>
+    <!-- END -->
 
     <!-- DEPLOY FILES -->
     <target name="copyToDeploy"
