@@ -270,7 +270,7 @@
     </target>
     <!-- END -->
 
-    <!-- RENAME OLD DIRECTORY IF BUILD SUCCESSFUL >
+    <!-- RENAME OLD DIRECTORY IF BUILD SUCCESSFUL -->
 
      <!-- CREATE DIR -->
     <target name="createDeploymentDir"
