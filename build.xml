@@ -11,7 +11,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="deploy" depends="createAssets, moveOldVersion, copyToDeploy" />
+    <target name="deploy" depends="createAssets, createLastDir, deleteLastDir" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -250,6 +250,7 @@
 
     <!-- YARN -->
     <target name="yarn"
+            if="composer.done"
             unless="yarn.done"
             description="Install Yarn">
         <echo message="Install Yarn ..." />
@@ -264,6 +265,7 @@
     <!-- YARN & ASSETS -->
     <target name="createAssets"
             depends="yarn"
+            if="yarn.done"
             unless="createAssets.done"
             description="Compile assets on production build">
         <echo message="Compile assets ..." />
@@ -276,9 +278,40 @@
     </target>
     <!-- END -->
 
+    <!-- CONDITION TO CREATE LAST VERSION DIR -->
+    <condition property="lastDir.exists" else="true" value="false">
+        <available file="${deployDir}/LAST" type="dir" />
+    </condition>
+
+    <!-- CREATE LAST VERSION DIR -->
+    <target name="createLastDir"
+            if="lastDir.exists"
+            unless="createLastDir.done"
+            description="Create directory to save last version">
+        <echo message="Create last version directory ..." />
+        <mkdir dir="${deployDir}/LAST"/>
+        <property name="createLastDir.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- DELETE LAST VERSION DIR -->
+    <target name="deleteLastDir"
+            if="yarn.done"
+            unless="deleteLastDir.done"
+            description="Delete directory of previous last version">
+        <echo message="Remove previous last version directory ..." />
+
+        <delete includeemptydirs="true">
+            <fileset dir="${deployDir}/LAST" includes="**/*"/>
+        </delete>
+        <property name="deleteLastDir.done" value="true"/>
+    </target>
+    <!-- END -->
+
+
     <!-- RENAME OLD DIRECTORY IF BUILD SUCCESSFUL -->
 
-     <!-- CREATE DIR -->
+    <!-- CREATE DIR -->
     <target name="createDeploymentDir"
             unless="createDeploymentDir.done"
             description="Create directory to deploy">
