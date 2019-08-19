@@ -11,7 +11,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="deploy" depends="createAssets, createLastDir, deleteLastDir" />
+    <target name="deploy" depends="createAssets, createLastDir, deleteLastDir, moveOldVersion" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -308,38 +308,25 @@
     </target>
     <!-- END -->
 
-
-    <!-- RENAME OLD DIRECTORY IF BUILD SUCCESSFUL -->
-
-    <!-- CREATE DIR -->
-    <target name="createDeploymentDir"
-            unless="createDeploymentDir.done"
-            description="Create directory to deploy">
-        <property environment="env" />
-        <echo message="Create new deploy directory ..." />
-        <mkdir dir="${deployDir}/${env.APP_VERSION}"/>
-        <mkdir dir="${deployDir}/LAST"/>
-        <property name="createDeploymentDir.done" value="true"/>
-    </target>
-    <!-- END -->
-
     <!-- MOVE OLD FILES -->
     <target name="moveOldVersion"
-            depends="createDeploymentDir"
+            if="yarn.done"
             unless="moveOldVersion.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
         <move todir="${deployDir}/LAST">
-            <fileset dir="${deployDir}/190819-2">
+            <fileset dir="${deployDir}/190819-3">
             </fileset>
         </move>
         <property name="moveOldVersion.done" value="true"/>
     </target>
     <!-- END -->
 
+    <!-- RENAME OLD DIRECTORY IF BUILD SUCCESSFUL -->
+
     <!-- DEPLOY FILES -->
     <target name="copyToDeploy"
-            depends="createDeploymentDir"
+            if="yarn.done"
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
@@ -356,17 +343,6 @@
     <target name="finish" description="Finish script for enabling nakade site.">
         <echo message="Toogle Website"/>
         <exec executable="finishJob.sh" />
-    </target>
-    <!-- END -->
-
-    <!-- CHOWN -->
-    <target name="chown" depends="copyToDeploy" description="Change group owner.">
-        <property environment="env" />
-        <exec executable="chown -r jenkins:www-data">
-            <arg value="-r"/>
-            <arg value="jenkins:www-data"/>
-            <arg value="${deployDir}/${env.APP_VERSION}"/>
-        </exec>
     </target>
     <!-- END -->
 
