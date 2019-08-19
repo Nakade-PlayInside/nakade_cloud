@@ -279,7 +279,22 @@
         <property environment="env" />
         <echo message="Create new deploy directory ..." />
         <mkdir dir="${deployDir}/${env.APP_VERSION}"/>
+        <mkdir dir="${deployDir}/OLDER"/>
         <property name="createDeploymentDir.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- MOVE OLD FILES -->
+    <target name="moveOldVersion"
+            depends="createDeploymentDir"
+            unless="moveOldVersion.done"
+            description="Copy files to deploy folder.">
+        <property environment="env" />
+        <move todir="${deployDir}/OLDER">
+            <fileset dir="${deployDir}/190819-2">
+            </fileset>
+        </move>
+        <property name="moveOldVersion.done" value="true"/>
     </target>
     <!-- END -->
 
@@ -296,9 +311,6 @@
         </copy>
         <property name="copyToDeploy.done" value="true"/>
     </target>
-    <!-- END -->
-
-    <!-- CHANGE OWNER -->
     <!-- END -->
 
     <!-- FINISH -->
