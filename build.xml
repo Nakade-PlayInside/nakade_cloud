@@ -303,14 +303,18 @@
     </target>
     <!-- END -->
 
+    <condition property="oldVersion.exist" else="false">
+        <available file="${deployDir}/nakade" type="dir"/>
+    </condition>
+
     <!-- MOVE OLD FILES -->
     <target name="moveOldVersion"
             depends="deleteLastDir"
-            if="createAssets.done"
+            if="oldVersion.exist"
             unless="moveOldVersion.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
-        <move todir="${deployDir}/LAST" includeemptydirs="true">
+        <move todir="${deployDir}/LAST" includeemptydirs="true" overwrite="true">
             <fileset dir="${deployDir}/nakade">
             </fileset>
         </move>
