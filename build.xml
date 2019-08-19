@@ -7,7 +7,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, start, analysis, deploy" />
+    <target name="full-suite" depends="date, start, analysis, deploy, finish" />
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
@@ -28,10 +28,10 @@
     </target>
     <!-- END -->
 
-    <!-- DATE -->
-    <target name="start">
+    <!-- START -->
+    <target name="start" description="Start script for enabling working site.">
         <echo message="Toogle Website"/>
-        <exec executable="startJob.sh" />
+        <exec executable="startJob" />
     </target>
     <!-- END -->
 
@@ -54,12 +54,13 @@
             unless="prepare.done"
             depends="clean"
             description="Prepare for build">
+        <property environment="env" />
         <echo message="Create build directories ..." />
-        <mkdir dir="${basedir}/build/api"/>
-        <mkdir dir="${basedir}/build/coverage"/>
-        <mkdir dir="${basedir}/build/logs"/>
-        <mkdir dir="${basedir}/build/pdepend"/>
-        <mkdir dir="${basedir}/build/phpdox"/>
+        <mkdir dir="${env.WORKSPACE}/build/api"/>
+        <mkdir dir="${env.WORKSPACE}/build/coverage"/>
+        <mkdir dir="${env.WORKSPACE}/build/logs"/>
+        <mkdir dir="${env.WORKSPACE}/build/pdepend"/>
+        <mkdir dir="${env.WORKSPACE}/build/phpdox"/>
         <property name="prepare.done" value="true"/>
     </target>
     <!-- END -->
@@ -280,6 +281,13 @@
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
+    </target>
+    <!-- END -->
+
+    <!-- FINISH -->
+    <target name="finish" description="Finish script for enabling nakade site.">
+        <echo message="Toogle Website"/>
+        <exec executable="finishJob" />
     </target>
     <!-- END -->
 
