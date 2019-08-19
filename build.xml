@@ -315,7 +315,7 @@
             description="Copy files to deploy folder.">
         <property environment="env" />
         <move todir="${deployDir}/LAST" includeemptydirs="true">
-            <fileset dir="${deployDir}/190819-3">
+            <fileset dir="${deployDir}/nakade">
             </fileset>
         </move>
         <property name="moveOldVersion.done" value="true"/>
