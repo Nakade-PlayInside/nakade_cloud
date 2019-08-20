@@ -24,7 +24,7 @@ Encore
 
         // only copy files matching this pattern
         pattern: /\.(png|jpg|jpeg)$/
-     })
+    })
 
     /*
      * ENTRY CONFIG
@@ -68,7 +68,7 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

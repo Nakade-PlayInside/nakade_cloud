@@ -2,16 +2,14 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/images/nakade_256x256.png') }}">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/nakade_256x256.png') }}">
+        <title>{% block title %}Willkommen bei Nakade!{% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
 
     <body>
-    <b>Unserer Webseite ist im Aufbau!</b>
-    <img src="{{ asset('build/images/nakade_256x256.png') }}" alt="Symfony!"/>
         <div id="upperbar">
             {% block upperbar %}
                 <ul>
@@ -24,7 +22,10 @@
             {% endblock %}
         </div>
         <div id="content">
-            {% block body %}{% endblock %}
+            <b>Unserer Webseite ist im Aufbau!</b>
+            {% block body %}
+                <img src="{{ asset('images/nakade_256x256.png') }}" alt="Symfony!"/>
+            {% endblock %}
         </div>
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
