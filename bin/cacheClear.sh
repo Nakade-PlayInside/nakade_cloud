@@ -1,3 +1,3 @@
 #!/bin/bash
 
-php console cache:clear
+sudo php console cache:clear
