@@ -8,12 +8,11 @@
 
 // any CSS you require will output into a single css file (app.css in this case)
 import '../css/app.scss';
-import $ from 'jquery';
-import 'bootstrap'; //add functions to jQuery
-//uncomment to support legacy code
-//global.$ = $;
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// const $ = require('jquery');
+const $ = require('jquery');
+import 'bootstrap'; //add functions to jQuery
+//uncomment to support legacy code
+global.$ = $;
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
