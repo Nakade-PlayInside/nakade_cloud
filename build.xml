@@ -287,9 +287,8 @@
             unless="cache.done"
             description="Clear cache in prod environment ...">
         <echo message="Clear Cache ..." />
-        <exec executable="/usr/bin/php console">
+        <exec executable="${env.WORKSPACE}/bin/cacheClear.sh">
             <!-- APP_ENV=prod APP_DEBUG=0 /usr/bin/php bin/console cache:clear   -->
-            <arg value="cache:clear"/>
         </exec>
         <echo message="Running composer install ..." />
         <property name="cache.done" value="true"/>
