@@ -283,6 +283,18 @@
     </target>
     <!-- END -->
 
+    <!-- CLEAR CACHE -->
+    <target name="clear cache"
+            unless="cache.done"
+            description="Clear cache in prod environment ...">
+        <echo message="Clear Cache ..." />
+        <exec executable="APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear">
+        </exec>
+        <echo message="Running composer install ..." />
+        <property name="cache.done" value="true"/>
+    </target>
+    <!-- END -->
+    
     <!-- CREATE LAST VERSION DIR -->
     <target name="createLastDir"
             unless="createLastDir.done"
