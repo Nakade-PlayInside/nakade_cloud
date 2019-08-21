@@ -290,7 +290,6 @@
         <exec executable="${env.WORKSPACE}/bin/cacheClear.sh">
             <!-- APP_ENV=prod APP_DEBUG=0 /usr/bin/php bin/console cache:clear   -->
         </exec>
-        <echo message="Running composer install ..." />
         <property name="cache.done" value="true"/>
     </target>
     <!-- END -->
