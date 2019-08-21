@@ -199,6 +199,8 @@
         <exec executable="/var/lib/jenkins/composer">
             <arg value="install" />
             <arg value="--no-interaction" />
+            <arg value="--no-dev" />
+            <arg value="--optimize-autoloader" />
         </exec>
         <property name="composer.done" value="true"/>
     </target>
