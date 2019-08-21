@@ -288,7 +288,7 @@
             description="Clear cache in prod environment ...">
         <echo message="Clear Cache ..." />
         <exec executable="php">
-            <arg value="APP_DEBUG=0"/>
+            <arg line="APP_DEBUG=0"/>
             <arg path="bin/console"/>
             <arg value="cache:clear"/>
             <!-- APP_ENV=prod APP_DEBUG=0 /usr/bin/php bin/console cache:clear   -->
