@@ -23,7 +23,7 @@ Encore
         to: 'images/[path][name].[hash:8].[ext]',
 
         // only copy files matching this pattern
-        pattern: /\.(png|jpg|jpeg)$/
+        pattern: /\.(png|jpg|jpeg|gif|ico|svg|webp)$/
     })
 
     /*
@@ -37,8 +37,6 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('main', './assets/js/main.js')
-    .addEntry('about', './assets/js/about.js')
-    //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
@@ -59,7 +57,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning()
+    .enableVersioning(Encore.isProduction())
 
     // enables @babel/preset-env polyfills
     .configureBabel(() => {}, {

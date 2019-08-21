@@ -274,8 +274,7 @@
             description="Compile assets on production build">
         <echo message="Compile assets ..." />
         <exec executable="yarn">
-            <arg value="encore"/>
-            <arg value="production"/>
+            <arg value="build"/>
         </exec>
 
         <property name="createAssets.done" value="true"/>
