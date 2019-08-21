@@ -15,7 +15,7 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="deploy" depends="createAssets, moveOldVersion, copyToDeploy" />
+    <target name="deploy" depends="createAssets, clearCache, moveOldVersion, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -284,7 +284,7 @@
     <!-- END -->
 
     <!-- CLEAR CACHE -->
-    <target name="clear cache"
+    <target name="clearCache"
             unless="cache.done"
             description="Clear cache in prod environment ...">
         <echo message="Clear Cache ..." />
@@ -294,7 +294,7 @@
         <property name="cache.done" value="true"/>
     </target>
     <!-- END -->
-    
+
     <!-- CREATE LAST VERSION DIR -->
     <target name="createLastDir"
             unless="createLastDir.done"
