@@ -287,10 +287,9 @@
             unless="cache.done"
             description="Clear cache in prod environment ...">
         <echo message="Clear Cache ..." />
-        <exec executable="APP_DEBUG=0 php">
+        <exec executable="php">
             <arg path="bin/console"/>
             <arg value="cache:clear"/>
-            <!-- APP_ENV=prod APP_DEBUG=0 /usr/bin/php bin/console cache:clear   -->
         </exec>
         <property name="cache.done" value="true"/>
     </target>
