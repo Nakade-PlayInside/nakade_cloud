@@ -287,6 +287,7 @@
             unless="cache.done"
             description="Clear cache in prod environment ...">
         <echo message="Clear Cache ..." />
+        <property environment="env" />
         <exec executable="php">
             <arg path="bin/console"/>
             <arg value="cache:clear"/>
@@ -360,6 +361,7 @@
         <copy todir="${deployDir}/nakade" includeemptydirs="true" overwrite="true">
             <fileset dir="${env.WORKSPACE}">
                 <exclude name="**/*.java"/>
+                <exclude name="**/cache/prod/**"/>
             </fileset>
         </copy>
         <property name="copyToDeploy.done" value="true"/>
