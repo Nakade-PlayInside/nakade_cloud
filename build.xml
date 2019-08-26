@@ -16,7 +16,7 @@
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="deploy" depends="version, createAssets, clearCache, moveOldVersion, copyToDeploy" />
+    <target name="deploy" depends="createAssets, chmod, clearCache, version, moveOldVersion, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -254,20 +254,7 @@
     </target>
     <!-- END -->
 
-    <!--VERSION PROPERTIES-->
-    <target name="version" unless="version.done" description="Generate project version">
-        <property environment="env" />
-        <echo message="Generate version dump ..." />
-        <exec executable="${env.WORKSPACE}/version-bump.sh">
-            <arg value="${env.WORKSPACE}"/>
-            <arg value="${VERSION}"/>
-        </exec>
-        <property name="version.done" value="true"/>
-    </target>
-    <!-- END -->
-
-
-    <!-- YARN -->
+   <!-- YARN -->
     <target name="yarn"
             if="composer.done"
             unless="yarn.done"
@@ -330,6 +317,17 @@
     </target>
     <!-- END -->
 
+    <!--VERSION PROPERTIES-->
+    <target name="version" unless="version.done" description="Generate project version">
+        <property environment="env" />
+        <echo message="Generate version dump ..." />
+        <exec executable="${env.WORKSPACE}/version-bump.sh">
+            <arg value="${env.WORKSPACE}"/>
+            <arg value="${VERSION}"/>
+        </exec>
+        <property name="version.done" value="true"/>
+    </target>
+    <!-- END -->
 
     <!-- CREATE LAST VERSION DIR -->
     <target name="createLastDir"
