@@ -6,8 +6,8 @@
     <property name="deployDir" value="/var/www/projekt" />
     <!-- version -->
     <property environment="env"/>
-    <property name="MINOR" value="0"/>
-    <property name="VERSION" value="v3.${env.GIT_TAG_NAME}.${env.APP_VERSION}" />
+    <property name="MINOR" value="$GIT_TAG_NAME"/>
+    <property name="VERSION" value="v3.${MINOR}.${env.APP_VERSION}" />
     <echo message="${VERSION}"/>
     <!-- END -->
 
@@ -317,6 +317,9 @@
         <echo message="Change rights for www-data ..." />
         <chmod perm="775">
           <fileset dir="${env.WORKSPACE}/var">
+            <exclude name="**/trial/**"/>
+          </fileset>
+          <fileset dir="${deployDir}/LAST/var">
             <exclude name="**/trial/**"/>
           </fileset>
         </chmod>
