@@ -258,7 +258,7 @@
     <target name="version" unless="version.done" description="Generate project version">
         <property environment="env" />
         <echo message="Generate version dump ..." />
-        <exec executable="${env.WORKSPACE}/version-dump.sh">
+        <exec executable="${env.WORKSPACE}/version-bump.sh">
             <arg value="${env.WORKSPACE}"/>
             <arg value="${VERSION}"/>
         </exec>
