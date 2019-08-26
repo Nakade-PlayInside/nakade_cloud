@@ -12,11 +12,11 @@
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, start, analysis, deploy, finish" />
+    <target name="full-suite" depends="date, start, analysis, delivery, finish" />
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="deploy" depends="createAssets, chmod, clearCache, version, copyToDeploy" />
+    <target name="delivery" depends="createAssets, chmod, clearCache, version, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -386,7 +386,8 @@
             description="Copy files to deploy folder.">
         <property environment="env" />
         <copy todir="${deployDir}/nakade" includeemptydirs="true" overwrite="true">
-            <fileset dir="${env.WORKSPACE}">
+            <fileset dir="${WORKSPACE}">
+                <include name="**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/cache/prod/**"/>
                 <exclude name="**/log/**"/>
