@@ -16,7 +16,7 @@
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="deploy" depends="createAssets, chmod, clearCache, version, moveOldVersion, copyToDeploy" />
+    <target name="deploy" depends="createAssets, chmod, clearCache, version, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
