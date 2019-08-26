@@ -6,7 +6,7 @@
     <property name="deployDir" value="/var/www/projekt" />
     <!-- version -->
     <property environment="env"/>
-    <property name="MINOR" value="$GIT_TAG_NAME"/>
+    <property name="MINOR" value="1"/>
     <property name="VERSION" value="v3.${MINOR}.${env.APP_VERSION}" />
     <echo message="${VERSION}"/>
     <!-- END -->
@@ -258,7 +258,7 @@
     <target name="version" unless="version.done" description="Generate project version">
         <property environment="env" />
         <echo message="Generate version dump ..." />
-        <exec executable="version_dump.sh">
+        <exec executable="${env.WORKSPACE}/version_dump.sh">
             <arg value="${env.WORKSPACE}"/>
             <arg value="${VERSION}"/>
         </exec>
@@ -322,10 +322,14 @@
           <fileset dir="${deployDir}/LAST/var">
             <exclude name="**/trial/**"/>
           </fileset>
+          <fileset dir="${deployDir}/nakade/var">
+            <exclude name="**/trial/**"/>
+          </fileset>
         </chmod>
         <property name="chmod.done" value="true"/>
     </target>
     <!-- END -->
+
 
     <!-- CREATE LAST VERSION DIR -->
     <target name="createLastDir"

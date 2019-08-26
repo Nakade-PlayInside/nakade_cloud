@@ -37,7 +37,7 @@ fi
 sed -i 's/<li class="version">.*</<li class="version">'$VERSION'</' "$PATH" 2>/dev/null
 if [ $? -ne 0 ]
 then
-    echo Could not edit template
+    echo Could not edit "$PATH"
     exit 1
 else echo Set new version in template.
 fi
