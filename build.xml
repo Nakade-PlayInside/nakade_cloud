@@ -8,14 +8,15 @@
     <property environment="env"/>
     <property name="MINOR" value="0"/>
     <property name="VERSION" value="v3.${env.GIT_TAG_NAME}.${env.APP_VERSION}" />
+    <echo message="$VERSION"/>
     <!-- END -->
 
     <!-- AVAILABLE COMMANDS -->
     <target name="full-suite" depends="date, start, analysis, deploy, finish" />
     <!-- END -->
 
-    <!-- AVAILABLE COMMANDS -->
-    <target name="deploy" depends="createAssets, clearCache, moveOldVersion, copyToDeploy" />
+    <!-- DEPLOYMENT -->
+    <target name="deploy" depends="version, createAssets, clearCache, moveOldVersion, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -27,7 +28,7 @@
     <!-- DATE -->
     <target name="date">
         <property environment="env" />
-        <echo message="Printing system date ...${env.WORKSPACE}"/>
+        <echo message="Printing system date ..."/>
         <exec executable="date" />
     </target>
     <!-- END -->
@@ -253,6 +254,19 @@
     </target>
     <!-- END -->
 
+    <!--VERSION PROPERTIES-->
+    <target name="version" unless="version.done" description="Generate project version">
+        <property environment="env" />
+        <echo message="Generate version dump ..." />
+        <exec executable="version_sump.sh">
+            <arg value="${env.WORKSPACE}"/>
+            <arg value="${VERSION}"/>
+        </exec>
+        <property name="version.done" value="true"/>
+    </target>
+    <!-- END -->
+
+
     <!-- YARN -->
     <target name="yarn"
             if="composer.done"
@@ -335,15 +349,9 @@
     </target>
     <!-- END -->
 
-    <condition property="oldVersion.dir" else="false">
-        <available file="${deployDir}/nakade" type="dir"/>
-    </condition>
-
-    <echo message="oldVersion.dir"/>
     <!-- MOVE OLD FILES -->
     <target name="moveOldVersion"
             depends="deleteLastDir"
-            if="oldVersion.exist"
             unless="moveOldVersion.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
