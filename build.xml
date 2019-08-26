@@ -386,7 +386,7 @@
             description="Copy files to deploy folder.">
         <property environment="env" />
         <copy todir="${deployDir}/nakade" includeemptydirs="true" overwrite="true">
-            <fileset dir="${WORKSPACE}">
+            <fileset dir="${BASEDIR}">
                 <include name="**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/cache/prod/**"/>
