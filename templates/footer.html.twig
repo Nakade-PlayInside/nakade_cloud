@@ -1,0 +1,22 @@
+{# templates/footer.html.twig #}
+{% block navFooter %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsBottom" aria-controls="navbarsBottom" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-md-center" id="navbarsBottom">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('common_imprint') }}">Impressum</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('common_contact') }}">Kontakt</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('common_privacy') }}">Datenschutz</a>
+            </li>
+        </ul>
+    </div>
+    <span class="navbar-text"><a href="#" class="version">v1.0.5</span>
+</nav>
+{% endblock %}

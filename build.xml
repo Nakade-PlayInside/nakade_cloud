@@ -5,18 +5,15 @@
     <!-- GLOBAL VARIABLES -->
     <property name="deployDir" value="/var/www/projekt" />
     <!-- version -->
-    <property environment="env"/>
     <property name="MINOR" value="1"/>
-    <property name="VERSION" value="v3.${MINOR}.${env.APP_VERSION}" />
-    <echo message="${VERSION}"/>
-    <!-- END -->
+
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, start, analysis, delivery, finish" />
+    <target name="full-suite" depends="date, start, delivery, finish" />
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="delivery" depends="createAssets, chmod, clearCache, version, copyToDeploy" />
+    <target name="delivery" depends="chmod, clearCache, version, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -27,7 +24,6 @@
 
     <!-- DATE -->
     <target name="date">
-        <property environment="env" />
         <echo message="Printing system date ..."/>
         <exec executable="date" />
     </target>
@@ -320,7 +316,8 @@
     <!--VERSION PROPERTIES-->
     <target name="version" unless="version.done" description="Generate project version">
         <property environment="env" />
-        <echo message="Generate version dump ..." />
+        <property name="VERSION" value="v3.${MINOR}.${env.APP_VERSION}" />
+        <echo message="Generate version bump ...${VERSION}" />
         <exec executable="${env.WORKSPACE}/version-bump.sh">
             <arg value="${env.WORKSPACE}"/>
             <arg value="${VERSION}"/>
