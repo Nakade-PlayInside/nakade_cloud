@@ -379,7 +379,6 @@
     <!-- DEPLOY FILES -->
     <target name="copyToDeploy"
             depends="createDeployDir"
-            if="createAssets.done"
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
