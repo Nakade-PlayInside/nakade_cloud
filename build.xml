@@ -13,7 +13,7 @@
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="delivery" depends="clearCache, version, createAssets, copyToDeploy" />
+    <target name="delivery" depends="clearCache, version, chmod, createAssets, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -300,13 +300,13 @@
         <echo message="Change rights for www-data ..." />
         <property environment="env" />
         <chmod perm="775">
-          <fileset dir="${env.WORKSPACE}/var">
+          <fileset dir="${env.WORKSPACE}">
             <exclude name="**/trial/**"/>
           </fileset>
-          <fileset dir="${deployDir}/LAST/var">
+          <fileset dir="${deployDir}/LAST">
             <exclude name="**/trial/**"/>
           </fileset>
-          <fileset dir="${deployDir}/nakade/var">
+          <fileset dir="${deployDir}/nakade">
             <exclude name="**/trial/**"/>
           </fileset>
         </chmod>
