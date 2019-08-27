@@ -355,7 +355,9 @@
         <property environment="env" />
         <echo message="Move previous version to ${saveDir} ..." />
         <move todir="${saveDir}" includeemptydirs="true" overwrite="true">
-            <fileset dir="${deployDir}" />
+            <fileset dir="${deployDir}" >
+                <exclude name="**/var/log/**"/>
+            </fileset>
         </move>
         <property name="moveOldVersion.done" value="true"/>
     </target>
@@ -381,9 +383,13 @@
         <copy todir="${deployDir}" includeemptydirs="true" overwrite="true">
             <fileset dir="${env.WORKSPACE}">
                 <include name="**"/>
-                <exclude name="**/*.java"/>
+                <exclude name="**/assets/**"/>
+                <exclude name="**/cache/dev/**"/>
                 <exclude name="**/cache/prod/**"/>
                 <exclude name="**/log/**"/>
+                <exclude name="**/tests/**"/>
+                <exclude name="**/phpunit.xml.dist"/>
+                <exclude name="**/*.sh"/>
             </fileset>
         </copy>
         <property name="copyToDeploy.done" value="true"/>

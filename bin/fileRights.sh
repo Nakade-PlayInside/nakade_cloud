@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #Params are root dir
 PATH=$1
-RIGHTS=775
 
 #template file existing
 function findPath()
@@ -14,9 +13,23 @@ function findPath()
         exit 1
     else
         echo Path "$PATH" found.
-        echo "Make subdir rights writable: $RIGHTS"
-        /bin/chmod "$RIGHTS" -R "$PATH"
     fi
+}
+
+function makeRights()
+{
+    RIGHTS=$1
+    PATH=$2
+    changeOwner $2
+    echo "Make subdir rights writable: $RIGHTS"
+    /bin/chmod "$RIGHTS" -R "$PATH"
+}
+
+function changeOwner()
+{
+    PATH=$1
+    echo "Change owner: $1"
+    sudo /bin/chown "jenkins:www-data" -R "$PATH"
 }
 
 
@@ -25,6 +38,9 @@ while [ $# -gt 0 ]
 do
   findPath "$1"/var
   findPath "$1"/vendor
+  makeRights 775 "$1"/var
+  makeRights 775 "$1"/vendor
+  makeRights 777 "$1"/var/log
   shift
 done
 
