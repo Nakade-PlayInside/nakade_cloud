@@ -20,7 +20,6 @@ function makeRights()
 {
     RIGHTS=$1
     PATH=$2
-    changeOwner $2
     echo "Make subdir rights writable: $RIGHTS"
     /bin/chmod "$RIGHTS" -R "$PATH"
 }
@@ -29,13 +28,14 @@ function changeOwner()
 {
     PATH=$1
     echo "Change owner: $1"
-    sudo /bin/chown "jenkins:www-data" -R "$PATH"
+    /usr/bin/sudo /bin/chown "jenkins:www-data" -R "$PATH"
 }
 
 
 #iterate thru all params
 while [ $# -gt 0 ]
 do
+  changeOwner $1
   findPath "$1"/var
   findPath "$1"/vendor
   makeRights 775 "$1"/var
