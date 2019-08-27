@@ -369,8 +369,8 @@
     <!-- CREATE LAST VERSION DIR -->
     <target name="createDeployDir"
             unless="createDeployDir.done"
-            description="Create directory to save last version">
-        <echo message="Create last version directory ..." />
+            description="Create directory to deliver product">
+        <echo message="Create product directory if not existent ..." />
         <mkdir dir="${deployDir}/nakade" />
         <property name="createDeployDir.done" value="true"/>
     </target>
@@ -383,8 +383,9 @@
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
+        <echo message="Copy all files from ${env.WORKSPACE} to ${deployDir}/nakade ..." />
         <copy todir="${deployDir}/nakade" includeemptydirs="true" overwrite="true">
-            <fileset dir="${BASEDIR}">
+            <fileset dir="${env.WORKSPACE}">
                 <include name="**"/>
                 <exclude name="**/*.java"/>
                 <exclude name="**/cache/prod/**"/>
