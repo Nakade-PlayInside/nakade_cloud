@@ -13,7 +13,7 @@
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="delivery" depends="clearCache, version, copyToDeploy" />
+    <target name="delivery" depends="clearCache, version, createAssets, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
