@@ -13,7 +13,7 @@
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="delivery" depends="clearCache, version, chmod, createAssets, copyToDeploy" />
+    <target name="delivery" depends="clearCache, version, createAssets, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -294,23 +294,17 @@
     <!-- END -->
 
     <!-- CHMOD -->
-    <target name="chmod"
-            unless="chmod.done"
-            description="Change rights for group ...">
+    <target name="chmodWorkDir"
+            unless="chmodWorkDir.done"
+            description="Change rights of files in Workspace ...">
         <echo message="Change rights for www-data ..." />
         <property environment="env" />
         <chmod perm="775">
           <fileset dir="${env.WORKSPACE}">
             <exclude name="**/trial/**"/>
           </fileset>
-          <fileset dir="${deployDir}/LAST">
-            <exclude name="**/trial/**"/>
-          </fileset>
-          <fileset dir="${deployDir}/nakade">
-            <exclude name="**/trial/**"/>
-          </fileset>
         </chmod>
-        <property name="chmod.done" value="true"/>
+        <property name="chmodWorkDir.done" value="true"/>
     </target>
     <!-- END -->
 
@@ -378,7 +372,7 @@
 
     <!-- DEPLOY FILES -->
     <target name="copyToDeploy"
-            depends="createDeployDir"
+            depends="createDeployDir, chmodWorkDir"
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
