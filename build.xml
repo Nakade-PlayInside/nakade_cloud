@@ -315,7 +315,6 @@
         <property name="VERSION" value="v3.${MINOR}.${env.APP_VERSION}" />
         <echo message="Generate version bump ...${VERSION}" />
         <exec executable="${env.WORKSPACE}/version-bump.sh">
-            <arg value="${env.WORKSPACE}"/>
             <arg value="${VERSION}"/>
         </exec>
         <property name="version.done" value="true"/>

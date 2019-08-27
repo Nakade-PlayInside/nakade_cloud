@@ -15,7 +15,7 @@ if [ "$#" -eq 0 ]; then
     exit 1
 fi
 
-echo New version is $1
+echo New version is $VERSION
 
 #creating file project.properties
 sed -i 's/project.version = .*$/project.version = '$VERSION'/' $BASEDIR/project.properties 2>/dev/null
