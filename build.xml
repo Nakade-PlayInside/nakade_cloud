@@ -3,7 +3,8 @@
 <project name="nakade" default="full-suite" basedir=".">
 
     <!-- GLOBAL VARIABLES -->
-    <property name="deployDir" value="/var/www/projekt" />
+    <property name="deployDir" value="/var/www/projekt/nakade" />
+    <property name="saveDir" value="/var/www/projekt/LAST" />
     <!-- version -->
     <property name="MINOR" value="1"/>
 
@@ -13,7 +14,7 @@
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="delivery" depends="clearCache, version, createAssets, copyToDeploy" />
+    <target name="delivery" depends="createAssets, fileRights, clearCache, version, moveOldVersion, copyToDeploy" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -279,6 +280,21 @@
     </target>
     <!-- END -->
 
+    <!-- FILE RIGHTS WORKSPACE -->
+    <target name="fileRights"
+            unless="fileRights.done"
+            description="Change rights of files in Workspace ...">
+        <echo message="Change rights for www-data ..." />
+        <property environment="env" />
+        <exec executable="fileRights.sh">
+            <arg path="${env.WORKSPACE}"/>
+            <arg path="${deployDir}"/>
+            <arg path="${saveDir}"/>
+        </exec>
+        <property name="fileRights.done" value="true"/>
+    </target>
+    <!-- END -->
+
     <!-- CLEAR CACHE -->
     <target name="clearCache"
             unless="cache.done"
@@ -290,33 +306,6 @@
             <arg value="cache:clear"/>
         </exec>
         <property name="cache.done" value="true"/>
-    </target>
-    <!-- END -->
-
-    <!-- CHMOD -->
-    <target name="chmodWorkDir"
-            unless="chmodWorkDir.done"
-            description="Change rights of files in Workspace ...">
-        <echo message="Change rights for www-data ..." />
-        <property environment="env" />
-        <chmod perm="775">
-          <fileset dir="${env.WORKSPACE}/var"/>
-          <fileset dir="${env.WORKSPACE}/vendor"/>
-        </chmod>
-        <property name="chmodWorkDir.done" value="true"/>
-    </target>
-    <!-- END -->
-
-    <!-- FILE RIGHTS WORKSPACE -->
-    <target name="fileRights"
-            unless="fileRights.done"
-            description="Change rights of files in Workspace ...">
-        <echo message="Change rights for www-data ..." />
-        <property environment="env" />
-        <exec executable="fileRights.sh">
-            <arg path="${env.WORKSPACE}"/>
-        </exec>
-        <property name="fileRights.done" value="true"/>
     </target>
     <!-- END -->
 
@@ -338,7 +327,7 @@
             unless="createLastDir.done"
             description="Create directory to save last version">
         <echo message="Create last version directory ..." />
-        <mkdir dir="${deployDir}/LAST"/>
+        <mkdir dir="${saveDir}"/>
         <property name="createLastDir.done" value="true"/>
     </target>
     <!-- END -->
@@ -352,7 +341,7 @@
         <echo message="Remove previous last version directory ..." />
 
         <delete includeemptydirs="true">
-            <fileset dir="${deployDir}/LAST" includes="**/*"/>
+            <fileset dir="${saveDir}" includes="**/*"/>
         </delete>
         <property name="deleteLastDir.done" value="true"/>
     </target>
@@ -362,11 +351,11 @@
     <target name="moveOldVersion"
             depends="deleteLastDir"
             unless="moveOldVersion.done"
-            description="Copy files to deploy folder.">
+            description="Move old version.">
         <property environment="env" />
-        <move todir="${deployDir}/LAST" includeemptydirs="true" overwrite="true">
-            <fileset dir="${deployDir}/nakade">
-            </fileset>
+        <echo message="Move previous version to ${saveDir} ..." />
+        <move todir="${saveDir}" includeemptydirs="true" overwrite="true">
+            <fileset dir="${deployDir}" />
         </move>
         <property name="moveOldVersion.done" value="true"/>
     </target>
@@ -377,7 +366,7 @@
             unless="createDeployDir.done"
             description="Create directory to deliver product">
         <echo message="Create product directory if not existent ..." />
-        <mkdir dir="${deployDir}/nakade" />
+        <mkdir dir="${deployDir}" />
         <property name="createDeployDir.done" value="true"/>
     </target>
     <!-- END -->
@@ -388,8 +377,8 @@
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
-        <echo message="Copy all files from ${env.WORKSPACE} to ${deployDir}/nakade ..." />
-        <copy todir="${deployDir}/nakade" includeemptydirs="true" overwrite="true">
+        <echo message="Copy all files from ${env.WORKSPACE} to ${deployDir} ..." />
+        <copy todir="${deployDir}" includeemptydirs="true" overwrite="true">
             <fileset dir="${env.WORKSPACE}">
                 <include name="**"/>
                 <exclude name="**/*.java"/>
