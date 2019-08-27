@@ -298,6 +298,7 @@
             unless="chmod.done"
             description="Change rights for group ...">
         <echo message="Change rights for www-data ..." />
+        <property environment="env" />
         <chmod perm="775">
           <fileset dir="${env.WORKSPACE}/var">
             <exclude name="**/trial/**"/>
