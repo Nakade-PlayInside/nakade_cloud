@@ -300,9 +300,8 @@
         <echo message="Change rights for www-data ..." />
         <property environment="env" />
         <chmod perm="775">
-          <fileset dir="${env.WORKSPACE}">
-            <exclude name="**/trial/**"/>
-          </fileset>
+          <fileset dir="${env.WORKSPACE}/var"/>
+          <fileset dir="${env.WORKSPACE}/vendor"/>
         </chmod>
         <property name="chmodWorkDir.done" value="true"/>
     </target>
