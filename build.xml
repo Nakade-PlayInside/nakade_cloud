@@ -363,7 +363,7 @@
     </target>
     <!-- END -->
 
-    <!-- CREATE LAST VERSION DIR -->
+    <!-- CREATE PROJECT DIR -->
     <target name="createDeployDir"
             unless="createDeployDir.done"
             description="Create directory to deliver product">
@@ -384,9 +384,6 @@
             <fileset dir="${env.WORKSPACE}">
                 <include name="**"/>
                 <exclude name="**/assets/**"/>
-                <exclude name="**/cache/dev/**"/>
-                <exclude name="**/cache/prod/**"/>
-                <exclude name="**/log/**"/>
                 <exclude name="**/tests/**"/>
                 <exclude name="**/phpunit.xml.dist"/>
                 <exclude name="**/*.sh"/>
