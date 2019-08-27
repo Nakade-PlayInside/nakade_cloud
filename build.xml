@@ -307,7 +307,7 @@
     </target>
     <!-- END -->
 
-    <!-- CHMOD -->
+    <!-- FILE RIGHTS WORKSPACE -->
     <target name="fileRights"
             unless="fileRights.done"
             description="Change rights of files in Workspace ...">
