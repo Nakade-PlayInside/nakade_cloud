@@ -10,11 +10,15 @@
 
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, start, composer, delivery, finish" />
+    <target name="full-suite" depends="date, start, composer, analysis, delivery, finalize" />
     <!-- END -->
 
     <!-- DEPLOYMENT -->
     <target name="delivery" depends="createAssets, fileRights, clearCache, version, moveOldVersion, copyToDeploy" />
+    <!-- END -->
+
+    <!-- FINALIZE -->
+    <target name="finalize" depends="fileRightsFinal, clearCacheFinal, finish" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -298,7 +302,7 @@
     <!-- CLEAR CACHE -->
     <target name="clearCache"
             unless="cache.done"
-            description="Clear cache in prod environment ...">
+            description="Clear cache in workspace ...">
         <echo message="Clear Cache ..." />
         <property environment="env" />
         <exec executable="php">
@@ -389,6 +393,33 @@
             </fileset>
         </copy>
         <property name="copyToDeploy.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- FILE RIGHTS WORKSPACE -->
+    <target name="fileRightsFinal"
+            unless="fileRightsFinal.done"
+            description="Change rights of files in prod ...">
+        <echo message="Change rights for www-data ..." />
+        <property environment="env" />
+        <exec executable="fileRights.sh">
+            <arg path="${deployDir}"/>
+        </exec>
+        <property name="fileRightsFinal.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- CLEAR CACHE -->
+    <target name="clearCacheFinal"
+            unless="clearCacheFinal.done"
+            description="Clear cache in prod environment ...">
+        <echo message="Clear Cache ..." />
+        <property environment="env" />
+        <exec executable="php">
+            <arg path="${deployDir}/bin/console"/>
+            <arg value="cache:clear"/>
+        </exec>
+        <property name="clearCacheFinal.done" value="true"/>
     </target>
     <!-- END -->
 
