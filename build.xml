@@ -9,7 +9,7 @@
 
 
     <!-- AVAILABLE COMMANDS -->
-    <target name="full-suite" depends="date, start, delivery, finish" />
+    <target name="full-suite" depends="date, start, composer, delivery, finish" />
     <!-- END -->
 
     <!-- DEPLOYMENT -->
@@ -18,7 +18,7 @@
 
     <!-- ANALYSIS -->
     <target name="analysis"
-            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, composer, phpunit, phpdox, -check-failure"
+            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, phpunit, phpdox, -check-failure"
             description="Performs static analysis" />
     <!-- END -->
 
