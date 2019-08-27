@@ -315,7 +315,7 @@
         <property environment="env" />
         <exec executable="fileRights.sh">
             <arg path="${env.WORKSPACE}"/>
-        </exec>>
+        </exec>
         <property name="fileRights.done" value="true"/>
     </target>
     <!-- END -->
