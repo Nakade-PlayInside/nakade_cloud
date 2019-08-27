@@ -307,6 +307,19 @@
     </target>
     <!-- END -->
 
+    <!-- CHMOD -->
+    <target name="fileRights"
+            unless="fileRights.done"
+            description="Change rights of files in Workspace ...">
+        <echo message="Change rights for www-data ..." />
+        <property environment="env" />
+        <exec executable="fileRights.sh">
+            <arg path="${env.WORKSPACE}"/>
+        </exec>>
+        <property name="fileRights.done" value="true"/>
+    </target>
+    <!-- END -->
+
     <!--VERSION PROPERTIES-->
     <target name="version" unless="version.done" description="Generate project version">
         <property environment="env" />
@@ -371,7 +384,7 @@
 
     <!-- DEPLOY FILES -->
     <target name="copyToDeploy"
-            depends="createDeployDir, chmodWorkDir"
+            depends="createDeployDir, fileRights"
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
