@@ -1,20 +1,32 @@
 {# templates/common/imprint.html.twig #}
 {% extends 'base.html.twig' %}
 {% block title %}Impressum{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('imprint') }}
+{% endblock %}
 
 {% block body %}
     <h2>Impressum</h2>
 
-    <dl>
-        <dt>Nakade Berlin</dt>
-        <dd>Mannschaft der Bundesliga des DGoB</dd>
+    <dl class="imprint">
+        <dt>Verein</dt>
+        <dd>Nakade Berlin - Mannschaft der DGoB Bundesliga</dd>
+        <dd>email: info@nakade.de</dd>
+
+        <dt>Vertretungsberechtigter Vorstand:</dt>
+        <dd>Dr. Holger Maerz</dd>
+        <dd>Maurice Wohabi</dd>
+        <dd>Pandau Ting</dd>
+
+        <dt>Verantwortlich für den Inhalt:</dt>
+        <dd>Dr. Holger Maerz</dd>
     </dl>
 
-    <dl>
-        <dt>Disclaimer:</dt>
+    <dl class="disclaimer">
+        <dt>Haftungsausschluss</dt>
         <dd>
             <b>Haftung für Inhalte</b>
-
             Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.
             Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu
             überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
@@ -25,7 +37,6 @@
         </dd>
         <dd>
             <b>Haftung für Links</b>
-
             Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese
             fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber
             der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft.
@@ -36,7 +47,6 @@
         </dd>
         <dd>
             <b>Urheberrecht</b>
-
             Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht.
             Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der
             schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht
@@ -46,5 +56,13 @@
             Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden,
             bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
         </dd>
+        <dd>
+            <span>29.08.2019</span>
+        </dd>
     </dl>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('imprint') }}
 {% endblock %}

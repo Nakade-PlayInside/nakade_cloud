@@ -1,0 +1,48 @@
+
+dl {
+    text-align: left;
+  dt {
+      font-size: larger;
+  }
+}
+
+.disclaimer {
+    margin-top: 4em;
+
+  dt {
+    margin-bottom: 0.3em;
+    text-decoration: underline;
+  }
+  span {
+    font-style: italic;
+  }
+}
+
+.imprint {
+  dt {
+    margin: 1.5em 0 0.2em 0;
+  }
+
+  dd {
+    margin: 0;
+
+  }
+}
+
+.privacy {
+  text-align: left;
+  .title {
+    text-decoration: underline;
+  }
+  h2 {
+    margin: 1.5em 0 0.2em 0;
+    font-size: medium;
+    font-weight: bold;
+  }
+
+  p {
+    margin-bottom: 0.5em;
+    text-align: justify;
+  }
+}
+

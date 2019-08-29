@@ -37,7 +37,7 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('main', './assets/js/main.js')
-    //.addEntry('page2', './assets/js/page2.js')
+    .addEntry('imprint', './assets/js/imprint.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -57,7 +57,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(Encore.isProduction())
+    .enableVersioning()
 
     // enables @babel/preset-env polyfills
     .configureBabel(() => {}, {
