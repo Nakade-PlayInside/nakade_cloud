@@ -1,0 +1,21 @@
+//contact.scss
+
+.form-group {
+    text-align: left;
+}
+
+label {
+    text-align: left;
+
+
+}
+
+label.required:after {
+    content: "*";
+}
+
+p {
+    text-align: left;
+}
+
+

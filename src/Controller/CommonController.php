@@ -21,6 +21,8 @@
 
 namespace App\Controller;
 
+use App\Entity\ContactMail;
+use App\Form\Type\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -86,7 +88,16 @@ class CommonController extends AbstractController
      */
     public function contact()
     {
-        return $this->render('common/contact.html.twig');
+
+        // creates a task object and initializes some data for this example
+        $contact = new ContactMail();
+        $contact->setMessage('Write a blog post');
+
+        $form = $this->createForm(ContactType::class, $contact);
+
+        return $this->render('common/contact.html.twig', [
+                'form' => $form->createView(),
+        ]);
     }
 
 }
