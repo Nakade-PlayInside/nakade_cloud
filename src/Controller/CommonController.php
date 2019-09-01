@@ -98,10 +98,6 @@ class CommonController extends AbstractController
         $recaptcha = $request->get('g-recaptcha-response', '');
         if ($form->isSubmitted() && $form->isValid() && !empty($recaptcha)) {
 
-
-            dump($recaptcha);
-            die();
-
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $contact = $form->getData();
@@ -118,7 +114,6 @@ class CommonController extends AbstractController
         return $this->render('common/contact.html.twig', [
                 'form' => $form->createView(),
         ]);
-
     }
 
     /**
@@ -134,6 +129,4 @@ class CommonController extends AbstractController
     {
         return $this->render('common/about.html.twig');
     }
-
-
 }
