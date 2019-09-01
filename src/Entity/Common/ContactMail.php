@@ -18,7 +18,7 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Entity;
+namespace App\Entity\Common;
 
 use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -143,7 +143,7 @@ class ContactMail
      *
      * @return ContactMail
      */
-    public function setAddress(string $address): ContactMail
+    public function setAddress(string $address = ''): ContactMail
     {
         $this->address = $address;
 
@@ -163,7 +163,7 @@ class ContactMail
      *
      * @return ContactMail
      */
-    public function setCity(string $city): ContactMail
+    public function setCity(string $city = ''): ContactMail
     {
         $this->city = $city;
 
@@ -203,7 +203,7 @@ class ContactMail
      *
      * @return ContactMail
      */
-    public function setEmail(string $email): ContactMail
+    public function setEmail(string $email = ''): ContactMail
     {
         $this->email = $email;
 
@@ -223,7 +223,7 @@ class ContactMail
      *
      * @return ContactMail
      */
-    public function setFirstName(string $firstName): ContactMail
+    public function setFirstName(string $firstName = ''): ContactMail
     {
         $this->firstName = $firstName;
 
@@ -243,7 +243,7 @@ class ContactMail
      *
      * @return ContactMail
      */
-    public function setLastName(string $lastName): ContactMail
+    public function setLastName(string $lastName = ''): ContactMail
     {
         $this->lastName = $lastName;
 
@@ -263,7 +263,7 @@ class ContactMail
      *
      * @return ContactMail
      */
-    public function setPhone(string $phone): ContactMail
+    public function setPhone(string $phone = ''): ContactMail
     {
         $this->phone = $phone;
 
@@ -283,7 +283,7 @@ class ContactMail
      *
      * @return ContactMail
      */
-    public function setMessage(string $message): ContactMail
+    public function setMessage(string $message = ''): ContactMail
     {
         $this->message = $message;
 
@@ -303,7 +303,7 @@ class ContactMail
      *
      * @return ContactMail
      */
-    public function setZipCode(string $zipCode): ContactMail
+    public function setZipCode(string $zipCode = ''): ContactMail
     {
         $this->zipCode = $zipCode;
 

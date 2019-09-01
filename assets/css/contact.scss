@@ -1,5 +1,4 @@
 //contact.scss
-
 .form-group {
     text-align: left;
 }
@@ -10,7 +9,7 @@ label {
 
 }
 
-label.required:after {
+label.required:before {
     content: "*";
 }
 

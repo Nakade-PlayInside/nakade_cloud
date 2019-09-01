@@ -21,9 +21,10 @@
 
 namespace App\Controller;
 
-use App\Entity\ContactMail;
-use App\Form\Type\ContactType;
+use App\Entity\Common\ContactMail;
+use App\Form\Type\Common\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
@@ -86,7 +87,7 @@ class CommonController extends AbstractController
      *
      * @Route("/contact", name="common_contact")
      */
-    public function contact()
+    public function contact(Request $request)
     {
 
         // creates a task object and initializes some data for this example
@@ -95,9 +96,40 @@ class CommonController extends AbstractController
 
         $form = $this->createForm(ContactType::class, $contact);
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $contact = $form->getData();
+
+            // ... perform some action, such as saving the task to the database
+            // for example, if Task is a Doctrine entity, save it!
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($task);
+            // $entityManager->flush();
+
+            return $this->redirectToRoute('contact_success');
+        }
+
         return $this->render('common/contact.html.twig', [
                 'form' => $form->createView(),
         ]);
+
     }
+
+    /**
+     * The contact success page!
+     *
+     * @return Response
+     *
+     * @throws Exception
+     *
+     * @Route("/contact_success", name="contact_success")
+     */
+    public function contactSuccess()
+    {
+        return $this->render('common/about.html.twig');
+    }
+
 
 }

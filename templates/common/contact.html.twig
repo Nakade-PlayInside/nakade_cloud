@@ -1,6 +1,7 @@
 {# templates/common/contact.html.twig #}
 {% extends 'base.html.twig' %}
 {% block title %}Kontakt{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('contact') }}
@@ -23,36 +24,39 @@
         </div>
     </div>
 
-    <div class="unknown">
-        {{ form_row(form.address) }}
-    </div>
+    {{ form_row(form.address) }}
+
 
     <div class="row">
         <div class="col-3">
             {{ form_row(form.zipCode) }}
         </div>
-        <div class="col" id="some-custom-id">
+        <div class="col">
             {{ form_row(form.city) }}
         </div>
     </div>
 
-    <div class="unknown">
-        {{ form_row(form.phone) }}
+    {{ form_row(form.phone) }}
+
+    {{ form_row(form.email) }}
+
+    <div class="form-group">
+        {{ form_label(form.message) }}
+        {{ form_widget(form.message, {'attr': {'rows': '6'}}) }}
     </div>
 
-    <div class="email">
-        {{ form_row(form.email) }}
-    </div>
+    <p>Bitte füllen sie alle Felder, die mit einem * markiert sind, aus!</p>
 
-    <div class="message row-10">
-        {{ form_row(form.message) }}
-    </div>
+    <div class="g-recaptcha" data-sitekey="6LfmCrYUAAAAABrdZmHP3qzi7yUDuzq03mkA41xD"></div>
 
     {{ form_end(form) }}
-
-    <p>Bitte füllen sie alle Felder die mit einem * markiert sind aus!</p>
 
     <p>Ihre Kontaktdaten werden zum Zweck der Bearbeitung Ihrer Anfrage und für den Fall von Anschlussfragen bei uns
         gespeichert.<br>
         Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('contact') }}
 {% endblock %}

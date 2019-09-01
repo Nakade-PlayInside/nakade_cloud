@@ -18,9 +18,9 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form\Type;
+namespace App\Form\Type\Common;
 
-use App\Entity\ContactMail;
+use App\Entity\Common\ContactMail;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -35,9 +35,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ContactType extends AbstractType
@@ -53,53 +51,61 @@ class ContactType extends AbstractType
                     'firstName',
                     TextType::class,
                     ['label' => 'Vorname',
+                     'empty_data' => '',
                     ]
                 )
                 ->add(
                     'lastName',
                     TextType::class,
                     ['label' => 'Nachname',
+                     'empty_data' => '',
                     ]
                 )
                 ->add(
                     'address',
                     TextType::class,
                     ['label' => 'Anschrift',
-                    'required' => false,
+                     'required' => false,
+                     'empty_data' => '',
                     ]
                 )
                 ->add(
                     'zipCode',
                     TextType::class,
                     ['label' => 'PLZ',
-                    'required' => false,
+                     'required' => false,
+                     'empty_data' => '',
                     ]
                 )
                 ->add(
                     'city',
                     TextType::class,
                     ['label' => 'Stadt',
-                    'required' => false,
+                     'required' => false,
+                     'empty_data' => '',
                     ]
                 )
                 ->add(
                     'phone',
                     TelType::class,
                     ['label' => 'Telefon',
-                    'required' => false,
+                     'required' => false,
+                     'empty_data' => '',
                     ]
                 )
                 ->add(
                     'email',
                     EmailType::class,
                     ['label' => 'eMail',
-                    'help' => 'An diese Adresse wird eine Bestätigung geschickt',
+                     'help' => 'An diese Adresse wird eine Bestätigung geschickt',
+                     'empty_data' => '',
                     ]
                 )
                 ->add(
                     'message',
                     TextareaType::class,
                     ['label' => 'Nachricht',
+                     'empty_data' => '',
                     ]
                 )
                 ->add(
