@@ -5,6 +5,7 @@
         "php": "^7.3.7",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "beelab/recaptcha2-bundle": "^2.0",
         "sensio/framework-extra-bundle": "^5.4",
         "sensiolabs/security-checker": "^6.0",
         "symfony/asset": "4.3.*",

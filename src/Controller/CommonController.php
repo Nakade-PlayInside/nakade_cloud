@@ -92,12 +92,12 @@ class CommonController extends AbstractController
 
         // creates a task object and initializes some data for this example
         $contact = new ContactMail();
-        $contact->setMessage('Write a blog post');
-
         $form = $this->createForm(ContactType::class, $contact);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $contact = $form->getData();
