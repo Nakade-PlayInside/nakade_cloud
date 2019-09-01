@@ -58,6 +58,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="//www.google.com/recaptcha/api.js?hl=de"></script>
-     {{ encore_entry_script_tags('contact') }}
+     <script src="https://www.google.com/recaptcha/api.js?hl=de" async defer></script>
+    {{ encore_entry_script_tags('contact') }}
 {% endblock %}
