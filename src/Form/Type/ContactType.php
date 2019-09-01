@@ -35,7 +35,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ContactType extends AbstractType
@@ -47,38 +49,65 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('firstName', TextType::class,
-                   ['label' => 'Vorname',
-                ])
-                ->add('lastName', TextType::class,
-                   ['label' => 'Nachname',
-                ])
-                ->add('address', TextType::class,
-                   ['label' => 'Anschrift',
+                ->add(
+                    'firstName',
+                    TextType::class,
+                    ['label' => 'Vorname',
+                    ]
+                )
+                ->add(
+                    'lastName',
+                    TextType::class,
+                    ['label' => 'Nachname',
+                    ]
+                )
+                ->add(
+                    'address',
+                    TextType::class,
+                    ['label' => 'Anschrift',
                     'required' => false,
-                ])
-                ->add('zipCode', TextType::class,
-                   ['label' => 'PLZ',
+                    ]
+                )
+                ->add(
+                    'zipCode',
+                    TextType::class,
+                    ['label' => 'PLZ',
                     'required' => false,
-                ])
-                ->add('city', TextType::class,
-                   ['label' => 'Stadt',
+                    ]
+                )
+                ->add(
+                    'city',
+                    TextType::class,
+                    ['label' => 'Stadt',
                     'required' => false,
-                ])
-                ->add('phone', TelType::class,
-                   ['label' => 'Telefon',
+                    ]
+                )
+                ->add(
+                    'phone',
+                    TelType::class,
+                    ['label' => 'Telefon',
                     'required' => false,
-                ])
-                ->add('email', EmailType::class,
-                   ['label' => 'eMail',
-                    'help'  => 'An diese Adresse wird eine Bestätigung geschickt'
-                ])
-                ->add('message', TextareaType::class,
-                   ['label' => 'Nachricht',
-                ])
-                ->add('save', SubmitType::class,
-                   ['label' => 'Abschicken',
-                ])
+                    ]
+                )
+                ->add(
+                    'email',
+                    EmailType::class,
+                    ['label' => 'eMail',
+                    'help' => 'An diese Adresse wird eine Bestätigung geschickt',
+                    ]
+                )
+                ->add(
+                    'message',
+                    TextareaType::class,
+                    ['label' => 'Nachricht',
+                    ]
+                )
+                ->add(
+                    'save',
+                    SubmitType::class,
+                    ['label' => 'Abschicken',
+                    ]
+                )
         ;
     }
 
@@ -89,6 +118,13 @@ class ContactType extends AbstractType
     {
         $resolver->setDefaults([
                 'data_class' => ContactMail::class,
+            // enable/disable CSRF protection for this form
+                'csrf_protection' => true,
+            // the name of the hidden HTML field that stores the token
+                'csrf_field_name' => '_token',
+            // an arbitrary string used to generate the value of the token
+            // using a different string for each form improves its security
+                'csrf_token_id' => 'contact_item',
         ]);
     }
 }
