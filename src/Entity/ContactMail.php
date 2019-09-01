@@ -21,6 +21,7 @@
 namespace App\Entity;
 
 use DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class ContactMail!
@@ -32,31 +33,91 @@ use DateTime;
  */
 class ContactMail
 {
-    /** @var string */
+    /**
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
+     * @var string
+     */
     protected $city = '';
 
     /** @var DateTime Date of message */
     protected $date;
 
-    /** @var string */
+    /**
+     * @Assert\NotBlank
+     * @Assert\Email(
+     *     message="Die Email {{ value }} ist ungültig.",
+     *     checkMX=true
+     * )
+     *
+     * @var string
+     */
     protected $email = '';
 
-    /** @var string */
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
+     * @var string
+     */
     protected $firstName = '';
 
-    /** @var string */
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
+     * @var string
+     */
     protected $lastName = '';
 
-    /** @var string */
+    /**
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
+     * @var string
+     */
     protected $phone = '';
 
-    /** @var string */
+    /**
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
+     * @var string
+     */
     protected $address = '';
 
-    /** @var string User message */
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
+     * @var string User message
+     */
     protected $message = '';
 
-    /** @var string Postleitzahl */
+    /**
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
+     * @var string Postleitzahl
+     */
     protected $zipCode = '';
 
     /**
