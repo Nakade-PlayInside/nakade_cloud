@@ -81,6 +81,8 @@ class CommonController extends AbstractController
     /**
      * The contact page!
      *
+     * @param Request $request
+     *
      * @return Response
      *
      * @throws Exception
@@ -89,7 +91,6 @@ class CommonController extends AbstractController
      */
     public function contact(Request $request)
     {
-
         // creates a task object and initializes some data for this example
         $contact = new ContactMail();
         $form = $this->createForm(ContactType::class, $contact);
@@ -97,7 +98,6 @@ class CommonController extends AbstractController
         $form->handleRequest($request);
         $recaptcha = $request->get('g-recaptcha-response', '');
         if ($form->isSubmitted() && $form->isValid() && !empty($recaptcha)) {
-
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $contact = $form->getData();
