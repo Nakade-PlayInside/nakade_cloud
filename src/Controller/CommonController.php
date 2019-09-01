@@ -95,10 +95,10 @@ class CommonController extends AbstractController
         $form = $this->createForm(ContactType::class, $contact);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $recaptcha = $request->get('g-recaptcha-response', '');
+        if ($form->isSubmitted() && $form->isValid() && !empty($recaptcha)) {
 
 
-            $recaptcha = $request->get('g-recaptcha-response', '');
             dump($recaptcha);
             die();
 

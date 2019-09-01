@@ -120,17 +120,6 @@ class ContactMail
      */
     protected $zipCode = '';
 
-
-    /**
-     * @Assert\NotBlank(
-     *     message="Bist du ein Roboter?"
-     * )
-     *
-     *
-     * @var string Postleitzahl
-     */
-    protected $captcha;
-
     /**
      * ContactMail constructor.
      *
