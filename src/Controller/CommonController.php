@@ -98,6 +98,10 @@ class CommonController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
+            $recaptcha = $request->get('g-recaptcha-response', '');
+            dump($recaptcha);
+            die();
+
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $contact = $form->getData();
