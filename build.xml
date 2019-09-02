@@ -14,11 +14,11 @@
     <!-- END -->
 
     <!-- DEPLOYMENT -->
-    <target name="delivery" depends="createAssets, fileRights, clearCache, version, moveOldVersion, copyToDeploy" />
+    <target name="delivery" depends="createAssets, clearCache, version, moveOldVersion, copyToDeploy" />
     <!-- END -->
 
     <!-- FINALIZE -->
-    <target name="finalize" depends="fileRightsFinal, clearCacheFinal, finish" />
+    <target name="finalize" depends="fileRightsFinal, clearCacheFinal, chgOwnerProductFiles, finish" />
     <!-- END -->
 
     <!-- ANALYSIS -->
