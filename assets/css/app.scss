@@ -1,8 +1,13 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 //@import "~font-awesome";
 
+$color-site: rgb(170,205,78);
+
 body {
-    background: #aacd4e;
+    background-image: url("../images/background/wood2.jpeg");
+    //background-size: cover;
+    //background-position: center center;
+    background-color: $color-site;
     padding-top: 5rem;
 }
 
@@ -31,10 +36,21 @@ main > .container {
 }
 
 
-a.navbar-brand img {
-    width: 28px;
-    height: 28px;
-    margin-right: 10px;
+a.navbar-brand {
+
+    img {
+        width: 28px;
+        height: 28px;
+        margin-right: 10px;
+    }
+}
+
+.navbar-light .navbar-brand{
+    font-weight: bold;
+}
+
+.upper-toggler {
+    background-color: $color-site;
 }
 
 .footer {
@@ -48,4 +64,10 @@ a.navbar-brand img {
 
 code {
     font-size: 80%;
+}
+
+.nakade-bg {
+    background:linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("../images/background/steine.jpeg");
+    background-size: cover;
+    background-color: #e3f2fd;
 }

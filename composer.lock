@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08f7a2b7c36b5cf61bd149b62015733c",
+    "content-hash": "0aa6d3628731be775dd3295e8cba84ca",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",

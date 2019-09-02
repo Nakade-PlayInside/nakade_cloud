@@ -15,4 +15,24 @@ import 'bootstrap'; //add functions to jQuery
 //uncomment to support legacy code
 global.$ = $;
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+//navigation active class settings
+$(document).ready(function () {
+    $(function () {
+        var current_page_URL = location.href;
+
+        $("a").each(function () {
+
+            if ($(this).attr("href") !== "#") {
+                var target_URL = $(this).prop("href");
+
+                if (target_URL == current_page_URL) {
+                    $('nav a').parents('li, ul').removeClass('active');
+                    $(this).parent('li').addClass('active');
+
+                    return false;
+                }
+            }
+        });
+    });
+});
+
