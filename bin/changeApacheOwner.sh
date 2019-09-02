@@ -13,7 +13,7 @@ if [ ! -d "$PATH" ]
      echo found "$PATH".
 fi
 
-echo "change recursive owner to \"$OWNER:www-data\" of \"$PATH\"."
-/usr/bin/sudo /bin/chown "$OWNER:www-data" -R "$PATH"
+echo "change recursive owner to \"www-data:www-data\" of \"$PATH\"."
+/usr/bin/sudo /bin/chown www-data:www-data -R "$PATH"
 
 exit 0
