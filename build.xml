@@ -284,21 +284,6 @@
     </target>
     <!-- END -->
 
-    <!-- FILE RIGHTS WORKSPACE -->
-    <target name="fileRights"
-            unless="fileRights.done"
-            description="Change rights of files in Workspace ...">
-        <echo message="Change rights for www-data ..." />
-        <property environment="env" />
-        <exec executable="fileRights.sh">
-            <arg path="${env.WORKSPACE}"/>
-            <arg path="${deployDir}"/>
-            <arg path="${saveDir}"/>
-        </exec>
-        <property name="fileRights.done" value="true"/>
-    </target>
-    <!-- END -->
-
     <!-- CLEAR CACHE -->
     <target name="clearCache"
             unless="cache.done"
@@ -350,9 +335,21 @@
     </target>
     <!-- END -->
 
+    <!-- FILE OWNERSHIP OLD FILES -->
+    <target name="chgOwnerOldFiles"
+            unless="chgOwnerOldFiles.done"
+            description="Change owner of files in product before moving...">
+        <echo message="Change rights for www-data ..." />
+        <exec executable="changeOwner.sh">
+            <arg path="${deployDir}"/>
+        </exec>
+        <property name="chgOwnerOldFiles.done" value="true"/>
+    </target>
+    <!-- END -->
+
     <!-- MOVE OLD FILES -->
     <target name="moveOldVersion"
-            depends="deleteLastDir"
+            depends="deleteLastDir, chgOwnerOldFiles"
             unless="moveOldVersion.done"
             description="Move old version.">
         <property environment="env" />
@@ -360,6 +357,7 @@
         <move todir="${saveDir}" includeemptydirs="true" overwrite="true">
             <fileset dir="${deployDir}" >
                 <exclude name="**/var/log/**"/>
+                <exclude name=".env.local"/>
             </fileset>
         </move>
         <property name="moveOldVersion.done" value="true"/>
@@ -378,7 +376,7 @@
 
     <!-- DEPLOY FILES -->
     <target name="copyToDeploy"
-            depends="createDeployDir, fileRights"
+            depends="createDeployDir"
             unless="copyToDeploy.done"
             description="Copy files to deploy folder.">
         <property environment="env" />
@@ -401,7 +399,6 @@
             unless="fileRightsFinal.done"
             description="Change rights of files in prod ...">
         <echo message="Change rights for www-data ..." />
-        <property environment="env" />
         <exec executable="fileRights.sh">
             <arg path="${deployDir}"/>
         </exec>
@@ -420,6 +417,19 @@
             <arg value="cache:clear"/>
         </exec>
         <property name="clearCacheFinal.done" value="true"/>
+    </target>
+    <!-- END -->
+
+    <!-- FILE OWNERSHIP PRODUCT FILES -->
+    <target name="chgOwnerProductFiles"
+            unless="chgOwnerProductFiles.done"
+            description="Change owner of production files ...">
+        <echo message="Change rights for www-data ..." />
+        <exec executable="changeOwner.sh">
+            <arg path="${deployDir}"/>
+            <arg path="www-data"/>
+        </exec>
+        <property name="chgOwnerProductFiles.done" value="true"/>
     </target>
     <!-- END -->
 

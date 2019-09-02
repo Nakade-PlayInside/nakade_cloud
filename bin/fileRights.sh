@@ -2,46 +2,22 @@
 #Params are root dir
 PATH=$1
 
-#template file existing
-function findPath()
-{
-    PATH=$1
-    if [ ! -d "$PATH" ]
-    then
-        echo Path "$PATH" not found.
-        echo Exit.
-        exit 1
-    else
-        echo Path "$PATH" found.
-    fi
-}
+#proof if path exists
+if [ ! -d "$PATH" ]
+  then
+     echo Path \"$PATH\" not found.
+     echo Exit.
+     exit 1
+  else
+     echo found \"$PATH\" ...
+fi
 
-function makeRights()
-{
-    RIGHTS=$1
-    PATH=$2
-    echo "Make subdir rights writable: $RIGHTS"
-    /bin/chmod "$RIGHTS" -R "$PATH"
-}
+#file rights
+echo "make recursive rights to 775 in  \"$PATH\" ..."
+/usr/bin/sudo /bin/chmod 775 -R "$PATH"
 
-function changeOwner()
-{
-    PATH=$1
-    echo "Change owner: $1"
-    /usr/bin/sudo /bin/chown "jenkins:www-data" -R "$PATH"
-}
-
-
-#iterate thru all params
-while [ $# -gt 0 ]
-do
-  changeOwner $1
-  findPath "$1"/var
-  findPath "$1"/vendor
-  makeRights 775 "$1"/var
-  makeRights 775 "$1"/vendor
-  makeRights 777 "$1"/var/log
-  shift
-done
+#log files
+echo "make log files accessible (777): \"$PATH/var/log\""
+/usr/bin/sudo /bin/chmod 777 -R "$PATH/var/log/"
 
 exit 0
