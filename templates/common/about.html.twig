@@ -2,7 +2,53 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Über uns{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('imprint') }}
+{% endblock %}
 
 {% block body %}
-    <h2>Wer ist Nakade?</h2>
+
+    <h2>Wir über uns</h2>
+
+    <div class="privacy">
+
+    <p>Der <b>Nakade Go Club</b> mit Sitz in Berlin wurde gegründet, um die gleichnamige Bundesliga Mannschaft zu
+        unterstützen.<br>
+     (<span style="font-style: italic;">Nakade ist japanisch und bedeutet soviel wie "innerer Zug".
+    Als Go-Terminus steht Nakade für die innere Klumpen-Form, wie das sog. Häschen-Sechser, durch die eine Stellung
+    bei einem Tötungsversuch auf ein Auge reduziert wird.</span>)<br>
+    </p>
+
+    <p>Ursprünglich wurde die Bundesliga Mannschaft aus dem <b>Spandauer Go Club</b> rekrutiert. Nach anfänglichen Erfolgen,
+    fiel die Mannschaft auseinander und wurde wieder aufgelöst. Einige der Spieler spielten zwischenzeitlich für
+        andere Bundesliga Mannschaften, bis <b>Maurice "Mo" Wohabi</b> eine neue Mannschaft zusammengestellen konnte.<br>
+    </p>
+
+    <p>Da es zu diesem Zeitpunkt keinen Spieltreff gab, aus dem weitere Spieler rekrutiert hätten werden können, wurde
+        zeitgleich der <b>Berliner Baduk Club e.V.</b> ins Leben gerufen. Ein neuer wöchentlicher Spieltreff wurde in
+     Berlin-Charlottenburg eröffnet und Nakade startete erfolgreich in eine neue Saison.<br>
+     Leider waren Verein wie auch Spieltreff nur wenig erfolgreich.<br> Das Wunschziel eines wachsenden Verein und vor
+        allem Nachwuchs für die Bundesliga Mannschaft wurde auch nach mehreren Jahren nicht erreicht.
+    </p>
+
+    <p>Zu Trainingszwecken wurde die <b>Nakade-Liga</b> ins Leben gerufen. Die Spieler konnten sich so gegeneinander in
+        ernsthaften online-Partien messen. Die Nakade-Liga wurde über eine Webseite vollautomatisch organisiert. Nach
+        der ersten Probesaison wurde die Liga stetig erweitert. Bis zu 30 Teilnehmer aus ganz Europa nahmen an der
+        Nakade-Liga teil.<br>
+        Zeitgleich konnte sich die Mannschaft in der 3. Liga der Bundesliga etablieren.
+    </p>
+
+    <p>Zudem wurde ein neuer Spieltreff in zentraler Lage eröffnet, das <b>Mommsen-Eck</b>, eine bekannste Alt-Berliner
+        Gaststätte, die mit allen Verkehrsmitteln gut erreichbar ist. Einmal im Monat trifft sich dort der Verein,
+        um in gemütlicher Umgebung eine Partie zu spielen.
+    </p>
+
+    <p>In der Saison 2018/2019 gelang dem Team die große Überraschung: Der Aufstieg in die <b>2. Liga!</b> Jeder
+    der 10 Spieler hatte im Saisonverlauf seinen Beitrag für das Erreichen des 2.Platzes geleistet. In den beiden
+    Relegationsspielen wuchs die Mannschaft über sich heraus und gewann beide Spiele knapp mit 3:2.
+    Der damit verbundene Aufstieg ist eine <b>Teamleistung</b> und die Krönung einer glücklichen Saison.
+    </p>
+    </div>
+
 {% endblock %}
