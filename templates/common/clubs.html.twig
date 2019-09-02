@@ -1,0 +1,53 @@
+{# templates/common/about.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Über uns{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('imprint') }}
+{% endblock %}
+
+{% block body %}
+
+    <h2>Spieltreff</h2>
+
+    <div class="privacy">
+
+    <h2>Mommsen-Eck</h2>
+        <p>Der <b>Nakade Go Club</b> trifft sich einmal im Monat im <a target="_blank" title="externe Seite!"
+        href="http://www.mommsen-eck.de/">Mommsen-Eck</a> in Berlin Charlottenburg.<br>
+     Das <i>Haus der 100 Biere</i> ist eine beliebte Gaststätte mit langer Tradition zwischen Ku'damm und
+     Kantstrasse.</p>
+
+        <p>Go-Spieler, Anfänger und Interessierte sind herzlich willkommen. Wir verfügen auch über kleinere
+        <b>Anfänger-Bretter</b> und erklären gerne das Spiel.<br>
+        Die Teilnahme ist <b>kostenlos</b>.<br>
+    </p>
+
+    <h2>Adresse</h2>
+    <div class="bvg">
+        <p>
+            Mommsen-Eck<br>
+            Mommsenstrasse 45<br>
+            10629 Berlin<br><br>
+            <img src="{{ asset('build/images/background/u2.png') }}">
+            <img src="{{ asset('build/images/background/u7.png') }}"><span>Wilmersdorfer Str.</span>
+            <img src="{{ asset('build/images/background/u7.png') }}"><span>Adenauer Platz</span>
+            <img src="{{ asset('build/images/background/sbahn.png') }}"><span>Bahnhof Charlottenburg</span><br>
+            <i>ca. 5min Fussweg</i>
+
+        </p>
+    </div>
+
+    <h2>Jeden 2.Montag im Monat von 18-22h</h2>
+    <p>nächster Termin am <b>9.September</b></p>
+
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('imprint') }}
+{% endblock %}

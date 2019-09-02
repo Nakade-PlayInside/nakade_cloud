@@ -79,6 +79,20 @@ class CommonController extends AbstractController
     }
 
     /**
+     * The clubs page!
+     *
+     * @return Response
+     *
+     * @throws Exception
+     *
+     * @Route("/clubs", name="common_clubs")
+     */
+    public function clubs()
+    {
+        return $this->render('common/clubs.html.twig');
+    }
+
+    /**
      * The contact page!
      *
      * @param Request $request
