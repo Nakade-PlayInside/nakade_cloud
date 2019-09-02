@@ -340,7 +340,7 @@
             unless="chgOwnerOldFiles.done"
             description="Change owner of files in product before moving...">
         <echo message="Change rights for www-data ..." />
-        <exec executable="changeOwner.sh">
+        <exec executable="changeJenkinsOwner.sh">
             <arg path="${deployDir}"/>
         </exec>
         <property name="chgOwnerOldFiles.done" value="true"/>
@@ -425,7 +425,7 @@
             unless="chgOwnerProductFiles.done"
             description="Change owner of production files ...">
         <echo message="Change rights for www-data ..." />
-        <exec executable="changeOwner.sh">
+        <exec executable="changeApacheOwner.sh">
             <arg path="${deployDir}"/>
             <arg path="www-data"/>
         </exec>
