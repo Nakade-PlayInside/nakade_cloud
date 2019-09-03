@@ -1,0 +1,208 @@
+.contentIcon {
+  background-image: url(../images/sprites/sprite-content-black.png);
+}
+.icon-ic_add_black_24dp {
+  background-position: -32px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_add_box_black_24dp {
+  background-position: -0px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_add_circle_black_24dp {
+  background-position: -0px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_add_circle_outline_black_24dp {
+  background-position: -32px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_archive_black_24dp {
+  background-position: -64px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_backspace_black_24dp {
+  background-position: -64px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_block_black_24dp {
+  background-position: -0px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_clear_black_24dp {
+  background-position: -32px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_content_copy_black_24dp {
+  background-position: -64px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_content_cut_black_24dp {
+  background-position: -96px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_content_paste_black_24dp {
+  background-position: -96px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_create_black_24dp {
+  background-position: -96px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_delete_sweep_black_24dp {
+  background-position: -0px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_drafts_black_24dp {
+  background-position: -32px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_filter_list_black_24dp {
+  background-position: -64px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_flag_black_24dp {
+  background-position: -96px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_font_download_black_24dp {
+  background-position: -128px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_forward_black_24dp {
+  background-position: -128px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_gesture_black_24dp {
+  background-position: -128px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_inbox_black_24dp {
+  background-position: -128px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_link_black_24dp {
+  background-position: -0px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_low_priority_black_24dp {
+  background-position: -32px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_mail_black_24dp {
+  background-position: -64px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_markunread_black_24dp {
+  background-position: -96px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_move_to_inbox_black_24dp {
+  background-position: -128px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_next_week_black_24dp {
+  background-position: -160px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_redo_black_24dp {
+  background-position: -160px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_remove_black_24dp {
+  background-position: -160px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_remove_circle_black_24dp {
+  background-position: -160px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_remove_circle_outline_black_24dp {
+  background-position: -160px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_reply_all_black_24dp {
+  background-position: -0px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_reply_black_24dp {
+  background-position: -32px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_report_black_24dp {
+  background-position: -64px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_save_black_24dp {
+  background-position: -96px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_select_all_black_24dp {
+  background-position: -128px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_send_black_24dp {
+  background-position: -160px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_sort_black_24dp {
+  background-position: -192px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_text_format_black_24dp {
+  background-position: -192px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_unarchive_black_24dp {
+  background-position: -192px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_undo_black_24dp {
+  background-position: -192px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_weekend_black_24dp {
+  background-position: -192px -128px;
+  width: 32px;
+  height: 32px;
+}
