@@ -23,7 +23,5 @@
   "browserslist": [
     "> 1%"
   ],
-  "dependencies": {
-    "api.js": "^0.0.5"
-  }
+  "dependencies": {}
 }
