@@ -89,6 +89,8 @@ class CommonController extends AbstractController
      */
     public function clubs()
     {
+        new \DateTime('now');
+
         return $this->render('common/clubs.html.twig');
     }
 
