@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 
+setlocale(LC_TIME, 'de_DE');
 /**
  * Class Common Controller!
  *
@@ -87,11 +88,17 @@ class CommonController extends AbstractController
      *
      * @Route("/clubs", name="common_clubs")
      */
-    public function clubs()
+    final public function clubs(): Response
     {
-        new \DateTime('now');
+        $datum = date('d-m-Y', strtotime(sprintf('second monday of %s', date('F Y'))));
+        $timestamp = strtotime($datum);
+        setlocale(LC_TIME, 'de_DE.utf8');
+        $next = strftime('%e.%B', $timestamp);
+        //todo: wenn spieltreff gewesen...nächster tag
+        //todo: hinweis->morgen
+        //todo: hinweis->heute
 
-        return $this->render('common/clubs.html.twig');
+        return $this->render('common/clubs.html.twig', ['next' => $next]);
     }
 
     /**
@@ -120,9 +127,9 @@ class CommonController extends AbstractController
 
             // ... perform some action, such as saving the task to the database
             // for example, if Task is a Doctrine entity, save it!
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($task);
-            // $entityManager->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($contact);
+            $entityManager->flush();
 
             return $this->redirectToRoute('contact_success');
         }
