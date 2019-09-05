@@ -47,7 +47,7 @@
     </div>
 
     <h2>jeden 2.Montag im Monat von 18-22h</h2>
-    <p>nächster Termin am <b>{{ next }}</b></p>
+    <p>nächster Termin am <b>{{ meetingDate | locale_date }}</b>{{ meeting_alert('2019-09-09') }}</p>
 
     </div>
 

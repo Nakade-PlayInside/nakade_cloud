@@ -92,14 +92,13 @@ class CommonController extends AbstractController
      */
     final public function clubs(): Response
     {
-        $meeting = new NextClubMeeting();
-        $next = $meeting->calcNextMeetingDate();
+        $meetingDate = (new NextClubMeeting())->calcNextMeetingDate();
 
-        echo (new ClubMeetingAlert($meeting->getNextMeetingDate()))->isTomorrow();
+        //echo (new ClubMeetingAlert($meeting->getNextMeetingDate()))->isTomorrow();
 
         //todo: twig filter
 
-        return $this->render('common/clubs.html.twig', ['next' => $next]);
+        return $this->render('common/clubs.html.twig', ['meetingDate' => $meetingDate]);
     }
 
     /**

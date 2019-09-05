@@ -109,24 +109,7 @@ class NextClubMeeting
     }
 
     /**
-     * Gives you a locale string of the calculated date.
-     *
-     * @param string $actualMonthDate
-     *
-     * @return string
-     */
-    public function getLocaleDate(string $actualMonthDate): string
-    {
-        $timestamp = strtotime($actualMonthDate);
-
-        //set date locale to German
-        setlocale(LC_TIME, 'de_DE.utf8');
-
-        return strftime('%e.%B', $timestamp);
-    }
-
-    /**
-     * @return string German date string eg. 9. September
+     * @return string a date string in format Y-m-d eg. 2019-09-17
      */
     public function calcNextMeetingDate(): string
     {
@@ -141,7 +124,7 @@ class NextClubMeeting
         }
         $this->nextMeetingDate = $actualMonthDate;
 
-        return $this->getLocaleDate($actualMonthDate);
+        return $this->getNextMeetingDate();
     }
 
     /**

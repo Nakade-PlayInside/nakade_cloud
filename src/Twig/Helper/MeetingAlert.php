@@ -18,16 +18,16 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Controller\Helper;
+namespace App\Twig\Helper;
 
 /**
- * Gives you an alert message if club meeting is tomorrow or today.
+ * Gives you an alert message if meeting is tomorrow or today.
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ClubMeetingAlert
+class MeetingAlert
 {
     const FORMAT = 'Y-m-d';
 
@@ -47,55 +47,28 @@ class ClubMeetingAlert
     protected $dayBeforeMeeting;
 
     /**
-     * ClubMeetingAlert constructor.
+     * Gives you an alert HTML if date is today or tomorrow.
      *
-     * @param string $nextMeetingDate
+     * @param string $nextMeetingDate expects a date string in format 'Y-m-d eg. 2019-11-24
+     *
+     * @return string
      */
-    public function __construct(string $nextMeetingDate = '')
+    public function getAlert(string $nextMeetingDate): string
     {
         $this->nextMeetingDate = $nextMeetingDate;
         $this->setDayBeforeMeeting($nextMeetingDate);
         $this->today = date(self::FORMAT);
-    }
 
-    /**
-     * @return false|string
-     */
-    public function getToday()
-    {
-        return $this->today;
-    }
+        //tomorrow
+        if (strtotime($this->today) === strtotime($this->dayBeforeMeeting)) {
+            return 'Morgen';
+        }
+        //today
+        if (strtotime($this->today) === strtotime($this->nextMeetingDate)) {
+            return 'Heute';
+        }
 
-    /**
-     * @return string
-     */
-    public function getNextMeetingDate(): string
-    {
-        return $this->nextMeetingDate;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDayBeforeMeeting(): string
-    {
-        return $this->dayBeforeMeeting;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isToday(): bool
-    {
-        return strtotime($this->today) == strtotime($this->nextMeetingDate);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTomorrow(): bool
-    {
-        return strtotime($this->today) == strtotime($this->dayBeforeMeeting);
+        return '';
     }
 
     /**
