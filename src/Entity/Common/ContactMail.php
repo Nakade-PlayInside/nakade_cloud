@@ -129,7 +129,7 @@ class ContactMail
      *
      * @var string|null
      */
-    protected $address = '';
+    protected $address;
 
     /**
      * @Assert\NotNull
@@ -156,6 +156,10 @@ class ContactMail
      * @var string|null Postleitzahl
      */
     protected $zipCode;
+
+    //todo: processDate
+    //todo: editor
+    //todo: parentMailId wie forum
 
     /**
      * ContactMail constructor.
@@ -190,7 +194,7 @@ class ContactMail
     /**
      * @return string|null
      */
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -210,7 +214,7 @@ class ContactMail
     /**
      * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->city;
     }
@@ -220,7 +224,7 @@ class ContactMail
      *
      * @return self
      */
-    public function setCity(string $city = ''): self
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
@@ -250,7 +254,7 @@ class ContactMail
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -260,7 +264,7 @@ class ContactMail
      *
      * @return self
      */
-    public function setEmail(string $email = ''): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -270,7 +274,7 @@ class ContactMail
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -280,7 +284,7 @@ class ContactMail
      *
      * @return self
      */
-    public function setFirstName(string $firstName = ''): self
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -290,7 +294,7 @@ class ContactMail
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -300,7 +304,7 @@ class ContactMail
      *
      * @return self
      */
-    public function setLastName(string $lastName = ''): self
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -308,9 +312,9 @@ class ContactMail
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -320,7 +324,7 @@ class ContactMail
      *
      * @return self
      */
-    public function setPhone(string $phone = ''): self
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
 
@@ -328,9 +332,9 @@ class ContactMail
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
         return $this->message;
     }
@@ -340,7 +344,7 @@ class ContactMail
      *
      * @return self
      */
-    public function setMessage(string $message = ''): self
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 
@@ -348,9 +352,9 @@ class ContactMail
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getZipCode(): string
+    public function getZipCode(): ?string
     {
         return $this->zipCode;
     }
@@ -360,7 +364,7 @@ class ContactMail
      *
      * @return self
      */
-    public function setZipCode(string $zipCode = ''): self
+    public function setZipCode(string $zipCode): self
     {
         $this->zipCode = $zipCode;
 

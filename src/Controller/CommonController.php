@@ -21,6 +21,8 @@
 
 namespace App\Controller;
 
+use App\Controller\Helper\ClubMeetingAlert;
+use App\Controller\Helper\NextClubMeeting;
 use App\Entity\Common\ContactMail;
 use App\Form\Type\Common\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -90,13 +92,12 @@ class CommonController extends AbstractController
      */
     final public function clubs(): Response
     {
-        $datum = date('d-m-Y', strtotime(sprintf('second monday of %s', date('F Y'))));
-        $timestamp = strtotime($datum);
-        setlocale(LC_TIME, 'de_DE.utf8');
-        $next = strftime('%e.%B', $timestamp);
-        //todo: wenn spieltreff gewesen...nächster tag
-        //todo: hinweis->morgen
-        //todo: hinweis->heute
+        $meeting = new NextClubMeeting();
+        $next = $meeting->calcNextMeetingDate();
+
+        echo (new ClubMeetingAlert($meeting->getNextMeetingDate()))->isTomorrow();
+
+        //todo: twig filter
 
         return $this->render('common/clubs.html.twig', ['next' => $next]);
     }
@@ -122,7 +123,7 @@ class CommonController extends AbstractController
         $recaptcha = $request->get('g-recaptcha-response', '');
         if ($form->isSubmitted() && $form->isValid() && !empty($recaptcha)) {
             // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
+            // but, the original `$contact` variable has also been updated
             $contact = $form->getData();
 
             // ... perform some action, such as saving the task to the database
