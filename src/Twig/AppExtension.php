@@ -3,23 +3,36 @@
 namespace App\Twig;
 
 use App\Twig\Helper\MeetingAlert;
+use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
+use Twig\Environment;
 
 /**
  * Class AppExtension!
  *
- * @package App\Twig
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class AppExtension extends AbstractExtension
 {
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * AppExtension constructor.
+     *
+     * @param Environment $twig
+     */
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
     /**
      * @return array
      */
@@ -30,16 +43,7 @@ class AppExtension extends AbstractExtension
             // parameter: ['is_safe' => ['html']]
             // Reference: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
             new TwigFilter('locale_date', [$this, 'processLocale']),
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('meeting_alert', [$this, 'processAlert']),
+            new TwigFilter('meeting_alert', [$this, 'processAlert'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -69,8 +73,20 @@ class AppExtension extends AbstractExtension
      */
     public function processAlert(string $value): string
     {
-        return (new MeetingAlert())->getAlert($value);
+        $alert = (new MeetingAlert())->getAlert($value);
+
+        if (empty($alert)) {
+            return '';
+        }
+
+        /** @var AssetExtension $asset */
+        $asset = $this->twig->getExtension(AssetExtension::class);
+        $imgSrc = $asset->getAssetUrl('build/images/svg/ic_event_available_24px.svg');
+        $class = $alert==='Heute'? "today":'';
+
+        $html = '<img alt="termin" src="'.$imgSrc.'">';
+        $html .= '<span class="' . $class . '">'.$alert.'</span>';
+
+        return $html;
     }
-
-
 }

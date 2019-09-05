@@ -1,5 +1,6 @@
 @import "sprite-maps-black.css";
 @import "sprite-action-black.css";
+@import "sprite-notification-black.css";
 
 dl {
     text-align: left;
@@ -110,5 +111,29 @@ dl {
     }
 
   }
+}
+
+.meeting {
+  img {
+    height:24px;
+    width:24px;
+    margin: 0px 5px 0px 10px;
+  }
+
+  span {
+    color: forestgreen;
+    font-weight: bold;
+  }
+
+  .today {
+    animation: blinker 1.5s linear infinite;
+    color: red;
+    @keyframes blinker {
+      50% {
+        opacity: 0;
+      }
+    }
+  }
+
 
 }

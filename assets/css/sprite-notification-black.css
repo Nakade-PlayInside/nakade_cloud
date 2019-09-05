@@ -1,0 +1,274 @@
+
+.notificationIcon {
+  background-image: url(../images/sprites/sprite-notification-black.png);
+}
+.icon-ic_adb_black_24dp {
+  background-position: -32px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_airline_seat_flat_angled_black_24dp {
+  background-position: -160px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_airline_seat_flat_black_24dp {
+  background-position: -0px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_airline_seat_individual_suite_black_24dp {
+  background-position: -32px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_airline_seat_legroom_extra_black_24dp {
+  background-position: -64px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_airline_seat_legroom_normal_black_24dp {
+  background-position: -64px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_airline_seat_legroom_reduced_black_24dp {
+  background-position: -0px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_airline_seat_recline_extra_black_24dp {
+  background-position: -32px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_airline_seat_recline_normal_black_24dp {
+  background-position: -64px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_bluetooth_audio_black_24dp {
+  background-position: -96px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_confirmation_number_black_24dp {
+  background-position: -96px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_disc_full_black_24dp {
+  background-position: -96px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_do_not_disturb_alt_black_24dp {
+  background-position: -0px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_do_not_disturb_black_24dp {
+  background-position: -32px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_do_not_disturb_off_black_24dp {
+  background-position: -64px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_do_not_disturb_on_black_24dp {
+  background-position: -96px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_drive_eta_black_24dp {
+  background-position: -128px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_enhanced_encryption_black_24dp {
+  background-position: -128px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_event_available_black_24dp {
+  background-position: -128px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_event_busy_black_24dp {
+  background-position: -128px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_event_note_black_24dp {
+  background-position: -0px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_folder_special_black_24dp {
+  background-position: -32px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_live_tv_black_24dp {
+  background-position: -64px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_mms_black_24dp {
+  background-position: -96px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_more_black_24dp {
+  background-position: -128px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_network_check_black_24dp {
+  background-position: -160px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_network_locked_black_24dp {
+  background-position: -160px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_no_encryption_black_24dp {
+  background-position: -0px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_ondemand_video_black_24dp {
+  background-position: -160px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_personal_video_black_24dp {
+  background-position: -160px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_phone_bluetooth_speaker_black_24dp {
+  background-position: -0px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_phone_forwarded_black_24dp {
+  background-position: -32px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_phone_in_talk_black_24dp {
+  background-position: -64px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_phone_locked_black_24dp {
+  background-position: -96px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_phone_missed_black_24dp {
+  background-position: -128px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_phone_paused_black_24dp {
+  background-position: -160px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_power_black_24dp {
+  background-position: -192px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_priority_high_black_24dp {
+  background-position: -192px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_rv_hookup_black_24dp {
+  background-position: -192px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_sd_card_black_24dp {
+  background-position: -192px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_sim_card_alert_black_24dp {
+  background-position: -192px -128px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_sms_black_24dp {
+  background-position: -192px -160px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_sms_failed_black_24dp {
+  background-position: -0px -192px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_sync_black_24dp {
+  background-position: -32px -192px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_sync_disabled_black_24dp {
+  background-position: -64px -192px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_sync_problem_black_24dp {
+  background-position: -96px -192px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_system_update_black_24dp {
+  background-position: -128px -192px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_tap_and_play_black_24dp {
+  background-position: -160px -192px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_time_to_leave_black_24dp {
+  background-position: -192px -192px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_vibration_black_24dp {
+  background-position: -224px -0px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_voice_chat_black_24dp {
+  background-position: -224px -32px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_vpn_lock_black_24dp {
+  background-position: -224px -64px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_wc_black_24dp {
+  background-position: -224px -96px;
+  width: 32px;
+  height: 32px;
+}
+.icon-ic_wifi_black_24dp {
+  background-position: -224px -128px;
+  width: 32px;
+  height: 32px;
+}
