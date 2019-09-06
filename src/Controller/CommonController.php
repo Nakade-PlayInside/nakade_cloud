@@ -131,6 +131,31 @@ class CommonController extends AbstractController
             $entityManager->persist($contact);
             $entityManager->flush();
 
+            $message = (new \Swift_Message('Ihre Kontaktanfrage'))
+                    ->setFrom('send@example.com')
+                    ->setTo($contact->getEmail())
+                    ->setBody(
+                            $this->renderView(
+                            // templates/emails/registration.html.twig
+                                    'emails/contact.html.twig',
+                                    ['name' => $name]
+                            ),
+                            'text/html'
+                    )
+
+                    // you can remove the following code if you don't define a text version for your emails
+                    ->addPart(
+                            $this->renderView(
+                            // templates/emails/registration.txt.twig
+                                    'emails/contact.txt.twig',
+                                    ['name' => $name]
+                            ),
+                            'text/plain'
+                    )
+            ;
+
+            $mailer->send($message);
+
             return $this->redirectToRoute('contact_success');
         }
 
@@ -150,6 +175,6 @@ class CommonController extends AbstractController
      */
     public function contactSuccess()
     {
-        return $this->render('common/about.html.twig');
+        return $this->render('emails/contact.html.twig', ['name' => 'Hans Doof']);
     }
 }

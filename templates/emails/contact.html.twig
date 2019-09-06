@@ -1,0 +1,18 @@
+{# templates/emails/contact.html.twig #}
+<h3>Deine Anfrage bei nakade.de</h3>
+
+<p style="margin-top: 5px;margin-bottom: 10px;">Hallo {{ name }}!</p>
+
+Vielen Dank für deine Anfrage über unser online-Kontaktformular.<br>
+Die Bearbeitung kann etwas dauern. Bitte habe ein paar Tage Geduld.
+
+<p style="margin-top: 20px;margin-bottom: 10px;">Mit 361 Grüßen</p>
+Das Nakade Team<br>
+
+{# Makes an absolute URL to the /images/logo.png file #}
+<img style="display:block; margin: 20px" alt="logo" width="96px" height="96px" src="{{ absolute_url(asset('build/images/nakade_256x256.png')) }}">
+
+
+<p style="margin-top: 20px;font-size: smaller; color: rgb(0,0,0); rgb(0,0,0,0.5) ">
+Information zur Verwendung deiner personenbezogenen Daten findest du unter <a href="https://nakade.de/privacy">https://nakade.de/privacy</a>
+</p>
