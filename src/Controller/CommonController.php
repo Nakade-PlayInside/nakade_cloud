@@ -175,6 +175,6 @@ class CommonController extends AbstractController
      */
     public function contactSuccess()
     {
-        return $this->render('common/clubs.html.twig');
+        return $this->render('common/about.html.twig');
     }
 }
