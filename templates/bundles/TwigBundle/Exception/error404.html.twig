@@ -1,0 +1,20 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="error">
+    <h1>Dango! Seite nicht gefunden: 404</h1>
+
+    <p>
+        Die Waldgeister können die gewünschte Seite nicht finden,
+        weil sie nicht mehr existiert oder weil die URL-Adresse falsch eingegeben wurde.<br>
+        <div>
+            <h3>Dango (jap. Go Term)</h3>
+            Dango ist eine japanische Süßspeise in Klößchenform. Beim Go bezeichnet man so eine klumpige Form ('Kloß')
+            ohne Augen und mit wenigen Freiheiten.
+        </div>
+
+        <a href="{{ path('homepage') }}">zurück zur Homepage</a>.
+    </p>
+  </div>
+{% endblock %}

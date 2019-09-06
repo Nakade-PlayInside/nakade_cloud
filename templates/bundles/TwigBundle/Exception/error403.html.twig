@@ -1,0 +1,26 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="error">
+    <h1>Hamete! Zuritt verweigert: 403</h1>
+
+    <p>
+        Die Waldgeister wollen nicht gestört werden. Du bist hier unerwünscht! Verlass den Wald und diese Seite,
+        bevor sie dir nachstellen.<br>
+        <div>
+          <h3>Hamete (jap. Go Term)</h3>
+          Ein kunstvolles und kompliziertes Trickspiel bei einem Joseki, wird als Hamete bezeichnet. Typischerweise
+          handelt es sich um eine komplizierte, aber unkorrekte Zugfolge, die schwer zu widerlegen ist.
+          Mit einem erfolgreichen Hamete erzielt der Spieler lokal einen einseitigen, großen Vorteil.
+          Eine einfache Falle, die einen schwachen Spieler zu einen Fehler verführt, ist kein Hamete, ebenso wenig
+          wie ein Trickzug im Mittelspiel.<br>
+          Das Erlernen von Hamete stärkt die Lesefähigkeit, schult die Fähigkeit Stellungen zu beurteilen und lehrt
+          die wirkliche Bedeutung von Joseki. Besonders berühmt ist das 19-Punkte-Hamete, auch bekannt als das
+          18-und-ein-halber-Punkt Trickspiel.
+        </div>
+
+        <a href="{{ path('homepage') }}">zurück zur Homepage</a>.
+    </p>
+  </div>
+{% endblock %}

@@ -9,6 +9,23 @@ body {
     //background-position: center center;
     background-color: $color-site;
     padding-top: 5rem;
+
+}
+
+.error {
+    h1 {
+        color: red;
+    }
+    p {
+        text-align: justify;
+    }
+    div {
+        margin: 10px 0 20px 0;
+        font-style: italic;
+        color: #000; /* Fallback for older browsers */
+        color: rgba(0, 0, 0, 0.5);
+        ;
+    }
 }
 
 .bd-placeholder-img {
