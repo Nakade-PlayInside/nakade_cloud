@@ -18,7 +18,7 @@
     <!-- END -->
 
     <!-- FINALIZE -->
-    <target name="finalize" depends="fileRightsFinal, clearCacheFinal, chgOwnerProductFiles, finish" />
+    <target name="finalize" depends="fileRightsFinal, migration, clearCacheFinal, chgOwnerProductFiles, finish" />
     <!-- END -->
 
     <!-- ANALYSIS -->
@@ -406,12 +406,24 @@
     </target>
     <!-- END -->
 
+    <!-- MIGRATION -->
+    <target name="migration"
+            unless="migration.done"
+            description="database migrations ...">
+        <echo message="Migrate database data ..." />
+        <exec executable="php">
+            <arg path="${deployDir}/bin/console"/>
+            <arg value="doctrine:migrations:migrate"/>
+        </exec>
+        <property name="migration.done" value="true"/>
+    </target>
+    <!-- END -->
+
     <!-- CLEAR CACHE -->
     <target name="clearCacheFinal"
             unless="clearCacheFinal.done"
             description="Clear cache in prod environment ...">
         <echo message="Clear Cache ..." />
-        <property environment="env" />
         <exec executable="php">
             <arg path="${deployDir}/bin/console"/>
             <arg value="cache:clear"/>

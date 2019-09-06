@@ -112,7 +112,7 @@ class CommonController extends AbstractController
      *
      * @Route("/contact", name="common_contact")
      */
-    public function contact(Request $request)
+    public function contact(Request $request, \Swift_Mailer $mailer)
     {
         // creates a task object and initializes some data for this example
         $contact = new ContactMail();
@@ -132,25 +132,25 @@ class CommonController extends AbstractController
             $entityManager->flush();
 
             $message = (new \Swift_Message('Ihre Kontaktanfrage'))
-                    ->setFrom('send@example.com')
+                    ->setFrom('noreply@nakade.de')
                     ->setTo($contact->getEmail())
                     ->setBody(
-                            $this->renderView(
+                        $this->renderView(
                             // templates/emails/registration.html.twig
                                     'emails/contact.html.twig',
-                                    ['name' => $name]
-                            ),
-                            'text/html'
+                            ['name' => $contact->getName()]
+                        ),
+                        'text/html'
                     )
 
                     // you can remove the following code if you don't define a text version for your emails
                     ->addPart(
-                            $this->renderView(
+                        $this->renderView(
                             // templates/emails/registration.txt.twig
                                     'emails/contact.txt.twig',
-                                    ['name' => $name]
-                            ),
-                            'text/plain'
+                            ['name' => $contact->getName()]
+                        ),
+                        'text/plain'
                     )
             ;
 

@@ -312,6 +312,14 @@ class ContactMail
     }
 
     /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return sprintf('%s %s', $this->firstName, $this->lastName);
+    }
+
+    /**
      * @return string|null
      */
     public function getPhone(): ?string
