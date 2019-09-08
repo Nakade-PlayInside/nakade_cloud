@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -21,34 +20,31 @@
 
 namespace App\Controller;
 
-use App\Entity\Common\Quotes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Exception;
 
 /**
- * Class Default Controller!
+ * Class SecurityController!
+ *
+ * @package App\Controller
+ *
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class DefaultController extends AbstractController
+class SecurityController extends AbstractController
 {
     /**
-     * The index page!
+     * @Route("/login", name="app_login")
      *
      * @return Response
-     *
-     * @throws Exception
-     *
-     * @Route("/", name="homepage")
      */
-    public function index(): Response
+    public function login(): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $quotes = $entityManager->getRepository(Quotes::class)->findAll();
-
-
-        return $this->render('default/index.html.twig', ['quotes' => $quotes]);
+        return $this->render('security/login.html.twig', [
+        ]);
     }
 }
