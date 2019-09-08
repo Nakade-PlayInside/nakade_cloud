@@ -21,6 +21,7 @@
 namespace App\Entity\Common;
 
 use DateTime;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +38,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ContactMail
 {
+    use TimestampableEntity;
+
+    //todo: editor
+    //todo: parentMailId wie forum oder eml abspeichern
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -57,13 +62,6 @@ class ContactMail
      * @var string|null
      */
     protected $city;
-
-    /**
-     * @ORM\Column(type="datetime")
-     *
-     * @var DateTime Date of message
-     */
-    protected $date;
 
     /**
      * @Assert\NotNull
@@ -157,20 +155,6 @@ class ContactMail
      */
     protected $zipCode;
 
-    //todo: processDate
-    //todo: editor
-    //todo: parentMailId wie forum
-
-    /**
-     * ContactMail constructor.
-     *
-     * @throws \Exception
-     */
-    public function __construct()
-    {
-        $this->setDate(new DateTime('now'));
-    }
-
     /**
      * @return int
      */
@@ -227,26 +211,6 @@ class ContactMail
     public function setCity(string $city): self
     {
         $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getDate(): DateTime
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param DateTime $date
-     *
-     * @return self
-     */
-    public function setDate(DateTime $date): self
-    {
-        $this->date = $date;
 
         return $this;
     }

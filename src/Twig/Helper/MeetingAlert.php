@@ -66,16 +66,6 @@ class MeetingAlert
         //today
         if (strtotime($this->today) === strtotime($this->nextMeetingDate)) {
             return 'Heute';
-//                "<div style='height: 32px;vertical-align: top'>
-//<svg style=\"height:24px; width: 24px;\">
-//  <use xlink:href=\"images\svg\ic_event_available_24px\"></use>
-//</svg>
-//<img src="{{ asset('build/images/svg/ic_event_available_24px.svg') }}">
-//<span style='display: inline-block; font-weight: bold; color: forestgreen'>Heute</span>
-//                <div style='display: inline-block' class=\"notificationIcon icon-ic_event_available_black_24dp\"></div>
-//
-//                </div>
-//                ";
         }
 
         return '';
