@@ -41,7 +41,7 @@ class DefaultController extends AbstractController
      *
      * @throws Exception
      *
-     * @Route("/", name="homepage")
+     * @Route("/", name="app_homepage")
      */
     public function index(): Response
     {
