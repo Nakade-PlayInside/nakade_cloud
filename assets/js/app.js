@@ -36,3 +36,7 @@ $(document).ready(function () {
     });
 });
 
+//carousel interval time in micro seconds
+$('.carousel').carousel({
+    interval: 30000
+})

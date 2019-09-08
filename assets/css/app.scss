@@ -1,4 +1,8 @@
 @import '~bootstrap/dist/css/bootstrap.css';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
 //@import "~font-awesome";
 
 $color-site: rgb(170,205,78);
@@ -87,4 +91,23 @@ code {
     background:linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("../images/background/steine.jpeg");
     background-size: cover;
     background-color: #e3f2fd;
+}
+
+.nakade-quotes {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.carousel-item {
+    div {
+        width: 70%;
+        text-align: justify;
+        margin-left: auto;
+        margin-right: auto;
+        div {
+            width: auto;
+            color: #916319;
+        }
+    }
+
 }

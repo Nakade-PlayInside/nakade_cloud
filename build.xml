@@ -388,6 +388,7 @@
                 <exclude name="**/tests/**"/>
                 <exclude name="**/phpunit.xml.dist"/>
                 <exclude name="**/*.sh"/>
+                <exclude name="**/.env.test"/>
             </fileset>
         </copy>
         <property name="copyToDeploy.done" value="true"/>
