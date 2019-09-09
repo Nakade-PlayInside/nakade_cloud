@@ -18,7 +18,7 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form\Type\Common;
+namespace App\Form\Type\Admin;
 
 use App\Entity\Common\Quotes;
 use Symfony\Component\Form\AbstractType;
@@ -70,7 +70,7 @@ class QuotesType extends AbstractType
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Quotes::class,

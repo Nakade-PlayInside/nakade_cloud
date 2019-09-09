@@ -23,9 +23,7 @@ namespace App\Controller;
 
 use App\Controller\Helper\NextClubMeeting;
 use App\Entity\Common\ContactMail;
-use App\Entity\Common\Quotes;
 use App\Form\Type\Common\ContactType;
-use App\Form\Type\Common\QuotesType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -152,8 +150,7 @@ class CommonController extends AbstractController
                             ['name' => $contact->getName()]
                         ),
                         'text/plain'
-                    )
-            ;
+                    );
 
             $mailer->send($message);
 
@@ -178,41 +175,4 @@ class CommonController extends AbstractController
     {
         return $this->render('common/about.html.twig');
     }
-
-    /**
-     * The quotes page!
-     *
-     * @param Request $request
-     *
-     * @return Response
-     *
-     * @throws Exception
-     *
-     * @Route("/quotes", name="common_quotes")
-     */
-    public function quotes(Request $request)
-    {
-        // creates a task object and initializes some data for this example
-        $quotes = new Quotes();
-        $form = $this->createForm(QuotesType::class, $quotes);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$contact` variable has also been updated
-            $quotes = $form->getData();
-
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($quotes);
-            $entityManager->flush();
-        }
-
-        return $this->render('common/quotes.html.twig', [
-                'form' => $form->createView(),
-        ]);
-    }
-
-
 }

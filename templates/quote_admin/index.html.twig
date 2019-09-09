@@ -9,16 +9,16 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    <table>
-        <tr><thead>Zitat</thead><thead>Details</thead><thead>created</thead><thead>updated</thead></tr>
+
+    <table style="width: 100%; border: #313131 1px solid; font-size: smaller">
+        <tr><th>Zitat</th><th>Details</th><th>created</th><th>updated</th></tr>
         {% for quote in quotes %}
-            <tr>
+            <tr style="text-align: left">
                 <td>{{ quote.quote }}</td>
                 <td>{{ quote.details }}</td>
-                <td>{{ quote.createdAt }}</td>
-                <td>{{ quote.updatedAt }}</td>
+                <td>{{ quote.createdAt|date('d-m') }}</td>
+                <td>{{ quote.updatedAt|date('d-m') }}</td>
             </tr>
         {% endfor %}
     </table>
