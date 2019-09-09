@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -18,11 +19,13 @@ declare(strict_types=1);
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Controller;
 
 use App\Entity\Common\Quotes;
 use App\Form\Type\Admin\QuotesType;
 use App\Repository\Common\QuotesRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,31 +33,27 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class QuoteAdminController!
+ * Class QuoteController!
  *
- * @package App\Controller
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class QuoteAdminController extends AbstractController
+class QuoteController extends AbstractController
 {
     /**
-     * @Route("/admin/quote", name="quote_admin")
+     * @Route("/quote", name="quote_index")
      *
      * @param QuotesRepository $repository
-     * @param Request          $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(QuotesRepository $repository, Request $request): Response
+    public function index(QuotesRepository $repository): Response
     {
         $quotes = $repository->findAll();
 
-        return $this->render('quote_admin/index.html.twig', [
+        return $this->render('quote/index.html.twig', [
             'quotes' => $quotes,
         ]);
     }
@@ -68,9 +67,9 @@ class QuoteAdminController extends AbstractController
      *
      * @throws Exception
      *
-     * @Route("/admin/quote/add", name="add_quote_admin")
+     * @Route("/quote/new", name="quote_new")
      */
-    public function quotes(Request $request): Response
+    public function new(Request $request): Response
     {
         // creates a task object and initializes some data for this example
         $quotes = new Quotes();
@@ -89,7 +88,37 @@ class QuoteAdminController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->render('quote_admin/add_quote.html.twig', [
+        return $this->render('quote/new.html.twig', [
+                'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Quotes                 $quote
+     * @param Request                $request
+     * @param EntityManagerInterface $em
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     *
+     * @Route("/quote/{id}/edit", name="quote_edit")
+     */
+    public function edit(Quotes $quote, Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(QuotesType::class, $quote);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Quotes $quote */
+            $quote = $form->getData();
+            $em->persist($quote);
+            $em->flush();
+            $this->addFlash('success', 'Zitat erfolgreich bearbeitet!');
+
+            return $this->redirectToRoute('quote_edit', [
+                    'id' => $quote->getId(),
+            ]);
+        }
+
+        return $this->render('quote/edit.html.twig', [
                 'form' => $form->createView(),
         ]);
     }
