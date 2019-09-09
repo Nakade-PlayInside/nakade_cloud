@@ -27,6 +27,7 @@ use App\Form\Type\Admin\QuotesType;
 use App\Repository\Common\QuotesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,12 +36,15 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class QuoteController!
  *
- *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @IsGranted("ROLE_ADMIN")
  */
-class QuoteController extends AbstractController
+class QuoteAdminController extends AbstractController
 {
     /**
      * @Route("/quote", name="quote_index")

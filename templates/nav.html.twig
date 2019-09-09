@@ -1,4 +1,5 @@
 {% block navigation %}
+
 <nav class="navbar navbar-expand-md navbar-light fixed-top nakade-bg">
     <a class="navbar-brand" href="#"><img src="{{ asset('build/images/nakade_256x256.png') }}" alt="Symfony!"/>Nakade</a>
     <button class="navbar-toggler upper-toggler" type="button" data-toggle="collapse" data-target="#navbarsTop" aria-controls="navbarsTop" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,14 +26,26 @@
                 </div>
             </li>-->
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Suchen" aria-label="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Suchen</button>
-        </form>
+{#        <form class="form-inline my-2 my-lg-0">#}
+{#            <input class="form-control mr-sm-2" type="text" placeholder="Suchen" aria-label="Search">#}
+{#            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Suchen</button>#}
+{#        </form>#}
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a style="color: #000;" class="nav-link" href="{{ path('app_login') }}">Login</a>
-            </li>
+            {% if is_granted('ROLE_USER') %}
+                <li class="nav-item dropdown" style="margin-right: 75px;">
+                    <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="nav-profile-img rounded-circle" src="{{ asset('build/images/common/ic_person_24px.png') }}">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ path('app_account') }}">Profil</a>
+                        <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a style="color: #000;" class="nav-link" href="{{ path('app_login') }}">Login</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
