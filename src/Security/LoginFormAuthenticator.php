@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -39,9 +40,7 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
@@ -67,9 +66,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     /**
      * LoginFormAuthenticator constructor.
      *
-     * @param UserRepository            $userRepository
-     * @param RouterInterface           $router
-     * @param CsrfTokenManagerInterface $csrfTokenManager
+     * @param UserRepository               $userRepository
+     * @param RouterInterface              $router
+     * @param CsrfTokenManagerInterface    $csrfTokenManager
+     * @param UserPasswordEncoderInterface $passwordEncoder
      */
     public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {

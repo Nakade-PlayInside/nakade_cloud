@@ -3,20 +3,17 @@
 
 {% block body %}
   <div class="error">
-    <h1>Atari! Serverfehler "{{ status_code }} {{ status_text }}".</h1>
-
-    <p>
-        Die Waldgeister haben ihre Partie unterbrochen und suchen nach einer Lösung,
-        <br>
-        <div>
-          <h3>Atari (jap. Go Term)</h3>
-          Hat ein Stein oder eine Gruppe auf Steine lediglich eine letzte Freiheit, so bezeichnet man diesen Zustand
-          als Atari. Haben die Steine keine Freiheit mehr, werden sie vom Brett entfernt. Der Zug, mit dem man einen
-          Stein oder Gruppe unter Atari setzt, wird Ate genannt.<br>
-          Der gleichnamige US-amerikanische Computerspielhersteller bezog seinen Namen vom Go-Begriff.
-        </div>
-
-        <a href="{{ path('homepage') }}">zurück zur Homepage</a>.
-    </p>
+     <h1>Atari! Serverfehler "{{ status_code }} {{ status_text }}".</h1>
+      <p>
+           Die Waldgeister haben ihre Partie unterbrochen und suchen nach einer Lösung,<br/>
+           <div>
+              <h3>Atari (jap. Go Term)</h3>
+              Hat ein Stein oder eine Gruppe auf Steine lediglich eine letzte Freiheit, so bezeichnet man diesen Zustand
+              als Atari. Haben die Steine keine Freiheit mehr, werden sie vom Brett entfernt. Der Zug, mit dem man einen
+              Stein oder Gruppe unter Atari setzt, wird Ate genannt.<br/>
+              Der gleichnamige US-amerikanische Computerspielhersteller bezog seinen Namen vom Go-Begriff.
+            </div>
+            <a href="{{ path('homepage') }}">zurück zur Homepage</a>.
+      </p>
   </div>
 {% endblock %}

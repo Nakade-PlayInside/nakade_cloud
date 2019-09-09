@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -28,7 +29,9 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  *
  * @method ContactMail|null find($id, $lockMode = null, $lockVersion = null)
