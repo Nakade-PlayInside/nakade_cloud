@@ -142,4 +142,12 @@ class Quotes
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): ?string
+    {
+        return (string) $this->getQuote();
+    }
 }

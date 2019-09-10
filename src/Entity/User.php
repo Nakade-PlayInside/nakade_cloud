@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -18,6 +19,7 @@ declare(strict_types=1);
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity;
 
 use App\Entity\Common\Quotes;
@@ -285,6 +287,14 @@ class User implements UserInterface
     }
 
     /**
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return $this->firstName.' '.$this->getLastName();
+    }
+
+    /**
      * @param int $size
      *
      * @return string
@@ -303,7 +313,7 @@ class User implements UserInterface
     /**
      * @return string|null
      */
-    public function __toString(): string
+    public function __toString(): ?string
     {
         return $this->getFirstName();
     }

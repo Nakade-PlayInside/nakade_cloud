@@ -48,7 +48,7 @@ class ContactMail
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      *
-     * @var int
+     * @var int|null
      */
     private $id;
 
@@ -159,7 +159,7 @@ class ContactMail
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -279,7 +279,7 @@ class ContactMail
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return sprintf('%s %s', $this->firstName, $this->lastName);
     }
@@ -342,5 +342,13 @@ class ContactMail
         $this->zipCode = $zipCode;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): ?string
+    {
+        return (string) $this->getName();
     }
 }

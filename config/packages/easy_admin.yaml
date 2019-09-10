@@ -1,0 +1,47 @@
+easy_admin:
+    site_name: 'Nakade <img width="64px" height="64px" alt="Nakade" src="../images/nakade_256x256.png" /> Admin'
+    formats:
+        date:     'd-m-Y'
+        time:     'H:i'
+        datetime: 'd-m-Y  H:i'
+    user:
+        display_name: true
+        display_avatar: true
+        avatar_property_path: 'avatarUrl'
+    design:
+        brand_color: '#1ABC9C'
+        menu: ['User', 'ContactMail', 'Quotes']
+    list:
+        title: '%%entity_label%%'
+        actions:
+            - { name: edit, icon: pencil, label: false, title: 'Ändern' }
+            - { name: delete, icon: remove, label: false, title: 'Löschen'  }
+    entities:
+#        # List the entity class name you want to manage
+        Quotes:
+            class: App\Entity\Common\Quotes
+            label: Zitate
+            list:
+                fields: ['id', { property: 'quote', label: 'Zitat' }, { property: 'details', label: 'Hinweis' }, 'createdAt']
+            search:
+                fields: ['quote', 'details']
+        ContactMail:
+            class: App\Entity\Common\ContactMail
+            label: Kontaktanfragen
+            help: Neue Anfragen bitte umgehend beantworten
+            list:
+              actions: [-new]
+            search:
+                fields: ['email', 'firstName', 'lastName', 'message']
+        User:
+            class: App\Entity\User
+            list:
+                fields: [
+                    'id',
+                    { property: 'email', type: 'email', label: 'Email' },
+                    { property: 'fullName', label: 'Name' },
+                    { property: 'nickName', label: 'Nick' },
+                    { property: 'roles', label: 'Rolle' },
+                    { property: 'avatarUrl', type: 'image', label: 'Avatar', sortable: false },
+                    'createdAt',]
+                sort: ['firstName', 'ASC']
