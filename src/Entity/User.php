@@ -20,6 +20,9 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
+use App\Entity\Common\Quotes;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -67,6 +70,19 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Common\Quotes", mappedBy="author")
+     */
+    private $quotes;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->quotes = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -225,5 +241,70 @@ class User implements UserInterface
         $this->password = $password;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Quotes[]
+     */
+    public function getQuotes(): Collection
+    {
+        return $this->quotes;
+    }
+
+    /**
+     * @param Quotes $quote
+     *
+     * @return User
+     */
+    public function addQuote(Quotes $quote): self
+    {
+        if (!$this->quotes->contains($quote)) {
+            $this->quotes[] = $quote;
+            $quote->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Quotes $quote
+     *
+     * @return User
+     */
+    public function removeQuote(Quotes $quote): self
+    {
+        if ($this->quotes->contains($quote)) {
+            $this->quotes->removeElement($quote);
+            // set the owning side to null (unless already changed)
+            if ($quote->getAuthor() === $this) {
+                $quote->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param int $size
+     *
+     * @return string
+     */
+    public function getAvatarUrl(int $size = 32): string
+    {
+        $url = 'https://robohash.org/'.$this->getEmail();
+
+        if ($size) {
+            $url .= sprintf('?size=%dx%d', $size, $size);
+        }
+
+        return $url;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function __toString(): string
+    {
+        return $this->getFirstName();
     }
 }

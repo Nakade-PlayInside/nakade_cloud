@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -21,8 +22,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Common;
 
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -52,7 +53,7 @@ class Quotes
      *
      * @var string
      */
-    private $quote;
+    private $quote = '';
 
     /**
      * @Assert\NotNull
@@ -67,6 +68,12 @@ class Quotes
      * @var string
      */
     private $details = 'Go-Weisheit';
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="quotes")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $author;
 
     /**
      * @return int|null
@@ -112,6 +119,26 @@ class Quotes
     public function setDetails(?string $details): self
     {
         $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param User|null $author
+     *
+     * @return Quotes
+     */
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

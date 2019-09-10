@@ -33,20 +33,23 @@
         <ul class="navbar-nav ml-auto">
             {% if is_granted('ROLE_USER') %}
                 <li class="nav-item dropdown" style="margin-right: 75px;">
-                    <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img class="nav-profile-img rounded-circle" src="{{ asset('build/images/common/ic_person_24px.png') }}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img alt="avatar" class="nav-profile-img rounded-circle" src="{{ app.user.avatarUrl(30) }}">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{{ path('app_account') }}">Profil</a>
+                        <a class="dropdown-item" href="{{ path('app_register') }}">Register</a>
                         <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
                     </div>
                 </li>
             {% else %}
-                <li class="nav-item">
-                    <a style="color: #000;" class="nav-link" href="{{ path('app_login') }}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a style="color: #000;" class="nav-link" href="{{ path('app_register') }}">Register</a>
+                <li title="login" class="nav-item dropdown" style="margin-right: 75px;">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img alt="ic_person" class="nav-profile-img rounded-circle" src="{{ asset('build/images/common/ic_person_24px.png') }}">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ path('app_login') }}">Login</a>
+                    </div>
                 </li>
             {% endif %}
         </ul>
