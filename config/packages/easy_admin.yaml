@@ -41,7 +41,32 @@ easy_admin:
                     { property: 'email', type: 'email', label: 'Email' },
                     { property: 'fullName', label: 'Name' },
                     { property: 'nickName', label: 'Nick' },
-                    { property: 'roles', label: 'Rolle' },
+                    { property: 'roles', label: 'Rolle'},
+                    'password',
                     { property: 'avatarUrl', type: 'image', label: 'Avatar', sortable: false },
                     'createdAt',]
                 sort: ['firstName', 'ASC']
+            form:
+                fields:
+                    - { property: 'firstName', label: 'Vorname' }
+                    - { property: 'lastName', label: 'Nachname' }
+                    - { property: 'nickName', label: 'Nick' }
+                    -
+                       property: 'email'
+                       help: 'Login Name muss eine gültige email Adresse sein.'
+
+                    -
+                       property: 'password'
+                       label: 'Passwort'
+                    -
+                       property: 'roles'
+                       type: 'choice'
+                       help: 'zuzügliche Rollen zu ROLE_USER'
+                       type_options:
+                          mapped: true
+                          expanded: true
+                          multiple: true
+                          choices:
+                            'Member': 'ROLE_MEMBER'
+                            'Admin':  'ROLE_ADMIN'
+
