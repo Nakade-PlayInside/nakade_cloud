@@ -10,7 +10,12 @@ easy_admin:
         avatar_property_path: 'avatarUrl'
     design:
         brand_color: '#1ABC9C'
-        menu: ['User', 'ContactMail', 'Quotes']
+        menu:
+          - { entity: User, default: true, icon: 'users'}
+          - 'ContactMail'
+          - 'Quotes'
+          - { label: ''}
+          - { label: 'exit', route: 'app_homepage', icon: 'home'}
     list:
         title: '%%entity_label%%'
         actions:
@@ -44,7 +49,7 @@ easy_admin:
                     { property: 'roles', label: 'Rolle'},
                     { property: 'avatarUrl', type: 'image', label: 'Avatar', sortable: false },
                     { property: 'active', label: 'aktiv' },
-                    { property: 'verified', help: 'Email Adresse ist bestätigt.' },
+                    { property: 'confirmed', help: 'Email Adresse ist bestätigt.' },
                     'createdAt',]
                 sort: ['firstName', 'ASC']
             form:

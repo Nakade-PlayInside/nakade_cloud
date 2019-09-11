@@ -39,4 +39,5 @@ class AccountController extends AbstractController
 
         ]);
     }
+
 }

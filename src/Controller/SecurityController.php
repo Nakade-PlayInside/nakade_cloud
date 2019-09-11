@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -36,9 +37,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class SecurityController extends AbstractController
@@ -74,26 +73,56 @@ class SecurityController extends AbstractController
     /**
      * @param Request                      $request
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param GuardAuthenticatorHandler    $guardHandler
+     * @param LoginFormAuthenticator       $formAuthenticator
+     * @param \Swift_Mailer                $mailer
      *
      * @return Response
      *
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator, \Swift_Mailer $mailer): Response
     {
         if ($request->isMethod('POST')) {
             $user = new User();
             $user->setEmail($request->request->get('email'));
             $user->setFirstName($request->request->get('firstName'));
             $user->setLastName($request->request->get('lastName'));
+            $user->setActive(true);
+            $user->setToken(uniqid('nakade', true));
 
             $user->setPassword($passwordEncoder->encodePassword(
                 $user,
                 $request->request->get('password')
             ));
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $message = (new \Swift_Message('Bestätige deine email Adresse'))
+                    ->setFrom('noreply@nakade.de')
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            // templates/emails/confirmation.html.twig
+                                    'emails/confirmation.html.twig',
+                            ['user' => $user]
+                        ),
+                        'text/html'
+                    )
+
+                    // you can remove the following code if you don't define a text version for your emails
+                    ->addPart(
+                        $this->renderView(
+                            // templates/emails/confirmation.txt.twig
+                                    'emails/confirmation.txt.twig',
+                            ['user' => $user]
+                        ),
+                        'text/plain'
+                    );
+
+            $mailer->send($message);
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
@@ -104,5 +133,38 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/register.html.twig');
+    }
+
+    /**
+     * Confirm the registered email!
+     *
+     * @param string $token
+     *
+     * @throws \Exception
+     *
+     * @return Response
+     *
+     * @Route("/confirm/{token}", name="app_confirm")
+     */
+    public function confirm(string $token): Response
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['token' => $token.'1']);
+
+        if (!$user) {
+            throw new \Exception('Data not found!');
+        }
+
+
+        if ($user->isConfirmed()) {
+            $message = sprintf('Deine Email wurde schon bestätigt. Kennst du Schach?');
+
+            return $this->render('security/confirm.html.twig', ['message' => $message]);
+        }
+
+        $user->setConfirmed(true);
+        $this->getDoctrine()->getManager()->flush();
+        $message = sprintf('Deine Email wurde erfolgreich bestätigt. Vielen Dank und mögen die Steine mit dir sein.');
+
+        return $this->render('security/confirm.html.twig', ['message' => $message]);
     }
 }

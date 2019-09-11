@@ -1,0 +1,25 @@
+{# templates/emails/contact.html.twig #}
+<h3>Bestätige deine Email Adresse bei nakade.de</h3>
+
+<p style="margin-top: 5px;margin-bottom: 10px;">Hallo {{ user.fullName }}!</p>
+
+Bitte bestätige deine email <i><b>{{ user.email }}</b></i> über diesen link
+<a href="{{ absolute_url(path('app_confirm', { token: user.token })) }}" title="confirmation link">{{ absolute_url(path('app_confirm', { token: user.token } )) }}</a>.<br>
+
+<div style="text-align: justify; margin:10px 0px 5px 0px; padding: 10px; width: 30%; border: #1b1e21 1px solid; background-color: #a5cee5 ">
+    <span style="font-weight:bold; font-size: larger; color: red">WICHTIG:</span>
+Ohne Bestätigung du keinen Zugriff auf sicherheitsrelevante Services, wie z.B. die
+<u>Zusendung eines neuen Passworts</u>, falls du deines vergessen hast.<br/>
+Wir verschicken keinen Newsletter ohne deine Zustimmung oder geben deine Email Adresse an Dritte weiter.
+Der Newsletterversand ist <u>optional</u> und muss zusätzlich in deinem Profil angefordert werden.</div>
+
+<p style="margin-top: 20px;margin-bottom: 10px;">Mit 361 Grüßen</p>
+Das Nakade Team<br>
+
+{# Makes an absolute URL to the /images/logo.png file #}
+<img style="display:block; margin: 20px" alt="logo" width="96px" height="96px" src="{{ absolute_url(asset('build/images/nakade_256x256.png')) }}">
+
+
+<p style="margin-top: 20px;font-size: smaller; color: rgb(0,0,0); rgb(0,0,0,0.5) ">
+Information zur Verwendung deiner personenbezogenen Daten findest du unter <a href="https://nakade.de/privacy">https://nakade.de/privacy</a>
+</p>

@@ -119,11 +119,11 @@ class User implements UserInterface
     private $active = false;
 
     /**
-     * Only a verified email address will receive mails.
+     * Only a confirmed email address will receive mails.
      *
      * @ORM\Column(type="boolean", options={"default": 0} )
      */
-    private $verified = false;
+    private $confirmed = false;
 
     /**
      * @Assert\Type(
@@ -133,7 +133,16 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $verifyCode;
+    private $token;
+
+    /**
+     * @Assert\Url(
+     *     message="Die url {{ value }} ist ungültig."
+     * )
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatarUrl;
 
     /**
      * User constructor.
@@ -366,19 +375,19 @@ class User implements UserInterface
     /**
      * @return bool
      */
-    public function isVerified(): bool
+    public function isConfirmed(): bool
     {
-        return $this->verified;
+        return $this->confirmed;
     }
 
     /**
-     * @param bool $verified
+     * @param bool $confirmed
      *
      * @return User
      */
-    public function setVerified(bool $verified): self
+    public function setConfirmed(bool $confirmed): self
     {
-        $this->verified = $verified;
+        $this->confirmed = $confirmed;
 
         return $this;
     }
@@ -386,19 +395,19 @@ class User implements UserInterface
     /**
      * @return string|null
      */
-    public function getVerifyCode(): ?string
+    public function getToken(): ?string
     {
-        return $this->verifyCode;
+        return $this->token;
     }
 
     /**
-     * @param string $verifyCode
+     * @param string $token
      *
      * @return User
      */
-    public function setVerifyCode(string $verifyCode): self
+    public function setToken(string $token): self
     {
-        $this->verifyCode = $verifyCode;
+        $this->token = $token;
 
         return $this;
     }
@@ -412,14 +421,30 @@ class User implements UserInterface
     }
 
     /**
+     * @param string $avatarUrl
+     *
+     * @return User
+     */
+    public function setAvatarUrl(string $avatarUrl)
+    {
+        $this->avatarUrl = $avatarUrl;
+
+        return $this;
+    }
+
+    /**
      * @param int $size
      *
      * @return string
      */
     public function getAvatarUrl(int $size = 32): string
     {
-        $url = 'https://robohash.org/'.$this->getEmail();
+        if ($this->avatarUrl) {
+            return $this->avatarUrl;
+        }
 
+        //show robos if no url is set
+        $url = 'https://robohash.org/'.$this->getEmail();
         if ($size) {
             $url .= sprintf('?size=%dx%d', $size, $size);
         }

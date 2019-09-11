@@ -22,6 +22,7 @@ namespace App\Controller;
 
 use App\Controller\Helper\NextClubMeeting;
 use App\Entity\Common\ContactMail;
+use App\Entity\User;
 use App\Form\Type\Common\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,10 +91,6 @@ class CommonController extends AbstractController
     final public function clubs(): Response
     {
         $meetingDate = (new NextClubMeeting())->calcNextMeetingDate();
-
-        //echo (new ClubMeetingAlert($meeting->getNextMeetingDate()))->isTomorrow();
-
-        //todo: twig filter
 
         return $this->render('common/clubs.html.twig', ['meetingDate' => $meetingDate]);
     }

@@ -31,21 +31,33 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class AdminController extends EasyAdminController
 {
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private $passwordEncoder;
+
+    /**
+     * @var \Swift_Mailer
+     */
+    private $mailer;
 
     /**
      * AdminController constructor.
      *
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param \Swift_Mailer                $mailer
      */
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -56,7 +68,41 @@ class AdminController extends EasyAdminController
         $encodedPassword = $this->passwordEncoder->encodePassword($user, $user->getPassword());
         $user->setActive(true);
         $user->setPassword($encodedPassword);
+        $user->setToken(uniqid('nakade', true));
 
         parent::persistEntity($user);
+        $this->sendConfirmationMail($user);
+
+        $this->addFlash('success', 'Neuer User angelegt!');
+    }
+
+    /**
+     * @param User $user
+     */
+    private function sendConfirmationMail(User $user)
+    {
+        $message = (new \Swift_Message('Bestätige deine email Adresse'))
+                ->setFrom('noreply@nakade.de')
+                ->setTo($user->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        // templates/emails/confirmation.html.twig
+                                'emails/confirmation.html.twig',
+                        ['user' => $user]
+                    ),
+                    'text/html'
+                )
+
+                // you can remove the following code if you don't define a text version for your emails
+                ->addPart(
+                    $this->renderView(
+                        // templates/emails/confirmation.txt.twig
+                                'emails/confirmation.txt.twig',
+                        ['user' => $user]
+                    ),
+                    'text/plain'
+                );
+
+        $this->mailer->send($message);
     }
 }

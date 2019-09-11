@@ -60,10 +60,11 @@ class UserFixture extends BaseFixture
     {
         $this->createMany(10, 'main_users', function ($i) {
             $user = new User();
-            $user->setEmail(sprintf('spacebar%d@example.com', $i));
+            $user->setEmail(sprintf('spacebar%d@thespacebar.com', $i));
             $user->setFirstName($this->faker->firstName);
             $user->setLastName($this->faker->lastName);
             $user->setActive(true);
+            $user->setConfirmed(true);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 'engage'
@@ -78,6 +79,7 @@ class UserFixture extends BaseFixture
             $user->setFirstName($this->faker->firstName);
             $user->setLastName($this->faker->lastName);
             $user->setActive(true);
+            $user->setConfirmed(true);
             $user->setRoles(['ROLE_ADMIN']);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
