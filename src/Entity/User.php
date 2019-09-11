@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -44,6 +45,13 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Email(
+     *     message="Die Email {{ value }} ist ungültig.",
+     *     checkMX=true
+     * )
+     *
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -54,21 +62,46 @@ class User implements UserInterface
     private $roles = [];
 
     /**
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $nickName;
 
     /**
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 5,
+     *      minMessage = "Dein Passwort muss mind. {{ limit }} Zeichen enthalten.",
+     * )
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $password;
@@ -77,6 +110,30 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Common\Quotes", mappedBy="author")
      */
     private $quotes;
+
+    /**
+     * Only an active user is allowed to sign in.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0} )
+     */
+    private $active = false;
+
+    /**
+     * Only a verified email address will receive mails.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0} )
+     */
+    private $verified = false;
+
+    /**
+     * @Assert\Type(
+     *     type="string",
+     *     message="Der Wert {{ value }} ist kein {{ type }}."
+     * )
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $verifyCode;
 
     /**
      * User constructor.
@@ -282,6 +339,66 @@ class User implements UserInterface
                 $quote->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     *
+     * @return User
+     */
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVerified(): bool
+    {
+        return $this->verified;
+    }
+
+    /**
+     * @param bool $verified
+     *
+     * @return User
+     */
+    public function setVerified(bool $verified): self
+    {
+        $this->verified = $verified;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getVerifyCode(): ?string
+    {
+        return $this->verifyCode;
+    }
+
+    /**
+     * @param string $verifyCode
+     *
+     * @return User
+     */
+    public function setVerifyCode(string $verifyCode): self
+    {
+        $this->verifyCode = $verifyCode;
 
         return $this;
     }

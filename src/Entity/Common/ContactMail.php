@@ -21,7 +21,6 @@ declare(strict_types=1);
 
 namespace App\Entity\Common;
 
-use DateTime;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;

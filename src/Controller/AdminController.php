@@ -34,12 +34,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class NakadeAdminController extends EasyAdminController
+class AdminController extends EasyAdminController
 {
     private $passwordEncoder;
 
     /**
-     * NakadeAdminController constructor.
+     * AdminController constructor.
      *
      * @param UserPasswordEncoderInterface $passwordEncoder
      */
@@ -53,7 +53,8 @@ class NakadeAdminController extends EasyAdminController
      */
     protected function persistUserEntity(User $user)
     {
-        $encodedPassword = $this->passwordEncoder->encodePassword($user, 'engage');
+        $encodedPassword = $this->passwordEncoder->encodePassword($user, $user->getPassword());
+        $user->setActive(true);
         $user->setPassword($encodedPassword);
 
         parent::persistEntity($user);

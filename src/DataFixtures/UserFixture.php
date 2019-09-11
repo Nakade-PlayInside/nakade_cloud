@@ -63,6 +63,7 @@ class UserFixture extends BaseFixture
             $user->setEmail(sprintf('spacebar%d@example.com', $i));
             $user->setFirstName($this->faker->firstName);
             $user->setLastName($this->faker->lastName);
+            $user->setActive(true);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 'engage'
@@ -76,6 +77,7 @@ class UserFixture extends BaseFixture
             $user->setEmail(sprintf('admin%d@thespacebar.com', $i));
             $user->setFirstName($this->faker->firstName);
             $user->setLastName($this->faker->lastName);
+            $user->setActive(true);
             $user->setRoles(['ROLE_ADMIN']);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,

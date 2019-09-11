@@ -42,8 +42,9 @@ easy_admin:
                     { property: 'fullName', label: 'Name' },
                     { property: 'nickName', label: 'Nick' },
                     { property: 'roles', label: 'Rolle'},
-                    'password',
                     { property: 'avatarUrl', type: 'image', label: 'Avatar', sortable: false },
+                    { property: 'active', label: 'aktiv' },
+                    { property: 'verified', help: 'Email Adresse ist bestätigt.' },
                     'createdAt',]
                 sort: ['firstName', 'ASC']
             form:
@@ -54,7 +55,6 @@ easy_admin:
                     -
                        property: 'email'
                        help: 'Login Name muss eine gültige email Adresse sein.'
-
                     -
                        property: 'password'
                        label: 'Passwort'
