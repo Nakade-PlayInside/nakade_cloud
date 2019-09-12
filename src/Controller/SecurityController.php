@@ -148,7 +148,7 @@ class SecurityController extends AbstractController
      */
     public function confirm(string $token): Response
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['token' => $token.'1']);
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['token' => $token]);
 
         if (!$user) {
             throw new \Exception('Data not found!');
