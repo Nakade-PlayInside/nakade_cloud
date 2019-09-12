@@ -60,8 +60,9 @@ class AppExtension extends AbstractExtension
 
         //set date locale to German
         setlocale(LC_TIME, 'de_DE.utf8');
+        setlocale(LC_ALL, 'de_DE.utf8');
 
-        return strftime('%e.%B', $timestamp);
+        return strftime(_("%e.%B"), $timestamp);
     }
 
     /**
@@ -82,10 +83,10 @@ class AppExtension extends AbstractExtension
         /** @var AssetExtension $asset */
         $asset = $this->twig->getExtension(AssetExtension::class);
         $imgSrc = $asset->getAssetUrl('build/images/svg/ic_event_available_24px.svg');
-        $class = $alert==='Heute'? "today":'';
+        $class = 'Heute' === $alert ? 'today' : '';
 
         $html = '<img alt="termin" src="'.$imgSrc.'">';
-        $html .= '<span class="' . $class . '">'.$alert.'</span>';
+        $html .= '<span class="'.$class.'">'.$alert.'</span>';
 
         return $html;
     }
