@@ -156,7 +156,7 @@ class CommonController extends AbstractController
         }
 
         return $this->render('common/contact.html.twig', [
-                'form' => $form->createView(),
+                'contactForm' => $form->createView(),
         ]);
     }
 }

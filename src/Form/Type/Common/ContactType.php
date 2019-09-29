@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -18,6 +19,7 @@ declare(strict_types=1);
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Form\Type\Common;
 
 use App\Entity\Common\ContactMail;
@@ -36,9 +38,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ContactType extends AbstractType
@@ -50,81 +50,18 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add(
-                    'firstName',
-                    TextType::class,
-                    ['label' => 'Vorname',
-                     'empty_data' => '',
-                    ]
-                )
-                ->add(
-                    'lastName',
-                    TextType::class,
-                    ['label' => 'Nachname',
-                     'empty_data' => '',
-                    ]
-                )
-                ->add(
-                    'address',
-                    TextType::class,
-                    ['label' => 'Anschrift',
-                     'required' => false,
-                     'empty_data' => '',
-                    ]
-                )
-                ->add(
-                    'zipCode',
-                    TextType::class,
-                    ['label' => 'PLZ',
-                     'required' => false,
-                     'empty_data' => '',
-                    ]
-                )
-                ->add(
-                    'city',
-                    TextType::class,
-                    ['label' => 'Stadt',
-                     'required' => false,
-                     'empty_data' => '',
-                    ]
-                )
-                ->add(
-                    'phone',
-                    TelType::class,
-                    ['label' => 'Telefon',
-                     'required' => false,
-                     'empty_data' => '',
-                    ]
-                )
-                ->add(
-                    'email',
-                    EmailType::class,
-                    ['label' => 'eMail',
-                     'help' => 'An diese Adresse wird eine Bestätigung geschickt',
-                     'empty_data' => '',
-                    ]
-                )
-                ->add(
-                    'message',
-                    TextareaType::class,
-                    ['label' => 'Nachricht',
-                     'empty_data' => '',
-                    ]
-                )
-
-                ->add(
-                    'captcha',
-                    RecaptchaType::class
-                )
-
-                ->add(
-                    'save',
-                    SubmitType::class,
-                    ['label' => 'Abschicken',
-                    ]
-                )
+                ->add('firstName', TextType::class, [])
+                ->add('lastName', TextType::class, [])
+                ->add('email', EmailType::class, [])
+                ->add('address', TextType::class, ['required' => false])
+                ->add('zipCode', TextType::class, ['required' => false])
+                ->add('city', TextType::class, ['required' => false])
+                ->add('phone', TelType::class, ['required' => false])
+                ->add('message', TextareaType::class, [])
+                ->add('captcha', RecaptchaType::class)
         ;
     }
+
 
     /**
      * @param OptionsResolver $resolver
