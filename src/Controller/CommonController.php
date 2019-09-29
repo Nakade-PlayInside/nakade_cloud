@@ -152,25 +152,11 @@ class CommonController extends AbstractController
 
             $this->addFlash('success', 'Nachricht verschickt!');
 
-            return $this->redirectToRoute('contact_success');
+            return $this->redirectToRoute('app_homepage');
         }
 
         return $this->render('common/contact.html.twig', [
                 'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * The contact success page!
-     *
-     * @return Response
-     *
-     * @throws Exception
-     *
-     * @Route("/contact_success", name="contact_success")
-     */
-    public function contactSuccess()
-    {
-        return $this->render('common/about.html.twig');
     }
 }
