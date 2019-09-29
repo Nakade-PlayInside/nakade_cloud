@@ -22,11 +22,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Common\ContactMail;
 use App\Entity\User;
+use App\Form\Type\Common\ContactType;
+use App\Form\Type\Security\RegisterType;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -83,6 +87,16 @@ class SecurityController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator, \Swift_Mailer $mailer): Response
     {
+
+        $user = new User();
+        $form = $this->createForm(RegisterType::class, $user);
+
+        $form->handleRequest($request);
+        return $this->render('security/register.html.twig', [
+                'form' => $form->createView(),
+        ]);
+
+
         if ($request->isMethod('POST')) {
             $user = new User();
             $user->setEmail($request->request->get('email'));
@@ -151,7 +165,7 @@ class SecurityController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['token' => $token]);
 
         if (!$user) {
-            throw new \Exception('Data not found!');
+            throw new NotFoundHttpException('Data not found!');
         }
 
 

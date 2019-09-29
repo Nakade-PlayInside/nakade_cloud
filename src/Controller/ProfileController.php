@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -25,19 +24,30 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-class AccountController extends AbstractController
+/**
+ * Class ProfileController!
+ *
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
+ * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @IsGranted("ROLE_USER")
+ */
+class ProfileController extends AbstractController
 {
     /**
      * @return Response
      *
-     * @Route("/account", name="app_account")
+     * @Route("/profile", name="app_profile")
      */
     public function index(): Response
     {
-        return $this->render('account/index.html.twig', [
+        return $this->render('profile/index.html.twig', [
 
         ]);
     }
-
 }

@@ -51,7 +51,7 @@ class QuoteAdminController extends AbstractController
      *
      * @param QuotesRepository $repository
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function index(QuotesRepository $repository): Response
     {
@@ -100,21 +100,21 @@ class QuoteAdminController extends AbstractController
     /**
      * @param Quotes                 $quote
      * @param Request                $request
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $manager
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return Response
      *
      * @Route("/quote/{id}/edit", name="quote_edit")
      */
-    public function edit(Quotes $quote, Request $request, EntityManagerInterface $em)
+    public function edit(Quotes $quote, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(QuotesType::class, $quote);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Quotes $quote */
             $quote = $form->getData();
-            $em->persist($quote);
-            $em->flush();
+            $manager->persist($quote);
+            $manager->flush();
             $this->addFlash('success', 'Zitat erfolgreich bearbeitet!');
 
             return $this->redirectToRoute('quote_edit', [

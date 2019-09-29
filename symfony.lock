@@ -14,9 +14,6 @@
     "behat/transliterator": {
         "version": "v1.2.0"
     },
-    "composer/ca-bundle": {
-        "version": "1.1.4"
-    },
     "composer/semver": {
         "version": "1.5.0"
     },
@@ -283,6 +280,9 @@
     "symfony/cache": {
         "version": "v4.2.8"
     },
+    "symfony/cache-contracts": {
+        "version": "v1.1.5"
+    },
     "symfony/config": {
         "version": "v4.2.8"
     },
@@ -298,9 +298,6 @@
             "bin/console",
             "config/bootstrap.php"
         ]
-    },
-    "symfony/contracts": {
-        "version": "v1.0.2"
     },
     "symfony/css-selector": {
         "version": "v4.2.8"
@@ -337,6 +334,9 @@
     },
     "symfony/event-dispatcher": {
         "version": "v4.2.8"
+    },
+    "symfony/event-dispatcher-contracts": {
+        "version": "v1.1.5"
     },
     "symfony/expression-language": {
         "version": "v4.2.8"
@@ -383,6 +383,9 @@
     },
     "symfony/http-client": {
         "version": "v4.3.3"
+    },
+    "symfony/http-client-contracts": {
+        "version": "v1.1.6"
     },
     "symfony/http-foundation": {
         "version": "v4.2.8"
@@ -534,6 +537,9 @@
     "symfony/serializer-pack": {
         "version": "v1.0.2"
     },
+    "symfony/service-contracts": {
+        "version": "v1.1.6"
+    },
     "symfony/stopwatch": {
         "version": "v4.2.8"
     },
@@ -569,6 +575,9 @@
             "config/packages/translation.yaml",
             "translations/.gitignore"
         ]
+    },
+    "symfony/translation-contracts": {
+        "version": "v1.1.6"
     },
     "symfony/twig-bridge": {
         "version": "v4.2.8"

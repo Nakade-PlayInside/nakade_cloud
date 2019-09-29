@@ -110,8 +110,8 @@ class CommonController extends AbstractController
     public function contact(Request $request, \Swift_Mailer $mailer)
     {
         // creates a task object and initializes some data for this example
-        $contact = new ContactMail();
-        $form = $this->createForm(ContactType::class, $contact);
+        //$contact = new ContactMail();
+        $form = $this->createForm(ContactType::class);
 
         $form->handleRequest($request);
         $recaptcha = $request->get('g-recaptcha-response', '');
@@ -149,6 +149,8 @@ class CommonController extends AbstractController
                     );
 
             $mailer->send($message);
+
+            $this->addFlash('success', 'Nachricht verschickt!');
 
             return $this->redirectToRoute('contact_success');
         }

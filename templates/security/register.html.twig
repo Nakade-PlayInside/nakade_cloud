@@ -5,41 +5,73 @@
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('login') }}
+
+
 {% endblock %}
 
 {% block body %}
 
+
+    <div id="wrapper">
+        <div class="form-group has-feedback">
+            <input type="password" class="form-control" id="password" placeholder="Password">
+            <i class="fa fa-fw fa-eye glyphicon glyphicon-eye-open form-control-feedback"></i>
+        </div>
+    </div>
+
+    <div class="md-form md-outline">
+{#        <i class="fas fa-key prefix" aria-hidden="true"></i>#}
+        <input type="password" name="pwd" id="input-pwd" class="form-control validate" required>
+{#        <label data-error="wrong" data-success="right" for="input-pwd\">Password</label>#}
+        <span toggle="#input-pwd" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+    </div>
+
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                {# todo - replace with a Symfony form! #}
-                <form class="form-signin" method="post">
-                    <h1 class="h3 mb-3 font-weight-normal">Registrierung</h1>
 
-                    <label for="inputEmail" class="sr-only">Email Addresse</label>
-                    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email Addresse" required autofocus>
+                <h1 class="h3 mb-3 font-weight-normal">Registrierung</h1>
+                {{ form_start(form) }}
+                <div class="my-custom-class-for-errors">
+                    {{ form_errors(form) }}
+                </div>
+                {{ form_row(form.email) }}
+                {{ form_row(form.password) }}
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.lastName) }}
+                 <div class="checkbox mb-3">
+                 {{ form_row(form._agreed) }}
+                 </div>
+                {{ form_end(form) }}
 
-                    <label for="inputPassword" class="sr-only">Passwort</label>
-                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Passwort" required>
-
-                    <label for="inputFirstName" class="sr-only">Vorname</label>
-                    <input type="text" name="firstName" id="inputFirstName" class="form-control" placeholder="Vorname" required>
-
-                    <label for="inputLastName" class="sr-only">Nachname</label>
-                    <input type="text" name="lastName" id="inputLastName" class="form-control" placeholder="Nachname" required>
-
-                    <div class="checkbox mb-3">
-                        <label>
-                            <input type="checkbox" name="_remember_me" required> Agree to terms I for sure read
-                        </label>
-                    </div>
-
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">
-                        Registrieren
-                    </button>
-                </form>
             </div>
         </div>
     </div>
 
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://www.google.com/recaptcha/api.js?hl=de" async defer></script>
+    <script>
+
+        $('.toggle-password').on('click', function() {
+            $(this).toggleClass('fa-eye fa-eye-slash');
+            let input = $($(this).attr('toggle'));
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text');
+            }
+            else {
+                input.attr('type', 'password');
+            }
+        });
+
+        // toggle password visibility
+        $('#password + .glyphicon').on('click', function() {
+            $(this).toggleClass('fa-eye-slash').toggleClass('fa-eye'); // toggle our classes for the eye icon
+            $('#password').togglePassword(); // activate the hideShowPassword plugin
+        });
+    </script>
+    {{ encore_entry_script_tags('contact') }}
 {% endblock %}
