@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -24,6 +25,7 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ReCaptchaValidator!
@@ -46,17 +48,23 @@ class ReCaptchaValidator extends ConstraintValidator
      * @var RequestStack
      */
     private $requestStack;
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
 
     /**
      * ReCaptchaValidator constructor.
      *
-     * @param string       $secretKey
-     * @param RequestStack $requestStack
+     * @param string              $secretKey
+     * @param RequestStack        $requestStack
+     * @param TranslatorInterface $translator
      */
-    public function __construct(string $secretKey, RequestStack $requestStack)
+    public function __construct(string $secretKey, RequestStack $requestStack, TranslatorInterface $translator)
     {
         $this->secretKey = $secretKey;
         $this->requestStack = $requestStack;
+        $this->translator = $translator;
     }
 
     /**
@@ -72,7 +80,8 @@ class ReCaptchaValidator extends ConstraintValidator
         }
 
         if (null === $response || '' === $response) {
-            $this->context->buildViolation('ReCaptcha nicht vergessen!')->addViolation();
+            $errorMessage = $this->translator->trans('notChecked', [], 'recaptcha');
+            $this->context->buildViolation($errorMessage)->addViolation();
 
             return;
         }
@@ -96,7 +105,8 @@ class ReCaptchaValidator extends ConstraintValidator
         if (!$data['success']) {
             //if no error code is given
             if (0 === count($data['error-codes'])) {
-                $this->context->buildViolation($constraint->message)->addViolation();
+                $errorMessage = $this->translator->trans('required', [], 'recaptcha');
+                $this->context->buildViolation($errorMessage)->addViolation();
             }
 
             foreach ($data['error-codes'] as $errorCode) {

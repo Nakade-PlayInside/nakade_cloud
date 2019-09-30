@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -22,7 +23,16 @@ namespace App\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
+/**
+ * Class ReCaptcha!
+ *
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
 class ReCaptcha extends Constraint
 {
-    public $message = 'Löse das Captcha.';
+    public $message = 'Captcha is required!';
 }
