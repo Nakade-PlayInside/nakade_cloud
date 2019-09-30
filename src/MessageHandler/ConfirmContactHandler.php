@@ -21,6 +21,8 @@
 namespace App\MessageHandler;
 
 use App\Message\ConfirmContact;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
@@ -34,8 +36,10 @@ use Twig\Environment;
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ConfirmContactHandler implements MessageHandlerInterface
+class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var Swift_Mailer
      */
@@ -86,6 +90,13 @@ class ConfirmContactHandler implements MessageHandlerInterface
                         ),
                         'text/plain'
                     );
-        $this->mailer->send($message);
+
+        $sent = $this->mailer->send($message);
+
+        if (0 === $sent) {
+            if ($this->logger) {
+                $this->logger->alert(sprintf('Could not sent confirmation mail id:%d', $contactMail->getId()));
+            }
+        }
     }
 }
