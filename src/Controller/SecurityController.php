@@ -22,10 +22,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Common\ContactMail;
 use App\Entity\User;
-use App\Form\Type\Common\ContactType;
-use App\Form\Type\Security\RegisterType;
+use App\Form\RegisterType;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

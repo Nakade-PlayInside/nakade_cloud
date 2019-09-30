@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -19,53 +18,69 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form\Type\Admin;
+namespace App\Form;
 
-use App\Entity\Common\Quotes;
+use App\Validator\ReCaptchaValidator;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\IsFalse;
 
 /**
- * Class QuotesType!
- *
+ * Class ReCaptchaType!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class QuotesType extends AbstractType
+class ReCaptchaType extends AbstractType
 {
+    private $siteKey;
+    private $secretKey;
+
     /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     * ReCaptchaType constructor.
+     *
+     * @param string $siteKey
+     * @param string $secretKey
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function __construct(string $siteKey, string $secretKey)
     {
-        $builder
-            ->add(
-                'quote',
-                TextareaType::class,
-                ['label' => 'Zitat']
-            )
+        $this->siteKey = $siteKey;
+        $this->secretKey = $secretKey;
+    }
 
-            ->add(
-                'details',
-                TextType::class,
-                ['label' => 'Details',
-                 'empty_data' => 'Go-Weisheit',
-                ]
-            )
+    /**
+     * @return string
+     */
+    public function getParent(): string
+    {
+        return TextType::class;
+    }
 
-            ->add(
-                'save',
-                SubmitType::class,
-                ['label' => 'Speichern']
-            )
-        ;
+    /**
+     * Block name for templating.
+     *
+     * @return string
+     */
+    public function getBlockPrefix(): string
+    {
+        return 'google_recaptcha';
+    }
+
+    /**
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['site_key'] = $this->siteKey;
     }
 
     /**
@@ -74,14 +89,8 @@ class QuotesType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Quotes::class,
-            // enable/disable CSRF protection for this form
-                'csrf_protection' => true,
-            // the name of the hidden HTML field that stores the token
-                'csrf_field_name' => '_token',
-            // an arbitrary string used to generate the value of the token
-            // using a different string for each form improves its security
-                'csrf_token_id' => 'quotes_item',
+                'label' => false,
+                'mapped' => false,
         ]);
     }
 }

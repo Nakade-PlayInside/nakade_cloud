@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\Helper\NextClubMeeting;
-use App\Form\Type\Common\ContactType;
+use App\Form\ContactType;
 use App\Message\ConfirmContact;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -110,12 +110,10 @@ class CommonController extends AbstractController
     public function contact(Request $request, MessageBusInterface $messageBus)
     {
         // creates a task object and initializes some data for this example
-        //$contact = new ContactMail();
         $form = $this->createForm(ContactType::class);
-
         $form->handleRequest($request);
-        $recaptcha = $request->get('g-recaptcha-response', '');
-        if ($form->isSubmitted() && $form->isValid() && !empty($recaptcha)) {
+
+        if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             // but, the original `$contact` variable has also been updated
             $contact = $form->getData();

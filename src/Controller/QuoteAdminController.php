@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Common\Quotes;
-use App\Form\Type\Admin\QuotesType;
+use App\Form\QuotesType;
 use App\Repository\Common\QuotesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;

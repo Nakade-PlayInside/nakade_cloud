@@ -4,8 +4,10 @@
     "require": {
         "php": "^7.3.7",
         "ext-ctype": "*",
+        "ext-curl": "*",
         "ext-iconv": "*",
-        "beelab/recaptcha2-bundle": "^2.0",
+        "ext-json": "*",
+        "beelab/recaptcha2-bundle": "^2.1",
         "easycorp/easyadmin-bundle": "^2.3",
         "sensio/framework-extra-bundle": "^5.4",
         "sensiolabs/security-checker": "^6.0",

@@ -20,7 +20,7 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form\Type\Security;
+namespace App\Form;
 
 use App\Entity\User;
 use Beelab\Recaptcha2Bundle\Form\Type\RecaptchaType;

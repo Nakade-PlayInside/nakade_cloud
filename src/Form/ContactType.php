@@ -20,13 +20,12 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form\Type\Common;
+namespace App\Form;
 
 use App\Entity\Common\ContactMail;
-use Beelab\Recaptcha2Bundle\Form\Type\RecaptchaType;
+use App\Validator\ReCaptcha;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -38,7 +37,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ContactType extends AbstractType
@@ -58,10 +59,11 @@ class ContactType extends AbstractType
                 ->add('city', TextType::class, ['required' => false])
                 ->add('phone', TelType::class, ['required' => false])
                 ->add('message', TextareaType::class, [])
-                ->add('captcha', RecaptchaType::class)
+                ->add('captcha', ReCaptchaType::class, [
+                        'constraints' => [new ReCaptcha()],
+                ])
         ;
     }
-
 
     /**
      * @param OptionsResolver $resolver
@@ -70,13 +72,6 @@ class ContactType extends AbstractType
     {
         $resolver->setDefaults([
                 'data_class' => ContactMail::class,
-            // enable/disable CSRF protection for this form
-                'csrf_protection' => true,
-            // the name of the hidden HTML field that stores the token
-                'csrf_field_name' => '_token',
-            // an arbitrary string used to generate the value of the token
-            // using a different string for each form improves its security
-                'csrf_token_id' => 'contact_item',
         ]);
     }
 }
