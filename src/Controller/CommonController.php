@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -18,15 +19,16 @@ declare(strict_types=1);
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Controller;
 
 use App\Controller\Helper\NextClubMeeting;
-use App\Entity\Common\ContactMail;
-use App\Entity\User;
 use App\Form\Type\Common\ContactType;
+use App\Message\ConfirmContact;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 
@@ -98,16 +100,14 @@ class CommonController extends AbstractController
     /**
      * The contact page!
      *
-     * @param Request       $request
-     * @param \Swift_Mailer $mailer
+     * @param Request             $request
+     * @param MessageBusInterface $messageBus
      *
      * @return Response
      *
-     * @throws Exception
-     *
      * @Route("/contact", name="common_contact")
      */
-    public function contact(Request $request, \Swift_Mailer $mailer)
+    public function contact(Request $request, MessageBusInterface $messageBus)
     {
         // creates a task object and initializes some data for this example
         //$contact = new ContactMail();
@@ -126,29 +126,9 @@ class CommonController extends AbstractController
             $entityManager->persist($contact);
             $entityManager->flush();
 
-            $message = (new \Swift_Message('Ihre Kontaktanfrage'))
-                    ->setFrom('noreply@nakade.de')
-                    ->setTo($contact->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            // templates/emails/registration.html.twig
-                                    'emails/contact.html.twig',
-                            ['name' => $contact->getName()]
-                        ),
-                        'text/html'
-                    )
-
-                    // you can remove the following code if you don't define a text version for your emails
-                    ->addPart(
-                        $this->renderView(
-                            // templates/emails/registration.txt.twig
-                                    'emails/contact.txt.twig',
-                            ['name' => $contact->getName()]
-                        ),
-                        'text/plain'
-                    );
-
-            $mailer->send($message);
+            //mail handling
+            $message = new ConfirmContact($contact);
+            $messageBus->dispatch($message);
 
             $this->addFlash('success', 'Nachricht verschickt!');
 
