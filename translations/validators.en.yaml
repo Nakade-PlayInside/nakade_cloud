@@ -1,0 +1,5 @@
+"recaptcha":
+  "error": "Error"
+  "recaptcha": "reCaptcha"
+  "notChecked": "Please check!"
+  "required": "Captcha is required!"

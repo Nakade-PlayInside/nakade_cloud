@@ -4,7 +4,7 @@
         <span class="invalid-feedback d-block">
             <span class="d-block" style="text-align: left">
                 {% for error in errors  %}
-                    <span class="form-error-icon badge badge-danger text-uppercase">{{ 'error'|trans({}, 'recaptcha') }} </span> <span class="form-error-message"> {{ 'reCaptcha'|trans({}, 'recaptcha') }}: {{ error.message }}</span>
+                    <span class="form-error-icon badge badge-danger text-uppercase">{{ 'recaptcha.error'|trans({}, 'validators') }} </span> <span class="form-error-message"> {{ 'recaptcha.recaptcha'|trans({}, 'validators') }}: {{ error.message }}</span>
                 {% endfor %}
             </span>
         </span>

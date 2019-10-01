@@ -17,7 +17,7 @@
 {% endblock %}
 
 
-{% block title %}Kontakt{% endblock %}
+{% block title %}{{ 'contact.title'|trans({}, 'messages') }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Kontakt</h2>
+    <h2>{{ 'contact.title'|trans({}, 'messages') }}</h2>
 
     {{ form_start(contactForm) }}
 
@@ -36,69 +36,68 @@
     <div class="row">
         <div class="col">
             {{ form_row(contactForm.firstName,  {
-                label: 'Vorname',
-                attr: { placeholder: '*Vorname' }
+                label: 'contact.first.name',
+                attr: { placeholder: 'contact.first.name.required' }
             }) }}
         </div>
         <div class="col" id="some-custom-id">
             {{ form_row(contactForm.lastName,  {
-                label: 'Nachname',
-                attr: { placeholder: '*Nachname' }
+                label: 'contact.last.name',
+                attr: { placeholder: 'contact.last.name.required' }
             }) }}
         </div>
     </div>
 
     <div class="form-group">
     {{ form_row(contactForm.email,  {
-        label: 'eMail',
-        attr: { placeholder: '*eMail' },
-        help: 'An diese Adresse wird eine Bestätigung geschickt',
+        label: "contact.email",
+        attr: { placeholder: 'contact.email.required' },
+        help: 'contact.email.help',
     }) }}
     </div>
 
     {{ form_row(contactForm.address,  {
-        label: 'Anschrift',
-        attr: { placeholder: 'Anschrift' }
+        label: 'contact.address',
+        attr: { placeholder: 'contact.address' }
     }) }}
 
     <div class="row">
         <div class="col-3">
             {{ form_row(contactForm.zipCode,  {
-                label: 'Postleitzahl',
-                attr: { placeholder: 'Postleitzahl' }
+                label: 'contact.zip',
+                attr: { placeholder: 'contact.zip' }
             }) }}
         </div>
         <div class="col">
             {{ form_row(contactForm.city,  {
-                label: 'Stadt',
-                attr: { placeholder: 'Stadt' }
+                label: 'contact.city',
+                attr: { placeholder: 'contact.city' }
             }) }}
         </div>
     </div>
 
     {{ form_row(contactForm.phone,  {
-        label: 'Telefon',
-        attr: { placeholder: 'Telefon' }
+        label: 'contact.phone',
+        attr: { placeholder: 'contact.phone' }
     }) }}
 
     <div class="form-group">
         {{ form_row(contactForm.message, {
-        label: 'Nachricht',
-        attr: { placeholder: '*Ihre Nachricht', rows: '6' },
-        help: 'Bitte füllen sie alle Felder, die mit einem * markiert sind, aus!',
+        label: 'contact.message',
+        attr: { placeholder: 'contact.message.required', rows: '6' },
+        help: 'contact.required.help',
         }) }}
     </div>
 
     {{ form_row(contactForm.captcha,  {
-        label: 'ReCaptcha'
+        label: 'contact.reCaptcha'
     }) }}
 
-    <button type="submit" class="btn btn-primary">Abschicken</button>
+    <button type="submit" class="btn btn-primary">{{ 'contact.send'|trans({}, 'messages') }}</button>
 
     {{ form_end(contactForm) }}
 
-    <p style="margin-top: 20px;">Ihre Kontaktdaten werden zum Zweck der Bearbeitung Ihrer Anfrage und für den Fall von Anschlussfragen bei uns
-        gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
+    <p style="margin-top: 20px;">{{ 'contact.privacy.info'|trans({}, 'messages') }}</p>
 {% endblock %}
 
 {% block javascripts %}

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -31,9 +32,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Class ReCaptchaValidator!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ReCaptchaValidator extends ConstraintValidator
@@ -48,23 +47,17 @@ class ReCaptchaValidator extends ConstraintValidator
      * @var RequestStack
      */
     private $requestStack;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
 
     /**
      * ReCaptchaValidator constructor.
      *
-     * @param string              $secretKey
-     * @param RequestStack        $requestStack
-     * @param TranslatorInterface $translator
+     * @param string       $secretKey
+     * @param RequestStack $requestStack
      */
-    public function __construct(string $secretKey, RequestStack $requestStack, TranslatorInterface $translator)
+    public function __construct(string $secretKey, RequestStack $requestStack)
     {
         $this->secretKey = $secretKey;
         $this->requestStack = $requestStack;
-        $this->translator = $translator;
     }
 
     /**
@@ -80,8 +73,7 @@ class ReCaptchaValidator extends ConstraintValidator
         }
 
         if (null === $response || '' === $response) {
-            $errorMessage = $this->translator->trans('notChecked', [], 'recaptcha');
-            $this->context->buildViolation($errorMessage)->addViolation();
+            $this->context->buildViolation('recaptcha.notChecked')->addViolation();
 
             return;
         }
@@ -105,8 +97,7 @@ class ReCaptchaValidator extends ConstraintValidator
         if (!$data['success']) {
             //if no error code is given
             if (0 === count($data['error-codes'])) {
-                $errorMessage = $this->translator->trans('required', [], 'recaptcha');
-                $this->context->buildViolation($errorMessage)->addViolation();
+                $this->context->buildViolation('recaptcha.required')->addViolation();
             }
 
             foreach ($data['error-codes'] as $errorCode) {
