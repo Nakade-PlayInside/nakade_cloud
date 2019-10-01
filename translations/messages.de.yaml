@@ -18,3 +18,16 @@
   "send": "Abschicken"
   "title": "Kontakt"
   "zip": "Postleitzahl"
+"navigation":
+  "about": "Über Uns"
+  "admin": "Admin"
+  "club": "Spieltreff"
+  "contact": "Kontakt"
+  "home": "Home"
+  "imprint": "Impressum"
+  "login": "Login"
+  "logout": "Logout"
+  "privacy": "Datenschutz"
+  "profile": "Profil"
+  "register": "Registrieren"
+
