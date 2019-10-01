@@ -40,6 +40,7 @@ Encore
     .addEntry('imprint', './assets/js/imprint.js')
     .addEntry('contact', './assets/js/contact.js')
     .addEntry('login', './assets/js/login.js')
+    .addEntry('registration', './assets/js/registration.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

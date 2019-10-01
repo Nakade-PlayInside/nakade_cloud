@@ -1,0 +1,87 @@
+body {
+    background-color: #fff;
+}
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 10px;
+    margin: auto;
+}
+.form-signin .checkbox {
+    font-weight: 400;
+}
+.form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+button {
+    margin-top: 10px;
+}
+
+.mb-3 {
+    text-align: left;
+    input[type="checkbox"] {
+        margin-right: 5px;
+    }
+}
+
+.fa {
+   position: relative;
+    left: 380px;
+    top:40px;
+    color: #999;
+}
+
+.fa.active {
+   color: dodgerblue;
+}
+
+input[type=text].form-control.valid + label:after,
+input[type=text].form-control:focus.valid + label:after,
+input[type=text].form-control.invalid + label:after,
+input[type=text].form-control:focus.invalid + label:after,
+input[type=password].form-control.valid + label:after,
+input[type=password].form-control:focus.valid + label:after,
+input[type=password].form-control.invalid + label:after,
+input[type=password].form-control:focus.invalid + label:after {
+    top: 3.75rem !important;
+}
+
+span.field-icon {
+    position: absolute;
+    display: inline-block;
+    cursor: pointer;
+    right: 0.5rem;
+    top: 0.7rem;
+    color: red;
+    z-index: 2;
+}
+
+#password + .glyphicon {
+    cursor: pointer;
+    pointer-events: all;
+}
+
+/* Styles for CodePen Demo Only */
+#wrapper {
+    max-width: 500px;
+    margin: auto;
+    padding-top: 25vh;
+}

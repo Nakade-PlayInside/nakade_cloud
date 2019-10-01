@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\LoginType;
 use App\Form\RegisterType;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,15 +52,18 @@ class SecurityController extends AbstractController
      *
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        $form = $this->createForm(LoginType::class, null, ['lastUsername' => $lastUsername]);
+        $form->handleRequest($request);
+
         return $this->render('security/login.html.twig', [
+                'loginForm' => $form->createView(),
                 'last_username' => $lastUsername,
                 'error' => $error,
         ]);

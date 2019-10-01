@@ -21,6 +21,7 @@ security:
             logout:
                 path: app_logout
             remember_me:
+                remember_me_parameter: login[_remember_me]
                 secret:   '%kernel.secret%'
                 lifetime: 2592000 # 30 days in seconds
             switch_user: true

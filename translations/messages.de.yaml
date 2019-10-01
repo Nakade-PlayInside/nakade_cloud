@@ -30,4 +30,10 @@
   "privacy": "Datenschutz"
   "profile": "Profil"
   "register": "Registrieren"
+"login":
+  "title": "Login"
+  "email": "eMail"
+  "password": "Passwort"
+  "send": "Anmelden"
+  "rememberMe": "Angemeldet bleiben"
 
