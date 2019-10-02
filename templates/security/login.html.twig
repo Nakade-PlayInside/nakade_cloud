@@ -1,20 +1,4 @@
 {% extends 'base.html.twig' %}
-{% form_theme loginForm _self %}
-
-{% block form_row %}
-    {%- set widget_attr = {} -%}
-    {%- if help is not empty -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
-    {%- endif -%}
-
-    {{- form_label(form, null, {
-        label_attr: { class: 'sr-only' }
-    }) -}}
-    {{- form_errors(form) -}}
-    {{- form_widget(form, widget_attr) -}}
-    {{- form_help(form) -}}
-{% endblock %}
-
 {% block title %}{{ 'login.title'|trans({}, 'messages') }}!{% endblock %}
 
 {% block stylesheets %}
@@ -25,64 +9,30 @@
 {% block body %}
     <h2>{{ 'login.title'|trans({}, 'messages') }}</h2>
 
-    {{ form_start(loginForm, {
-        attr: { class: "form-signin" }
-        })
-    }}
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <form name="login" method="post" class="form-signin">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-    {{ form_row(loginForm.email, {
-        label: 'login.email',
-        attr: { placeholder: 'login.email' }
-        })
-    }}
+        <label class="sr-only required" for="login_email">{{ 'login.email'|trans({}, 'messages') }}</label>
+        <input class="form-control" type="email" id="login_email" name="email" placeholder="{{ 'login.email'|trans({}, 'messages') }}" value="{{ last_username }}" required autofocus >
 
-    {{ form_row(loginForm.password,  {
-        label: 'login.password',
-        attr: { placeholder: 'login.password' }
-        })
-    }}
+        <label class="sr-only required" for="login_password">{{ 'login.password'|trans({}, 'messages') }}</label>
+        <input class="form-control" type="password" id="login_password" name="password" placeholder="{{ 'login.password'|trans({}, 'messages') }}" required>
 
-    <div class="checkbox mb-3">
-    {{ form_row(loginForm._remember_me,  {
-        label: 'login.rememberMe',
-        })
-    }}
-    </div>
+        <div class="form-check checkbox mb-3">
+            <input class="form-check-input" type="checkbox" id="login__remember_me" name="_remember_me" value="1">
+            <label class="form-check-label" for="login__remember_me">{{ 'login.rememberMe'|trans({}, 'messages') }}</label>
+        </div>
 
-    {{ form_row(loginForm.captcha) }}
 
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-    <button type="submit" class="btn btn-primary">{{ 'login.send'|trans({}, 'messages') }}</button>
+        {% if isCaptcha %}
+            <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
+        {% endif %}
 
-    {{ form_end(loginForm) }}
-
-{#    <form class="form-signin" method="post">#}
-{#        {% if error %}#}
-{#            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
-{#        {% endif %}#}
-{#        <h1 class="h3 mb-3 font-weight-normal">Login</h1>#}
-
-{#        <label for="inputEmail" class="sr-only">Email Addresse</label>#}
-{#        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email Addresse" required autofocus>#}
-
-{#        <label for="inputPassword" class="sr-only">Passwort</label>#}
-{#        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Passwort" required>#}
-
-{#        <div class="checkbox mb-3">#}
-{#            <label>#}
-{#                <input type="checkbox" name="_remember_me">Angemeldet bleiben#}
-{#            </label>#}
-{#        </div>#}
-
-{#        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">#}
-
-{#        <button class="btn btn-lg btn-primary btn-block" type="submit">#}
-{#            Anmelden#}
-{#        </button>#}
-{#    </form>#}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <button type="submit" class="btn btn-primary">{{ 'login.send'|trans({}, 'messages') }}</button>
+    </form>
 {% endblock %}
 
 {% block javascripts %}

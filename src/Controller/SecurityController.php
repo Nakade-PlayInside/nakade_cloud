@@ -23,9 +23,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\LoginType;
 use App\Form\RegisterType;
 use App\Security\LoginFormAuthenticator;
+use App\Security\LoginUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +33,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Class SecurityController!
@@ -48,24 +47,24 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="app_login")
      *
-     * @param AuthenticationUtils $authenticationUtils
+     * @param LoginUtils $authenticationUtils
      *
      * @return Response
      */
-    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
+    public function login(LoginUtils $authenticationUtils, string $siteKey): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
-        $form = $this->createForm(LoginType::class, null, ['lastUsername' => $lastUsername]);
-        $form->handleRequest($request);
+        //show reCaptcha
+        $isCaptcha = $authenticationUtils->isReCaptcha();
 
         return $this->render('security/login.html.twig', [
-                'loginForm' => $form->createView(),
                 'last_username' => $lastUsername,
+                'isCaptcha' => $isCaptcha,
                 'error' => $error,
+                'site_key' => $siteKey,
         ]);
     }
 
@@ -74,6 +73,8 @@ class SecurityController extends AbstractController
      */
     public function logout()
     {
+        //DO NOT DELETE
+        //used by authentication service for logout
     }
 
     /**

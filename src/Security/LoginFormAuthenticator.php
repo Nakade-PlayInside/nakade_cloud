@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -22,11 +23,13 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Repository\UserRepository;
+use App\Validator\ReCaptcha\ReCaptchaVerifier;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -41,31 +44,22 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
 
-    /**
-     * @var RouterInterface
-     */
+    private const LOGIN_COUNT_FAILURE = '_security.count_login_failure';
+    private const LOGIN_ALLOWED_ATTEMPTS = 3;
+    const LOGIN_IS_RECAPTCHA = '_security.is_recaptcha';
+
+    private $userRepository;
     private $router;
-    /**
-     * @var CsrfTokenManagerInterface
-     */
     private $csrfTokenManager;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
     private $passwordEncoder;
+    private $reCaptchaVerifier;
 
     /**
      * LoginFormAuthenticator constructor.
@@ -74,13 +68,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param RouterInterface              $router
      * @param CsrfTokenManagerInterface    $csrfTokenManager
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param ReCaptchaVerifier            $reCaptchaVerifier
      */
-    public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, ReCaptchaVerifier $reCaptchaVerifier)
     {
         $this->userRepository = $userRepository;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->reCaptchaVerifier = $reCaptchaVerifier;
     }
 
     /**
@@ -96,11 +92,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        $login = $request->request->get('login');
+        //proves recaptcha if set
+        if ($request->getSession()->has(self::LOGIN_IS_RECAPTCHA)) {
+            $data = $this->reCaptchaVerifier->verify();
+
+            if (array_key_exists(ReCaptchaVerifier::NOT_CHECKED, $data) || !$data[ReCaptchaVerifier::SUCCESS]) {
+                throw new AuthenticationException('reCaptcha required!');
+            }
+        }
 
         $credentials = [
-                'email' => $login['email'],
-                'password' => $login['password'],
+                'email' => $request->request->get('email'),
+                'password' => $request->request->get('password'),
                 'csrf_token' => $request->request->get('_csrf_token'),
         ];
 
@@ -145,6 +148,33 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         return new RedirectResponse($this->router->generate('app_homepage'));
+    }
+
+    /**
+     *  {@inheritdoc}
+     */
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        if ($request->hasSession()) {
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+
+            // counts the amount of login failures and put it into a session
+            if ($request->getSession()->has(self::LOGIN_COUNT_FAILURE)) {
+                $countFailure = $request->getSession()->get(self::LOGIN_COUNT_FAILURE) + 1;
+                $request->getSession()->set(self::LOGIN_COUNT_FAILURE, $countFailure);
+            } else {
+                $request->getSession()->set(self::LOGIN_COUNT_FAILURE, 1);
+            }
+
+            //if failures exceed max allowed attempts
+            if ($request->getSession()->get(self::LOGIN_COUNT_FAILURE) >= self::LOGIN_ALLOWED_ATTEMPTS) {
+                $request->getSession()->set(self::LOGIN_IS_RECAPTCHA, true);
+            }
+        }
+
+        $url = $this->getLoginUrl();
+
+        return new RedirectResponse($url);
     }
 
     /**

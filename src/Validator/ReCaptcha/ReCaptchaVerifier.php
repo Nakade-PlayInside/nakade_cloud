@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -19,18 +18,12 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form;
+namespace App\Validator\ReCaptcha;
 
-use App\Validator\ReCaptcha;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class LoginType!
+ * Class ReCaptchaVerifier!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  *
@@ -38,35 +31,48 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class LoginType extends AbstractType
+class ReCaptchaVerifier
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    private const GOOGLE_URL = 'https://www.google.com/recaptcha/api/siteverify';
+
+    const NOT_CHECKED = 'notChecked';
+    const SUCCESS = 'success';
+    const ERROR_CODES = 'error-codes';
+
+    private $secretKey;
+    private $requestStack;
+
+    public function __construct(string $secretKey, RequestStack $requestStack)
     {
-        $builder
-                ->add('email', EmailType::class, [
-                        'data' => $options['lastUsername'],
-                        'attr' => ['autofocus' => 'autofocus'],
-                ])
-                ->add('password', PasswordType::class)
-                ->add('_remember_me', CheckboxType::class, ['required' => false])
-                ->add('captcha', ReCaptchaType::class, [
-                        'constraints' => [new ReCaptcha()],
-                ])
-        ;
+        $this->secretKey = $secretKey;
+        $this->requestStack = $requestStack;
     }
 
     /**
-     * @param OptionsResolver $resolver
+     * @return mixed Associated array
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function verify()
     {
-        $resolver->setDefaults([
-                'lastUsername' => null,
-                'csrf_protection' => false,
+        $response = $this->requestStack->getMasterRequest()->get('g-recaptcha-response');
+
+        if (null === $response || '' === $response) {
+            return [self::NOT_CHECKED => true];
+        }
+
+        $apiRequest = curl_init();
+
+        curl_setopt($apiRequest, CURLOPT_URL, self::GOOGLE_URL);
+        curl_setopt($apiRequest, CURLOPT_HEADER, 0);
+        curl_setopt($apiRequest, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($apiRequest, CURLOPT_POST, true);
+        curl_setopt($apiRequest, CURLOPT_POSTFIELDS, [
+                'secret' => $this->secretKey,
+                'response' => $response,
         ]);
+
+        $apiResponse = curl_exec($apiRequest);
+        curl_close($apiRequest);
+
+        return json_decode($apiResponse, true);
     }
 }

@@ -22,11 +22,10 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Validator\ReCaptcha\ReCaptchaVerifier;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class ReCaptchaValidator!
@@ -37,27 +36,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ReCaptchaValidator extends ConstraintValidator
 {
-    const GOOGLE_URL = 'https://www.google.com/recaptcha/api/siteverify';
+    private $reCaptchaVerifier;
 
-    /**
-     * @var string
-     */
-    private $secretKey;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * ReCaptchaValidator constructor.
-     *
-     * @param string       $secretKey
-     * @param RequestStack $requestStack
-     */
-    public function __construct(string $secretKey, RequestStack $requestStack)
+    public function __construct(ReCaptchaVerifier $reCaptchaVerifier)
     {
-        $this->secretKey = $secretKey;
-        $this->requestStack = $requestStack;
+        $this->reCaptchaVerifier = $reCaptchaVerifier;
     }
 
     /**
@@ -66,41 +49,25 @@ class ReCaptchaValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        $response = $this->requestStack->getMasterRequest()->get('g-recaptcha-response');
-
         if (!$constraint instanceof ReCaptcha) {
             throw new UnexpectedTypeException($constraint, ReCaptcha::class);
         }
 
-        if (null === $response || '' === $response) {
+        $data = $this->reCaptchaVerifier->verify();
+
+        if (array_key_exists(ReCaptchaVerifier::NOT_CHECKED, $data)) {
             $this->context->buildViolation('recaptcha.notChecked')->addViolation();
 
             return;
         }
 
-        $apiRequest = curl_init();
-
-        curl_setopt($apiRequest, CURLOPT_URL, self::GOOGLE_URL);
-        curl_setopt($apiRequest, CURLOPT_HEADER, 0);
-        curl_setopt($apiRequest, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($apiRequest, CURLOPT_POST, true);
-        curl_setopt($apiRequest, CURLOPT_POSTFIELDS, [
-             'secret' => $this->secretKey,
-             'response' => $response,
-        ]);
-
-        $apiResponse = curl_exec($apiRequest);
-        curl_close($apiRequest);
-
-        $data = json_decode($apiResponse, true);
-
-        if (!$data['success']) {
+        if (!$data[ReCaptchaVerifier::SUCCESS]) {
             //if no error code is given
-            if (0 === count($data['error-codes'])) {
+            if (0 === count($data[ReCaptchaVerifier::ERROR_CODES])) {
                 $this->context->buildViolation('recaptcha.required')->addViolation();
             }
 
-            foreach ($data['error-codes'] as $errorCode) {
+            foreach ($data[ReCaptchaVerifier::ERROR_CODES] as $errorCode) {
                 $this->context->buildViolation($errorCode)->addViolation();
             }
         }

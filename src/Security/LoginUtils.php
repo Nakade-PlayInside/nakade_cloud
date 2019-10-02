@@ -18,16 +18,14 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form;
+namespace App\Security;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
- * Class ReCaptchaType!
+ * Class LoginUtils!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  *
@@ -35,56 +33,37 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ReCaptchaType extends AbstractType
+class LoginUtils extends AuthenticationUtils
 {
-    private $siteKey;
+    private $requestStack;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        parent::__construct($requestStack);
+        $this->requestStack = $requestStack;
+    }
 
     /**
-     * ReCaptchaType constructor.
+     * @return bool
+     */
+    public function isReCaptcha(): bool
+    {
+        return $this->getRequest()->getSession()->has(LoginFormAuthenticator::LOGIN_IS_RECAPTCHA);
+    }
+
+    /**
+     * @throws \LogicException
      *
-     * @param string $siteKey
+     * @return Request
      */
-    public function __construct(string $siteKey)
+    private function getRequest(): Request
     {
-        $this->siteKey = $siteKey;
-    }
+        $request = $this->requestStack->getCurrentRequest();
 
-    /**
-     * @return string
-     */
-    public function getParent(): string
-    {
-        return TextType::class;
-    }
+        if (null === $request) {
+            throw new \LogicException('Request should exist so it can be processed for error.');
+        }
 
-    /**
-     * Block name for templating.
-     *
-     * @return string
-     */
-    public function getBlockPrefix(): string
-    {
-        return 'google_recaptcha';
-    }
-
-    /**
-     * @param FormView      $view
-     * @param FormInterface $form
-     * @param array         $options
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options): void
-    {
-        $view->vars['site_key'] = $this->siteKey;
-    }
-
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-                'label' => false,
-                'mapped' => false,
-        ]);
+        return $request;
     }
 }
