@@ -15,16 +15,22 @@
         {% endif %}
 
         <label class="sr-only required" for="login_email">{{ 'login.email'|trans({}, 'messages') }}</label>
-        <input class="form-control" type="email" id="login_email" name="email" placeholder="{{ 'login.email'|trans({}, 'messages') }}" value="{{ last_username }}" required autofocus >
+        <input aria-label="{{ 'login.email'|trans({}, 'messages') }}" class="form-control" type="email" id="login_email" name="email" placeholder="{{ 'login.email'|trans({}, 'messages') }}" value="{{ last_username }}" required autofocus autocomplete="on">
 
-        <label class="sr-only required" for="login_password">{{ 'login.password'|trans({}, 'messages') }}</label>
-        <input class="form-control" type="password" id="login_password" name="password" placeholder="{{ 'login.password'|trans({}, 'messages') }}" required>
-
-        <div class="form-check checkbox mb-3">
-            <input class="form-check-input" type="checkbox" id="login__remember_me" name="_remember_me" value="1">
-            <label class="form-check-label" for="login__remember_me">{{ 'login.rememberMe'|trans({}, 'messages') }}</label>
+        <div class="input-group mb-3">
+            <label class="sr-only required" for="login_password">{{ 'login.password'|trans({}, 'messages') }}</label>
+            <input class="toggle-password form-control" type="password" id="login_password" name="password" placeholder="{{ 'login.password'|trans({}, 'messages') }}" required autocomplete="off">
+            <div class="input-group-append">
+                <div style="" class="toggle-eye input-group-text fa fa-eye"></div>
+            </div>
         </div>
 
+        <div class="input-group mb-3">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="login__remember_me" name="_remember_me" value="1">
+                <label class="form-check-label" for="login__remember_me">{{ 'login.rememberMe'|trans({}, 'messages') }}</label>
+            </div>
+        </div>
 
         {% if isCaptcha %}
             <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
@@ -38,4 +44,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="https://www.google.com/recaptcha/api.js?hl=de" async defer></script>
+    {{ encore_entry_script_tags('login') }}
 {% endblock %}
