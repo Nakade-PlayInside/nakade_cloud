@@ -1,6 +1,6 @@
 // assets/js/imprint
 // custom code for the imprint page
-import '../css/registration.scss';
+import '../css/register.scss';
 
 /* Toggles the password field readability of the plain password.
   @license http://www.opensource.org/licenses/mit-license.html  MIT License

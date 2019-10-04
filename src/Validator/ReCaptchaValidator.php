@@ -31,7 +31,9 @@ use Symfony\Component\Validator\ConstraintValidator;
  * Class ReCaptchaValidator!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ReCaptchaValidator extends ConstraintValidator

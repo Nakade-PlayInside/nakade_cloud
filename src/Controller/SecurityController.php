@@ -90,27 +90,20 @@ class SecurityController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator, \Swift_Mailer $mailer): Response
     {
-
-        $user = new User();
-        $form = $this->createForm(RegisterType::class, $user);
-
+        $form = $this->createForm(RegisterType::class);
         $form->handleRequest($request);
-        return $this->render('security/register.html.twig', [
-                'form' => $form->createView(),
-        ]);
 
+        if ($form->isSubmitted() && $form->isValid()) {
 
-        if ($request->isMethod('POST')) {
-            $user = new User();
-            $user->setEmail($request->request->get('email'));
-            $user->setFirstName($request->request->get('firstName'));
-            $user->setLastName($request->request->get('lastName'));
+            /** @var User $user */
+            $user = $form->getData();
+
             $user->setActive(true);
             $user->setToken(uniqid('nakade', true));
 
             $user->setPassword($passwordEncoder->encodePassword(
-                $user,
-                $request->request->get('password')
+                    $user,
+                    $form['plainPassword']->getData()
             ));
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -149,7 +142,9 @@ class SecurityController extends AbstractController
             );
         }
 
-        return $this->render('security/register.html.twig');
+        return $this->render('security/register.html.twig', [
+                'registerForm' => $form->createView(),
+        ]);
     }
 
     /**
