@@ -102,7 +102,7 @@ class SecurityController extends AbstractController
                 ->setFirstName($userModel->firstName)
                 ->setLastName($userModel->lastName)
                 ->setConfirmToken(uniqid('nakade', true))
-                ->setActive($userModel->newsletter)
+                ->setNewsletter($userModel->newsletter)
                 ->setPassword($passwordEncoder->encodePassword(
                     $user,
                     $userModel->plainPassword
@@ -166,6 +166,13 @@ class SecurityController extends AbstractController
      */
     public function profile(): Response
     {
+        return $this->render('emails/confirmRegistration.html.twig', [
+                'email' => "Hans@gmali.de",
+                'token'  => '1234werewrwer',
+                'name' => 'Hans Doof'
+
+        ]);
+
         return $this->render('security/profile.html.twig', [
         ]);
     }
