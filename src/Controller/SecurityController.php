@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\Model\UserRegistrationFormModel;
 use App\Form\RegisterType;
 use App\Security\LoginFormAuthenticator;
 use App\Security\LoginUtils;
@@ -39,7 +40,9 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class SecurityController extends AbstractController
@@ -95,16 +98,17 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /** @var User $user */
-            $user = $form->getData();
+            /** @var UserRegistrationFormModel $userModel */
+            $userModel = $form->getData();
 
-            $user->setActive(true);
-            $user->setToken(uniqid('nakade', true));
-
-            $user->setPassword($passwordEncoder->encodePassword(
+            $user = new User();
+            $user->setEmail($userModel->email)
+                ->setConfirmToken(uniqid('nakade', true))
+                ->setActive($userModel->newsletter)
+                ->setPassword($passwordEncoder->encodePassword(
                     $user,
-                    $form['plainPassword']->getData()
-            ));
+                    $userModel->plainPassword
+                ));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -160,7 +164,7 @@ class SecurityController extends AbstractController
      */
     public function confirm(string $token): Response
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['token' => $token]);
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['confirmToken' => $token]);
 
         if (!$user) {
             throw new NotFoundHttpException('Data not found!');

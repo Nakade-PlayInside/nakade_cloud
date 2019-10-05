@@ -27,11 +27,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ *
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="This email is already registered!"
+ * )
  */
 class User implements UserInterface
 {
@@ -45,7 +51,6 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Email(
      *     message="Die Email {{ value }} ist ungültig.",
@@ -62,24 +67,17 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Type(
-     *     type="string",
-     *     message="Der Wert {{ value }} ist kein {{ type }}."
-     * )
+     * @Assert\Type(type="string")
      *
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
-     * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Type(
-     *     type="string",
-     *     message="Der Wert {{ value }} ist kein {{ type }}."
-     * )
+     * @Assert\Type(type="string")
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
@@ -95,12 +93,8 @@ class User implements UserInterface
     private $nickName;
 
     /**
-     * @Assert\NotNull
      * @Assert\NotBlank
-     * @Assert\Length(
-     *      min = 5,
-     *      minMessage = "Dein Passwort muss mind. {{ limit }} Zeichen enthalten.",
-     * )
+     * @Assert\Length(min = 6)
      *
      * @ORM\Column(type="string", length=255)
      */
@@ -114,9 +108,16 @@ class User implements UserInterface
     /**
      * Only an active user is allowed to sign in.
      *
+     * @ORM\Column(type="boolean", options={"default": 1} )
+     */
+    private $active = true;
+
+    /**
+     * A removed user is inactive, not allowed to sign in and only visible to admins or superAdmins.
+     *
      * @ORM\Column(type="boolean", options={"default": 0} )
      */
-    private $active = false;
+    private $removed = false;
 
     /**
      * Only a confirmed email address will receive mails.
@@ -126,14 +127,16 @@ class User implements UserInterface
     private $confirmed = false;
 
     /**
-     * @Assert\Type(
-     *     type="string",
-     *     message="Der Wert {{ value }} ist kein {{ type }}."
-     * )
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $token;
+    private $confirmToken;
+
+    /**
+     * Has registered for newsletter.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0} )
+     */
+    private $newsletter = false;
 
     /**
      * @Assert\Url(
@@ -395,9 +398,9 @@ class User implements UserInterface
     /**
      * @return string|null
      */
-    public function getToken(): ?string
+    public function getConfirmToken(): ?string
     {
-        return $this->token;
+        return $this->confirmToken;
     }
 
     /**
@@ -405,9 +408,50 @@ class User implements UserInterface
      *
      * @return User
      */
-    public function setToken(string $token): self
+    public function setConfirmToken(string $token): self
     {
-        $this->token = $token;
+        $this->confirmToken = $token;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNewsletter(): bool
+    {
+        return $this->newsletter;
+    }
+
+    /**
+     * @param bool $newsletter
+     *
+     * @return User
+     */
+    public function setNewsletter(bool $newsletter): self
+    {
+        $this->newsletter = $newsletter;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRemoved(): bool
+    {
+        return $this->removed;
+    }
+
+    /**
+     * @param bool $removed
+     *
+     * @return User
+     */
+    public function setRemoved(bool $removed): self
+    {
+        $this->removed = $removed;
+        //todo: set active to false if remove ==true ; eventually toggle
 
         return $this;
     }

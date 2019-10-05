@@ -68,7 +68,7 @@ class AdminController extends EasyAdminController
         $encodedPassword = $this->passwordEncoder->encodePassword($user, $user->getPassword());
         $user->setActive(true);
         $user->setPassword($encodedPassword);
-        $user->setToken(uniqid('nakade', true));
+        $user->setConfirmToken(uniqid('nakade', true));
 
         parent::persistEntity($user);
         $this->sendConfirmationMail($user);

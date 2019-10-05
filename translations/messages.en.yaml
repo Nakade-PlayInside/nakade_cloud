@@ -46,6 +46,7 @@
   "newsletter": "Yes, How can I live on without a newsletter"
   "newsletter.help": "Our newsletter will notice you on our regular club meeting and can be unsubscribed at any time."
   "password": "Password"
+  "password.help": "minimum 6 chars containing letters and digits"
   "password.required": "*Password"
   "privacy.info": "We will keep your data in confidence. Further details to our privacy policy you will find "
   "privacy.info.link": "here"

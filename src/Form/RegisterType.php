@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Form\Model\UserRegistrationFormModel;
 use App\Validator\ReCaptcha;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -31,17 +31,13 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class RegisterType!
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class RegisterType extends AbstractType
@@ -53,19 +49,12 @@ class RegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('email',EmailType::class)
-                ->add('plainPassword',PasswordType::class, [
-                    'mapped' => false,
-                    'constraints' => [
-                        new NotBlank(),
-                        new Length(['min' => 6])
-                    ]
-                ])
-                ->add('firstName',TextType::class)
-                ->add('lastName',TextType::class)
-                ->add('captcha', ReCaptchaType::class, [
-                        'constraints' => [new ReCaptcha()],
-                ])
+                ->add('email', EmailType::class)
+                ->add('plainPassword', PasswordType::class)
+                ->add('firstName', TextType::class)
+                ->add('lastName', TextType::class)
+                ->add('captcha', ReCaptchaType::class)
+                ->add('newsletter', CheckboxType::class, ['required' => false])
         ;
     }
 
@@ -75,7 +64,7 @@ class RegisterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'data_class' => User::class
+                'data_class' => UserRegistrationFormModel::class,
         ]);
     }
 }

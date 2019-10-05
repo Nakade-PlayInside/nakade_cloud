@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -19,23 +18,57 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Validator;
+namespace App\Form\Model;
 
-use Symfony\Component\Validator\Constraint;
+use App\Validator\Password;
+use App\Validator\ReCaptcha;
+use App\Validator\UniqueUser;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class ReCaptcha!
+ * Class UserRegistrationFormModel!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  *
  * @author Dr. H.Maerz <holger@nakade.de>
- *
- * @Annotation
- * @Target({"PROPERTY", "ANNOTATION"})
  */
-class ReCaptcha extends Constraint
+class UserRegistrationFormModel
 {
-    public $message = 'Captcha is required!';
+    /**
+     * @Assert\NotBlank
+     * @Assert\Email(
+     *     message="Die Email {{ value }} ist ungültig.",
+     *     checkMX=true
+     * )
+     * @UniqueUser()
+     */
+    public $email;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Length(min="6")
+     * @Password()
+     */
+    public $plainPassword;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type(type="string")
+     */
+    public $firstName;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type(type="string")
+     */
+    public $lastName;
+
+    public $newsletter;
+
+    /**
+     * @ReCaptcha()
+     */
+    public $captcha;
 }

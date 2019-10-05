@@ -24,7 +24,7 @@ namespace App\Validator;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class ReCaptcha!
+ * Class Password!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  *
@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraint;
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION"})
  */
-class ReCaptcha extends Constraint
+class Password extends Constraint
 {
-    public $message = 'Captcha is required!';
+    public $message = 'Password should contain letters and numbers!';
 }

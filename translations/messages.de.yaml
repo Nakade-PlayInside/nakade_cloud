@@ -46,6 +46,7 @@
   "newsletter": "Ja, ich will den Newsletter"
   "newsletter.help": "Unser Newsletter erinnert dich rechtzeitig an unseren regelmäßigen Spieltreff und kann jederzeit abbestellt werden."
   "password": "Passwort"
+  "password.help": "min. 6 Zeichen lang, sowie Buchstaben und Zahlen enthalten"
   "password.required": "*Passwort"
   "privacy.info": "Wir behandeln deine Daten vertraulich. Weitere Informationen zum Datenschutz findest du"
   "privacy.info.link": "hier"

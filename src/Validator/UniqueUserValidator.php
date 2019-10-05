@@ -21,21 +21,35 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
 
-/**
- * Class ReCaptcha!
- *
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
- * @author Dr. H.Maerz <holger@nakade.de>
- *
- * @Annotation
- * @Target({"PROPERTY", "ANNOTATION"})
- */
-class ReCaptcha extends Constraint
+class UniqueUserValidator extends ConstraintValidator
 {
-    public $message = 'Captcha is required!';
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    public function validate($value, Constraint $constraint)
+    {
+        /* @var $constraint \App\Validator\UniqueUser */
+
+        if (null === $value || '' === $value) {
+            return;
+        }
+
+        $existingUser = $this->userRepository->findOneBy([
+                'email' => $value,
+        ]);
+        if (!$existingUser) {
+            return;
+        }
+
+        $this->context->buildViolation($constraint->message)
+            ->addViolation();
+    }
 }

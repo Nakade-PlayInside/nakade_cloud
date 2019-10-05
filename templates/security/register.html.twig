@@ -50,11 +50,11 @@
                         <div class="toggle-eye input-group-text fa fa-eye"></div>
                     </div>
                 </div>
+                <small id="register__password_help" class="newsletter-help form-text text-muted">{{ 'register.password.help'|trans({}, 'messages') }}</small>
 
                 <div class="input-group">
                     <div class="form-check form-check-inline">
-                        <input type="checkbox" id="register__newsletter" name="register[_newsletter]" class="form-check-input" value="1">
-                        <label class="form-check-label" for="register__newsletter">{{ 'register.newsletter'|trans({}, 'messages') }}</label>
+                        {{ form_widget(registerForm.newsletter, {label: 'register.newsletter'}) }}
                     </div>
                 </div>
                 <small id="register__newsletter_help" class="newsletter-help form-text text-muted">{{ 'register.newsletter.help'|trans({}, 'messages') }}</small>

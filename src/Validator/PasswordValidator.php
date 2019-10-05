@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -21,21 +22,38 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
 
 /**
- * Class ReCaptcha!
+ * Class PasswordValidator!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  *
  * @author Dr. H.Maerz <holger@nakade.de>
- *
- * @Annotation
- * @Target({"PROPERTY", "ANNOTATION"})
  */
-class ReCaptcha extends Constraint
+class PasswordValidator extends ConstraintValidator
 {
-    public $message = 'Captcha is required!';
+    /**
+     * @param mixed      $value
+     * @param Constraint $constraint
+     */
+    public function validate($value, Constraint $constraint)
+    {
+        if (!$constraint instanceof Password) {
+            throw new UnexpectedTypeException($constraint, Password::class);
+        }
+
+        if (null === $value || '' === $value) {
+            return;
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $value)) {
+            $this->context->buildViolation($constraint->message)
+                    ->addViolation();
+        }
+    }
 }
