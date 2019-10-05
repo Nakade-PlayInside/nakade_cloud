@@ -1,23 +1,23 @@
 {# templates/common/about.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Über uns{% endblock %}
+{% block title %}{{ 'about.title'|trans({}, 'messages') }}{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('imprint') }}
+    {{ encore_entry_link_tags('common') }}
 {% endblock %}
 
 {% block body %}
 
-    <h2>Wir über uns</h2>
+    <h2>{{ 'about.title.main'|trans({}, 'messages') }}</h2>
 
     <div class="privacy">
 
     <p>Der <b>Nakade Go Club</b> mit Sitz in Berlin wurde gegründet, um die gleichnamige Bundesliga Mannschaft zu
         unterstützen.<br>
-     (<span style="font-style: italic;">Nakade ist japanisch und bedeutet soviel wie "innerer Zug".
+    <span class="hint">(Nakade ist japanisch und bedeutet soviel wie "innerer Zug".
     Als Go-Terminus steht Nakade für die innere Klumpen-Form, wie das sog. Häschen-Sechser, durch die eine Stellung
-    bei einem Tötungsversuch auf ein Auge reduziert wird.</span>)<br>
+    bei einem Tötungsversuch auf ein Auge reduziert wird.)</span>
     </p>
 
     <p>Ursprünglich wurde die Bundesliga Mannschaft aus dem <b>Spandauer Go Club</b> rekrutiert. Nach anfänglichen Erfolgen,
@@ -51,11 +51,4 @@
     </p>
 
     </div>
-
-{% endblock %}
-
-
-{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('imprint') }}
 {% endblock %}

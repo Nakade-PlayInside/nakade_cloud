@@ -1,13 +1,13 @@
 {# templates/common/imprint.html.twig #}
 {% extends 'base.html.twig' %}
-{% block title %}Impressum{% endblock %}
+{% block title %}{{ 'imprint.title'|trans({}, 'messages') }}!{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('imprint') }}
+    {{ encore_entry_link_tags('common') }}
 {% endblock %}
 
 {% block body %}
-    <h2>Impressum</h2>
+    <h2>{{ 'imprint.title'|trans({}, 'messages') }}</h2>
 
     <dl class="imprint">
         <dt>Verein</dt>
@@ -24,7 +24,7 @@
     </dl>
 
     <dl class="disclaimer">
-        <dt>Haftungsausschluss</dt>
+        <dt>{{ 'imprint.disclaimer'|trans({}, 'messages') }}</dt>
         <dd>
             <b>Haftung für Inhalte</b>
             Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.
@@ -60,9 +60,4 @@
             <span>29.08.2019</span>
         </dd>
     </dl>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('imprint') }}
 {% endblock %}

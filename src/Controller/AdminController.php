@@ -87,7 +87,7 @@ class AdminController extends EasyAdminController
                 ->setBody(
                     $this->renderView(
                         // templates/emails/confirmation.html.twig
-                                'emails/confirmation.html.twig',
+                                'confirmRegistration.html.twig',
                         ['user' => $user]
                     ),
                     'text/html'
@@ -97,7 +97,7 @@ class AdminController extends EasyAdminController
                 ->addPart(
                     $this->renderView(
                         // templates/emails/confirmation.txt.twig
-                                'emails/confirmation.txt.twig',
+                                'confirmRegistration.txt.twig',
                         ['user' => $user]
                     ),
                     'text/plain'

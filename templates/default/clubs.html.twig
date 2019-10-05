@@ -1,0 +1,48 @@
+{# templates/default/clubs.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'clubs.title'|trans({}, 'messages') }}!{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('clubs') }}
+{% endblock %}
+
+{% block body %}
+
+    <h2>{{ 'clubs.title'|trans({}, 'messages') }}</h2>
+
+    <div class="clubs">
+        <h2>Mommsen-Eck</h2>
+        <p>Der <b>Nakade Go Club</b> trifft sich einmal im Monat im <a target="_blank" title="externe Seite!"
+        href="http://www.mommsen-eck.de/">Mommsen-Eck<span title="externe Seite!" class="actionIcon icon-ic_launch_black_24dp"></span></a> in Berlin Charlottenburg.<br>
+         Das <i>Haus der 100 Biere</i> ist eine beliebte Gaststätte mit langer Tradition zwischen Ku'damm und
+         Kantstrasse.</p>
+
+            <p>Go-Spieler, Anfänger und Interessierte sind herzlich willkommen. Wir verfügen auch über kleinere
+            <b>Anfänger-Bretter</b> und erklären gerne das Spiel.<br>
+            Die Teilnahme ist <b>kostenlos</b>.<br>
+        </p>
+
+        <h2>Adresse</h2>
+        <div class="bvg">
+            <p>
+                Mommsen-Eck <a title="externe Seite!" target="_blank" href="{{ googleMapsLink }}"><img alt="google Maps" src="{{ asset('build/images/common/googleMaps.jpeg') }}"></a><br>
+                Mommsenstrasse 45<br>
+                <u>10629 Berlin</u>
+                <ul>
+                    <li>
+                        <img alt="U-Bahn" title="U-Bahn Linie 2" src="{{ asset('build/images/common/u2.png') }}">
+                        <img alt="U-Bahn" title="U-Bahn Linie 7" src="{{ asset('build/images/common/u7.png') }}">
+                        <span>Wilmersdorfer Str.</span>
+                    </li>
+                    <li><img alt="U-Bahn" title="U-Bahn Linie 7" src="{{ asset('build/images/common/u7.png') }}"><span>Adenauer Platz</span></li>
+                    <li><img alt="S-Bahn" title="S-Bahn" src="{{ asset('build/images/common/sbahn.png') }}"><span>Bahnhof Charlottenburg</span></li>
+                    <li class="walkway"><div title="Fussweg" class="mapsIcon icon-ic_directions_walk_black_24dp"></div><span>ca. 5min Fussweg</span></li>
+                </ul>
+            </p>
+        </div>
+
+        <h2>jeden 2.Montag im Monat von 18-22h</h2>
+        <p class="meeting">nächster Termin am <b>{{ meetingDate | locale_date }}</b>{{ meetingDate | meeting_alert }}</p>
+    </div>
+{% endblock %}

@@ -1,4 +1,4 @@
 // assets/js/imprint
 // custom code for the imprint page
-import '../css/imprint.scss';
+import '../css/common.scss';
 

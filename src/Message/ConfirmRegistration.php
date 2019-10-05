@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -19,35 +18,33 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Controller;
+namespace App\Message;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Entity\User;
 
 /**
- * Class ProfileController!
+ * Class ConfirmRegistration!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  *
  * @author Dr. H.Maerz <holger@nakade.de>
- *
- * @IsGranted("ROLE_USER")
  */
-class ProfileController extends AbstractController
+class ConfirmRegistration
 {
-    /**
-     * @return Response
-     *
-     * @Route("/profile", name="app_profile")
-     */
-    public function index(): Response
-    {
-        return $this->render('profile/index.html.twig', [
+    private $user;
 
-        ]);
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
     }
 }

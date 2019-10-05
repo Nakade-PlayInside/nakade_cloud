@@ -25,34 +25,31 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\Model\UserRegistrationFormModel;
 use App\Form\RegisterType;
+use App\Message\ConfirmRegistration;
 use App\Security\LoginFormAuthenticator;
 use App\Security\LoginUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class SecurityController!
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="app_login")
-     *
-     * @param LoginUtils $authenticationUtils
-     *
-     * @return Response
      */
     public function login(LoginUtils $authenticationUtils, string $siteKey): Response
     {
@@ -91,18 +88,19 @@ class SecurityController extends AbstractController
      *
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator, \Swift_Mailer $mailer): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator,  MessageBusInterface $messageBus): Response
     {
         $form = $this->createForm(RegisterType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             /** @var UserRegistrationFormModel $userModel */
             $userModel = $form->getData();
 
             $user = new User();
             $user->setEmail($userModel->email)
+                ->setFirstName($userModel->firstName)
+                ->setLastName($userModel->lastName)
                 ->setConfirmToken(uniqid('nakade', true))
                 ->setActive($userModel->newsletter)
                 ->setPassword($passwordEncoder->encodePassword(
@@ -114,29 +112,11 @@ class SecurityController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $message = (new \Swift_Message('Bestätige deine email Adresse'))
-                    ->setFrom('noreply@nakade.de')
-                    ->setTo($user->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            // templates/emails/confirmation.html.twig
-                                    'emails/confirmation.html.twig',
-                            ['user' => $user]
-                        ),
-                        'text/html'
-                    )
+            //mail handling
+            $message = new ConfirmRegistration($user);
+            $messageBus->dispatch($message);
 
-                    // you can remove the following code if you don't define a text version for your emails
-                    ->addPart(
-                        $this->renderView(
-                            // templates/emails/confirmation.txt.twig
-                                    'emails/confirmation.txt.twig',
-                            ['user' => $user]
-                        ),
-                        'text/plain'
-                    );
-
-            $mailer->send($message);
+            $this->addFlash('success', 'Du bist registriert!');
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
@@ -154,12 +134,6 @@ class SecurityController extends AbstractController
     /**
      * Confirm the registered email!
      *
-     * @param string $token
-     *
-     * @throws \Exception
-     *
-     * @return Response
-     *
      * @Route("/confirm/{token}", name="app_confirm")
      */
     public function confirm(string $token): Response
@@ -170,17 +144,29 @@ class SecurityController extends AbstractController
             throw new NotFoundHttpException('Data not found!');
         }
 
-
         if ($user->isConfirmed()) {
-            $message = sprintf('Deine Email wurde schon bestätigt. Kennst du Schach?');
+            $message = 'Deine Email wurde schon bestätigt. Kennst du Schach?';
 
             return $this->render('security/confirm.html.twig', ['message' => $message]);
         }
 
         $user->setConfirmed(true);
         $this->getDoctrine()->getManager()->flush();
-        $message = sprintf('Deine Email wurde erfolgreich bestätigt. Vielen Dank und mögen die Steine mit dir sein.');
+        $message = 'Deine Email wurde erfolgreich bestätigt. Vielen Dank und mögen die Steine mit dir sein.';
 
         return $this->render('security/confirm.html.twig', ['message' => $message]);
+    }
+
+    /**
+     * @return Response
+     *
+     * @Route("/profile", name="app_profile")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function profile(): Response
+    {
+        return $this->render('security/profile.html.twig', [
+        ]);
     }
 }

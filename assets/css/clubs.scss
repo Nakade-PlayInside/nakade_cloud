@@ -1,0 +1,101 @@
+@import "sprite-maps-black.css";
+@import "sprite-action-black.css";
+@import "sprite-notification-black.css";
+
+.clubs {
+  text-align: left;
+  .title {
+    text-decoration: underline;
+  }
+  a {
+    white-space: nowrap;
+  }
+  h2 {
+    margin: 1.5em 0 0.2em 0;
+    font-size: medium;
+    font-weight: bold;
+  }
+  p {
+    margin-bottom: 0.5em;
+    text-align: justify;
+  }
+  .hint {
+    display: inline-block;
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+  .actionIcon {
+    display: inline-block;
+    margin-right: 5px;
+    background-repeat: no-repeat;
+    zoom: 0.6;
+    cursor: pointer;
+  }
+  .bvg {
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0;
+      margin-top:20px;
+    }
+    li {
+      list-style: none;
+    }
+    img {
+      vertical-align: center;
+      margin-bottom: 3px;
+      margin-right: 1px;
+      height: 16px;
+      width: auto;
+      cursor: context-menu;
+    }
+    span {
+      padding-left: 3px;
+      padding-right: 20px;
+      cursor: default;
+    }
+    a {
+      img {
+        cursor: pointer;
+      }
+    }
+    .walkway {
+
+      div {
+        background-color: #F0D721;
+        display: inline-block;
+        margin-right: 5px;
+        background-repeat: no-repeat;
+        zoom: 0.6;
+        cursor: context-menu;
+      }
+
+      span {
+        vertical-align: top;
+        display: inline-block;
+        font-style: italic;
+        margin-bottom: 3px;
+      }
+    }
+  }
+  .meeting {
+    img {
+      height:24px;
+      width:24px;
+      margin: 0px 5px 0px 10px;
+    }
+    span {
+      color: forestgreen;
+      font-weight: bold;
+    }
+    .today {
+      animation: blinker 1.5s linear infinite;
+      color: red;
+      @keyframes blinker {
+        50% {
+          opacity: 0;
+        }
+      }
+    }
+  }
+}

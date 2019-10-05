@@ -1,10 +1,10 @@
 {# templates/default/index.html.twig #}
 {% extends 'base.html.twig' %}
-{% block title %}Nakade{% endblock %}
+{% block title %}{{ 'home.title'|trans({}, 'messages') }}{% endblock %}
 
 
 {% block body %}
-    <h2>Willkommen!</h2>
+    <h2>{{ 'home.welcome'|trans({}, 'messages') }}</h2>
 
     <div class="nakade-quotes">
         <div id="carouselQuotes" class="carousel slide" data-ride="carousel">

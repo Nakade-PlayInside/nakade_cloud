@@ -30,16 +30,16 @@
 
                 {{ form_row(registerForm.firstName, {
                     label: 'register.first.name',
-                    attr: { placeholder: 'register.first.name.required' },
+                    attr: { placeholder: 'register.first.name.required', autocomplete: "on" },
                 }) }}
                 {{ form_row(registerForm.lastName, {
                     label: 'register.last.name',
-                    attr: { placeholder: 'register.last.name.required' },
+                    attr: { placeholder: 'register.last.name.required', autocomplete: "on" },
                 }) }}
 
                 {{ form_row(registerForm.email, {
                     label: 'register.email',
-                    attr: { placeholder: 'register.email.required'},
+                    attr: { placeholder: 'register.email.required', autocomplete: "on"},
                 }) }}
                 <div class="input-group">
                 {{ form_row(registerForm.plainPassword, {
@@ -67,7 +67,7 @@
                 {{ form_end(registerForm) }}
 
             </div>
-    <p class="privacy">{{ 'register.privacy.info'|trans({}, 'messages') }} <a target="_blank" href="{{ path('common_privacy') }}" title="{{ 'register.privacy.title'|trans({}, 'messages') }}">{{ 'register.privacy.info.link'|trans({}, 'messages') }}.</a></p>
+    <p class="privacy">{{ 'register.privacy.info'|trans({}, 'messages') }} <a target="_blank" href="{{ path('app_privacy') }}" title="{{ 'register.privacy.title'|trans({}, 'messages') }}">{{ 'register.privacy.info.link'|trans({}, 'messages') }}.</a></p>
 {% endblock %}
 
 

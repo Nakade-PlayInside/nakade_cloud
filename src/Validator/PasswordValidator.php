@@ -51,9 +51,30 @@ class PasswordValidator extends ConstraintValidator
             return;
         }
 
-        if (!preg_match('/^[a-zA-Z0-9]+$/', $value)) {
-            $this->context->buildViolation($constraint->message)
-                    ->addViolation();
+        if ($this->hasLetters($value) && $this->hasDigits($value)) {
+            return;
         }
+
+        $this->context->buildViolation($constraint->message)->addViolation();
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return bool
+     */
+    private function hasLetters(string $value): bool
+    {
+        return (bool) preg_match('/[a-zA-Z]+/', $value);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return bool
+     */
+    private function hasDigits(string $value): bool
+    {
+        return (bool) preg_match('/[0-9]+/', $value);
     }
 }

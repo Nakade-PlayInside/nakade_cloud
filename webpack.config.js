@@ -37,7 +37,8 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('main', './assets/js/main.js')
-    .addEntry('imprint', './assets/js/imprint.js')
+    .addEntry('clubs', './assets/js/clubs.js')
+    .addEntry('common', './assets/js/common.js')
     .addEntry('contact', './assets/js/contact.js')
     .addEntry('login', './assets/js/login.js')
     .addEntry('register', './assets/js/register.js')
