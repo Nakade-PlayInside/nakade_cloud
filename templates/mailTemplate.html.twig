@@ -1,0 +1,72 @@
+{# templates/emails/mailTemplate #}
+<div style="background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('{{ asset('build/images/background/steine.jpeg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;">
+    <table style="text-align: center;
+        width:500px;
+        padding: 20px;
+        margin:auto;
+        background-color: #fff;
+        font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';">
+        <tbody>
+        <tr>
+            <td style="text-align: left;">
+                <a style="display: flex; align-items: center; text-decoration: none;" title="{{ 'news.homepage.hint'|trans({}, 'messages') }}" href="{{ absolute_url(path('app_homepage')) }}">
+                    <img alt="logo" width="48px" height="48px" src="{{ absolute_url(asset('build/images/nakade_256x256.png')) }}"><span style="color: #262E75; padding-left: 10px; font-weight: bold; font-size: 1.3em">{{ 'home.title'|trans({}, 'messages') }}</span>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table style="text-align: center;
+    width:500px;
+    margin:auto;
+    background-color: #fff;
+    padding: 20px;
+    color: rgb(85, 85, 85);
+    font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'">
+        <tbody>
+        <tr>
+            <td>
+                {% block mail_body %}
+                Das ist der Mailtext
+                {% endblock %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table style="text-align: center;
+        width:500px;
+        padding: 20px;
+        margin:auto;
+        background-color: #F5F5F5;
+        color: rgb(136, 137, 140);
+        font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'">
+        <tbody>
+        <tr>
+            <td style="text-align: left;display: flex; align-items: center;">
+                 <img style="filter: opacity(30%);" alt="logo" width="48px" height="48px" src="{{ absolute_url(asset('build/images/nakade_256x256.png')) }}"><span style="padding-left: 10px; font-weight: bold; font-size: 1.3em">{{ 'home.title'|trans({}, 'messages') }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:left; font-size: smaller;  padding-top:10px; padding-bottom: 10px;">
+                {{ 'email.send.info' | trans({'%email%': email}, 'messages') }}<br>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:left; font-size: smaller;  padding-top:10px; padding-bottom: 10px;">
+                {% block mail_footer %}
+                Hier ist eine Fußnote
+                {% endblock %}
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:left; font-size: smaller; font-weight: bolder; padding-top:10px; padding-bottom: 10px;">
+                <a style="text-decoration:none; color: rgb(136, 137, 140);" href="{{ absolute_url(path('app_privacy')) }}">{{ 'navigation.privacy'|trans({}, 'messages') }}</a> |
+                <a style="text-decoration:none; color: rgb(136, 137, 140);" href="{{ absolute_url(path('app_contact')) }}">{{ 'navigation.contact'|trans({}, 'messages') }}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

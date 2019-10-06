@@ -1,0 +1,19 @@
+{# templates/emails/contact.html.twig #}
+Bestätige deine Email Adresse bei nakade.de
+
+Hallo {{ name }}!
+
+Bitte bestätige deine email {{ email }} über diesen link {{ absolute_url(path('app_confirm', { token: token })) }}
+
+WICHTIG:
+Ohne Bestätigung du keinen Zugriff auf sicherheitsrelevante Services, wie z.B. die
+Zusendung eines neuen Passworts, falls du deines vergessen hast.
+Wir verschicken keinen Newsletter ohne deine Zustimmung oder geben deine Email Adresse an Dritte weiter.
+Der Newsletterversand ist optional und muss zusätzlich in deinem Profil angefordert werden.
+
+Mit 361 Grüßen
+Das Nakade Team
+
+
+Information zur Verwendung deiner personenbezogenen Daten findest du unter https://nakade.de/privacy
+

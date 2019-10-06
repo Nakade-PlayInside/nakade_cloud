@@ -163,6 +163,32 @@ class SecurityController extends AbstractController
      */
     public function profile(): Response
     {
+        return $this->render('emails/clubInvitation.html.twig', [
+                'token' => '1234',
+                'email' => 'holger@nakade.de',
+                'date'  => '13.02.2019'
+        ]);
+
+        return $this->render('security/profile.html.twig', [
+        ]);
+    }
+
+    /**
+     * @return Response
+     *
+     * @Route("/news/unsubscribe", name="app_unsubscribe_news")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function unsubscribe(): Response
+    {
+        return $this->render('emails/clubInvitation.html.twig', [
+                'name' => 'holger',
+                'token' => '1234',
+                'email' => 'holger@nakade.de',
+
+        ]);
+
         return $this->render('security/profile.html.twig', [
         ]);
     }
