@@ -144,17 +144,14 @@ class SecurityController extends AbstractController
             throw new NotFoundHttpException('Data not found!');
         }
 
-        if ($user->isConfirmed()) {
-            $message = 'Deine Email wurde schon bestätigt. Kennst du Schach?';
+        if (false === $user->isConfirmed()) {
+            $user->setConfirmed(true);
+            $this->getDoctrine()->getManager()->flush();
 
-            return $this->render('security/confirm.html.twig', ['message' => $message]);
+            $this->addFlash('success', 'Deine email wurde bestätigt!');
         }
 
-        $user->setConfirmed(true);
-        $this->getDoctrine()->getManager()->flush();
-        $message = 'Deine Email wurde erfolgreich bestätigt. Vielen Dank und mögen die Steine mit dir sein.';
-
-        return $this->render('security/confirm.html.twig', ['message' => $message]);
+        return $this->render('security/confirm.html.twig');
     }
 
     /**
@@ -166,13 +163,6 @@ class SecurityController extends AbstractController
      */
     public function profile(): Response
     {
-        return $this->render('emails/confirmRegistration.html.twig', [
-                'email' => "Hans@gmali.de",
-                'token'  => '1234werewrwer',
-                'name' => 'Hans Doof'
-
-        ]);
-
         return $this->render('security/profile.html.twig', [
         ]);
     }

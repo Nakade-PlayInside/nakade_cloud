@@ -55,6 +55,8 @@
   "send": "Registrieren"
   "success.message": "Du bist registriert!"
   "title": "Registrieren"
+  "confirmed.title": "Email bestätigt"
+  "confirmed.message": "Deine Email wurde erfolgreich bestätigt. Mögen die Steine mit dir sein."
 "about.title": "Über uns"
 "about.title.main": "Wir über uns"
 "imprint.title": "Impressum"

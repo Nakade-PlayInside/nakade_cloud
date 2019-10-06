@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Confirm!{% endblock %}
+{% block title %}{{'register.confirmed.title'|trans({}, 'messages') }}!{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
 
 {% block body %}
+    <h2>{{'register.confirmed.title'|trans({}, 'messages') }}</h2>
 
-    <h2>Email Bestätigung</h2>
-
-    <p>{{ message }}</p>
+    <p>{{'register.confirmed.message'|trans({}, 'messages') }}</p>
 {% endblock %}
