@@ -7,11 +7,11 @@
 
     <p>am <span style="font-size: larger; font-weight: bolder">Montag</span>, den
         <span style="font-size: larger; font-weight: bolder">{{ date }}</span> ab
-        <span style="font-size: larger; font-weight: bolder">19h</span>
+        <span style="font-size: larger; font-weight: bolder">18h</span>
     </p>
 
     <ul style="text-align: left; list-style: none; line-height: 1.5em">
-        <li><a style="display: flex; color: inherit; text-decoration: none; align-items: center" title="externe Seite!" target="_blank" href="http://www.mommsen-eck.de/"><img style="margin-right: 5px" height="16px" width="auto" alt="google Maps" src="{{ asset('build/images/common/external-link-48.png') }}">Mommsen-Eck <span style="padding-left: 5px; filter: opacity(80%)">"Haus der 100 Biere"</span></a></li>
+        <li><a style="display: flex; color: inherit; text-decoration: none; align-items: center" title="externe Seite!" target="_blank" href="http://www.mommsen-eck.de/"><img style="margin-right: 5px" height="16px" width="auto" alt="Mommsen-Eck" src="{{ absolute_url(asset('build/images/common/external-link-48.png')) }}">Mommsen-Eck <span style="padding-left: 5px; filter: opacity(80%)">"Haus der 100 Biere"</span></a></li>
         <li>Mommsenstraße 45</li>
         <li style="text-decoration: underline; padding-top: 5px;">10629 Berlin (Charlottenburg)</li>
     </ul>
@@ -19,24 +19,24 @@
     <ul style="text-align: left; list-style: none;">
         <li style="display: flex; align-items: center">
             <span style="font-weight: bolder">U-Bahnhof Wilmersdorfer Str.</span>
-            <img style="margin-left: 10px; opacity: 0.7;" height="16px" width="auto" alt="U-Bahn" title="U-Bahn Linie 2" src="{{ asset('build/images/common/u2.png') }}">
-            <img style="margin-left: 1px; opacity: 0.7;" height="16px" width="auto" alt="U-Bahn" title="U-Bahn Linie 7" src="{{ asset('build/images/common/u7.png') }}">
+            <img style="margin-left: 10px; opacity: 0.7;" height="16px" width="auto" alt="U-Bahn" title="U-Bahn Linie 2" src="{{ absolute_url(asset('build/images/common/u2.png')) }}">
+            <img style="margin-left: 1px; opacity: 0.7;" height="16px" width="auto" alt="U-Bahn" title="U-Bahn Linie 7" src="{{ absolute_url(asset('build/images/common/u7.png')) }}">
         </li>
         <li style="display: flex; align-items: center">
             <span style="font-weight: bolder">S-Bahnhof Charlottenburg</span>
-            <img style="margin-left: 36px; opacity: 0.7;" height="16px" width="auto" alt="S-Bahn" title="S-Bahn" src="{{ asset('build/images/common/sbahn.png') }}">
+            <img style="margin-left: 36px; opacity: 0.7;" height="16px" width="auto" alt="S-Bahn" title="S-Bahn" src="{{ absolute_url(asset('build/images/common/sbahn.png')) }}">
         </li>
         <li style="display: flex; align-items: center"><span>U-Bahnhof Adenauer Platz</span>
-            <img style="margin-left: 45px; opacity: 0.7;" height="16px" width="auto" alt="U-Bahn" title="U-Bahn Linie 7" src="{{ asset('build/images/common/u7.png') }}">
+            <img style="margin-left: 45px; opacity: 0.7;" height="16px" width="auto" alt="U-Bahn" title="U-Bahn Linie 7" src="{{ absolute_url(asset('build/images/common/u7.png')) }}">
         </li>
 
         <li style="display: flex; align-items: center">
             <span>ca. 5 min. Fussweg</span>
-            <img style="margin-left: 20px; opacity: 0.7;" height="16px" width="auto" alt="Fußweg" title="Fußweg" src="{{ asset('build/images/common/walkway.png') }}">
+            <img style="margin-left: 20px; opacity: 0.7;" height="16px" width="auto" alt="Fußweg" title="Fußweg" src="{{ absolute_url(asset('build/images/common/walkway.png')) }}">
 
         </li>
         {% set googleMapsLink = 'https://www.google.de/maps/place/Mommsen-Eck+Charlottenburg+-+Haus+der+100+Biere/@52.5033712,13.3061993,17z/data=!4m5!3m4!1s0x47a850e713b8bc8d:0xc3bbcc7aaab481fb!8m2!3d52.5033692!4d13.3083839' %}
-        <li style="margin-top: 20px"><a style="display: flex; align-items: center" title="externe Seite!" target="_blank" href="{{ googleMapsLink }}"><img style="margin-right: 5px; opacity: 0.75" height="16px" width="auto" alt="google Maps" src="{{ asset('build/images/common/external-link-48.png') }}">in Google Maps anzeigen</a></li>
+        <li style="margin-top: 20px"><a style="display: flex; align-items: center" title="externe Seite!" target="_blank" href="{{ googleMapsLink }}"><img style="margin-right: 5px; opacity: 0.75" height="16px" width="auto" alt="google Maps" src="{{ absolute_url(asset('build/images/common/external-link-48.png')) }}">in Google Maps anzeigen</a></li>
         <li style="margin-top: 20px"><p style="color: #C82829; font-weight: bolder; margin-bottom: 3px; ">ACHTUNG!</p>Nicht zu verwechseln mit dem Lokal am Potsdamer Platz.</li>
     </ul>
 {% endblock %}

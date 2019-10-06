@@ -1,0 +1,13 @@
+{# templates/emails/mailTemplate.text.twig #}
+{% block mail_body %}
+{#Mailtext hier#}
+{% endblock %}
+
+Diese Nachricht wurde an <{{ email }}> geschickt.
+
+{% block mail_footer %}
+{#Fußnote hier#}
+{% endblock %}
+
+Informationen zur Verwendung deiner personenbezogenen Daten findest du unter <{{ absolute_url(path('app_privacy')) }}>.
+Bei Fragen helfen wir dir gerne unter <{{ absolute_url(path('app_contact')) }}> weiter.

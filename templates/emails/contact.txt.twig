@@ -1,4 +1,7 @@
 {# templates/emails/contact.txt.twig #}
+{% extends "mailTemplate.txt.twig" %}
+
+{% block mail_body %}
 Deine Anfrage bei nakade.de
 
 Hallo {{ name }}!
@@ -10,5 +13,4 @@ Bitte habe ein paar Tage Geduld.
 Mit 361 Grüßen
 
 Das Nakade Team
-
-Information zur Verwendung deiner personenbezogenen Daten findest du unter https://nakade.de/privacy
+{% endblock %}

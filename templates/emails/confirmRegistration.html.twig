@@ -1,93 +1,36 @@
 {# templates/emails/confirmRegistration.html.twig #}
-<div>
-    <table style="text-align: center;
-        display: block;
-        width:500px;
-        padding: 20px;
-        margin:auto;
-        font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'">
-        <tr>
-            <td style="width: 10%; text-align: left;">
-                <img alt="logo" width="48px" height="48px" src="{{ absolute_url(asset('build/images/nakade_256x256.png')) }}">
-            </td>
-            <td style="with: 90%; color: #262E75; text-align: left;  vertical-align: middle !important; margin: auto; padding-left: 10px; font-weight: bold; font-size: 1.3em">
-                Nakade
-            </td>
-        </tr>
-    </table>
-    <table style="text-align: center;
-    display: block;
-    width:500px;
-    margin:auto;
-    padding: 20px;
-    font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'">
-       <tr>
-           <td>
-               <h1 style="font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
-                          white-space: nowrap;
-                          color: rgb(85, 85, 85);
-                ">Bitte bestätige dein Konto.</h1>
-           </td>
-       </tr>
-       <tr>
-           <td style="text-align: justify; color: rgb(85, 85, 85);">
-               Du hast es fast geschafft. Bestätige nur noch unten dein Nakade Konto, um deine Registrierung abzuschliessen.
-           </td>
-       </tr>
-        <tr>
-            <td style="text-align:center; margin: auto; display: table;">
-                <a style="text-decoration: none" href="{{ absolute_url(path('app_confirm', { token: token })) }}">
-                <button style="
-                         margin-top: 20px;
-                         color: #fff;
-                         background-color: #007bff;
-                         cursor: pointer;
-                         display: block;
-                         font-weight: 400;
-                         text-align: center;
-                         vertical-align: middle;
-                         padding: 0.375rem 0.75rem;
-                         font-size: 1rem;
-                         line-height: 1.5;
-                         -webkit-border-radius: 10px;
-                         -moz-border-radius: 10px;
-                         border-radius: 10px;
-                         transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-                         -webkit-appearance: button;
-                ">Konto bestätigen</button></a>
-            </td>
-        </tr>
-    </table>
-    <table style="text-align: center;
-        display: block;
-        width:500px;
-        padding: 20px;
-        margin:auto;
-        background-color: #F5F5F5;
-        color: rgb(136, 137, 140);
-        font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'">
-        <tr>
-            <td style="width: 10%; text-align: left;">
-                <img style="filter: opacity(30%);" alt="logo" width="36px" height="36px" src="{{ absolute_url(asset('build/images/nakade_256x256.png')) }}">
-            </td>
-            <td style="with: 90%; text-align: left;  vertical-align: middle !important; margin: auto; padding-left: 10px; font-weight: bold; font-size: 1.3em">
-                Nakade
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align:left; font-size: smaller;  padding-top:10px; padding-bottom: 10px;">
-                Diese Nachricht wurde an <span style="white-space: nowrap">&lt;{{ email }}&gt;</span> gesendet.<br><br>
-                Durch die Bestätigung deiner email bekommst du Zugriff auf sicherheitsrelevante Services, wie z.B. die
-                <u>Zusendung eines neuen Passworts</u>, falls du deines vergessen hast.<br/>
-                Wir verschicken keinen Newsletter ohne deine Zustimmung oder geben deine Email Adresse an Dritte weiter.
-                Der Newsletter ist <u>optional</u> und kann jederzeit abbestellt werden.
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align:left; font-size: smaller; font-weight: bolder; padding-top:10px; padding-bottom: 10px;">
-                <a style="text-decoration:none; color: rgb(136, 137, 140);" href="{{ absolute_url(path('app_privacy')) }}">Datenschutzhinweise</a> |
-                <a style="text-decoration:none; color: rgb(136, 137, 140);" href="{{ absolute_url(path('app_contact')) }}">Kontakt</a>
-            </td>
-        </tr>
-    </table>
-</div>
+{% extends 'mailTemplate.html.twig' %}
+
+{% block mail_body %}
+    <h1 style="white-space: nowrap; display: flex; align-items: center">Bitte bestätige dein Konto.</h1>
+
+    <p style="text-align: justify; color: rgb(85, 85, 85);">Du hast es fast geschafft. Bestätige nur noch unten dein Nakade Konto, um deine Registrierung abzuschliessen.</p>
+    <a style="text-align:center; margin: auto; display: table;text-decoration: none" href="{{ absolute_url(path('app_confirm', { token: token })) }}">
+                    <button style="
+                             margin-top: 20px;
+                             color: #fff;
+                             background-color: #007bff;
+                             cursor: pointer;
+                             display: block;
+                             font-weight: 400;
+                             text-align: center;
+                             vertical-align: middle;
+                             padding: 0.375rem 0.75rem;
+                             font-size: 1rem;
+                             line-height: 1.5;
+                             -webkit-border-radius: 10px;
+                             -moz-border-radius: 10px;
+                             border-radius: 10px;
+                             transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+                             -webkit-appearance: button;
+                    ">Konto bestätigen</button>
+    </a>
+
+    {% endblock %}
+
+    {% block mail_footer %}
+        Durch die Bestätigung deiner email bekommst du Zugriff auf sicherheitsrelevante Services, wie z.B. die
+        <u>Zusendung eines neuen Passworts</u>, falls du deines vergessen hast.<br/>
+        Wir verschicken keinen Newsletter ohne deine Zustimmung oder geben deine Email Adresse an Dritte weiter.
+        Der Newsletter ist <u>optional</u> und kann jederzeit abbestellt werden.
+    {% endblock %}

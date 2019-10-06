@@ -1,19 +1,39 @@
 {# templates/emails/contact.html.twig #}
-Bestätige deine Email Adresse bei nakade.de
+{% extends "mailTemplate.txt.twig" %}
 
-Hallo {{ name }}!
+{% block mail_body %}
+Liebe Go Freunde,
 
-Bitte bestätige deine email {{ email }} über diesen link {{ absolute_url(path('app_confirm', { token: token })) }}
+wie jeden Monat seid Ihr wieder herzlich zu unserem Spieltreff eingeladen.
 
-WICHTIG:
-Ohne Bestätigung du keinen Zugriff auf sicherheitsrelevante Services, wie z.B. die
-Zusendung eines neuen Passworts, falls du deines vergessen hast.
-Wir verschicken keinen Newsletter ohne deine Zustimmung oder geben deine Email Adresse an Dritte weiter.
-Der Newsletterversand ist optional und muss zusätzlich in deinem Profil angefordert werden.
+Unser nächstes Treffen ist am Montag, den {{ date }} ab 18 Uhr.
 
+
+Wann?
+
+Montag, den {{ date}} ab 18 Uhr
+
+
+Wo?
+
+Mommsen-Eck, Haus der 100 Biere
+Mommsenstraße 45
+10629 Berlin
+
+Anfahrt:
+S-Bahnhof Berlin-Charlottenburg oder
+U-Bahnhof Wilmersdorfer Str.
+
+
+ACHTUNG!
+Nicht zu verwechseln mit dem Lokal am Potsdamer Platz!
+
+Ich freue mich, Euch alle im Haus der 100 Biere ​wieder zusehen.
 Mit 361 Grüßen
-Das Nakade Team
 
+Maurice
+{% endblock %}
 
-Information zur Verwendung deiner personenbezogenen Daten findest du unter https://nakade.de/privacy
-
+{% block mail_footer %}
+Du kannst unseren Newsletter jederzeit über diesen Link {{ absolute_url(path('app_unsubscribe_news', { token: token })) }} stornieren.
+{% endblock %}

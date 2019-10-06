@@ -163,12 +163,6 @@ class SecurityController extends AbstractController
      */
     public function profile(): Response
     {
-        return $this->render('emails/clubInvitation.html.twig', [
-                'token' => '1234',
-                'email' => 'holger@nakade.de',
-                'date'  => '13.02.2019'
-        ]);
-
         return $this->render('security/profile.html.twig', [
         ]);
     }
@@ -182,12 +176,7 @@ class SecurityController extends AbstractController
      */
     public function unsubscribe(): Response
     {
-        return $this->render('emails/clubInvitation.html.twig', [
-                'name' => 'holger',
-                'token' => '1234',
-                'email' => 'holger@nakade.de',
-
-        ]);
+        //todo
 
         return $this->render('security/profile.html.twig', [
         ]);

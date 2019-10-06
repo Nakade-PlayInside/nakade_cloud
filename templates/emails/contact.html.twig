@@ -1,71 +1,16 @@
 {# templates/emails/contact.html.twig #}
-<div style="">
-    <table style="text-align: center;
-        display: block;
-        width:500px;
-        padding: 20px;
-        margin:auto;
-        font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'">
-        <tr>
-            <td style="width: 10%; text-align: left;">
-                <img alt="logo" width="48px" height="48px" src="{{ absolute_url(asset('build/images/nakade_256x256.png')) }}">
-            </td>
-            <td style="with: 90%; color: #262E75; text-align: left;  vertical-align: middle !important; margin: auto; padding-left: 10px; font-weight: bold; font-size: 1.3em">
-                Nakade
-            </td>
-        </tr>
-    </table>
-    <table style="text-align: center;
-    display: block;
-    width:500px;
-    margin:auto;
-    padding: 20px;
-    font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'">
-        <tr>
-            <td>
-                <h1 style="font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
-                          white-space: nowrap;
-                          color: rgb(85, 85, 85);
-                ">Deine Anfrage bei Nakade</h1>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: justify; color: rgb(85, 85, 85);">
-                Vielen Dank für deine Anfrage über unser online-Kontaktformular.
-                Die Bearbeitung kann etwas dauern. Bitte habe ein paar Tage Geduld.
-            </td>
-        </tr>
-    </table>
-    <table style="text-align: center;
-        display: block;
-        width:500px;
-        padding: 20px;
-        margin:auto;
-        background-color: #F5F5F5;
-        color: rgb(136, 137, 140);
-        font-family: 'Circular', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'">
-        <tr>
-            <td style="width: 10%; text-align: left;">
-                <img style="filter: opacity(30%);" alt="logo" width="36px" height="36px" src="{{ absolute_url(asset('build/images/nakade_256x256.png')) }}">
-            </td>
-            <td style="with: 90%; text-align: left;  vertical-align: middle !important; margin: auto; padding-left: 10px; font-weight: bold; font-size: 1.3em">
-                Nakade
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align:left; font-size: smaller;  padding-top:10px; padding-bottom: 10px;">
-                Diese Nachricht wurde an <span style="white-space: nowrap">&lt;{{ email }}&gt;</span> gesendet.<br><br>
-                Bitte beachten Sie, dass Sie auf diese E-Mail nicht direkt antworten können. Dies ist eine automatisch generierte E-Mail.
-                Antworten an diese Adresse werden nicht gelesen.<br>
-                Ihre Kontaktdaten werden zum Zweck der Bearbeitung Ihrer Anfrage und für den Fall von Anschlussfragen bei uns gespeichert.
-                Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align:left; font-size: smaller; font-weight: bolder; padding-top:10px; padding-bottom: 10px;">
-                <a style="text-decoration:none; color: rgb(136, 137, 140);" href="{{ absolute_url(path('app_privacy')) }}">Datenschutzhinweise</a> |
-                <a style="text-decoration:none; color: rgb(136, 137, 140);" href="{{ absolute_url(path('app_contact')) }}">Kontakt</a>
-            </td>
-        </tr>
-    </table>
-</div>
+{% extends 'mailTemplate.html.twig' %}
+
+{% block mail_body %}
+    <h1 style="white-space: nowrap; display: flex; align-items: center">Deine Anfrage bei Nakade.</h1>
+
+    <p style="text-align: justify; color: rgb(85, 85, 85);">Vielen Dank für deine Anfrage über unser online-Kontaktformular.
+        Die Bearbeitung kann etwas dauern. Bitte habe ein paar Tage Geduld.</p>
+{% endblock %}
+
+{% block mail_footer %}
+        Bitte beachten Sie, dass Sie auf diese Nachricht nicht direkt antworten können. Dies ist eine automatisch generierte Email.
+        Antworten an diese Adresse werden nicht gelesen.<br>
+        Ihre Kontaktdaten werden zum Zweck der Bearbeitung Ihrer Anfrage und für den Fall von Anschlussfragen bei uns gespeichert.
+        Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
+{% endblock %}
