@@ -20,6 +20,8 @@
 
 namespace App\Message;
 
+use App\Entity\NewsReader;
+
 /**
  * Class ConfirmSubscription!
  *
@@ -29,21 +31,15 @@ namespace App\Message;
  */
 class ConfirmSubscription
 {
-    private $email;
-    private $confirmToken;
+    private $newsReader;
 
-    public function __construct(string $email, string $confirmToken)
+    public function __construct(NewsReader $newsReader)
     {
-        $this->email = $email;
-        $this->confirmToken = $confirmToken;
+        $this->newsReader = $newsReader;
     }
 
-    public function getEmail(): string
+    public function getNewsReader(): NewsReader
     {
-        return $this->email;
-    }
-
-    public function getConfirmToken(): string {
-        return $this->confirmToken;
+        return $this->newsReader;
     }
 }

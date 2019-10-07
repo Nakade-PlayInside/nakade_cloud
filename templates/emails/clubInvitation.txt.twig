@@ -35,5 +35,8 @@ Maurice
 {% endblock %}
 
 {% block mail_footer %}
-Du kannst unseren Newsletter jederzeit über diesen Link {{ absolute_url(path('app_unsubscribe_news', { token: token })) }} stornieren.
+Unser Newsletter informiert dich über unseren Spieltreff, wann der nächste Spieltreff stattfindet oder ob der Spieltreff aufgrund
+unvorhersehbarer Ereignisse abgesagt, verlegt wird oder die Örtlichkeit sich ändert. Üblicherweise wirst du einen Newsletter im Monat erhalten.
+
+Du kannst unseren Newsletter jederzeit über diesen Link {{ absolute_url(path('news_unsubscribe', { token: token }, true)) }} stornieren.
 {% endblock %}

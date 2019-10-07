@@ -21,6 +21,7 @@
 namespace App\Form\Model;
 
 use App\Validator\ReCaptcha;
+use App\Validator\UniqueReader;
 use App\Validator\UniqueUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -39,28 +40,11 @@ class SubscribeFormModel
      *     message="Die Email {{ value }} ist ungültig.",
      *     checkMX=true
      * )
-     * @UniqueUser()
+     * @UniqueReader()
      */
     public $email;
 
-    /**
-     * @Assert\NotBlank
-     */
-    public $subscribeToken;
-
-    /**
-     * @Assert\NotBlank
-     */
-    public $unSubscribeToken;
-
-    /**
-     * @Assert\Type(type="string")
-     */
     public $firstName;
-
-    /**
-     * @Assert\Type(type="string")
-     */
     public $lastName;
 
     /**

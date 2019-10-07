@@ -20,6 +20,8 @@
 
 namespace App\Message;
 
+use App\Entity\NewsReader;
+
 /**
  * Class ClubInvitation!
  *
@@ -29,27 +31,14 @@ namespace App\Message;
  */
 class News
 {
-    private $email;
     private $date;
-    private $cancelNewsToken;
+    private $reader;
 
-    /**
-     * News constructor.
-     *
-     * @param string $email
-     * @param string $date            Format 'Y-m-d'
-     * @param string $cancelNewsToken
-     */
-    public function __construct(string $email, string $date, string $cancelNewsToken)
+    public function __construct(NewsReader $reader, string $date)
     {
-        $this->email = $email;
         $this->date = $date;
-        $this->cancelNewsToken = $cancelNewsToken;
-    }
 
-    public function getEmail(): string
-    {
-        return $this->email;
+        $this->reader = $reader;
     }
 
     public function getDate(): string
@@ -57,8 +46,8 @@ class News
         return $this->date;
     }
 
-    public function getCancelNewsToken(): string
+    public function getReader(): NewsReader
     {
-        return $this->cancelNewsToken;
+        return $this->reader;
     }
 }

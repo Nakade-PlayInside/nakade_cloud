@@ -6,7 +6,7 @@ Bestätige deine Email Adresse bei nakade.de
 
 Hallo {{ name }}!
 
-Bitte bestätige deine email {{ email }} über diesen link {{ absolute_url(path('app_confirm', { token: token })) }}
+Bitte bestätige deine email {{ email }} über diesen link {{ absolute_url(path('app_confirm', { token: token }, true)) }}
 
 WICHTIG:
 Ohne Bestätigung du keinen Zugriff auf sicherheitsrelevante Services, wie z.B. die

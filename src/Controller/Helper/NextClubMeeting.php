@@ -33,7 +33,7 @@ namespace App\Controller\Helper;
  */
 class NextClubMeeting
 {
-    private const DATE_FORMAT = 'Y-m-d';
+    const DATE_FORMAT = 'Y-m-d';
     private const MONTH_YEAR_FORMAT = 'F Y';
 
     /**
@@ -58,22 +58,13 @@ class NextClubMeeting
 
     /**
      * Creates a timestamp for the second monday of given month and year.
-     *
-     * @param string $monthYear String in format F Y eg. November 2019
-     *
-     * @return int
      */
     private function createMondayTimestamp(string $monthYear): int
     {
         return strtotime(sprintf('second monday of %s', $monthYear));
     }
 
-    /**
-     * @param string $actualMonthDate
-     *
-     * @return string
-     */
-    private function calcNextMonth(string $actualMonthDate)
+    private function calcNextMonth(string $actualMonthDate): string
     {
         $dateTime = \DateTime::createFromFormat(self::DATE_FORMAT, $actualMonthDate);
         $dateTime->modify('+1 month');

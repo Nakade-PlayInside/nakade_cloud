@@ -36,11 +36,12 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('main', './assets/js/main.js')
     .addEntry('clubs', './assets/js/clubs.js')
     .addEntry('common', './assets/js/common.js')
     .addEntry('contact', './assets/js/contact.js')
     .addEntry('login', './assets/js/login.js')
+    .addEntry('main', './assets/js/main.js')
+    .addEntry('news', './assets/js/news.js')
     .addEntry('register', './assets/js/register.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

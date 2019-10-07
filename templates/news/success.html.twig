@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{'subscribe.success.title'|trans({}, 'messages') }}!{% endblock %}
+
+{% block body %}
+    <h2>{{'subscribe.success.title'|trans({}, 'messages') }}</h2>
+
+    <p style="text-align: left">Du hast hast es fast geschafft. Wir haben dir eine Nachricht an &lt;{{ email }}&gt; zugeschickt.<br>
+       In einem letzten Schritt, bestätige bitte deine Email Adresse über den angegebenen Button bzw. Link in der Mail.
+    </p>
+{% endblock %}

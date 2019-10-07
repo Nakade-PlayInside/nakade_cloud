@@ -2,10 +2,10 @@
 {% extends 'mailTemplate.html.twig' %}
 
 {% block mail_body %}
-    <h1 style="white-space: nowrap; display: flex; align-items: center">Bitte bestätige dein Konto.</h1>
+    <h1 style="white-space: nowrap; display: flex; align-items: center">Bitte bestätige deine Email.</h1>
 
-    <p style="text-align: justify; color: rgb(85, 85, 85);">Du hast es fast geschafft. Bestätige nur noch unten dein Nakade Konto, um deine Registrierung abzuschliessen.</p>
-    <a style="text-align:center; margin: auto; display: table;text-decoration: none" href="{{ absolute_url(path('app_confirm', { token: token }, true)) }}">
+    <p style="text-align: justify; color: rgb(85, 85, 85);">Du hast es fast geschafft. Bestätige nur noch unten deine Email, um deine Anmeldung für unseren Newsletter abzuschliessen.</p>
+    <a style="text-align:center; margin: auto; display: table;text-decoration: none" href="{{ absolute_url(path('news_confirm', { token: token }, true)) }}">
                     <button style="
                              margin-top: 20px;
                              color: #fff;
@@ -23,14 +23,15 @@
                              border-radius: 10px;
                              transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
                              -webkit-appearance: button;
-                    ">Konto bestätigen</button>
+                    ">Email bestätigen</button>
     </a>
 
     {% endblock %}
 
     {% block mail_footer %}
-        Durch die Bestätigung deiner email bekommst du Zugriff auf sicherheitsrelevante Services, wie z.B. die
-        <u>Zusendung eines neuen Passworts</u>, falls du deines vergessen hast.<br/>
-        Wir verschicken keinen Newsletter ohne deine Zustimmung oder geben deine Email Adresse an Dritte weiter.
-        Der Newsletter ist <u>optional</u> und kann jederzeit abbestellt werden.
+        Unser Newsletter informiert dich über unseren Spieltreff, wann der nächste Spieltreff stattfindet oder ob
+        der Spieltreff aufgrund unvorhersehbarer Ereignisse abgesagt, verlegt wird oder die Örtlichkeit sich ändert.<br>
+        Üblicherweise wirst du einen Newsletter im Monat erhalten. Du kannst den Newsletter jederzeit abbestellen.
+        Um den Newsletter zu stornieren, nutze den Link im Newsletter oder kontaktiere uns direkt.<br>
+        Wir behandeln deine Daten vertraulich und geben deine Daten nicht ohne deine Zustimmung an Dritte weiter.
     {% endblock %}

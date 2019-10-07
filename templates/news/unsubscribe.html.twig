@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{'subscribe.unsubscribe.title'|trans({}, 'messages') }}!{% endblock %}
+
+{% block body %}
+    <h2>{{'subscribe.unsubscribe.title'|trans({}, 'messages') }}</h2>
+
+    <p>Du hast den Newsletter für die email &lt;{{ email }}&gt; storniert. Falls du dich wieder als Abonnement eintragen möchtest, folge dem
+        <a href="{{ path('news_subscribe') }}">Link</a></p>
+{% endblock %}

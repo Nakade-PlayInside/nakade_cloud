@@ -73,13 +73,6 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * The contact page!
-     *
-     * @param Request             $request
-     * @param MessageBusInterface $messageBus
-     *
-     * @return Response
-     *
      * @Route("/contact", name="app_contact")
      */
     public function contact(Request $request, MessageBusInterface $messageBus)

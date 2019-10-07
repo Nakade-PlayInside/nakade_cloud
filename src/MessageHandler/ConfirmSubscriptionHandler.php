@@ -20,7 +20,8 @@
 
 namespace App\MessageHandler;
 
-use App\Message\News;
+use App\Message\ConfirmRegistration;
+use App\Message\ConfirmSubscription;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
@@ -28,13 +29,15 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
 
 /**
- * Class ClubInvitationHandler!
+ * Class ConfirmSubscriptionHandler!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class NewsHandler implements MessageHandlerInterface, LoggerAwareInterface
+class ConfirmSubscriptionHandler implements MessageHandlerInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -47,44 +50,32 @@ class NewsHandler implements MessageHandlerInterface, LoggerAwareInterface
         $this->twig = $twig;
     }
 
-    public function __invoke(News $news)
+    public function __invoke(ConfirmSubscription $confirmSubscription)
     {
-        $subject = sprintf('Nakade Spieltreff | Einladung zum Go im Mommsen-Eck [%s]', $news->getDate());
-        $message = (new \Swift_Message($subject))
+        /** @var ConfirmSubscription $confirmSubscription */
+        $reader = $confirmSubscription->getNewsReader();
+
+        $message = (new \Swift_Message('Bestätige deine email Adresse'))
                     ->setFrom('noreply@nakade.de')
-                    ->setTo($news->getReader()->getEmail())
+                    ->setTo($reader->getEmail())
                     ->setBody(
-                        $this->twig->render(
-                            // templates/emails/clubInvitation.html.twig
-                            'emails/clubInvitation.html.twig',
-                            [
-                                    'email' => $news->getReader()->getEmail(),
-                                    'token' => $news->getReader()->getUnsubscribeToken(),
-                                    'date' => $news->getDate(),
-                            ]
-                        ),
+                        $this->twig->render('emails/confirmSubscription.html.twig', [
+                            'email' => $reader->getEmail(),
+                            'token' => $reader->getSubscribeToken(),
+                        ]),
                         'text/html'
                     )
 
-                    // you can remove the following code if you don't define a text version for your emails
-                    ->addPart(
-                        $this->twig->render(
-                            // templates/emails/registration.txt.twig
-                            'emails/clubInvitation.txt.twig',
-                            [
-                                'email' => $news->getReader()->getEmail(),
-                                'token' => $news->getReader()->getUnsubscribeToken(),
-                                'date' => $news->getDate(),
-                            ]
-                        ),
-                        'text/plain'
-                    );
+                    ->addPart($this->twig->render('emails/confirmSubscription.txt.twig', [
+                            'email' => $reader->getEmail(),
+                            'token' => $reader->getSubscribeToken(),
+                    ]), 'text/plain');
 
         $sent = $this->mailer->send($message);
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent club invitaion mail email:%d', $news->getReader()->getEmail()));
+                $this->logger->alert(sprintf('Could not sent confirm subscription mail id:%d', $reader->getId()));
             }
         }
     }

@@ -23,11 +23,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\Helper\NextClubMeeting;
+use App\Controller\Helper\TokenGenerator;
 use App\Entity\NewsReader;
 use App\Entity\User;
 use App\Form\Model\SubscribeFormModel;
 use App\Form\SubscribeType;
-use App\Message\ConfirmRegistration;
+use App\Message\ConfirmSubscription;
 use App\Message\News;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,11 +43,14 @@ use Symfony\Component\Routing\Annotation\Route;
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ *
+ * @Route("/news", name="news_")
  */
 class NewsController extends AbstractController
 {
     /**
-     * @Route("/news", name="news")
+     * @Route("/", name="index")
      */
     public function index()
     {
@@ -56,18 +60,24 @@ class NewsController extends AbstractController
     }
 
     /**
-     * @Route("/news/send", name="news_send")
+     * @Route("/send", name="send")
      */
     public function send(MessageBusInterface $messageBus, NextClubMeeting $nextClubMeeting)
     {
         //  todo: make service
-        $date = $nextClubMeeting->calcNextMeetingDate();
+        $strDate = $nextClubMeeting->calcNextMeetingDate();
+        $objDate = \DateTime::createFromFormat(NextClubMeeting::DATE_FORMAT, $strDate);
+        $date = $objDate->format('d.m.Y');
 
-        //mail handling
-        $message = new News('holger@nakade.de', $date, '1234ewrer');
-        $messageBus->dispatch($message);
+        //todo: find confirmed only
+        $allReaders = $this->getDoctrine()->getRepository(NewsReader::class)->findAll();
+        foreach ($allReaders as $reader) {
+            //mail handling
+            $message = new News($reader, $date);
+            $messageBus->dispatch($message);
+        }
 
-        $this->addFlash('success', 'Nachricht verschickt!');
+        $this->addFlash('success', 'Nachrichten verschickt!');
 
         return $this->render('news/index.html.twig', [
                 'controller_name' => 'NewsController',
@@ -75,7 +85,7 @@ class NewsController extends AbstractController
     }
 
     /**
-     * @Route("/news/subscribe", name="news_subscribe")
+     * @Route("/subscribe", name="subscribe")
      */
     public function subscribe(Request $request, MessageBusInterface $messageBus): Response
     {
@@ -90,8 +100,8 @@ class NewsController extends AbstractController
             $reader->setEmail($subscriber->email)
                 ->setFirstName($subscriber->firstName)
                 ->setLastName($subscriber->lastName)
-                ->setSubscribeToken($subscriber->subscribeToken)
-                ->setUnsubscribeToken($subscriber->unSubscribeToken)
+                ->setSubscribeToken(TokenGenerator::generateToken($subscriber->email))
+                ->setUnsubscribeToken(TokenGenerator::generateToken($subscriber->email))
             ;
 
             //proof if user is registered for setting flag and user is already confirmed
@@ -108,13 +118,15 @@ class NewsController extends AbstractController
 
             //subscription confirmation mail is send only if not confirmed
             if (false === $reader->isConfirmed()) {
-                $message = new ConfirmRegistration($reader);
+                $message = new ConfirmSubscription($reader);
                 $messageBus->dispatch($message);
             }
 
             $this->addFlash('success', 'Du hast den Newsletter abonniert!');
 
-            return $this->redirectToRoute('app_homepage');
+            return $this->render('news/success.html.twig', [
+                    'email' => $reader->getEmail(),
+            ]);
         }
 
         return $this->render('news/subscribe.html.twig', [
@@ -123,26 +135,45 @@ class NewsController extends AbstractController
     }
 
     /**
-     * Confirm the registered email!
+     * Confirm the subscription email!
      *
-     * @Route("/news/confirm/{token}", name="news_confirm")
+     * @Route("/confirm/{token}", name="confirm")
      */
     public function confirm(string $token): Response
     {
-//        todo
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['confirmToken' => $token]);
+        $reader = $this->getDoctrine()->getRepository(NewsReader::class)->findOneBy(['subscribeToken' => $token]);
 
-        if (!$user) {
+        if (!$reader) {
             throw new NotFoundHttpException('Data not found!');
         }
 
-        if (false === $user->isConfirmed()) {
-            $user->setConfirmed(true);
+        if (false === $reader->isConfirmed()) {
+            $reader->setConfirmed(true);
             $this->getDoctrine()->getManager()->flush();
+        }
+        $this->addFlash('success', 'Deine Email wurde bestätigt!');
 
-            $this->addFlash('success', 'Deine email wurde bestätigt!');
+        return $this->render('security/confirm.html.twig', ['email' => $reader->getEmail()]);
+    }
+
+    /**
+     * unsubscribe newsletter!
+     *
+     * @Route("/unsubscribe/{token}", name="unsubscribe", requirements={"token"=".+"})
+     */
+    public function unsubscribe(string $token): Response
+    {
+        $reader = $this->getDoctrine()->getRepository(NewsReader::class)->findOneBy(['unsubscribeToken' => $token]);
+        if (!$reader) {
+            throw new NotFoundHttpException('Data not found!');
         }
 
-        return $this->render('security/confirm.html.twig');
+        $email = $reader->getEmail();
+        $this->getDoctrine()->getManager()->remove($reader);
+        $this->getDoctrine()->getManager()->flush();
+
+        $this->addFlash('success', 'Der Newsletter wurde storniert!');
+
+        return $this->render('news/unsubscribe.html.twig', ['email' => $email]);
     }
 }

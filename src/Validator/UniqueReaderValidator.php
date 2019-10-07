@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -20,39 +19,36 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form;
+namespace App\Validator;
 
-use App\Form\Model\SubscribeFormModel;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Repository\NewsReaderRepository;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
 
-/**
- * Class SubscribeType!
- *
- *
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- * @author Dr. H.Maerz <holger@nakade.de>
- */
-class SubscribeType extends AbstractType
+class UniqueReaderValidator extends ConstraintValidator
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    private $readerRepository;
+
+    public function __construct(NewsReaderRepository $readerRepository)
     {
-        $builder
-                ->add('email', EmailType::class)
-                ->add('firstName', TextType::class, ['required' => false])
-                ->add('lastName', TextType::class, ['required' => false])
-                ->add('captcha', ReCaptchaType::class)
-        ;
+        $this->readerRepository = $readerRepository;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function validate($value, Constraint $constraint)
     {
-        $resolver->setDefaults([
-            'data_class' => SubscribeFormModel::class,
+        /* @var $constraint \App\Validator\UniqueReader */
+        if (null === $value || '' === $value) {
+            return;
+        }
+
+        $existingUser = $this->readerRepository->findOneBy([
+                'email' => $value,
         ]);
+        if (!$existingUser) {
+            return;
+        }
+
+        $this->context->buildViolation($constraint->message)
+            ->addViolation();
     }
 }

@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Controller\Helper\TokenGenerator;
+use App\Entity\NewsReader;
 use App\Entity\User;
 use App\Form\Model\UserRegistrationFormModel;
 use App\Form\RegisterType;
@@ -78,17 +80,9 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @param Request                      $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param GuardAuthenticatorHandler    $guardHandler
-     * @param LoginFormAuthenticator       $formAuthenticator
-     * @param \Swift_Mailer                $mailer
-     *
-     * @return Response
-     *
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator,  MessageBusInterface $messageBus): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator, MessageBusInterface $messageBus): Response
     {
         $form = $this->createForm(RegisterType::class);
         $form->handleRequest($request);
@@ -99,17 +93,30 @@ class SecurityController extends AbstractController
 
             $user = new User();
             $user->setEmail($userModel->email)
-                ->setFirstName($userModel->firstName)
-                ->setLastName($userModel->lastName)
-                ->setConfirmToken(uniqid('nakade', true))
-                ->setNewsletter($userModel->newsletter)
-                ->setPassword($passwordEncoder->encodePassword(
-                    $user,
-                    $userModel->plainPassword
-                ));
+                    ->setFirstName($userModel->firstName)
+                    ->setLastName($userModel->lastName)
+                    ->setConfirmToken(TokenGenerator::generateToken($userModel->email))
+                    ->setNewsletter($userModel->newsletter)
+                    ->setPassword($passwordEncoder->encodePassword(
+                        $user,
+                        $userModel->plainPassword
+                    ));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
+
+            //if subscribed create reader, too
+            if (true === $userModel->newsletter) {
+                $reader = new NewsReader();
+
+                $reader->setEmail($userModel->email)
+                    ->setFirstName($userModel->firstName)
+                    ->setLastName($userModel->lastName)
+                    ->setUnsubscribeToken(TokenGenerator::generateToken($userModel->email))
+                    ->setUnsubscribeToken(TokenGenerator::generateToken($userModel->email))
+                ;
+                $entityManager->persist($reader);
+            }
             $entityManager->flush();
 
             //mail handling
@@ -139,45 +146,33 @@ class SecurityController extends AbstractController
     public function confirm(string $token): Response
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['confirmToken' => $token]);
-
         if (!$user) {
             throw new NotFoundHttpException('Data not found!');
         }
 
         if (false === $user->isConfirmed()) {
             $user->setConfirmed(true);
-            $this->getDoctrine()->getManager()->flush();
-
-            $this->addFlash('success', 'Deine email wurde bestätigt!');
         }
 
-        return $this->render('security/confirm.html.twig');
+        //if user is subscribed he is a confirmed reader, too
+        $reader = $this->getDoctrine()->getRepository(NewsReader::class)->findOneBy(['email' => $user->getEmail()]);
+        if ($reader) {
+            $reader->setConfirmed(true);
+        }
+
+        $this->getDoctrine()->getManager()->flush();
+        $this->addFlash('success', 'Deine email wurde bestätigt!');
+
+        return $this->render('security/confirm.html.twig', ['email'=> $user->getEmail()]);
     }
 
     /**
-     * @return Response
-     *
      * @Route("/profile", name="app_profile")
      *
      * @IsGranted("ROLE_USER")
      */
     public function profile(): Response
     {
-        return $this->render('security/profile.html.twig', [
-        ]);
-    }
-
-    /**
-     * @return Response
-     *
-     * @Route("/news/unsubscribe", name="app_unsubscribe_news")
-     *
-     * @IsGranted("ROLE_USER")
-     */
-    public function unsubscribe(): Response
-    {
-        //todo
-
         return $this->render('security/profile.html.twig', [
         ]);
     }

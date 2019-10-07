@@ -1,0 +1,22 @@
+{# templates/emails/confirmRegistration.txt.twig #}
+{% extends "mailTemplate.txt.twig" %}
+
+{% block mail_body %}
+Bestätige deine Email Adresse bei nakade.de
+
+Bitte bestätige deine email {{ email }} über diesen link {{ absolute_url(path('news_confirm', { token: token }, true)) }}
+Damit ist deine Anmeldung für unseren Newsletter abgeschlossen.
+
+Mit 361 Grüßen
+Das Nakade Team
+{% endblock %}
+
+
+{% block mail_footer %}
+Unser Newsletter informiert dich über unseren Spieltreff, wann der nächste Spieltreff stattfindet oder ob
+der Spieltreff aufgrund unvorhersehbarer Ereignisse abgesagt, verlegt wird oder die Örtlichkeit sich ändert.
+Üblicherweise wirst du einen Newsletter im Monat erhalten. Du kannst den Newsletter jederzeit abbestellen.
+Um den Newsletter zu stornieren, nutze den Link im Newsletter oder kontaktiere uns direkt.
+Wir behandeln deine Daten vertraulich und geben deine Daten nicht ohne deine Zustimmung an Dritte weiter.
+{% endblock %}
+

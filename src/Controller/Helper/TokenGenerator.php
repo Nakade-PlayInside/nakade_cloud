@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -20,39 +19,13 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form;
+namespace App\Controller\Helper;
 
-use App\Form\Model\SubscribeFormModel;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class SubscribeType!
- *
- *
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- * @author Dr. H.Maerz <holger@nakade.de>
- */
-class SubscribeType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options)
+class TokenGenerator {
+
+    static function generateToken (string $appendix ='nakade')
     {
-        $builder
-                ->add('email', EmailType::class)
-                ->add('firstName', TextType::class, ['required' => false])
-                ->add('lastName', TextType::class, ['required' => false])
-                ->add('captcha', ReCaptchaType::class)
-        ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => SubscribeFormModel::class,
-        ]);
+        return  bin2hex(random_bytes(16)).strstr($appendix, '@');
     }
 }
