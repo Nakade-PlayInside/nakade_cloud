@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -21,57 +22,42 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Common\Quotes;
+use App\Form\Model\SubscribeFormModel;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
+ * Class SubscribeType!
+ *
+ *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class QuotesType extends AbstractType
+class SubscribeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(
-                'quote',
-                TextareaType::class,
-                ['label' => 'Zitat']
-            )
-
-            ->add(
-                'details',
-                TextType::class,
-                ['label' => 'Details',
-                 'empty_data' => 'Go-Weisheit',
-                ]
-            )
-
-            ->add(
-                'save',
-                SubmitType::class,
-                ['label' => 'Speichern']
-            )
+                ->add('email', EmailType::class)
+                ->add('firstName', TextType::class, ['required' => false])
+                ->add('lastName', TextType::class, ['required' => false])
+                ->add('subscribeToken', HiddenType::class)
+                ->add('unsubscribeToken', HiddenType::class)
+                ->add('captcha', ReCaptchaType::class)
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Quotes::class,
-            // enable/disable CSRF protection for this form
-                'csrf_protection' => true,
-            // the name of the hidden HTML field that stores the token
-                'csrf_field_name' => '_token',
-            // an arbitrary string used to generate the value of the token
-            // using a different string for each form improves its security
-                'csrf_token_id' => 'quotes_item',
+            'data_class' => SubscribeFormModel::class,
+            'subscribeToken' => uniqid('subscribe', true),
+            'unsubscribeToken' => uniqid('unsubscribe', true),
         ]);
     }
 }

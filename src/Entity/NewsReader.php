@@ -40,12 +40,27 @@ class NewsReader
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    private $token;
+    private $subscribeToken;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $unsubscribeToken;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
 
     /**
      * @ORM\Column(type="boolean", options={"default": 0})
      */
-    private $confirmed=false;
+    private $confirmed = false;
 
     public function getId(): ?int
     {
@@ -64,14 +79,26 @@ class NewsReader
         return $this;
     }
 
-    public function getToken(): ?string
+    public function getSubscribeToken(): ?string
     {
-        return $this->token;
+        return $this->subscribeToken;
     }
 
-    public function setToken(string $token): self
+    public function setSubscribeToken($subscribeToken): self
     {
-        $this->token = $token;
+        $this->subscribeToken = $subscribeToken;
+
+        return $this;
+    }
+
+    public function getUnsubscribeToken(): ?string
+    {
+        return $this->unsubscribeToken;
+    }
+
+    public function setUnsubscribeToken(string $unsubscribeToken): self
+    {
+        $this->unsubscribeToken = $unsubscribeToken;
 
         return $this;
     }
@@ -84,6 +111,30 @@ class NewsReader
     public function setConfirmed(bool $confirmed): self
     {
         $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string$firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }

@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% form_theme subscribeForm _self %}
+
+{% block form_row %}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+
+    {{- form_label(form, null, {
+        label_attr: { class: 'sr-only' }
+    }) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+{% endblock %}
+
+{% block title %}{{ 'subscribe.title'|trans({}, 'messages') }}!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('register') }}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-6">
+        <h2>{{ 'subscribe.title'|trans({}, 'messages') }}</h2>
+
+        {{ form_start(subscribeForm) }}
+
+        {{ form_row(subscribeForm.email, {
+            label: 'subscribe.email',
+            attr: { placeholder: 'subscribe.email.required', autocomplete: "on"},
+        }) }}
+
+        {{ form_row(subscribeForm.firstName, {
+            label: 'subscribe.first.name',
+            attr: { placeholder: 'subscribe.first.name', autocomplete: "on" },
+        }) }}
+        {{ form_row(subscribeForm.lastName, {
+            label: 'subscribe.last.name',
+            attr: { placeholder: 'subscribe.last.name', autocomplete: "on" },
+        }) }}
+
+        {{ form_row(subscribeForm.captcha,  {
+            label: 'subscribe.reCaptcha'
+        }) }}
+
+        <button type="submit" class="btn btn-primary">{{ 'subscribe.send'|trans({}, 'messages') }}</button>
+        {{ form_end(subscribeForm) }}
+    </div>
+    <p class="privacy">{{ 'subscribe.privacy.info'|trans({}, 'messages') }} <a target="_blank" href="{{ path('app_privacy') }}" title="{{ 'subscribe.privacy.title'|trans({}, 'messages') }}">{{ 'subscribe.privacy.info.link'|trans({}, 'messages') }}.</a></p>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://www.google.com/recaptcha/api.js?hl=de" async defer></script>
+    {{ encore_entry_script_tags('register') }}
+{% endblock %}
