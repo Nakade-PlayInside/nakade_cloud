@@ -50,7 +50,7 @@
                         <h5>NEWS</h5>
                         <div class="user-show checkbox-switch" data-propertyname="active">
                             <label class="switch">
-                                <input type="checkbox" {% if app.user.newsletter %} checked {% endif %}>
+                                <input id="news-toggle" type="checkbox" {% if app.user.newsletter %} checked {% endif %}>
                                 <span class="slider round"></span>
                             </label>
                         </div>
@@ -59,4 +59,9 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('profile') }}
 {% endblock %}
