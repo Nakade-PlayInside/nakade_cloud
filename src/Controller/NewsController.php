@@ -101,8 +101,6 @@ class NewsController extends AbstractController
             $reader->setEmail($subscriber->email)
                 ->setFirstName($subscriber->firstName)
                 ->setLastName($subscriber->lastName)
-                ->setSubscribeToken(TokenGenerator::generateToken($subscriber->email))
-                ->setUnsubscribeToken(TokenGenerator::generateToken($subscriber->email))
             ;
 
             //proof if user is registered for setting flag and user is already confirmed

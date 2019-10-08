@@ -37,6 +37,11 @@
   "password": "Passwort"
   "send": "Anmelden"
   "rememberMe": "Angemeldet bleiben"
+"profile":
+  "title": Aktualisiere dein Profil
+  "avatarUrl": Avatar URL
+  "update": "Aktualisieren"
+  "nick": "Nickname"
 "register":
   "email": "eMail"
   "email.required": "*eMail"

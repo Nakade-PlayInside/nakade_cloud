@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% form_theme profileForm _self %}
+
+{% block form_row %}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+
+    {{- form_label(form, null, {
+        label_attr: { class: 'sr-only' }
+    }) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+{% endblock %}
+
+{% block title %}{{ 'profile.title'|trans({}, 'messages') }}!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('register') }}
+{% endblock %}
+
+{% block body %}
+            <div class="col-sm-12">
+                <h2>{{ 'profile.title'|trans({}, 'messages') }}</h2>
+                <div class="user-image">
+                    <img alt="avatar" src="https://robohash.org/{{ app.user.email }}" class="img-responsive thumbnail">
+                </div>
+                {{ form_start(profileForm) }}
+
+                {{ form_row(profileForm.email, {
+                    label: 'register.email',
+                    attr: { placeholder: 'register.email.required', autocomplete: "on"},
+                }) }}
+                {{ form_row(profileForm.firstName, {
+                    label: 'register.first.name',
+                    attr: { placeholder: 'register.first.name.required', autocomplete: "on" },
+                }) }}
+                {{ form_row(profileForm.nickName, {
+                    label: 'profile.nick',
+                    attr: { placeholder: 'profile.nick'},
+                }) }}
+                {{ form_row(profileForm.lastName, {
+                    label: 'register.last.name',
+                    attr: { placeholder: 'register.last.name.required', autocomplete: "on" },
+                }) }}
+                {{ form_row(profileForm.avatarUrl, {
+                    label: 'profile.avatarUrl',
+                    attr: { placeholder: 'profile.avatarUrl'},
+                }) }}
+
+                <button type="submit" class="btn btn-primary">{{ 'profile.update'|trans({}, 'messages') }}</button>
+                {{ form_end(profileForm) }}
+
+            </div>
+    <p class="privacy">{{ 'register.privacy.info'|trans({}, 'messages') }} <a target="_blank" href="{{ path('app_privacy') }}" title="{{ 'register.privacy.title'|trans({}, 'messages') }}">{{ 'register.privacy.info.link'|trans({}, 'messages') }}.</a></p>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Controller\Helper\TokenGenerator;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -61,6 +62,12 @@ class NewsReader
      * @ORM\Column(type="boolean", options={"default": 0})
      */
     private $confirmed = false;
+
+    public function __construct()
+    {
+        $this->subscribeToken   = TokenGenerator::generateToken('subscribe');
+        $this->unsubscribeToken = TokenGenerator::generateToken('unsubscribe');
+    }
 
     public function getId(): ?int
     {

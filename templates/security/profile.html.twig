@@ -19,13 +19,13 @@
                     </div>
                     <div class="col-md-9 no-pad">
                         <div class="user-pad" style="text-align: left;">
-                            <h3>Willkommen {{app.user.firstName}}</h3>
+                            <h3>Willkommen {% if app.user.nickName %} {{app.user.nickName}} {% else %} {{app.user.firstName}} {% endif %}</h3>
                             <ul style="text-align: left; list-style: none; padding:0; color: rosybrown">
 {#                                <li>Es gibt unbeantwortete Kontaktanfragen.</li>#}
                                 {% if app.user.confirmed == false %}<li>Du hast dein Konto noch nicht bestätigt. Check deine Emails!</li>{% endif %}
 {#                                <li>Eine ungelesene Nachricht wartet auf dich.</li>#}
                             </ul>
-                            <a class="btn btn-labeled btn-info" href="#">
+                            <a class="btn btn-labeled btn-info" href="{{ path('app_profile_edit') }}">
                                 <span class="btn-label"><i class="fa fa-pencil"></i></span>Update
                             </a>
                         </div>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-md-4 user-pad text-center">
                         <h5>BESTÄTIGT</h5>
-                        <div class="user-show">{% if app.user.confirmed == false %}<i class="active fa fa-check"></i>{% else %}<i class="inactive fa fa-remove"></i>{% endif %}</div>
+                        <div class="user-show">{% if app.user.confirmed %}<i class="active fa fa-check"></i>{% else %}<i class="inactive fa fa-remove"></i>{% endif %}</div>
                     </div>
                     <div class="col-md-4 user-pad text-center">
                         <h5>NEWS</h5>

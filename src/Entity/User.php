@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Controller\Helper\TokenGenerator;
 use App\Entity\Common\Quotes;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -153,29 +154,19 @@ class User implements UserInterface
     public function __construct()
     {
         $this->quotes = new ArrayCollection();
+        $this->confirmToken = TokenGenerator::generateToken('confirm');
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return User
-     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -205,11 +196,6 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    /**
-     * @param array $roles
-     *
-     * @return User
-     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -242,19 +228,11 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    /**
-     * @param string $firstName
-     *
-     * @return User
-     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
@@ -262,19 +240,11 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    /**
-     * @param string $lastName
-     *
-     * @return User
-     */
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
@@ -282,19 +252,11 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getNickName(): ?string
     {
         return $this->nickName;
     }
 
-    /**
-     * @param string|null $nickName
-     *
-     * @return User
-     */
     public function setNickName(?string $nickName): self
     {
         $this->nickName = $nickName;
@@ -302,12 +264,7 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword(string $password): self
+   public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -322,11 +279,6 @@ class User implements UserInterface
         return $this->quotes;
     }
 
-    /**
-     * @param Quotes $quote
-     *
-     * @return User
-     */
     public function addQuote(Quotes $quote): self
     {
         if (!$this->quotes->contains($quote)) {
@@ -337,11 +289,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @param Quotes $quote
-     *
-     * @return User
-     */
     public function removeQuote(Quotes $quote): self
     {
         if ($this->quotes->contains($quote)) {
@@ -363,11 +310,6 @@ class User implements UserInterface
         return $this->active;
     }
 
-    /**
-     * @param bool $active
-     *
-     * @return User
-     */
     public function setActive(bool $active): self
     {
         $this->active = $active;
@@ -375,19 +317,11 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isConfirmed(): bool
     {
         return $this->confirmed;
     }
 
-    /**
-     * @param bool $confirmed
-     *
-     * @return User
-     */
     public function setConfirmed(bool $confirmed): self
     {
         $this->confirmed = $confirmed;
@@ -395,19 +329,11 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getConfirmToken(): ?string
     {
         return $this->confirmToken;
     }
 
-    /**
-     * @param string $token
-     *
-     * @return User
-     */
     public function setConfirmToken(string $token): self
     {
         $this->confirmToken = $token;
@@ -415,19 +341,11 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasNewsletter(): bool
     {
         return $this->newsletter;
     }
 
-    /**
-     * @param bool $newsletter
-     *
-     * @return User
-     */
     public function setNewsletter(bool $newsletter): self
     {
         $this->newsletter = $newsletter;
@@ -435,19 +353,11 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isRemoved(): bool
     {
         return $this->removed;
     }
 
-    /**
-     * @param bool $removed
-     *
-     * @return User
-     */
     public function setRemoved(bool $removed): self
     {
         $this->removed = $removed;
@@ -456,19 +366,11 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFullName(): string
     {
         return $this->firstName.' '.$this->getLastName();
     }
 
-    /**
-     * @param string $avatarUrl
-     *
-     * @return User
-     */
     public function setAvatarUrl(string $avatarUrl)
     {
         $this->avatarUrl = $avatarUrl;
@@ -476,11 +378,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @param int $size
-     *
-     * @return string
-     */
     public function getAvatarUrl(int $size = 32): string
     {
         if ($this->avatarUrl) {
@@ -496,9 +393,6 @@ class User implements UserInterface
         return $url;
     }
 
-    /**
-     * @return string|null
-     */
     public function __toString(): ?string
     {
         return $this->getFirstName();

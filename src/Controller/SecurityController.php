@@ -22,10 +22,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Controller\Helper\TokenGenerator;
 use App\Entity\NewsReader;
 use App\Entity\User;
 use App\Form\Model\UserRegistrationFormModel;
+use App\Form\ProfileType;
 use App\Form\RegisterType;
 use App\Message\ConfirmRegistration;
 use App\Security\LoginFormAuthenticator;
@@ -95,7 +95,6 @@ class SecurityController extends AbstractController
             $user->setEmail($userModel->email)
                     ->setFirstName($userModel->firstName)
                     ->setLastName($userModel->lastName)
-                    ->setConfirmToken(TokenGenerator::generateToken($userModel->email))
                     ->setNewsletter($userModel->newsletter)
                     ->setPassword($passwordEncoder->encodePassword(
                         $user,
@@ -112,8 +111,6 @@ class SecurityController extends AbstractController
                 $reader->setEmail($userModel->email)
                     ->setFirstName($userModel->firstName)
                     ->setLastName($userModel->lastName)
-                    ->setUnsubscribeToken(TokenGenerator::generateToken($userModel->email))
-                    ->setUnsubscribeToken(TokenGenerator::generateToken($userModel->email))
                 ;
                 $entityManager->persist($reader);
             }
@@ -163,7 +160,7 @@ class SecurityController extends AbstractController
         $this->getDoctrine()->getManager()->flush();
         $this->addFlash('success', 'Deine email wurde bestätigt!');
 
-        return $this->render('security/confirm.html.twig', ['email'=> $user->getEmail()]);
+        return $this->render('security/confirm.html.twig', ['email' => $user->getEmail()]);
     }
 
     /**
@@ -174,6 +171,30 @@ class SecurityController extends AbstractController
     public function profile(): Response
     {
         return $this->render('security/profile.html.twig', [
+        ]);
+    }
+
+    /**
+     * @Route("/profile/edit", name="app_profile_edit")
+     *
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     */
+    public function editProfile(Request $request): Response
+    {
+        $form = $this->createForm(ProfileType::class, $this->getUser());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Dein Profil wurde aktualisiert!');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->render('security/edit_profile.html.twig', [
+                'profileForm' => $form->createView(),
         ]);
     }
 }
