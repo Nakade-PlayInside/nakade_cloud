@@ -3,7 +3,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('account.css') }}">
+    {{ encore_entry_link_tags('profile') }}
 {% endblock %}
 {% block body %}
     <h1>Manage dein Profil!</h1>
@@ -12,14 +12,19 @@
         <div class="row user-menu-container square">
             <div class="col-md-12 user-details">
                 <div class="row spacepurplebg white">
-                    <div class="col-md-2 no-pad">
+                    <div class="col-md-3 no-pad">
                         <div class="user-image">
                             <img alt="avatar" src="https://robohash.org/{{ app.user.email }}" class="img-responsive thumbnail">
                         </div>
                     </div>
-                    <div class="col-md-10 no-pad">
-                        <div class="user-pad">
-                            <h3>Willkommen, {{app.user.fullName}}</h3>
+                    <div class="col-md-9 no-pad">
+                        <div class="user-pad" style="text-align: left;">
+                            <h3>Willkommen {{app.user.firstName}}</h3>
+                            <ul style="text-align: left; list-style: none; padding:0; color: rosybrown">
+{#                                <li>Es gibt unbeantwortete Kontaktanfragen.</li>#}
+                                {% if app.user.confirmed == false %}<li>Du hast dein Konto noch nicht bestätigt. Check deine Emails!</li>{% endif %}
+{#                                <li>Eine ungelesene Nachricht wartet auf dich.</li>#}
+                            </ul>
                             <a class="btn btn-labeled btn-info" href="#">
                                 <span class="btn-label"><i class="fa fa-pencil"></i></span>Update
                             </a>
@@ -27,31 +32,28 @@
                     </div>
                 </div>
                 <div class="row overview">
-                    <div class="col-md-4 user-pad text-center">
-                        <h3>EMAIL</h3>
-                        <h4 style="font-size: 26px;">{{ app.user.email }}</h4>
-                    </div>
-                    <div class="col-md-4 user-pad text-center">
-                        <h3>AVATAR</h3>
-                        <h4 style="font-size: medium;">{{ app.user.avatarUrl }}</h4>
-                    </div>
-                    <div class="col-md-4 user-pad text-center">
-                        <h3>NICK</h3>
-                        <h4>{{ app.user.nickName }}</h4>
+                    <div class="col-md-12 user-pad text-center">
+                        <h5>EMAIL</h5>
+                        <div class="user-show">{{ app.user.email }}</div>
                     </div>
                 </div>
                 <div class="row overview">
                     <div class="col-md-4 user-pad text-center">
-                        <h3>SIGN UP</h3>
-                        <h4 style="font-size: 26px;">{{ app.user.createdAt | date('d.m.Y') }}</h4>
+                        <h5>REGISTRIERT</h5>
+                        <div class="user-show">{{ app.user.createdAt | date('d.m.Y') }}</div>
                     </div>
                     <div class="col-md-4 user-pad text-center">
-                        <h3>CONFIRMED</h3>
-                        <h4>{% if app.user.confirmed %}<i class="fa fa-check"></i>{% else %}<i class="fa fa-remove"></i>{% endif %}</h4>
+                        <h5>BESTÄTIGT</h5>
+                        <div class="user-show">{% if app.user.confirmed == false %}<i class="active fa fa-check"></i>{% else %}<i class="inactive fa fa-remove"></i>{% endif %}</div>
                     </div>
                     <div class="col-md-4 user-pad text-center">
-                        <h3>NEWS</h3>
-                        <h4>{% if app.user.newsletter %}<i class="fa fa-check"></i>{% else %}<i class="fa fa-remove"></i>{% endif %}</h4>
+                        <h5>NEWS</h5>
+                        <div class="user-show checkbox-switch" data-propertyname="active">
+                            <label class="switch">
+                                <input type="checkbox" {% if app.user.newsletter %} checked {% endif %}>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
