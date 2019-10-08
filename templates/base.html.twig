@@ -21,22 +21,33 @@
 
     {{ include('nav.html.twig') }}
 
-    <main role="main" class="flex-shrink-0" id="content">
-        <div class="container">
-            {% for msg in app.session.flashBag.get('success') %}
-                <div class="alert alert-success">
-                    {{ msg }}
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 d-none d-md-block bg-transparent sidebar">
+                <div class="sidebar-sticky">
+                    {% block sidebar %}
+{#                    sidebar#}
+                    {% endblock %}
                 </div>
-            {% endfor %}
-            {% for msg in app.session.flashBag.get('error') %}
-                <div class="alert alert-danger">
-                    {{ msg }}
-                </div>
-            {% endfor %}
+            </nav>
+            <main role="main" class="flex-sm-shrink-0" id="content">
+                <div class="container">
+                    {% for msg in app.session.flashBag.get('success') %}
+                        <div class="alert alert-success">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                    {% for msg in app.session.flashBag.get('error') %}
+                        <div class="alert alert-danger">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
 
-            {% block body %}TEMPLATE{% endblock %}
+                    {% block body %}TEMPLATE{% endblock %}
+                </div>
+            </main><!-- /.container -->
         </div>
-    </main><!-- /.container -->
+    </div>
 
     {{ include('footer.html.twig') }}
 

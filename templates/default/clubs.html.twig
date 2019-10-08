@@ -7,6 +7,11 @@
     {{ encore_entry_link_tags('clubs') }}
 {% endblock %}
 
+{% block sidebar %}
+    <div style="padding-top: 130px; ">
+        <img alt="Mommsen-Eck" width="420px" src="{{ asset('build/images/Mommsen-Eck.jpg') }}">
+    </div>
+{% endblock %}
 {% block body %}
 
     <h2>{{ 'clubs.title'|trans({}, 'messages') }}</h2>
