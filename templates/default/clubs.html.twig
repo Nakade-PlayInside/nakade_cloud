@@ -14,7 +14,7 @@
     <div class="clubs">
         <h2>Mommsen-Eck</h2>
         <p>Der <b>Nakade Go Club</b> trifft sich einmal im Monat im <a target="_blank" title="externe Seite!"
-        href="http://www.mommsen-eck.de/">Mommsen-Eck<span title="externe Seite!" class="actionIcon icon-ic_launch_black_24dp"></span></a> in Berlin Charlottenburg.<br>
+        href="http://www.mommsen-eck.de/">Mommsen-Eck <i class="fa fa-external-link"></i></a> in Berlin Charlottenburg.<br>
          Das <i>Haus der 100 Biere</i> ist eine beliebte Gaststätte mit langer Tradition zwischen Ku'damm und
          Kantstrasse.</p>
 
@@ -44,5 +44,6 @@
 
         <h2>jeden 2.Montag im Monat von 18-22h</h2>
         <p class="meeting">nächster Termin am <b>{{ meetingDate | locale_date }}</b>{{ meetingDate | meeting_alert }}</p>
+        <p class="hint"><span>Tipp:</span>Mit unserem <a title="Newsletter Anmeldung" href="{{ path('app_clubs') }}">Newsletter</a> verpasst du keinen Spielabend mehr.</p>
     </div>
 {% endblock %}

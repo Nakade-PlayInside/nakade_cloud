@@ -29,6 +29,12 @@ body {
     }
 }
 
+main > .container {
+    padding: 60px 15px 0;
+    text-align: center;
+}
+
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -38,74 +44,13 @@ body {
     user-select: none;
 }
 
-.version {
-    padding-right: 10px;
-}
-
 @media (min-width: 768px) {
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
     }
 }
 
-main > .container {
-    padding: 60px 15px 0;
-    text-align: center;
-}
-
-
-a.navbar-brand {
-
-    img {
-        width: 28px;
-        height: 28px;
-        margin-right: 10px;
-    }
-}
-
-.navbar-light .navbar-brand{
-    font-weight: bold;
-}
-
-.upper-toggler {
-    background-color: $color-site;
-}
-
-.footer {
-    background-color: #f5f5f5;
-}
-
-.footer > .container {
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
 code {
     font-size: 80%;
 }
 
-.nakade-bg {
-    background:linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("../images/background/steine.jpeg");
-    background-size: cover;
-    background-color: #e3f2fd;
-}
-
-.nakade-quotes {
-    margin-top: 50px;
-    margin-bottom: 50px;
-}
-
-.carousel-item {
-    div {
-        width: 70%;
-        text-align: justify;
-        margin-left: auto;
-        margin-right: auto;
-        div {
-            text-align: left;
-            width: auto;
-            color: #916319;
-        }
-    }
-
-}

@@ -1,0 +1,26 @@
+$color-site: rgb(170,205,78);
+
+
+a.navbar-brand {
+
+    img {
+        width: 28px;
+        height: 28px;
+        margin-right: 10px;
+    }
+}
+
+.navbar-light .navbar-brand{
+    font-weight: bold;
+}
+
+.upper-toggler {
+    background-color: $color-site;
+}
+
+.nakade-bg {
+    background:linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("../images/background/steine.jpeg");
+    background-size: cover;
+    background-color: #e3f2fd;
+}
+

@@ -64,6 +64,7 @@ class NewsController extends AbstractController
      */
     public function send(MessageBusInterface $messageBus, NextClubMeeting $nextClubMeeting)
     {
+        // calculate send date
         //  todo: make service
         $strDate = $nextClubMeeting->calcNextMeetingDate();
         $objDate = \DateTime::createFromFormat(NextClubMeeting::DATE_FORMAT, $strDate);

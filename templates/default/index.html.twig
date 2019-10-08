@@ -1,6 +1,10 @@
 {# templates/default/index.html.twig #}
 {% extends 'base.html.twig' %}
 {% block title %}{{ 'home.title'|trans({}, 'messages') }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('home') }}
+{% endblock %}
 
 
 {% block body %}
@@ -39,6 +43,22 @@
             </a>
             {% endif %}
         </div>
+        <div class="intro">
+            Nakade spielt in der Saison 2019/20 in der 2.Liga der <a title="externe Seite!" target="_blank" href="http://www.dgob.de/bundesliga/index.htm">Go-Bundesliga
+                <i class="fa fa-external-link"></i></a> des <a title="externe Seite!" target="_blank" href="http://www.dgob.de">Deutschen Go-Bund e.V.
+                <i class="fa fa-external-link"></i></a>.<br><br>
+            Wir veranstalten einen regelmäßigen <a class="internal" title="zum Spieltreff" href="{{ path('app_clubs') }}">Spieltreff</a> in unmittelbarer Nähe zum Ku'Damm in Berlin.<br>
+            <a class="internal" title="zur Registrierung" href="{{ path('app_register') }}">Registriere dich</a> und lerne uns kennen. Mögen die Steine mit dir sein!
+        </div>
     </div>
+    <footer style="margin-top: 100px" class="footer mt-auto py-3">
+        <div class="container" style="text-align: center">
+            <span class="text-muted ">UNDER CONSTRUCTION!!!</span>
+        </div>
+    </footer>
 
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('home') }}
 {% endblock %}

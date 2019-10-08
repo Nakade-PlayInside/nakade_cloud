@@ -8,6 +8,8 @@
 
 // any CSS you require will output into a single css file (app.css in this case)
 import '../css/app.scss';
+import '../css/nav.scss';
+import '../css/footer.scss';
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 const $ = require('jquery');
@@ -35,8 +37,3 @@ $(document).ready(function () {
         });
     });
 });
-
-//carousel interval time in micro seconds
-$('.carousel').carousel({
-    interval: 30000
-})

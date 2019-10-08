@@ -31,6 +31,21 @@
     zoom: 0.6;
     cursor: pointer;
   }
+  i {
+    color:rgb(60, 60, 60);
+  }
+  .hint {
+    margin-top: 5px;
+    font-style: normal;
+    color:rgb(85, 85, 85);
+    opacity: 0.9;
+
+    span {
+      padding-right: 5px;
+      font-weight: bolder;
+
+    }
+  }
   .bvg {
     ul {
       display: flex;

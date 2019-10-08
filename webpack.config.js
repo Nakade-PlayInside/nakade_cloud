@@ -39,6 +39,7 @@ Encore
     .addEntry('clubs', './assets/js/clubs.js')
     .addEntry('common', './assets/js/common.js')
     .addEntry('contact', './assets/js/contact.js')
+    .addEntry('home', './assets/js/home.js')
     .addEntry('login', './assets/js/login.js')
     .addEntry('main', './assets/js/main.js')
     .addEntry('news', './assets/js/news.js')
