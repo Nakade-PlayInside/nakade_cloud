@@ -35,3 +35,25 @@ form {
 .invalid-feedback {
     text-align: left;
 }
+
+
+.edit {
+    display: table;
+    width: 100%;
+    margin: 0;
+    background-color: #e9ecef;
+    opacity: 1;
+    >span {
+        text-align: left;
+        display: table-cell;
+    }
+    >a {
+        text-align: right;
+        display: table-cell;
+    }
+}
+
+.avatar {
+    margin-top: 20px;
+    text-align: center;
+}

@@ -22,38 +22,47 @@
     {{ encore_entry_link_tags('register') }}
 {% endblock %}
 
+{% block sidebar %}
+    <div  class="avatar user-image">
+        <img title="Echt jetzt!" data-toggle="tooltip" data-placement="bottom" alt="avatar" src="https://robohash.org/{{ app.user.email }}" class="img-responsive thumbnail">
+    </div>
+    <div style="margin-top: 45px; text-align: center">
+        <a title="Profil löschen" href="#"><button title="Du wirst noch einmal weitergeleitet" type="button" data-toggle="tooltip" data-placement="right" class="btn btn-danger">Profil löschen</button></a>
+    </div>
+{% endblock %}
+
 {% block body %}
             <div class="col-sm-12">
                 <h2>{{ 'profile.title'|trans({}, 'messages') }}</h2>
-                <div class="user-image">
-                    <img alt="avatar" src="https://robohash.org/{{ app.user.email }}" class="img-responsive thumbnail">
-                </div>
                 {{ form_start(profileForm) }}
-
-                {{ form_row(profileForm.email, {
-                    label: 'register.email',
-                    attr: { placeholder: 'register.email.required', autocomplete: "on"},
-                }) }}
+                <div class="edit form-control">
+                        <span>{{ app.user.email }}</span>
+                        <a title="Ändere deine Email" data-toggle="tooltip" data-placement="right" href="#"><i class="fa fa-pencil"></i></a>
+                </div>
+                <div class="edit form-control">
+                    <span>&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span>
+                    <a title="Ändere dein Passwort" data-toggle="tooltip" data-placement="right" href="#"><i class="fa fa-pencil"></i></a>
+                </div>
                 {{ form_row(profileForm.firstName, {
                     label: 'register.first.name',
                     attr: { placeholder: 'register.first.name.required', autocomplete: "on" },
                 }) }}
                 {{ form_row(profileForm.nickName, {
                     label: 'profile.nick',
-                    attr: { placeholder: 'profile.nick'},
+                    attr: { placeholder: 'profile.nick', 'data-toggle': "tooltip", 'data-placement': 'left', title:"Du willst Ghetto!! Kannste hab\'n"},
+                    help: "Mit einem Nick bleibst du anonym."
                 }) }}
                 {{ form_row(profileForm.lastName, {
                     label: 'register.last.name',
                     attr: { placeholder: 'register.last.name.required', autocomplete: "on" },
                 }) }}
-                {{ form_row(profileForm.avatarUrl, {
-                    label: 'profile.avatarUrl',
-                    attr: { placeholder: 'profile.avatarUrl'},
-                }) }}
+                <div class="edit form-control">
+                    <span>{{ app.user.avatarUrl }}</span>
+                    <a title="Nö. Is noch nicht" data-toggle="tooltip" data-placement="right" href="#"><i style="color: #95999c" class="fa fa-pencil"></i></a>
+                </div>
 
-                <button type="submit" class="btn btn-primary">{{ 'profile.update'|trans({}, 'messages') }}</button>
+                <button style="margin-top: 20px" type="submit" class="btn btn-primary">{{ 'profile.update'|trans({}, 'messages') }}</button>
                 {{ form_end(profileForm) }}
-
             </div>
     <p class="privacy">{{ 'register.privacy.info'|trans({}, 'messages') }} <a target="_blank" href="{{ path('app_privacy') }}" title="{{ 'register.privacy.title'|trans({}, 'messages') }}">{{ 'register.privacy.info.link'|trans({}, 'messages') }}.</a></p>
 {% endblock %}
