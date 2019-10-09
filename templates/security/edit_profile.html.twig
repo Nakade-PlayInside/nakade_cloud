@@ -37,11 +37,11 @@
                 {{ form_start(profileForm) }}
                 <div class="edit form-control">
                         <span>{{ app.user.email }}</span>
-                        <a title="Ändere deine Email" data-toggle="tooltip" data-placement="right" href="#"><i class="fa fa-pencil"></i></a>
+                        <a title="Ändere deine Email" data-toggle="tooltip" data-placement="right" href="{{ path('app_profile_email') }}"><i class="fa fa-pencil"></i></a>
                 </div>
                 <div class="edit form-control">
                     <span>&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span>
-                    <a title="Ändere dein Passwort" data-toggle="tooltip" data-placement="right" href="#"><i class="fa fa-pencil"></i></a>
+                    <a title="Ändere dein Passwort" data-toggle="tooltip" data-placement="right" href="{{ path('app_profile_changePwd') }}"><i class="fa fa-pencil"></i></a>
                 </div>
                 {{ form_row(profileForm.firstName, {
                     label: 'register.first.name',
@@ -49,8 +49,8 @@
                 }) }}
                 {{ form_row(profileForm.nickName, {
                     label: 'profile.nick',
-                    attr: { placeholder: 'profile.nick', 'data-toggle': "tooltip", 'data-placement': 'left', title:"Du willst Ghetto!! Kannste hab\'n"},
-                    help: "Mit einem Nick bleibst du anonym."
+                    attr: { placeholder: 'profile.nick', 'data-toggle': "tooltip", 'data-placement': 'left', title: 'profile.nick.tooltip' },
+                    help: 'profile.nick.help'
                 }) }}
                 {{ form_row(profileForm.lastName, {
                     label: 'register.last.name',

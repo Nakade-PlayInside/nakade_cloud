@@ -37,5 +37,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class ReCaptcha extends Constraint
 {
-    public $message = 'Captcha is required!';
+    public $message = "captcha.required";
 }

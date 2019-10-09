@@ -3,5 +3,6 @@
   "recaptcha": "reCaptcha"
   "notChecked": "Captcha nicht vergessen!"
   "required": "Löse das Captcha!"
-"The email is already registered": "Die email ist schon registriert!"
-"Password should contain letters and numbers!": "Das Passwort muss mind. einen Buchstaben und eine Zahl enthalten."
+"captcha.required": "Löse das Captcha!"
+"email.unique": "Die email <{{ email }}> ist schon registriert!"
+"password.msg": "Das Passwort muss mind. einen Buchstaben und eine Zahl enthalten."

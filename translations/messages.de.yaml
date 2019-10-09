@@ -41,6 +41,10 @@
   "title": Aktualisiere dein Profil
   "avatarUrl": Avatar URL
   "update": "Aktualisieren"
+  "email.title": "Ändere deine Email"
+  "password.title": "Ändere dein Passwort!"
+  "nick.help": "Mit einem Nick bleibst du anonym."
+  "nick.tooltip": "Du willst Ghetto!! Kannste hab'n"
   "nick": "Nickname"
 "register":
   "email": "eMail"

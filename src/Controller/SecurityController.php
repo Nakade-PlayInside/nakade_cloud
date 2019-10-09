@@ -22,11 +22,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Controller\Helper\TokenGenerator;
 use App\Entity\NewsReader;
 use App\Entity\User;
 use App\Form\Model\UserRegistrationFormModel;
 use App\Form\ProfileType;
 use App\Form\RegisterType;
+use App\Form\UserEmailType;
+use App\Form\UserPasswordType;
 use App\Message\ConfirmRegistration;
 use App\Security\LoginFormAuthenticator;
 use App\Security\LoginUtils;
@@ -45,7 +48,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class SecurityController extends AbstractController
@@ -179,7 +184,7 @@ class SecurityController extends AbstractController
      *
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
-    public function editProfile(Request $request): Response
+    public function edit(Request $request): Response
     {
         $form = $this->createForm(ProfileType::class, $this->getUser());
         $form->handleRequest($request);
@@ -195,6 +200,91 @@ class SecurityController extends AbstractController
 
         return $this->render('security/edit_profile.html.twig', [
                 'profileForm' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/profile/email", name="app_profile_email")
+     *
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     */
+    public function email(Request $request, MessageBusInterface $messageBus): Response
+    {
+        $form = $this->createForm(UserEmailType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $model = $form->getData();
+            $email = $model->email;
+
+            /** @var User $user */
+            $user = $this->getUser();
+
+            //newsletter update
+            if ($user->hasNewsletter()) {
+                $newsReader = $this->getDoctrine()->getRepository(NewsReader::class)->findOneBy([
+                        'email' => $user->getEmail(),
+                ]);
+                if ($newsReader) {
+                    $newsReader->setEmail($email)
+                        ->setConfirmed(false);
+                }
+            }
+
+            //user update
+            $user->setEmail($email)
+                ->setConfirmed(false)
+                ->setConfirmToken(TokenGenerator::generateToken());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            //confirmation mail
+            $message = new ConfirmRegistration($user);
+            $messageBus->dispatch($message);
+
+            $this->addFlash('success', 'Deine Email wurde aktualisiert! Bitte schau in dein Postfach.');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->render('security/edit_email.html.twig', [
+                'emailForm' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/profile/changePwd", name="app_profile_changePwd")
+     *
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     */
+    public function change(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $form = $this->createForm(UserPasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $model = $form->getData();
+
+            /** @var User $user */
+            $user = $this->getUser();
+
+            //user update
+            $user->setPassword($passwordEncoder->encodePassword(
+                $user,
+                $model->plainPassword
+            ));
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Deine Passwort wurde aktualisiert!');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->render('security/edit_pwd.html.twig', [
+                'passwordForm' => $form->createView(),
         ]);
     }
 }

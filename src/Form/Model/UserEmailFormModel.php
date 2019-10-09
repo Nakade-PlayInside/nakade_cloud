@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -19,37 +18,25 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Validator;
+namespace App\Form\Model;
 
-use App\Repository\NewsReaderRepository;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
+use App\Validator\UniqueUser;
+use Symfony\Component\Validator\Constraints as Assert;
 
-class UniqueReaderValidator extends ConstraintValidator
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
+class UserEmailFormModel
 {
-    private $readerRepository;
-
-    public function __construct(NewsReaderRepository $readerRepository)
-    {
-        $this->readerRepository = $readerRepository;
-    }
-
-    public function validate($value, Constraint $constraint)
-    {
-        /* @var $constraint \App\Validator\UniqueReader */
-        if (null === $value || '' === $value) {
-            return;
-        }
-
-        $existingUser = $this->readerRepository->findOneBy([
-                'email' => $value,
-        ]);
-        if (!$existingUser) {
-            return;
-        }
-
-        $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ email }}', $value)
-            ->addViolation();
-    }
+    /**
+     * @Assert\NotBlank
+     * @Assert\Email(
+     *     message="Die Email {{ value }} ist ungültig.",
+     *     checkMX=true
+     * )
+     * @UniqueUser()
+     */
+    public $email;
 }

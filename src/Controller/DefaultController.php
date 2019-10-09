@@ -46,6 +46,7 @@ class DefaultController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $quotes = $entityManager->getRepository(Quotes::class)->findAll();
+        shuffle($quotes);
 
         return $this->render('default/index.html.twig', ['quotes' => $quotes]);
     }

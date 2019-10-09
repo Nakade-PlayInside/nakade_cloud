@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -19,37 +20,33 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Validator;
+namespace App\Form;
 
-use App\Repository\NewsReaderRepository;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
+use App\Entity\User;
+use App\Form\Model\UserEmailFormModel;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UniqueReaderValidator extends ConstraintValidator
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
+class UserEmailType extends AbstractType
 {
-    private $readerRepository;
-
-    public function __construct(NewsReaderRepository $readerRepository)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->readerRepository = $readerRepository;
+        $builder
+                ->add('email', EmailType::class)
+        ;
     }
 
-    public function validate($value, Constraint $constraint)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        /* @var $constraint \App\Validator\UniqueReader */
-        if (null === $value || '' === $value) {
-            return;
-        }
-
-        $existingUser = $this->readerRepository->findOneBy([
-                'email' => $value,
+        $resolver->setDefaults([
+                'data_class' => UserEmailFormModel::class,
         ]);
-        if (!$existingUser) {
-            return;
-        }
-
-        $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ email }}', $value)
-            ->addViolation();
     }
 }

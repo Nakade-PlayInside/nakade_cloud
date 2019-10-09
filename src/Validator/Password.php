@@ -37,5 +37,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class Password extends Constraint
 {
-    public $message = 'Password should contain letters and numbers!';
+    public $message = "password.msg";
 }

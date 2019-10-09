@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% form_theme passwordForm _self %}
+
+{% block form_row %}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+
+    {{- form_label(form, null, {
+        label_attr: { class: 'sr-only' }
+    }) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+{% endblock %}
+
+{% block title %}{{ 'profile.password.title'|trans({}, 'messages') }}!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('register') }}
+{% endblock %}
+
+{% block body %}
+            <div class="col-sm-12">
+                <h2>{{ 'profile.password.title'|trans({}, 'messages') }}</h2>
+                {{ form_start(passwordForm) }}
+                <p style="text-align: left">Dein neues Passwort wird erst aktiv, wenn du dich ausloggst. Melde dich danach mit deinem neuen Passwort wieder an.</p>
+                <div class="input-group">
+                    {{ form_row(passwordForm.plainPassword, {
+                        label: 'register.password',
+                        attr: { placeholder: 'register.password.required', class: 'toggle-password', autocomplete: "off" },
+                    }) }}
+                    <div class="input-group-append">
+                        <div class="toggle-eye input-group-text fa fa-eye"></div>
+                    </div>
+                </div>
+                <small id="register__password_help" class="newsletter-help form-text text-muted">{{ 'register.password.help'|trans({}, 'messages') }}</small>
+
+
+                <a href="{{ path('app_profile_edit') }}"><button style="width: 120px; margin-top: 20px; margin-right: 20px;" type="button" class="btn btn-secondary">Abbrechen</button></a>
+                <button style="width: 120px; margin-top: 20px" type="submit" class="btn btn-primary">{{ 'profile.update'|trans({}, 'messages') }}</button>
+                {{ form_end(passwordForm) }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('register') }}
+{% endblock %}

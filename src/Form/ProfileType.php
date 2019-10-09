@@ -41,7 +41,6 @@ class ProfileType extends AbstractType
                 ->add('firstName', TextType::class)
                 ->add('lastName', TextType::class)
                 ->add('nickName', TextType::class, ['required' => false])
-                //todo: validation of a unique nick
         ;
     }
 
