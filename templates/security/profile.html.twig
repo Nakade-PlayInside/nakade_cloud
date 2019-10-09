@@ -50,7 +50,7 @@
                         <h5>NEWS</h5>
                         <div class="user-show checkbox-switch" data-propertyname="active">
                             <label class="switch">
-                                <input id="news-toggle" type="checkbox" {% if app.user.newsletter %} checked {% endif %}>
+                                <input data-url="{{ path('app_profile_toogle_news')}}" id="news-toggle" type="checkbox" {% if app.user.newsletter %} checked {% endif %}>
                                 <span class="slider round"></span>
                             </label>
                         </div>

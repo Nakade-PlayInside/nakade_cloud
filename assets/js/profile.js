@@ -1,11 +1,8 @@
 import '../css/profile.scss';
 
-//navigation active class settings
-$("#news-toggle").change(function () {
-
-    if (this.checked === true) {
-        $.ajax({ url: 'script.php?argument=value&foo=bar' });
-    } else {
-        alert("aus");
-    }
+//toggle news reader
+$(document).ready(function () {
+    $("#news-toggle").change(function () {
+            $.ajax({url: $(this).data('url'), METHOD: 'UPDATE'});
+    });
 });

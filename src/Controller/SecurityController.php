@@ -33,6 +33,7 @@ use App\Form\UserPasswordType;
 use App\Message\ConfirmRegistration;
 use App\Security\LoginFormAuthenticator;
 use App\Security\LoginUtils;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,9 +49,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class SecurityController extends AbstractController
@@ -286,5 +285,86 @@ class SecurityController extends AbstractController
         return $this->render('security/edit_pwd.html.twig', [
                 'passwordForm' => $form->createView(),
         ]);
+    }
+
+    /**
+     * This is used by an ajax call inside profile.
+     *
+     * @Route("/profile/toggle/news", name="app_profile_toogle_news")
+     *
+     * @Method("UPDATE")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function toggleNews(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $user->setNewsletter(!$user->hasNewsletter());
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        //new reader
+        if ($user->hasNewsletter()) {
+            $subscriber = new NewsReader();
+            $subscriber->setEmail($user->getEmail())
+                ->setUnsubscribeToken(TokenGenerator::generateToken('unsubscribe'))
+                ->setSubscribeToken(TokenGenerator::generateToken('subscribe'))
+                ->setConfirmed(true)
+                ->setFirstName($user->getFirstName())
+                ->setLastName($user->getLastName())
+            ;
+
+            $entityManager->persist($subscriber);
+        } else {
+            $reader = $entityManager->getRepository(NewsReader::class)->findOneBy(['email' => $user->getEmail()]);
+            if ($reader) {
+                $entityManager->remove($reader);
+            }
+        }
+
+        $entityManager->flush();
+
+        //return a response that is successful, but has no content. The 204 status code literally means "No Content".
+        return new Response(null, 204);
+    }
+
+    /**
+     * @Route("/profile/remove", name="app_profile_remove")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function remove(): Response
+    {
+        //todo form
+        //todo event for newsletter
+        //todo template
+        //todo: no login for inactive or removed user
+        
+        /** @var User $user */
+        $user = $this->getUser();
+        $entityManager = $this->getDoctrine()->getManager();
+        $email = TokenGenerator::generateToken().strstr($user->getEmail(), '@');
+
+        $user->setFirstName('unknown')
+            ->setLastName('unknown')
+            ->setNickName('unknown')
+            ->setActive(false)
+            ->setConfirmed(false)
+            ->setRemoved(true)
+            ->setEmail($email);
+
+        //new reader
+        if ($user->hasNewsletter()) {
+            $reader = $entityManager->getRepository(NewsReader::class)->findOneBy(['email' => $user->getEmail()]);
+            if ($reader) {
+                $entityManager->remove($reader);
+            }
+        }
+
+        $entityManager->flush();
+
+        //return a response that is successful, but has no content. The 204 status code literally means "No Content".
+        return new Response(null, 204);
     }
 }
