@@ -38,14 +38,17 @@
   "send": "Anmelden"
   "rememberMe": "Angemeldet bleiben"
 "profile":
-  "title": Aktualisiere dein Profil
   "avatarUrl": Avatar URL
-  "update": "Aktualisieren"
   "email.title": "Ändere deine Email"
-  "password.title": "Ändere dein Passwort!"
+  "nick": "Nickname"
   "nick.help": "Mit einem Nick bleibst du anonym."
   "nick.tooltip": "Du willst Ghetto!! Kannste hab'n"
-  "nick": "Nickname"
+  "password.title": "Ändere dein Passwort!"
+  "remove.send": "Löschen"
+  "remove.title": "Profil löschen"
+  "remove.title.personate": "Profil von \"firstName\" löschen"
+  "title": Aktualisiere dein Profil
+  "update": "Aktualisieren"
 "register":
   "email": "eMail"
   "email.required": "*eMail"

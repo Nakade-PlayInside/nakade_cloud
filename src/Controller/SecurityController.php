@@ -108,13 +108,16 @@ class SecurityController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
 
-            //if subscribed create reader, too
-            if (true === $userModel->newsletter) {
+            //check if user already subscribed news
+            $subscriber = $entityManager->getRepository(NewsReader::class)->findOneBy(['email' => $userModel->email]);
+            if ($subscriber) {
+                $user->setNewsletter(true);
+            } elseif (true === $userModel->newsletter) {
                 $reader = new NewsReader();
 
                 $reader->setEmail($userModel->email)
-                    ->setFirstName($userModel->firstName)
-                    ->setLastName($userModel->lastName)
+                        ->setFirstName($userModel->firstName)
+                        ->setLastName($userModel->lastName)
                 ;
                 $entityManager->persist($reader);
             }
@@ -303,6 +306,7 @@ class SecurityController extends AbstractController
         $user->setNewsletter(!$user->hasNewsletter());
 
         $entityManager = $this->getDoctrine()->getManager();
+        $reader = $entityManager->getRepository(NewsReader::class)->findOneBy(['email' => $user->getEmail()]);
 
         //new reader
         if ($user->hasNewsletter()) {
@@ -316,11 +320,8 @@ class SecurityController extends AbstractController
             ;
 
             $entityManager->persist($subscriber);
-        } else {
-            $reader = $entityManager->getRepository(NewsReader::class)->findOneBy(['email' => $user->getEmail()]);
-            if ($reader) {
-                $entityManager->remove($reader);
-            }
+        } elseif ($reader) {
+            $entityManager->remove($reader);
         }
 
         $entityManager->flush();
@@ -332,39 +333,34 @@ class SecurityController extends AbstractController
     /**
      * @Route("/profile/remove", name="app_profile_remove")
      *
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
      */
-    public function remove(): Response
+    public function remove(Request $request): Response
     {
-        //todo form
-        //todo event for newsletter
-        //todo template
-        //todo: no login for inactive or removed user
-        
-        /** @var User $user */
-        $user = $this->getUser();
-        $entityManager = $this->getDoctrine()->getManager();
-        $email = TokenGenerator::generateToken().strstr($user->getEmail(), '@');
+        if ('app_profile_remove' === $request->attributes->get('_route') && $request->isMethod('POST')) {
+            /** @var User $user */
+            $user = $this->getUser();
+            $entityManager = $this->getDoctrine()->getManager();
+            $email = $user->getEmail();
 
-        $user->setFirstName('unknown')
-            ->setLastName('unknown')
-            ->setNickName('unknown')
-            ->setActive(false)
-            ->setConfirmed(false)
-            ->setRemoved(true)
-            ->setEmail($email);
+            $user->setFirstName('not known')
+                ->setLastName('not known')
+                ->setNickName('not known')
+                ->setActive(false)
+                ->setConfirmed(false)
+                ->setRemoved(true)
+                ->setConfirmToken(uniqid())
+                ->setEmail(uniqid().'@nakade.de');
 
-        //new reader
-        if ($user->hasNewsletter()) {
-            $reader = $entityManager->getRepository(NewsReader::class)->findOneBy(['email' => $user->getEmail()]);
-            if ($reader) {
-                $entityManager->remove($reader);
+            if ($user->hasNewsletter()) {
+                $reader = $entityManager->getRepository(NewsReader::class)->findOneBy(['email' => $email]);
+                if ($reader) {
+                    $entityManager->remove($reader);
+                }
             }
+            $entityManager->flush();
         }
 
-        $entityManager->flush();
-
-        //return a response that is successful, but has no content. The 204 status code literally means "No Content".
-        return new Response(null, 204);
+        return $this->render('security/remove_profile.html.twig');
     }
 }

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'profile.remove.title'|trans({}, 'messages') }}!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('login') }}
+{% endblock %}
+
+{% block body %}
+
+    <form action="{{ path('app_profile_remove') }}" name="remove" method="post" class="form-signin">
+      <div style=" width: 500px;">
+          <h2>{{ 'profile.remove.title.personate'|trans({'firstName': app.user.firstName}, 'messages') }}</h2>
+        <h4>Schade, {{ app.user.firstName }}!</h4>
+       <p style="text-align: left;">
+        Wir sind betroffen, dass du uns nach so kurzer Zeit wieder verlassen möchtest.<br>
+        Aber vielleicht warst du ja auch nur neugierig, was sich hinter dem Buttom befindet.
+        Dann verlasse jetzt diese Seite und alles bleibt wie es ist <i class="fa fa-thumbs-o-up"></i>.<br><br>
+        Solltest du mit dem Vorsatz hier sein, tatsächlich den Profil zu löschen, dann bedenke die Konsequenzen.
+        Du kannst dich nicht mehr auf unsere Seite einloggen, bekommst keinen Newsletter mehr und verlässt eine
+        aussergewöhnliche Community...<br>
+        Deine Daten werden unwiderruflich entfernt und unkenntlich gemacht. Dieser Vorgang lässt sich nicht rückgängig machen.
+
+
+       </p>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <a title="Hier geht es zurück" data-toggle="tooltip" data-placement="left" href="{{ path('app_profile_edit') }}"><button style="width: 120px; margin-top: 20px; margin-right: 120px;" type="button" class="btn btn-primary">Abbrechen</button></a>
+        <button style="width: 120px; margin-top: 20px;" type="submit" class="btn btn-danger">{{ 'profile.remove.send'|trans({}, 'messages') }}</button>
+      </div>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

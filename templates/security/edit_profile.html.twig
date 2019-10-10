@@ -27,7 +27,7 @@
         <img title="Echt jetzt!" data-toggle="tooltip" data-placement="bottom" alt="avatar" src="https://robohash.org/{{ app.user.email }}" class="img-responsive thumbnail">
     </div>
     <div style="margin-top: 45px; text-align: center">
-        <a title="Profil löschen" href="#"><button title="Du wirst noch einmal weitergeleitet" type="button" data-toggle="tooltip" data-placement="right" class="btn btn-danger">Profil löschen</button></a>
+        <a title="Profil löschen" href="{{ path('app_profile_remove') }}"><button title="Du wirst noch einmal weitergeleitet" type="button" data-toggle="tooltip" data-placement="right" class="btn btn-danger">Profil löschen</button></a>
     </div>
 {% endblock %}
 
