@@ -61,7 +61,14 @@
                     <a title="Nö. Is noch nicht" data-toggle="tooltip" data-placement="right" href="#"><i style="color: #95999c" class="fa fa-pencil"></i></a>
                 </div>
 
-                <button style="margin-top: 20px" type="submit" class="btn btn-primary">{{ 'profile.update'|trans({}, 'messages') }}</button>
+                <a href="{{ path('app_profile') }}"><button style="width: 120px; margin-top: 20px; margin-right: 20px;" type="button" class="btn btn-secondary">Abbrechen</button></a>
+                <button style="margin-top: 20px;" type="submit" class="btn btn-primary">{{ 'profile.update'|trans({}, 'messages') }}</button>
+                {% if app.user.confirmed==false %}
+                <a title="Nachricht nochmal zuschicken" data-toggle="tooltip" data-placement="right" href="{{ path('app_profile_resent_confirm') }}">
+                    <button style="margin-top: 20px; margin-left: 60px;" type="button" class="btn btn-info"><i class="fa fa-envelope-o"></i> Bestätigung</button>
+                </a>
+                {% endif %}
+
                 {{ form_end(profileForm) }}
             </div>
     <p class="privacy">{{ 'register.privacy.info'|trans({}, 'messages') }} <a target="_blank" href="{{ path('app_privacy') }}" title="{{ 'register.privacy.title'|trans({}, 'messages') }}">{{ 'register.privacy.info.link'|trans({}, 'messages') }}.</a></p>

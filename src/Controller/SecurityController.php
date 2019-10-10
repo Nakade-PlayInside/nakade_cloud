@@ -182,6 +182,8 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Edit Profile
+     *
      * @Route("/profile/edit", name="app_profile_edit")
      *
      * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -206,6 +208,8 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Change Email!
+     *
      * @Route("/profile/email", name="app_profile_email")
      *
      * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -256,6 +260,8 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Change Password!
+     *
      * @Route("/profile/changePwd", name="app_profile_changePwd")
      *
      * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -288,6 +294,33 @@ class SecurityController extends AbstractController
         return $this->render('security/edit_pwd.html.twig', [
                 'passwordForm' => $form->createView(),
         ]);
+    }
+
+    /**
+     * Resend confirm mail
+     *
+     * @Route("/profile/resent/confirm", name="app_profile_resent_confirm")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function resentConfirm(MessageBusInterface $messageBus): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user->isConfirmed()) {
+            $user->setConfirmToken(TokenGenerator::generateToken());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            //mail handling
+            $message = new ConfirmRegistration($user);
+            $messageBus->dispatch($message);
+
+            $this->addFlash('success', 'Eine Bestätigung für dein Konto wurde dir zugeschickt!');
+        }
+
+        return $this->render('security/profile.html.twig');
     }
 
     /**
