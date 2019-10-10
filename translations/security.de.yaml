@@ -1,2 +1,4 @@
 "Username could not be found.": "Unbekannte Email!"
 "Error": "Fehler"
+"account.notFound": "Konto nicht gefunden."
+"account.disabled": "Konto ist deaktiviert."

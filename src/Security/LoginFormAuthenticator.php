@@ -61,15 +61,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $passwordEncoder;
     private $reCaptchaVerifier;
 
-    /**
-     * LoginFormAuthenticator constructor.
-     *
-     * @param UserRepository               $userRepository
-     * @param RouterInterface              $router
-     * @param CsrfTokenManagerInterface    $csrfTokenManager
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param ReCaptchaVerifier            $reCaptchaVerifier
-     */
     public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, ReCaptchaVerifier $reCaptchaVerifier)
     {
         $this->userRepository = $userRepository;

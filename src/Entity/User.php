@@ -76,14 +76,6 @@ class User implements UserInterface
     private $firstName;
 
     /**
-     * @Assert\NotBlank
-     * @Assert\Type(type="string")
-     *
-     * @ORM\Column(type="string", length=255)
-     */
-    private $lastName;
-
-    /**
      * @Assert\Type(
      *     type="string",
      *     message="Der Wert {{ value }} ist kein {{ type }}."
@@ -95,49 +87,19 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank
+     * @Assert\Type(type="string")
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
+
+    /**
+     * @Assert\NotBlank
      * @Assert\Length(min = 6)
      *
      * @ORM\Column(type="string", length=255)
      */
     private $password;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Common\Quotes", mappedBy="author")
-     */
-    private $quotes;
-
-    /**
-     * Only an active user is allowed to sign in.
-     *
-     * @ORM\Column(type="boolean", options={"default": 1} )
-     */
-    private $active = true;
-
-    /**
-     * A removed user is inactive, not allowed to sign in and only visible to admins or superAdmins.
-     *
-     * @ORM\Column(type="boolean", options={"default": 0} )
-     */
-    private $removed = false;
-
-    /**
-     * Only a confirmed email address will receive mails.
-     *
-     * @ORM\Column(type="boolean", options={"default": 0} )
-     */
-    private $confirmed = false;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $confirmToken;
-
-    /**
-     * Has registered for newsletter.
-     *
-     * @ORM\Column(type="boolean", options={"default": 0} )
-     */
-    private $newsletter = false;
 
     /**
      * @Assert\Url(
@@ -147,6 +109,51 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $avatarUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $confirmToken;
+
+    /**
+     * Only a confirmed email address will receive mails.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0} )
+     */
+    private $confirmed = false;
+
+    /**
+     * Has registered for newsletter.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0} )
+     */
+    private $newsletter = false;
+
+    /**
+     * Account can be locked if compromised.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0} )
+     */
+    private $locked = false;
+
+    /**
+     * Account can be disabled.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0} )
+     */
+    private $disabled = false;
+
+    /**
+     * A removed user is inactive, not allowed to sign in and only visible to admins or superAdmins.
+     *
+     * @ORM\Column(type="boolean", options={"default": 0} )
+     */
+    private $removed = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Common\Quotes", mappedBy="author")
+     */
+    private $quotes;
 
     /**
      * User constructor.
@@ -271,6 +278,100 @@ class User implements UserInterface
         return $this;
     }
 
+    public function setAvatarUrl(string $avatarUrl)
+    {
+        $this->avatarUrl = $avatarUrl;
+
+        return $this;
+    }
+
+    public function getAvatarUrl(int $size = 32): string
+    {
+        if ($this->avatarUrl) {
+            return $this->avatarUrl;
+        }
+
+        //show robos if no url is set
+        $url = 'https://robohash.org/'.$this->getEmail();
+        if ($size) {
+            $url .= sprintf('?size=%dx%d', $size, $size);
+        }
+
+        return $url;
+    }
+
+    public function getConfirmToken(): ?string
+    {
+        return $this->confirmToken;
+    }
+
+    public function setConfirmToken(string $token): self
+    {
+        $this->confirmToken = $token;
+
+        return $this;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(bool $confirmed): self
+    {
+        $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    public function isLocked(): bool
+    {
+        return $this->locked;
+    }
+
+    public function setLocked(bool $locked)
+    {
+        $this->locked = $locked;
+
+        return $this;
+    }
+
+    public function isDisabled(): bool
+    {
+        return $this->disabled;
+    }
+
+    public function setDisabled(bool $disabled)
+    {
+        $this->disabled = $disabled;
+
+        return $this;
+    }
+
+    public function hasNewsletter(): bool
+    {
+        return $this->newsletter;
+    }
+
+    public function setNewsletter(bool $newsletter): self
+    {
+        $this->newsletter = $newsletter;
+
+        return $this;
+    }
+
+    public function isRemoved(): bool
+    {
+        return $this->removed;
+    }
+
+    public function setRemoved(bool $removed): self
+    {
+        $this->removed = $removed;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Quotes[]
      */
@@ -302,95 +403,9 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): self
-    {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    public function isConfirmed(): bool
-    {
-        return $this->confirmed;
-    }
-
-    public function setConfirmed(bool $confirmed): self
-    {
-        $this->confirmed = $confirmed;
-
-        return $this;
-    }
-
-    public function getConfirmToken(): ?string
-    {
-        return $this->confirmToken;
-    }
-
-    public function setConfirmToken(string $token): self
-    {
-        $this->confirmToken = $token;
-
-        return $this;
-    }
-
-    public function hasNewsletter(): bool
-    {
-        return $this->newsletter;
-    }
-
-    public function setNewsletter(bool $newsletter): self
-    {
-        $this->newsletter = $newsletter;
-
-        return $this;
-    }
-
-    public function isRemoved(): bool
-    {
-        return $this->removed;
-    }
-
-    public function setRemoved(bool $removed): self
-    {
-        $this->removed = $removed;
-        //todo: set active to false if remove ==true ; eventually toggle
-
-        return $this;
-    }
-
     public function getFullName(): string
     {
         return $this->firstName.' '.$this->getLastName();
-    }
-
-    public function setAvatarUrl(string $avatarUrl)
-    {
-        $this->avatarUrl = $avatarUrl;
-
-        return $this;
-    }
-
-    public function getAvatarUrl(int $size = 32): string
-    {
-        if ($this->avatarUrl) {
-            return $this->avatarUrl;
-        }
-
-        //show robos if no url is set
-        $url = 'https://robohash.org/'.$this->getEmail();
-        if ($size) {
-            $url .= sprintf('?size=%dx%d', $size, $size);
-        }
-
-        return $url;
     }
 
     public function __toString(): ?string

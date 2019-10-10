@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Controller\Helper\TokenGenerator;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -38,39 +39,22 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class AdminController extends EasyAdminController
 {
-    /**
-     * @var UserPasswordEncoderInterface
-     */
     private $passwordEncoder;
+private $mailer;
 
-    /**
-     * @var \Swift_Mailer
-     */
-    private $mailer;
-
-    /**
-     * AdminController constructor.
-     *
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param \Swift_Mailer                $mailer
-     */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
     }
 
-    /**
-     * @param User $user
-     */
     protected function persistUserEntity(User $user)
     {
         $encodedPassword = $this->passwordEncoder->encodePassword($user, $user->getPassword());
-        $user->setActive(true);
         $user->setPassword($encodedPassword);
-        $user->setConfirmToken(uniqid('nakade', true));
 
         parent::persistEntity($user);
+        //todo: mailHandler MessageBus
         $this->sendConfirmationMail($user);
 
         $this->addFlash('success', 'Neuer User angelegt!');

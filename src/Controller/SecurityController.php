@@ -346,8 +346,6 @@ class SecurityController extends AbstractController
             $user->setFirstName('not known')
                 ->setLastName('not known')
                 ->setNickName('not known')
-                ->setActive(false)
-                ->setConfirmed(false)
                 ->setRemoved(true)
                 ->setConfirmToken(uniqid())
                 ->setEmail(uniqid().'@nakade.de');
@@ -359,6 +357,8 @@ class SecurityController extends AbstractController
                 }
             }
             $entityManager->flush();
+
+            return $this->redirectToRoute('app_logout');
         }
 
         return $this->render('security/remove_profile.html.twig');

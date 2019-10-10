@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -18,47 +20,17 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Security;
+namespace App\Security\Exception;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
 
-/**
- * Class LoginUtils!
- *
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
- * @author Dr. H.Maerz <holger@nakade.de>
- */
-class LoginUtils extends AuthenticationUtils
+class AccountDisabledException extends AccountStatusException
 {
-    private $requestStack;
-
-    public function __construct(RequestStack $requestStack)
-    {
-        parent::__construct($requestStack);
-        $this->requestStack = $requestStack;
-    }
-
-    public function isReCaptcha(): bool
-    {
-        return $this->getRequest()->getSession()->has(LoginFormAuthenticator::LOGIN_IS_RECAPTCHA);
-    }
-
     /**
-     * @throws \LogicException
+     * {@inheritdoc}
      */
-    private function getRequest(): Request
+    public function getMessageKey()
     {
-        $request = $this->requestStack->getCurrentRequest();
-
-        if (null === $request) {
-            throw new \LogicException('Request should exist so it can be processed for error.');
-        }
-
-        return $request;
+        return "account.disabled";
     }
 }

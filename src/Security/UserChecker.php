@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -20,45 +22,39 @@
 
 namespace App\Security;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use App\Entity\User;
+use App\Security\Exception\AccountDisabledException;
+use App\Security\Exception\AccountNotFoundException;
+use Symfony\Component\Security\Core\Exception\LockedException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class LoginUtils!
- *
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
- * @author Dr. H.Maerz <holger@nakade.de>
- */
-class LoginUtils extends AuthenticationUtils
+class UserChecker implements UserCheckerInterface
 {
-    private $requestStack;
-
-    public function __construct(RequestStack $requestStack)
+    public function checkPreAuth(UserInterface $user)
     {
-        parent::__construct($requestStack);
-        $this->requestStack = $requestStack;
-    }
-
-    public function isReCaptcha(): bool
-    {
-        return $this->getRequest()->getSession()->has(LoginFormAuthenticator::LOGIN_IS_RECAPTCHA);
-    }
-
-    /**
-     * @throws \LogicException
-     */
-    private function getRequest(): Request
-    {
-        $request = $this->requestStack->getCurrentRequest();
-
-        if (null === $request) {
-            throw new \LogicException('Request should exist so it can be processed for error.');
+        if (!$user instanceof User) {
+            return;
         }
 
-        return $request;
+        // user is deleted, show a generic Account Not Found message.
+        if ($user->isRemoved()) {
+            throw new AccountNotFoundException();
+        }
+
+        if ($user->isLocked()) {
+            throw new LockedException();
+        }
+
+        if ($user->isDisabled()) {
+            throw new AccountDisabledException();
+        }
+    }
+
+    public function checkPostAuth(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return;
+        }
     }
 }

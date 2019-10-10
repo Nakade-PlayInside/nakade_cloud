@@ -38,24 +38,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserFixture extends BaseFixture
 {
-    /**
-     * @var UserPasswordEncoderInterface
-     */
     private $passwordEncoder;
 
-    /**
-     * UserFixture constructor.
-     *
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     protected function loadData(ObjectManager $manager)
     {
         $this->createMany(10, 'main_users', function ($i) {
@@ -63,7 +52,6 @@ class UserFixture extends BaseFixture
             $user->setEmail(sprintf('spacebar%d@thespacebar.com', $i));
             $user->setFirstName($this->faker->firstName);
             $user->setLastName($this->faker->lastName);
-            $user->setActive(true);
             $user->setConfirmed(true);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
@@ -78,7 +66,6 @@ class UserFixture extends BaseFixture
             $user->setEmail(sprintf('admin%d@thespacebar.com', $i));
             $user->setFirstName($this->faker->firstName);
             $user->setLastName($this->faker->lastName);
-            $user->setActive(true);
             $user->setConfirmed(true);
             $user->setRoles(['ROLE_ADMIN']);
             $user->setPassword($this->passwordEncoder->encodePassword(
