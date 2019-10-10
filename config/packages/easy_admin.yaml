@@ -48,7 +48,8 @@ easy_admin:
                     { property: 'nickName', label: 'Nick' },
                     { property: 'roles', label: 'Rolle'},
                     { property: 'avatarUrl', type: 'image', label: 'Avatar', sortable: false },
-                    { property: 'active', label: 'aktiv' },
+                    { property: 'disabled', label: 'disabled' },
+                    { property: 'locked', label: 'gesperrt' },
                     { property: 'confirmed', help: 'Email Adresse ist bestätigt.' },
                     'createdAt',]
                 sort: ['firstName', 'ASC']
