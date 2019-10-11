@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\NewsLetter;
+use App\Services\NewsDeliverer;
 use App\Tools\NextClubMeeting;
 use App\Entity\NewsReader;
 use App\Entity\User;
@@ -61,29 +63,20 @@ class NewsController extends AbstractController
     /**
      * @Route("/send", name="send")
      */
-    public function send(MessageBusInterface $messageBus, NextClubMeeting $nextClubMeeting)
+    public function send(NewsDeliverer $newsDeliverer, NextClubMeeting $nextClubMeeting)
     {
-        // calculate send date
-        //todo: create Command
-        //todo: make service
-        //todo: create config
         $strDate = $nextClubMeeting->calcNextMeetingDate();
-        $objDate = \DateTime::createFromFormat(NextClubMeeting::DATE_FORMAT, $strDate);
-        $date = $objDate->format('d.m.Y');
-        $sendDate = clone $objDate;
-        $sendDate->modify("-4 day");
-        dd($sendDate);
-        //todo: create Newsletter Entity
-        //on service run. look up if newsletter for the next meeting date is in database
-        //if not, create data, persist and send mails
+        $dueDate = \DateTime::createFromFormat(NextClubMeeting::DATE_FORMAT, $strDate);
 
-        //todo: find confirmed only
         $allReaders = $this->getDoctrine()->getRepository(NewsReader::class)->findAll();
-        foreach ($allReaders as $reader) {
-            //mail handling
-            $message = new News($reader, $date);
-            $messageBus->dispatch($message);
-        }
+        $newsletter = new NewsLetter();
+        $newsletter->setDueAt($dueDate)
+                ->setNoRecipients(count($allReaders));
+
+        $this->getDoctrine()->getManager()->persist($newsletter);
+        $this->getDoctrine()->getManager()->flush();
+
+        $newsDeliverer->deliver($dueDate, $allReaders);
 
         $this->addFlash('success', 'Nachrichten verschickt!');
 
