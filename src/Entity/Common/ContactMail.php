@@ -275,27 +275,11 @@ class ContactMail
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName(): ?string
-    {
-        return sprintf('%s %s', $this->firstName, $this->lastName);
-    }
-
-    /**
-     * @return string|null
-     */
     public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * @param string $phone
-     *
-     * @return self
-     */
     public function setPhone(string $phone): self
     {
         $this->phone = $phone;
@@ -303,19 +287,11 @@ class ContactMail
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getMessage(): ?string
     {
         return $this->message;
     }
 
-    /**
-     * @param string $message
-     *
-     * @return self
-     */
     public function setMessage(string $message): self
     {
         $this->message = $message;
@@ -323,24 +299,21 @@ class ContactMail
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getZipCode(): ?string
     {
         return $this->zipCode;
     }
 
-    /**
-     * @param string $zipCode
-     *
-     * @return self
-     */
     public function setZipCode(string $zipCode): self
     {
         $this->zipCode = $zipCode;
 
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return sprintf('%s %s', $this->firstName, $this->lastName);
     }
 
     /**

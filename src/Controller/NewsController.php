@@ -65,10 +65,18 @@ class NewsController extends AbstractController
     public function send(MessageBusInterface $messageBus, NextClubMeeting $nextClubMeeting)
     {
         // calculate send date
-        //  todo: make service
+        //todo: create Command
+        //todo: make service
+        //todo: create config
         $strDate = $nextClubMeeting->calcNextMeetingDate();
         $objDate = \DateTime::createFromFormat(NextClubMeeting::DATE_FORMAT, $strDate);
         $date = $objDate->format('d.m.Y');
+        $sendDate = clone $objDate;
+        $sendDate->modify("-4 day");
+        dd($sendDate);
+        //todo: create Newsletter Entity
+        //on service run. look up if newsletter for the next meeting date is in database
+        //if not, create data, persist and send mails
 
         //todo: find confirmed only
         $allReaders = $this->getDoctrine()->getRepository(NewsReader::class)->findAll();

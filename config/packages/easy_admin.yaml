@@ -3,7 +3,7 @@ easy_admin:
     formats:
         date:     'd-m-Y'
         time:     'H:i'
-        datetime: 'd-m-Y  H:i'
+        datetime: 'd-m-Y'
     user:
         display_name: true
         display_avatar: true
@@ -11,68 +11,96 @@ easy_admin:
     design:
         brand_color: '#1ABC9C'
         menu:
-          - { entity: User, default: true, icon: 'users'}
+          - { entity: User, default: true, label: 'easyAdmin.user', icon: 'users'}
           - 'ContactMail'
           - 'Quotes'
-          - { label: ''}
-          - { label: 'exit', route: 'app_homepage', icon: 'home'}
+          - { label: 'easyAdmin.placeholder'}
+          - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
-        title: '%%entity_label%%'
         actions:
-            - { name: edit, icon: pencil, label: false, title: 'Ändern' }
-            - { name: delete, icon: remove, label: false, title: 'Löschen'  }
+            - { name: show, icon: search, label: false, title: 'easyAdmin.update' }
+            - { name: edit, icon: pencil, label: false, title: 'easyAdmin.update' }
+            - { name: delete, icon: remove, label: false, title: 'easyAdmin.delete' }
     entities:
 #        # List the entity class name you want to manage
         Quotes:
             class: App\Entity\Common\Quotes
-            label: Zitate
+            label: 'easyAdmin.quotes'
             list:
-                fields: ['id', { property: 'quote', label: 'Zitat' }, { property: 'details', label: 'Hinweis' }, 'createdAt']
+                fields: [
+                   { property: 'id', label: 'easyAdmin.id' },
+                   { property: 'quote', label: 'easyAdmin.quote.quote' },
+                   { property: 'details', label: 'easyAdmin.quote.origin' },
+                   { property: 'createdAt', label: 'easyAdmin.createdAt' },
+                   ]
             search:
                 fields: ['quote', 'details']
         ContactMail:
             class: App\Entity\Common\ContactMail
-            label: Kontaktanfragen
-            help: Neue Anfragen bitte umgehend beantworten
+            label: 'easyAdmin.contact'
+            help: 'easyAdmin.contact.help'
             list:
-              actions: [-new]
+                actions: [-new, -edit,]
+                fields: [
+                    { property: 'id', label: 'easyAdmin.user.id' },
+                    { property: 'email', type: 'email', label: 'easyAdmin.user.email' },
+                    { property: 'name', label: 'easyAdmin.user.name' },
+                    { property: 'phone', label: 'easyAdmin.contact.phone' },
+                    { property: 'zipCode', label: 'easyAdmin.contact.zip' },
+                    { property: 'city', label: 'easyAdmin.contact.city' },
+                    { property: 'address', label: 'easyAdmin.contact.address' },
+                    { property: 'createdAt', label: 'easyAdmin.createdAt' },
+                    ]
+                sort: ['firstName', 'ASC']
             search:
                 fields: ['email', 'firstName', 'lastName', 'message']
+            show:
+                fields:
+                  - { property: 'email', label: 'easyAdmin.user.email' }
+                  - { property: 'name', label: 'easyAdmin.user.name' }
+                  - { property: 'phone', label: 'easyAdmin.contact.phone'}
+                  - { property: 'zipCode', label: 'easyAdmin.contact.zip' }
+                  - { property: 'city', label: 'easyAdmin.contact.city' }
+                  - { property: 'address', label: 'easyAdmin.contact.address' }
+                  - { property: 'createdAt', label: 'easyAdmin.createdAt' }
+                  - { property: 'message', label: 'easyAdmin.message' }
         User:
             class: App\Entity\User
+            label: 'easyAdmin.user'
             list:
+                actions: [-show]
                 fields: [
-                    'id',
-                    { property: 'email', type: 'email', label: 'Email' },
-                    { property: 'fullName', label: 'Name' },
-                    { property: 'nickName', label: 'Nick' },
-                    { property: 'roles', label: 'Rolle'},
-                    { property: 'avatarUrl', type: 'image', label: 'Avatar', sortable: false },
-                    { property: 'disabled', label: 'disabled' },
-                    { property: 'locked', label: 'gesperrt' },
-                    { property: 'confirmed', help: 'Email Adresse ist bestätigt.' },
-                    'createdAt',]
+                    { property: 'id', label: 'easyAdmin.user.id' },
+                    { property: 'email', type: 'email', label: 'easyAdmin.user.email' },
+                    { property: 'fullName', label: 'easyAdmin.user.name' },
+                    { property: 'nickName', label: 'easyAdmin.user.nick' },
+                    { property: 'roles', label: 'easyAdmin.user.role'},
+                    { property: 'avatarUrl', type: 'image', label: 'easyAdmin.user.avatar', sortable: false },
+                    { property: 'disabled', label: 'easyAdmin.user.disabled' },
+                    { property: 'locked', label: 'easyAdmin.user.locked' },
+                    { property: 'confirmed', help: 'Email Adresse ist bestätigt.', label: 'easyAdmin.user.confirmed' },
+                    { property: 'createdAt', label: 'easyAdmin.createdAt' },
+                    { property: 'updatedAt', label: 'easyAdmin.updatedAt' },
+                    ]
                 sort: ['firstName', 'ASC']
             form:
                 fields:
-                    - { property: 'firstName', label: 'Vorname' }
-                    - { property: 'lastName', label: 'Nachname' }
-                    - { property: 'nickName', label: 'Nick' }
-                    -
-                       property: 'email'
-                       help: 'Login Name muss eine gültige email Adresse sein.'
-                    -
-                       property: 'password'
-                       label: 'Passwort'
+                    - { property: 'firstName', label: 'easyAdmin.user.firstName' }
+                    - { property: 'lastName', label: 'easyAdmin.user.lastName' }
+                    - { property: 'nickName', label: 'easyAdmin.user.nick' }
+                    - { property: 'email', label: 'easyAdmin.user.email', help: 'easyAdmin.user.email.help', type_options: { disabled: true } }
+                    - { property: 'password', label: 'easyAdmin.user.password', type_options: { disabled: true } }
                     -
                        property: 'roles'
+                       permission: ROLE_ADMIN
                        type: 'choice'
-                       help: 'zuzügliche Rollen zu ROLE_USER'
+                       label: 'easyAdmin.user.role'
+                       help: 'easyAdmin.user.role.help'
                        type_options:
                           mapped: true
                           expanded: true
                           multiple: true
                           choices:
-                            'Member': 'ROLE_MEMBER'
-                            'Admin':  'ROLE_ADMIN'
+                            - { 'easyAdmin.user.role.member': 'ROLE_MEMBER' }
+                            - { 'easyAdmin.user.role.admin':  'ROLE_ADMIN' }
 

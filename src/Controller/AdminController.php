@@ -22,25 +22,22 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Controller\Helper\TokenGenerator;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Class AdminController!
- *
- *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdminController extends EasyAdminController
 {
     private $passwordEncoder;
-private $mailer;
+    private $mailer;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
     {
@@ -60,9 +57,6 @@ private $mailer;
         $this->addFlash('success', 'Neuer User angelegt!');
     }
 
-    /**
-     * @param User $user
-     */
     private function sendConfirmationMail(User $user)
     {
         $message = (new \Swift_Message('Bestätige deine email Adresse'))
