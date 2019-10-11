@@ -84,7 +84,7 @@ class NewsHandler implements MessageHandlerInterface, LoggerAwareInterface
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent club invitaion mail email:%d', $news->getReader()->getEmail()));
+                $this->logger->alert(sprintf('Could not sent news to email:%d', $news->getReader()->getEmail()));
             }
         }
     }

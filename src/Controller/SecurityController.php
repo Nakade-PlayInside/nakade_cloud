@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Controller\Helper\TokenGenerator;
+use App\Tools\TokenGenerator;
 use App\Entity\NewsReader;
 use App\Entity\User;
 use App\Form\Model\UserRegistrationFormModel;

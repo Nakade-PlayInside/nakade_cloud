@@ -22,8 +22,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Controller\Helper\NextClubMeeting;
-use App\Controller\Helper\TokenGenerator;
+use App\Tools\NextClubMeeting;
 use App\Entity\NewsReader;
 use App\Entity\User;
 use App\Form\Model\SubscribeFormModel;

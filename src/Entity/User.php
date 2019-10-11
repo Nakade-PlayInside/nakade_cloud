@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Controller\Helper\TokenGenerator;
+use App\Tools\TokenGenerator;
 use App\Entity\Common\Quotes;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

@@ -20,7 +20,7 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Controller\Helper;
+namespace App\Tools;
 
 /**
  * Gives you the next meeting date for the club. Club meeting is always on the second monday of a month. If meeting date

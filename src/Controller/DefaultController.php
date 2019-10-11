@@ -22,10 +22,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Controller\Helper\NextClubMeeting;
 use App\Entity\Common\Quotes;
 use App\Form\ContactType;
 use App\Message\ConfirmContact;
+use App\Tools\NextClubMeeting;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

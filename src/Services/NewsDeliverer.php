@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -19,13 +20,39 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Controller\Helper;
+namespace App\Services;
 
+use App\Entity\NewsReader;
+use App\Message\News;
+use Symfony\Component\Messenger\MessageBusInterface;
 
-class TokenGenerator {
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
+class NewsDeliverer
+{
+    private $messageBus;
 
-    static function generateToken (string $appendix ='nakade')
+    public function __construct(MessageBusInterface $messageBus)
     {
-        return  bin2hex(random_bytes(16)).strstr($appendix, '@');
+        $this->messageBus = $messageBus;
+    }
+
+    /**
+     * Just provide a due date and an array of NewsReader.
+     * This service is used by NewsDeliveryCommand.
+     *
+     * @param NewsReader[] $allReaders
+     */
+    public function deliver(\DateTime $dueDate, array $allReaders)
+    {
+        $date = $dueDate->format('d.m.Y');
+        foreach ($allReaders as $reader) {
+            //mail handling
+            $message = new News($reader, $date);
+            $this->messageBus->dispatch($message);
+        }
     }
 }
