@@ -14,6 +14,8 @@ easy_admin:
           - { entity: User, default: true, label: 'easyAdmin.user', icon: 'users'}
           - 'ContactMail'
           - 'Quotes'
+          - 'NewsReader'
+          - 'NewsLetter'
           - { label: 'easyAdmin.placeholder'}
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
@@ -103,4 +105,38 @@ easy_admin:
                           choices:
                             - { 'easyAdmin.user.role.member': 'ROLE_MEMBER' }
                             - { 'easyAdmin.user.role.admin':  'ROLE_ADMIN' }
-
+        NewsReader:
+            class: App\Entity\NewsReader
+            label: 'NewsReader'
+            list:
+                actions: [-show]
+                fields:
+                  - { property: 'id', label: 'easyAdmin.user.id' }
+                  - { property: 'email', type: 'email', label: 'easyAdmin.user.email' }
+                  - { property: 'firstName', label: 'easyAdmin.user.firstName' }
+                  - { property: 'lastName', label: 'easyAdmin.user.lastName' }
+                  - { property: 'confirmed', help: 'Email Adresse ist bestätigt.', label: 'easyAdmin.user.confirmed' }
+                  - { property: 'createdAt', label: 'easyAdmin.createdAt' }
+                sort: ['email', 'ASC']
+            form:
+                fields:
+                  - { property: 'firstName', label: 'easyAdmin.user.firstName' }
+                  - { property: 'lastName', label: 'easyAdmin.user.lastName' }
+                  - { property: 'email', label: 'easyAdmin.user.email' }
+                  - { property: 'confirmed', label: 'easyAdmin.user.confirmed' }
+        NewsLetter:
+            class: App\Entity\NewsLetter
+            label: 'NewsLetter'
+            list:
+                actions: [-edit]
+                fields:
+                  - { property: 'id', label: 'easyAdmin.user.id' }
+                  - { property: 'dueAt', label: 'Termin' }
+                  - { property: 'sendAt', label: 'Versand' }
+                  - { property: 'NoRecipients', label: 'Anzahl' }
+                sort: ['dueAt', 'ASC']
+            form:
+                fields:
+                  - { property: 'dueAt', label: 'easyAdmin.user.firstName' }
+                  - { property: 'sendAt', label: 'easyAdmin.user.lastName' }
+                  - { property: 'NoRecipients', label: 'easyAdmin.user.email' }
