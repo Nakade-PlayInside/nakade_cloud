@@ -23,9 +23,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Tools\TokenGenerator;
-use App\Entity\Common\Quotes;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -149,11 +147,6 @@ class User implements UserInterface
      * @ORM\Column(type="boolean", options={"default": 0} )
      */
     private $removed = false;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Common\Quotes", mappedBy="author")
-     */
-    private $quotes;
 
     /**
      * User constructor.
@@ -368,37 +361,6 @@ class User implements UserInterface
     public function setRemoved(bool $removed): self
     {
         $this->removed = $removed;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Quotes[]
-     */
-    public function getQuotes(): Collection
-    {
-        return $this->quotes;
-    }
-
-    public function addQuote(Quotes $quote): self
-    {
-        if (!$this->quotes->contains($quote)) {
-            $this->quotes[] = $quote;
-            $quote->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuote(Quotes $quote): self
-    {
-        if ($this->quotes->contains($quote)) {
-            $this->quotes->removeElement($quote);
-            // set the owning side to null (unless already changed)
-            if ($quote->getAuthor() === $this) {
-                $quote->setAuthor(null);
-            }
-        }
 
         return $this;
     }

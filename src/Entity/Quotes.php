@@ -20,7 +20,7 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Entity\Common;
+namespace App\Entity;
 
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,7 +28,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\Common\QuotesRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\QuotesRepository")
  */
 class Quotes
 {
@@ -69,33 +69,16 @@ class Quotes
      */
     private $details = 'Go-Weisheit';
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="quotes")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $author;
-
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
     public function getQuote(): ?string
     {
         return $this->quote;
     }
 
-    /**
-     * @param string $quote
-     *
-     * @return Quotes
-     */
     public function setQuote(string $quote): self
     {
         $this->quote = $quote;
@@ -103,42 +86,14 @@ class Quotes
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDetails(): ?string
     {
         return $this->details;
     }
 
-    /**
-     * @param string|null $details
-     *
-     * @return Quotes
-     */
     public function setDetails(?string $details): self
     {
         $this->details = $details;
-
-        return $this;
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param User|null $author
-     *
-     * @return Quotes
-     */
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }

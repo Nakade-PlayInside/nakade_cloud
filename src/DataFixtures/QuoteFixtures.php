@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Common\Quotes;
+use App\Entity\Quotes;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**

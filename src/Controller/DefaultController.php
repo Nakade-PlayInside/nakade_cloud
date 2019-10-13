@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Common\Quotes;
+use App\Entity\Quotes;
 use App\Form\ContactType;
 use App\Message\ConfirmContact;
 use App\Tools\NextClubMeeting;

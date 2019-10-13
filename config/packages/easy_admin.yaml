@@ -9,6 +9,8 @@ easy_admin:
         display_avatar: true
         avatar_property_path: 'avatarUrl'
     design:
+        assets:
+            favicon: '../images/nakade_256x256.png'
         brand_color: '#1ABC9C'
         menu:
           - { entity: User, default: true, label: 'easyAdmin.user', icon: 'users'}
@@ -26,7 +28,7 @@ easy_admin:
     entities:
 #        # List the entity class name you want to manage
         Quotes:
-            class: App\Entity\Common\Quotes
+            class: App\Entity\Quotes
             label: 'easyAdmin.quotes'
             list:
                 fields: [
@@ -73,8 +75,14 @@ easy_admin:
         User:
             class: App\Entity\User
             label: 'easyAdmin.user'
+            search:
+              fields: ['email', 'fullName', 'id', 'nickName']
+            templates:
+              edit: 'admin/user/edit.html.twig'
+            edit:
+              actions: [-delete]
             list:
-                actions: [-show]
+                actions: [-show, -new, -delete]
                 fields: [
                     { property: 'id', label: 'easyAdmin.user.id' },
                     { property: 'email', type: 'email', label: 'easyAdmin.user.email' },
@@ -86,23 +94,20 @@ easy_admin:
                     { property: 'locked', label: 'easyAdmin.user.locked' },
                     { property: 'confirmed', help: 'Email Adresse ist bestätigt.', label: 'easyAdmin.user.confirmed' },
                     { property: 'createdAt', label: 'easyAdmin.createdAt' },
-                    { property: 'updatedAt', label: 'easyAdmin.updatedAt' },
                     ]
                 sort: ['firstName', 'ASC']
-            templates:
-                edit: 'admin/user/edit.html.twig'
-                new:  'admin/user/edit.html.twig'
             form:
+                title: "easyAdmin.user.edit.title"
                 fields:
-                    - { property: 'firstName', label: 'easyAdmin.user.firstName' }
-                    - { property: 'lastName', label: 'easyAdmin.user.lastName' }
-                    - { property: 'nickName', label: 'easyAdmin.user.nick' }
-                    - { property: 'email', label: 'easyAdmin.user.email', help: 'easyAdmin.user.email.help', type_options: { disabled: true } }
-                    - { property: 'password', label: 'easyAdmin.user.password', type_options: { disabled: true } }
+                    - { property: 'fullName', type: 'text', type_options: { disabled: true } }
+                    - { property: 'email', type_options: { disabled: true } }
+
         NewsReader:
             class: App\Entity\NewsReader
             label: 'easyAdmin.news.reader'
             help: 'easyAdmin.news.reader.help'
+            search:
+              fields: ['email', 'firstName', 'lastName']
             list:
                 actions: [-show]
                 fields:
@@ -123,6 +128,8 @@ easy_admin:
             class: App\Entity\NewsLetter
             label: 'easyAdmin.news.letter'
             help: 'easyAdmin.news.letter.help'
+            search:
+              fields: ['dueAt']
             templates:
               list:  'admin/news/list.html.twig'
             list:

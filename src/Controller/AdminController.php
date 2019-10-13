@@ -25,7 +25,6 @@ namespace App\Controller;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -36,56 +35,19 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class AdminController extends EasyAdminController
 {
-    private $passwordEncoder;
     private $mailer;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer)
+    public function __construct(\Swift_Mailer $mailer)
     {
-        $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
     }
 
-    protected function persistUserEntity(User $user)
+    protected function updateUserEntity(User $user)
     {
-        $encodedPassword = $this->passwordEncoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($encodedPassword);
-
-        parent::persistEntity($user);
-        //todo: mailHandler MessageBus
-        $this->sendConfirmationMail($user);
-
-        $this->addFlash('success', 'Neuer User angelegt!');
-    }
-
-    private function sendConfirmationMail(User $user)
-    {
-        $message = (new \Swift_Message('Bestätige deine email Adresse'))
-                ->setFrom('noreply@nakade.de')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->renderView(
-                        // templates/emails/confirmation.html.twig
-                                'confirmRegistration.html.twig',
-                        ['user' => $user]
-                    ),
-                    'text/html'
-                )
-
-                // you can remove the following code if you don't define a text version for your emails
-                ->addPart(
-                    $this->renderView(
-                        // templates/emails/confirmation.txt.twig
-                                'confirmRegistration.txt.twig',
-                        ['user' => $user]
-                    ),
-                    'text/plain'
-                );
-
-        $this->mailer->send($message);
-    }
-
-    public function sendNews()
-    {
-
+        if ($this->request->request->has('roles')) {
+            $roles = $this->request->request->get('roles');
+            $user->setRoles($roles);
+        }
+        $this->getDoctrine()->getManager()->flush();
     }
 }
