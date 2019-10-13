@@ -34,7 +34,7 @@
                      />
                      <label class="form-check-label" for="user_roles_30">Admin</label>
                  </div>
-                 {% if is_granted('IS_SUPER_ADMIN') %}
+                 {% if is_granted('ROLE_SUPER_ADMIN') %}
                  <div class="form-check">
                      <input type="checkbox" id="user_roles_0" name="roles[]" class="form-check-input" value="ROLE_SUPER_ADMIN"
                          {% if "ROLE_SUPER_ADMIN" in form.vars.value.roles  %} checked="checked" {% endif %}

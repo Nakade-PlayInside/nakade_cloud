@@ -396,4 +396,25 @@ class SecurityController extends AbstractController
 
         return $this->render('security/remove_profile.html.twig');
     }
+
+    /**
+     * @Route("/profile/impersonate", name="app_profile_impersonate")
+     *
+     * @IsGranted({"ROLE_ADMIN", "IS_AUTHENTICATED_FULLY"})
+     */
+    public function impersonate(Request $request): Response
+    {
+
+        $userId = $request->get('id');
+        if (!$userId) {
+            $this->addFlash('info', 'Switch User hat nicht funktioniert!');
+            $referer = $request->headers->get('referer');
+
+            return $this->redirect($referer);
+        }
+        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
+        $this->addFlash('success', 'Switch User erfolgreich!');
+
+        return $this->redirectToRoute('app_homepage', ['_switch_user' => $user->getEmail()]);
+    }
 }

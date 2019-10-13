@@ -1,0 +1,23 @@
+{# templates/admin/new.html.twig #}
+{% extends '@EasyAdmin/default/list.html.twig' %}
+
+{% block item_actions %}
+    {% set _actions_template = _entity_config.list.collapse_actions
+        ? '@EasyAdmin/default/includes/_actions_dropdown.html.twig'
+        : '@EasyAdmin/default/includes/_actions.html.twig'
+    %}
+    {% if is_granted('ROLE_SUPER_ADMIN') and _item_id != app.user.id  %}
+    <a class="action-app_profile_impersonate" title="Switch User" href="{{ path('app_profile_impersonate',{'id': _item_id}) }}" target="_self">
+        <i class="fa fa-fw fa-user-o"></i>
+    </a>
+    {% endif %}
+    {{ include(_actions_template, {
+        actions: _list_item_actions,
+        entity_config: _entity_config,
+        request_parameters: _request_parameters,
+        translation_domain: _entity_config.translation_domain,
+        trans_parameters: _trans_parameters,
+        item_id: _item_id,
+        item: item
+    }, with_context = false) }}
+{% endblock item_actions %}

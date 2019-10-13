@@ -42,6 +42,7 @@
   "user.email": "Email"
   "user.email.help": "Login muss eine gültige Email sein"
   "user.name": "Name"
+  "user.switch.title": "Switch User"
   "user.edit.title": "Benutzer bearbeiten"
   "user.firstName": "Vorname"
   "user.lastName": "Nachname"

@@ -78,11 +78,12 @@ easy_admin:
             search:
               fields: ['email', 'fullName', 'id', 'nickName']
             templates:
+              list: 'admin/user/list.html.twig'
               edit: 'admin/user/edit.html.twig'
             edit:
               actions: [-delete]
             list:
-                actions: [-show, -new, -delete]
+                actions: ['-delete', '-new', '-show']
                 fields: [
                     { property: 'id', label: 'easyAdmin.user.id' },
                     { property: 'email', type: 'email', label: 'easyAdmin.user.email' },
