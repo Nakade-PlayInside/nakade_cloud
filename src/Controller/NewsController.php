@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\NewsLetter;
 use App\Services\NewsDeliverer;
 use App\Tools\NextClubMeeting;
 use App\Entity\NewsReader;
@@ -30,7 +29,8 @@ use App\Entity\User;
 use App\Form\Model\SubscribeFormModel;
 use App\Form\SubscribeType;
 use App\Message\ConfirmSubscription;
-use App\Message\News;
+use Psr\Log\LoggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,37 +51,40 @@ use Symfony\Component\Routing\Annotation\Route;
 class NewsController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
-     */
-    public function index()
-    {
-        return $this->render('news/index.html.twig', [
-            'controller_name' => 'NewsController',
-        ]);
-    }
-
-    /**
      * @Route("/send", name="send")
+     *
+     * @IsGranted("ROLE_ADMIN")
      */
-    public function send(NewsDeliverer $newsDeliverer, NextClubMeeting $nextClubMeeting)
+    public function send(Request $request, NewsDeliverer $newsDeliverer, NextClubMeeting $nextClubMeeting)
     {
         $strDate = $nextClubMeeting->calcNextMeetingDate();
         $dueDate = \DateTime::createFromFormat(NextClubMeeting::DATE_FORMAT, $strDate);
-
         $allReaders = $this->getDoctrine()->getRepository(NewsReader::class)->findAll();
-        $newsletter = new NewsLetter();
-        $newsletter->setDueAt($dueDate)
-                ->setNoRecipients(count($allReaders));
 
-        $this->getDoctrine()->getManager()->persist($newsletter);
-        $this->getDoctrine()->getManager()->flush();
+        if ('news_send' === $request->attributes->get('_route') && $request->isMethod('POST') && $this->isCsrfTokenValid('send-news', $request->request->get('token'))
+        ) {
+            $selectedReaders = $request->request->get('readers');
+            $readers = [];
+            foreach ($selectedReaders as $readerId) {
+                $readers[] = $this->getDoctrine()->getRepository(NewsReader::class)->find($readerId);
+            }
 
-        $newsDeliverer->deliver($dueDate, $allReaders);
+            $newsDeliverer->deliver($dueDate, $readers);
 
-        $this->addFlash('success', 'Nachrichten verschickt!');
+            $this->addFlash('success', 'Nachrichten verschickt!');
 
-        return $this->render('news/index.html.twig', [
-                'controller_name' => 'NewsController',
+            return $this->redirectToRoute('easyadmin', [
+                        'entity' => 'NewsLetter',
+                        'action' => 'list',
+                        'menuIndex' => '4',
+                        'submenuIndex' => '-1',
+                        'page' => '1',
+            ]);
+        }
+
+        return $this->render('news/send_news.html.twig', [
+                'dueDate' => $dueDate->format('d.m.Y'),
+                'subscribers' => $allReaders,
         ]);
     }
 
@@ -160,12 +163,13 @@ class NewsController extends AbstractController
      *
      * @Route("/unsubscribe/{token}", name="unsubscribe", requirements={"token"=".+"})
      */
-    public function unsubscribe(string $token): Response
+    public function unsubscribe(string $token, LoggerInterface $logger): Response
     {
         $reader = $this->getDoctrine()->getRepository(NewsReader::class)->findOneBy(['unsubscribeToken' => $token]);
         if (!$reader) {
             throw new NotFoundHttpException('Data not found!');
         }
+        $logger->notice(sprintf('<%s> unsubscribed newsletter', $reader->getEmail()));
 
         $email = $reader->getEmail();
         $this->getDoctrine()->getManager()->remove($reader);

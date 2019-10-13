@@ -37,6 +37,10 @@ easy_admin:
                    ]
             search:
                 fields: ['quote', 'details']
+            form:
+                fields:
+                  - { property: 'quote', type: 'text_editor', label: 'easyAdmin.quote.quote' }
+                  - { property: 'details', label: 'easyAdmin.quote.origin' }
         ContactMail:
             class: App\Entity\Common\ContactMail
             label: 'easyAdmin.contact'
@@ -85,6 +89,9 @@ easy_admin:
                     { property: 'updatedAt', label: 'easyAdmin.updatedAt' },
                     ]
                 sort: ['firstName', 'ASC']
+            templates:
+                edit: 'admin/user/edit.html.twig'
+                new:  'admin/user/edit.html.twig'
             form:
                 fields:
                     - { property: 'firstName', label: 'easyAdmin.user.firstName' }
@@ -92,22 +99,10 @@ easy_admin:
                     - { property: 'nickName', label: 'easyAdmin.user.nick' }
                     - { property: 'email', label: 'easyAdmin.user.email', help: 'easyAdmin.user.email.help', type_options: { disabled: true } }
                     - { property: 'password', label: 'easyAdmin.user.password', type_options: { disabled: true } }
-                    -
-                       property: 'roles'
-                       permission: ROLE_ADMIN
-                       type: 'choice'
-                       label: 'easyAdmin.user.role'
-                       help: 'easyAdmin.user.role.help'
-                       type_options:
-                          mapped: true
-                          expanded: true
-                          multiple: true
-                          choices:
-                            - { 'easyAdmin.user.role.member': 'ROLE_MEMBER' }
-                            - { 'easyAdmin.user.role.admin':  'ROLE_ADMIN' }
         NewsReader:
             class: App\Entity\NewsReader
-            label: 'NewsReader'
+            label: 'easyAdmin.news.reader'
+            help: 'easyAdmin.news.reader.help'
             list:
                 actions: [-show]
                 fields:
@@ -126,15 +121,17 @@ easy_admin:
                   - { property: 'confirmed', label: 'easyAdmin.user.confirmed' }
         NewsLetter:
             class: App\Entity\NewsLetter
-            label: 'NewsLetter'
+            label: 'easyAdmin.news.letter'
+            help: 'easyAdmin.news.letter.help'
+            templates:
+              list:  'admin/news/list.html.twig'
             list:
-                actions: [-edit]
+                actions: [-edit, -show]
                 fields:
                   - { property: 'id', label: 'easyAdmin.user.id' }
-                  - { property: 'dueAt', label: 'Termin' }
-                  - { property: 'sendAt', label: 'Versand' }
-                  - { property: 'NoRecipients', label: 'Anzahl' }
-                sort: ['dueAt', 'ASC']
+                  - { property: 'dueAt', label: 'easyAdmin.news.letter.dueAt' }
+                  - { property: 'sendAt', label: 'easyAdmin.news.letter.sendAt' }
+                  - { property: 'NoRecipients', label: 'easyAdmin.news.letter.noRecipients' }
             form:
                 fields:
                   - { property: 'dueAt', label: 'easyAdmin.user.firstName' }

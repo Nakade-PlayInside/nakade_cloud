@@ -83,4 +83,9 @@ class AdminController extends EasyAdminController
 
         $this->mailer->send($message);
     }
+
+    public function sendNews()
+    {
+
+    }
 }

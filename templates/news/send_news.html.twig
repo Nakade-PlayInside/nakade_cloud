@@ -1,0 +1,32 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+{% block title %}{{ 'easyAdmin.news.send.title'|trans({}, 'messages') }}!{% endblock %}
+
+{% block content_title %}{{ 'easyAdmin.news.send.title'|trans({}, 'messages') }}{% endblock %}
+
+ {% block main %}
+     <form name="send" method="post">
+     <div style="display:table; width: 100%; text-align: left; padding: 10px;">
+         <p>Verschicke den Newsletter für den <span style="font-weight: bolder">{{ dueDate }}</span> manuell an beliebige Empfänger.</p>
+         <div style="width: 100%; text-align: center;" class="input-group">
+             <fieldset><legend style="font-weight: bolder" class="col-form-label">{{ 'easyAdmin.news.recipients'|trans({}, 'messages') }}</legend>
+                 <select name="readers[]" multiple size="10">
+                     {% for reader in subscribers %}
+                         <option value="{{ reader.id }}">&lt;{{ reader.email }}</option>
+                     {% endfor %}
+                 </select>
+             </fieldset>
+         </div>
+     </div>
+
+
+ {% endblock %}
+ {% block content_footer %}
+     <input type="hidden" name="token" value="{{ csrf_token('send-news') }}">
+     <div class="form-actions">
+         <button type="submit" class="btn btn-primary action-save">
+             <span class="btn-label">{{ 'easyAdmin.news.send'|trans({}, 'messages') }}</span>
+         </button>
+         <a class=" btn btn-link pr-0 action-list" title="" href="/admin/?entity=NewsLetter&amp;action=list&amp;menuIndex=4&amp;submenuIndex=-1&amp;page=1" target="_self">Zurück zur Übersicht</a>
+     </div>
+     </form>
+ {% endblock %}

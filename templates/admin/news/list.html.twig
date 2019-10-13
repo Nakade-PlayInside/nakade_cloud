@@ -1,0 +1,10 @@
+{# templates/admin/new.html.twig #}
+{% extends '@EasyAdmin/default/list.html.twig' %}
+
+{% block new_action %}
+    <div class="button-action">
+        <a class="{{ _action.css_class|default('') }}" href="{{ path('news_send') }}" target="{{ _action.target }}">
+            <i class="fa fa-fw fa-envelope"></i> News schicken
+        </a>
+    </div>
+{% endblock new_action %}

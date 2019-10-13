@@ -1,0 +1,52 @@
+{# templates/admin/new.html.twig #}
+{% extends '@EasyAdmin/default/new.html.twig' %}
+
+ {% block entity_form %}
+     {{ form_start(form) }}
+
+     {{ form_row(form.email, {
+         label: 'easyAdmin.user.email',
+     }) }}
+     {{ form_row(form.password, {
+         label: 'easyAdmin.user.password',
+     }) }}
+     {{  form_row(form.firstName, {
+     label: 'easyAdmin.user.firstName',
+     }) }}
+     {{  form_row(form.lastName, {
+         label: 'easyAdmin.user.lastName',
+     }) }}
+     {{  form_row(form.nickName, {
+         label: 'easyAdmin.user.nick',
+     }) }}
+     <div class="form-group  field-choice">
+         <fieldset style="margin: auto; padding-left:20px;"><legend class="col-form-label">Rolle</legend>
+         <div class="form-widget">
+             <div id="user_roles">
+                 <div class="form-check">
+                     <input type="checkbox" id="user_roles_10" name="user[roles][]" class="form-check-input" value="ROLE_MEMBER" />
+                     <label class="form-check-label" for="user_roles_10">Team</label>
+                     <small class="form-help">Nakade Bundesliga Team</small>
+                 </div>
+                 <div class="form-check">
+                     <input type="checkbox" id="user_roles_20" name="user[roles][]" class="form-check-input" value="ROLE_MEMBER" />
+                     <label class="form-check-label" for="user_roles_20">Member</label>
+                     <small class="form-help">Nakade Vereinsmitglied</small>
+                 </div>
+                 <div class="form-check">
+                     <input type="checkbox" id="user_roles_30" name="user[roles][]" class="form-check-input" value="ROLE_ADMIN" />
+                     <label class="form-check-label" for="user_roles_30">Admin</label>
+                 </div>
+                 {% if is_granted('IS_SUPER_ADMIN') %}
+                 <div class="form-check">
+                     <input type="checkbox" id="user_roles_0" name="user[roles][]" class="form-check-input" value="ROLE_SUPER_ADMIN" />
+                     <label class="form-check-label" for="user_roles_0">SuperAdmin</label>
+                 </div>
+                 {% endif %}
+             </div>
+             <small class="form-help">Achte auf die Mehrfach Auswahl.<br>Ein Vereinsmitglied, der auch im BL Team spielt, benötigt die Rollen Member und Team!</small>
+         </div>
+         </fieldset>
+     </div>
+     {{ form_end(form) }}
+ {% endblock entity_form %}

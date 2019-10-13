@@ -17,6 +17,7 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity;
 
 use App\Tools\TokenGenerator;
@@ -82,7 +83,7 @@ class NewsReader
 
     public function __construct()
     {
-        $this->subscribeToken   = TokenGenerator::generateToken('subscribe');
+        $this->subscribeToken = TokenGenerator::generateToken('subscribe');
         $this->unsubscribeToken = TokenGenerator::generateToken('unsubscribe');
     }
 
@@ -144,7 +145,7 @@ class NewsReader
         return $this->firstName;
     }
 
-    public function setFirstName(string$firstName): self
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -161,5 +162,18 @@ class NewsReader
         $this->lastName = $lastName;
 
         return $this;
+    }
+
+    public function getName(): string
+    {
+        $name = '';
+        if ($this->firstName) {
+            $name .= $this->firstName;
+        }
+        if ($this->lastName) {
+            $name .= ' '.$this->lastName;
+        }
+
+        return trim($name);
     }
 }

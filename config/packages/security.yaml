@@ -27,8 +27,9 @@ security:
             switch_user: true
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN]
-        ROLE_ADMIN: [ROLE_ALLOWED_TO_SWITCH, ROLE_MEMBER]
+        ROLE_ADMIN: [ROLE_ALLOWED_TO_SWITCH, ROLE_MEMBER, ROLE_NAKADE_TEAM]
         ROLE_MEMBER: [ROLE_USER]
+        ROLE_NAKADE_TEAM: [ROLE_USER]
 
             # activate different ways to authenticate
 
