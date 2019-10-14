@@ -47,6 +47,8 @@ easy_admin:
             class: App\Entity\ContactMail
             label: 'easyAdmin.contact'
             help: 'easyAdmin.contact.help'
+            templates:
+              list: 'admin/contact/list.html.twig'
             list:
                 actions: [-new, -edit,]
                 fields: [

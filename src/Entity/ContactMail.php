@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,8 +42,6 @@ class ContactMail
 {
     use TimestampableEntity;
 
-    //todo: editor
-    //todo: parentMailId wie forum oder eml abspeichern
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -156,6 +156,16 @@ class ContactMail
     protected $zipCode;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ContactReply", mappedBy="recipient")
+     */
+    private $contactReplies;
+
+    public function __construct()
+    {
+        $this->contactReplies = new ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId(): ?int
@@ -163,11 +173,6 @@ class ContactMail
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return self
-     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -183,11 +188,6 @@ class ContactMail
         return $this->address;
     }
 
-    /**
-     * @param string $address
-     *
-     * @return self
-     */
     public function setAddress(string $address = ''): self
     {
         $this->address = $address;
@@ -203,11 +203,6 @@ class ContactMail
         return $this->city;
     }
 
-    /**
-     * @param string $city
-     *
-     * @return self
-     */
     public function setCity(string $city): self
     {
         $this->city = $city;
@@ -216,38 +211,25 @@ class ContactMail
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return self
-     */
-    public function setEmail(string $email): self
+   public function setEmail(string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    /**
-     * @param string $firstName
-     *
-     * @return self
-     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
@@ -255,19 +237,11 @@ class ContactMail
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    /**
-     * @param string $lastName
-     *
-     * @return self
-     */
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
@@ -322,5 +296,36 @@ class ContactMail
     public function __toString(): ?string
     {
         return (string) $this->getName();
+    }
+
+    /**
+     * @return Collection|ContactReply[]
+     */
+    public function getContactReplies(): Collection
+    {
+        return $this->contactReplies;
+    }
+
+    public function addContactReply(ContactReply $contactReply): self
+    {
+        if (!$this->contactReplies->contains($contactReply)) {
+            $this->contactReplies[] = $contactReply;
+            $contactReply->setRecipient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactResponse(ContactReply $contactReply): self
+    {
+        if ($this->contactReplies->contains($contactReply)) {
+            $this->contactReplies->removeElement($contactReply);
+            // set the owning side to null (unless already changed)
+            if ($contactReply->getRecipient() === $this) {
+                $contactReply->setRecipient(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -22,7 +22,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\ContactMail;
 use App\Entity\Quotes;
+use App\Form\ContactReplyType;
 use App\Form\ContactType;
 use App\Message\ConfirmContact;
 use App\Tools\NextClubMeeting;
@@ -121,5 +123,31 @@ class DefaultController extends AbstractController
     public function privacy()
     {
         return $this->render('default/privacy.html.twig');
+    }
+
+    /**
+     * @Route("/contact/reply", name="app_contact_reply")
+     */
+    public function replyContact(Request $request)
+    {
+        $contactId = $request->get('id');
+        $contact = $this->getDoctrine()->getRepository(ContactMail::class)->find($contactId);
+
+        $form = $this->createForm(ContactReplyType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $contactReply = $form->getData();
+            $contactReply->setEditor($this->getUser())
+                    ->setRecipient($contact);
+
+            $this->getDoctrine()->getManager()->persist($contactReply);
+            $this->getDoctrine()->getManager()->flush();
+        }
+
+        return $this->render('admin/contact/reply.html.twig', [
+              'form' => $form->createView(),
+              'contact' => $contact,
+        ]);
     }
 }

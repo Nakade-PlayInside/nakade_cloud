@@ -20,36 +20,42 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Controller;
+namespace App\Form;
 
-use App\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Entity\ContactMail;
+use App\Entity\ContactReply;
+use App\Validator\ReCaptcha;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- * @author Dr. H.Maerz <holger@nakade.de>
+ * Class ContactType!
  *
- * @IsGranted("ROLE_ADMIN")
+ *
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
+ * @author Dr. H.Maerz <holger@nakade.de>
  */
-class AdminController extends EasyAdminController
+class ContactReplyType extends AbstractType
 {
-    private $mailer;
-
-    public function __construct(\Swift_Mailer $mailer)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->mailer = $mailer;
+        $builder
+                ->add('message', TextareaType::class, [])
+        ;
     }
 
-    protected function updateUserEntity(User $user)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        if ($this->request->request->has('roles')) {
-            $roles = $this->request->request->get('roles');
-            $user->setRoles($roles);
-        }
-        $this->getDoctrine()->getManager()->flush();
+        $resolver->setDefaults([
+                'data_class' => ContactReply::class,
+        ]);
     }
-
-
 }

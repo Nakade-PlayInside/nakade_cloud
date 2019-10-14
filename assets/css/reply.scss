@@ -1,0 +1,35 @@
+//easyAdmin contactReply
+.contact {
+    .info {
+        padding: 5px;
+        span {
+            background-color: lightcyan;
+        }
+        b {
+            margin-right: 10px;
+        }
+    }
+    .request {
+        padding: 5px;
+
+        .message {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            background-color: lightcyan;
+        }
+    }
+    .reply {
+        .form-group {
+            padding: 5px;
+
+            label {
+                text-align: left;
+
+            }
+        }
+    }
+}
+
+
+

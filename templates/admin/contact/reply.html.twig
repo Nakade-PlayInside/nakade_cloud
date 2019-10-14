@@ -1,0 +1,49 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+{% block head_stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('reply') }}
+{% endblock %}
+{% block content_title %}Kontaktanfrage beantworten{% endblock %}
+
+{% block main %}
+
+         {{ form_start(form) }}
+
+        <div class="contact" >
+            <div class="info">
+                <div>von <span>{{ contact.name }}</span> am <b>{{ contact.createdAt.format('d.m.y') }}</b>
+                    {% if contact.phone %}Telefon: <span>{{ contact.phone }}</span> {% endif %}</div>
+            </div>
+            <div class="request">
+                <div>Anfrage</div>
+                <div class="message">{{ contact.message }}
+                </div>
+            </div>
+            <div class="reply">
+                {{ form_row(form.message, {
+                    label: 'easyAdmin.contact.reply.message',
+                    attr: {'rows': '6'}
+                }) }}
+            </div>
+
+        </div>
+
+
+        <div class="content-footer">
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary action-save">
+                    <i class="fa fa-fw fa-envelope-o"></i><span class="btn-label">Abschicken</span>
+                </button>
+                <a class=" btn text-danger action-delete" title="" href="#" target="_self"><i class="fa fa-fw fa-trash-o"></i> Ablehnen</a>
+                <a class=" btn btn-link pr-0 action-list" title="" href="/admin/?entity=ContactMail&amp;action=list&amp;menuIndex=1&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1" target="_self">Zurück zur Übersicht</a>
+            </div>
+        </div>
+    {{ form_end(form) }}
+
+
+
+{% endblock %}
+
+
+{% block content_footer_wrapper %}
+{% endblock %}

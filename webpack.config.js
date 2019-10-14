@@ -45,6 +45,7 @@ Encore
     .addEntry('news', './assets/js/news.js')
     .addEntry('profile', './assets/js/profile.js')
     .addEntry('register', './assets/js/register.js')
+    .addEntry('reply', './assets/js/reply.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
