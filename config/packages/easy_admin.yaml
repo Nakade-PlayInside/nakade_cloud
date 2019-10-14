@@ -14,10 +14,10 @@ easy_admin:
         brand_color: '#1ABC9C'
         menu:
           - { entity: User, default: true, label: 'easyAdmin.user', icon: 'users'}
-          - 'ContactMail'
-          - 'Quotes'
-          - 'NewsReader'
-          - 'NewsLetter'
+          - { entity: ContactMail, label: 'easyAdmin.contact', icon: 'inbox'}
+          - { entity: Quotes, label: 'easyAdmin.quotes', icon: 'pencil-square-o'}
+          - { entity: NewsReader, label: 'easyAdmin.news.reader', icon: 'address-card-o'}
+          - { entity: NewsLetter, label: 'easyAdmin.news.letter', icon: 'envelope-o'}
           - { label: 'easyAdmin.placeholder'}
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
@@ -44,7 +44,7 @@ easy_admin:
                   - { property: 'quote', type: 'text_editor', label: 'easyAdmin.quote.quote' }
                   - { property: 'details', label: 'easyAdmin.quote.origin' }
         ContactMail:
-            class: App\Entity\Common\ContactMail
+            class: App\Entity\ContactMail
             label: 'easyAdmin.contact'
             help: 'easyAdmin.contact.help'
             list:
@@ -59,13 +59,14 @@ easy_admin:
                     { property: 'address', label: 'easyAdmin.contact.address' },
                     { property: 'createdAt', label: 'easyAdmin.createdAt' },
                     ]
-                sort: ['firstName', 'ASC']
+                sort: ['createdAt', 'DESC']
             search:
                 fields: ['email', 'firstName', 'lastName', 'message']
             show:
+                actions: [-edit]
                 fields:
                   - { property: 'email', label: 'easyAdmin.user.email' }
-                  - { property: 'name', label: 'easyAdmin.user.name' }
+                  - { property: 'name', type: 'text', label: 'easyAdmin.user.name' }
                   - { property: 'phone', label: 'easyAdmin.contact.phone'}
                   - { property: 'zipCode', label: 'easyAdmin.contact.zip' }
                   - { property: 'city', label: 'easyAdmin.contact.city' }
@@ -83,6 +84,11 @@ easy_admin:
             edit:
               actions: [-delete]
             list:
+                filters:
+                  - { property: 'roles', type: 'App\Form\Filter\RoleFilterType' }
+                  - { property: 'confirmed' }
+                  - { property: 'disabled' }
+                  - { property: 'locked' }
                 actions: ['-delete', '-new', '-show']
                 fields: [
                     { property: 'id', label: 'easyAdmin.user.id' },
@@ -102,7 +108,6 @@ easy_admin:
                 fields:
                     - { property: 'fullName', type: 'text', type_options: { disabled: true } }
                     - { property: 'email', type_options: { disabled: true } }
-
         NewsReader:
             class: App\Entity\NewsReader
             label: 'easyAdmin.news.reader'
@@ -111,6 +116,7 @@ easy_admin:
               fields: ['email', 'firstName', 'lastName']
             list:
                 actions: [-show]
+                filters: [ 'confirmed' ]
                 fields:
                   - { property: 'id', label: 'easyAdmin.user.id' }
                   - { property: 'email', type: 'email', label: 'easyAdmin.user.email' }

@@ -31,40 +31,22 @@ use Twig\Environment;
  * Class ConfirmContactHandler!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var Swift_Mailer
-     */
     private $mailer;
-
-    /**
-     * @var Environment
-     */
     private $twig;
 
-    /**
-     * ConfirmContactHandler constructor.
-     *
-     * @param Swift_Mailer $mailer
-     * @param Environment  $twig
-     */
     public function __construct(Swift_Mailer $mailer, Environment $twig)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
     }
 
-    /**
-     * @param ConfirmContact $confirmContact
-     */
     public function __invoke(ConfirmContact $confirmContact)
     {
         $contactMail = $confirmContact->getContactMail();
@@ -76,7 +58,7 @@ class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInter
                         $this->twig->render(
                             // templates/emails/registration.html.twig
                                     'emails/contact.html.twig',
-                            ['name' => $contactMail->getName()]
+                            ['email' => $contactMail->getEmail()]
                         ),
                         'text/html'
                     )
@@ -86,7 +68,7 @@ class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInter
                         $this->twig->render(
                             // templates/emails/registration.txt.twig
                                     'emails/contact.txt.twig',
-                            ['name' => $contactMail->getName()]
+                            ['email' => $contactMail->getEmail()]
                         ),
                         'text/plain'
                     );

@@ -20,7 +20,7 @@
 
 namespace App\Message;
 
-use App\Entity\Common\ContactMail;
+use App\Entity\ContactMail;
 
 /**
  * Class ConfirmContact!
@@ -33,24 +33,13 @@ use App\Entity\Common\ContactMail;
  */
 class ConfirmContact
 {
-    /**
-     * @var ContactMail
-     */
     private $contactMail;
 
-    /**
-     * ConfirmContact constructor.
-     *
-     * @param ContactMail $contactMail
-     */
     public function __construct(ContactMail $contactMail)
     {
         $this->contactMail = $contactMail;
     }
 
-    /**
-     * @return ContactMail
-     */
     public function getContactMail(): ContactMail
     {
         return $this->contactMail;

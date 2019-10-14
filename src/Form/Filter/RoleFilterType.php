@@ -20,38 +20,37 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form;
+namespace App\Form\Filter;
 
-use App\Entity\ContactMail;
-use Symfony\Component\Form\AbstractType;
+use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\FilterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class ContactType!
- *
- *
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
- * @author Dr. H.Maerz <holger@nakade.de>
- */
-class NewsType extends AbstractType
+class RoleFilterType extends FilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-                ->add('firstName', ChoiceType::class, [])
-
-        ;
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'data_class' => ContactMail::class,
+            'choices' => [
+                'TEAM' => 'ROLE_NAKADE_TEAM',
+                'MEMBER' => 'ROLE_MEMBER',
+                'ADMIN' => 'ROLE_ADMIN',
+                'SUPER ADMIN' => 'ROLE_SUPER_ADMIN',
+            ],
         ]);
+    }
+
+    public function getParent()
+    {
+        return ChoiceType::class;
+    }
+
+    public function filter(QueryBuilder $queryBuilder, FormInterface $form, array $metadata)
+    {
+            $queryBuilder->andWhere('entity.roles LIKE :role')
+                ->setParameter('role', '%'.$form->getData().'%');
+
     }
 }

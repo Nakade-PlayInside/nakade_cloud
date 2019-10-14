@@ -19,7 +19,7 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Entity\Common;
+namespace App\Entity;
 
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,7 +34,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Dr. H.Maerz <holger@nakade.de>
  *
  *
- * @ORM\Entity(repositoryClass="App\Repository\Common\ContactMailRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ContactMailRepository")
  */
 class ContactMail
 {
