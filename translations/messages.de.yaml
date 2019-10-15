@@ -50,6 +50,8 @@
   "exit": "Exit"
   "id": "ID"
   "message": "Nachricht"
+  "flash.message.success": "Nachricht verschickt!"
+  "flash.contact.removed": "Kontaktanfrage gelöscht!"
   "news":
     "send": "Abschicken"
     "send.title": "Newsletter verschicken"

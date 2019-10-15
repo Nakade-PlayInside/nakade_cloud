@@ -1,0 +1,16 @@
+{# templates/emails/contact.txt.twig #}
+{% extends "mailTemplate.txt.twig" %}
+
+{% block mail_body %}
+Deine Anfrage vom {{ reply.recipient.createdAt | date('d.m.Y') }}
+
+{{ reply.message }}
+
+Mit 361 Grüßen
+{{ app.user.firstName }}
+Team Nakade
+
+
+Deine Anfrage:
+{{ reply.recipient.message }}
+{% endblock %}

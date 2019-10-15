@@ -25,16 +25,20 @@
                     attr: {'rows': '6'}
                 }) }}
             </div>
-
+            <div class="salutation">
+                <small>autom. generierte Grußformel:</small>
+                <p>Mit 361 Grüßen</p>
+                {{ app.user.firstName }}<br>
+                Team Nakade
+            </div>
         </div>
-
 
         <div class="content-footer">
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary action-save">
                     <i class="fa fa-fw fa-envelope-o"></i><span class="btn-label">Abschicken</span>
                 </button>
-                <a class=" btn text-danger action-delete" title="" href="#" target="_self"><i class="fa fa-fw fa-trash-o"></i> Ablehnen</a>
+                <a class=" btn text-danger action-delete" title="" href="{{ path('app_contact_remove', { 'id': contact.id }) }}" target="_self"><i class="fa fa-fw fa-trash-o"></i> Löschen</a>
                 <a class=" btn btn-link pr-0 action-list" title="" href="/admin/?entity=ContactMail&amp;action=list&amp;menuIndex=1&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1" target="_self">Zurück zur Übersicht</a>
             </div>
         </div>

@@ -21,6 +21,7 @@
 namespace App\MessageHandler;
 
 use App\Message\ConfirmContact;
+use App\Message\ReplyContact;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
@@ -28,13 +29,13 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
 
 /**
- * Class ConfirmContactHandler!
+ * Class ReplyContactHandler!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInterface
+class ReplyContactHandler implements MessageHandlerInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -47,18 +48,19 @@ class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInter
         $this->twig = $twig;
     }
 
-    public function __invoke(ConfirmContact $confirmContact)
+    public function __invoke(ReplyContact $replyContact)
     {
-        $contactMail = $confirmContact->getContactMail();
+        $contactReply = $replyContact->getContactReply();
+        $email = $contactReply->getRecipient()->getEmail();
 
-        $message = (new \Swift_Message('Ihre Kontaktanfrage bei [nakade.de]'))
-                    ->setFrom('noreply@nakade.de')
-                    ->setTo($contactMail->getEmail())
+        $message = (new \Swift_Message('Antwort auf Ihre Kontaktanfrage bei [nakade.de]'))
+                    ->setFrom('service@nakade.de')
+                    ->setTo($email)
                     ->setBody(
                         $this->twig->render(
                             // templates/emails/registration.html.twig
-                                    'emails/contact.html.twig',
-                            ['email' => $contactMail->getEmail()]
+                                    'emails/contactReply.html.twig',
+                            ['email' => $email, 'reply' => $contactReply]
                         ),
                         'text/html'
                     )
@@ -67,8 +69,8 @@ class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInter
                     ->addPart(
                         $this->twig->render(
                             // templates/emails/registration.txt.twig
-                                    'emails/contact.txt.twig',
-                            ['email' => $contactMail->getEmail()]
+                                    'emails/contactReply.txt.twig',
+                            ['email' => $email, 'reply' => $contactReply]
                         ),
                         'text/plain'
                     );

@@ -1,0 +1,24 @@
+{# templates/emails/contact.html.twig #}
+{% extends 'mailTemplate.html.twig' %}
+
+{% block mail_body %}
+    <div>
+        <h2 style="white-space: nowrap; display: flex; align-items: center">Deine Anfrage vom {{ reply.recipient.createdAt | date('d.m.Y') }}</h2>
+
+        <div style="text-align: justify; color: rgb(85, 85, 85);margin-bottom: 20px;">{{ reply.message }}
+        <p>Mit 361 Grüßen</p>
+         {{ app.user.firstName }}<br>
+         Team Nakade
+        </div>
+
+        <fieldset style="text-align: left; padding: 5px;  border-radius: 5px;  border: 1px solid #ced4da; color: rgb(136, 137, 140);  background-color: lightcyan;">
+            <legend style="text-align: left">Anfrage</legend>
+            {{ reply.recipient.message }}
+        </fieldset>
+    </div>
+{% endblock %}
+
+{% block mail_footer %}
+        Ihre Kontaktdaten werden zum Zweck der Bearbeitung Ihrer Anfrage und für den Fall von Anschlussfragen bei uns gespeichert.
+        Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
+{% endblock %}
