@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -20,33 +18,26 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form;
+namespace App\Message;
 
-use App\Form\Model\UserResetFormModel;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Entity\User;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class UserPwdResetType extends AbstractType
+class ResetPassword
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    private $user;
+
+    public function __construct(User $user)
     {
-        $builder
-                ->add('email', EmailType::class)
-                ->add('captcha', ReCaptchaType::class)
-        ;
+        $this->user = $user;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function getUser(): User
     {
-        $resolver->setDefaults([
-                'data_class' => UserResetFormModel::class,
-        ]);
+        return $this->user;
     }
 }

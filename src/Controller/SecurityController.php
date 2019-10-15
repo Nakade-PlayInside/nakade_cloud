@@ -22,8 +22,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\Model\UserPasswordFormModel;
 use App\Form\Model\UserResetFormModel;
-use App\Form\UserPwdResetType;
+use App\Form\UserResetType;
+use App\Message\ResetPassword;
 use App\Tools\TokenGenerator;
 use App\Entity\NewsReader;
 use App\Entity\User;
@@ -37,6 +39,7 @@ use App\Security\LoginFormAuthenticator;
 use App\Security\LoginUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -400,34 +403,80 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/profile/reset", name="app_profile_reset")
+     * @Route("/profile/forgotten", name="app_profile_forgotten")
      */
-    public function resetPwd(Request $request)
+    public function forgotten(Request $request, MessageBusInterface $messageBus)
     {
-        $form = $this->createForm(UserPwdResetType::class);
+        $form = $this->createForm(UserResetType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UserResetFormModel $model */
             $model = $form->getData();
+            if (!assert($model instanceof UserResetFormModel)) {
+                throw new UnexpectedTypeException($model, UserResetFormModel::class);
+            }
             $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $model->email]);
             $user->setResetToken(TokenGenerator::generateToken())
-                    ->setResetDate(new \DateTime());
-            //todo: new properties
-            //todo: token mail
-            //todo: action for pwd reset
-            //todo: proff time and token
+                    ->setResetAt(new \DateTime());
 
-//            $entityManager = $this->getDoctrine()->getManager();
-//            $entityManager->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
 
-            $this->addFlash('success', 'Deine Passwort wurde aktualisiert!');
+            //mail handling
+            $message = new ResetPassword($user);
+            $messageBus->dispatch($message);
 
-            return $this->redirectToRoute('app_profile');
+            $this->addFlash('success', 'Eine Email wurde an dich gesandt!');
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('security/forgotten_pwd.html.twig', [
+            'emailForm' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/profile/reset/{token}", name="app_profile_reset")
+     */
+    public function reset(string $token, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['resetToken' => $token]);
+        if (!$user) {
+            throw new NotFoundHttpException('Data not found!');
+        }
+
+        if (!$user->getResetAt() || new \DateTime() > $user->getResetAt()->format('+3 day')) {
+            throw new NotFoundHttpException('Token expired!');
+        }
+
+        $form = $this->createForm(UserPasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $model = $form->getData();
+            if (!assert($model instanceof UserPasswordFormModel)) {
+                throw new UnexpectedTypeException($model, UserPasswordFormModel::class);
+            }
+
+            //user update
+            $user->setPassword($passwordEncoder->encodePassword(
+                $user,
+                $model->plainPassword
+            ))
+                ->setResetToken(null)
+                ->setResetAt(null);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Dein Passwort wurde aktualisiert!');
+
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('security/reset_pwd.html.twig', [
-            'emailForm' => $form->createView(),
+                'passwordForm' => $form->createView(),
         ]);
     }
 }

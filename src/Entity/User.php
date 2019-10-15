@@ -149,6 +149,16 @@ class User implements UserInterface
     private $removed = false;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $resetToken;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $resetAt;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -373,5 +383,29 @@ class User implements UserInterface
     public function __toString(): ?string
     {
         return $this->getFirstName();
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    public function getResetAt(): ?\DateTimeInterface
+    {
+        return $this->resetAt;
+    }
+
+    public function setResetAt(?\DateTimeInterface $resetAt): self
+    {
+        $this->resetAt = $resetAt;
+
+        return $this;
     }
 }

@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% form_theme emailForm _self %}
+{% form_theme passwordForm _self %}
 
 {% block form_row %}
     {%- set widget_attr = {} -%}
@@ -15,7 +15,7 @@
     {{- form_help(form) -}}
 {% endblock %}
 
-{% block title %}{{ 'profile.reset.title'|trans({}, 'messages') }}{% endblock %}
+{% block title %}{{ 'profile.password.title'|trans({}, 'messages') }}!{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -24,31 +24,26 @@
 
 {% block body %}
             <div class="col-sm-12">
-                <h2>{{ 'profile.reset.title'|trans({}, 'messages') }}</h2>
-
-                <div style="padding:5px; text-align: left"><small style="overflow-wrap: break-word;">Kein Problem! Gib deine Email Adresse ein, mit der du dich bei nakade.de einloggst.<br>
-                Du erhältst umgehend eine Email mit einem Link, über den du dein neues Passwort setzen kannst.
-                </small>
+                <h2>{{ 'profile.password.title'|trans({}, 'messages') }}</h2>
+                {{ form_start(passwordForm) }}
+                <p style="text-align: left">Setze dein neues Passwort und logge dich danach ein. Der hierfür verwendete Token kann nur einmal benutzt werden.</p>
+                <div class="input-group">
+                    {{ form_row(passwordForm.plainPassword, {
+                        label: 'register.password',
+                        attr: { placeholder: 'register.password.required', class: 'toggle-password', autocomplete: "off" },
+                    }) }}
+                    <div class="input-group-append">
+                        <div class="toggle-eye input-group-text fa fa-eye"></div>
+                    </div>
                 </div>
+                <small id="register__password_help" class="newsletter-help form-text text-muted">{{ 'register.password.help'|trans({}, 'messages') }}</small>
 
-                {{ form_start(emailForm) }}
-
-                {{ form_row(emailForm.email, {
-                    label: 'register.email',
-                    attr: { placeholder: 'register.email.required', autocomplete: "on" },
-                }) }}
-
-                {{ form_row(emailForm.captcha,  {
-                    label: 'register.reCaptcha'
-                }) }}
-
-                <button style="margin-top: 20px; white-space: nowrap" type="submit" class="btn btn-primary"><i class="fa fa-fw fa-envelope-o"></i> {{ 'contact.send'|trans({}, 'messages') }}</button>
-                {{ form_end(emailForm) }}
+                <button style="width: 120px; margin-top: 20px" type="submit" class="btn btn-primary">{{ 'profile.update'|trans({}, 'messages') }}</button>
+                {{ form_end(passwordForm) }}
 {% endblock %}
 
 
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('register') }}
-    <script src="https://www.google.com/recaptcha/api.js?hl=de" async defer></script>
 {% endblock %}
