@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\Model\UserEmailFormModel;
+use App\Form\Model\UserResetFormModel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -33,19 +33,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class UserEmailType extends AbstractType
+class UserPwdResetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
                 ->add('email', EmailType::class)
+                ->add('captcha', ReCaptchaType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'data_class' => UserEmailFormModel::class,
+                'data_class' => UserResetFormModel::class,
         ]);
     }
 }

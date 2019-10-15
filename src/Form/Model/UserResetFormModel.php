@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -20,32 +18,31 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form;
+namespace App\Form\Model;
 
-use App\Form\Model\UserEmailFormModel;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Validator\EmailExist;
+use App\Validator\ReCaptcha;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class UserEmailType extends AbstractType
+class UserResetFormModel
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-                ->add('email', EmailType::class)
-        ;
-    }
+    /**
+     * @Assert\NotBlank
+     * @Assert\Email(
+     *     message="Die Email {{ value }} ist ungültig.",
+     *     checkMX=true
+     * )
+     * @EmailExist()
+     */
+    public $email;
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-                'data_class' => UserEmailFormModel::class,
-        ]);
-    }
+    /**
+     * @ReCaptcha()
+     */
+    public $captcha;
 }

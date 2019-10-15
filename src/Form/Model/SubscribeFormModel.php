@@ -22,7 +22,6 @@ namespace App\Form\Model;
 
 use App\Validator\ReCaptcha;
 use App\Validator\UniqueReader;
-use App\Validator\UniqueUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

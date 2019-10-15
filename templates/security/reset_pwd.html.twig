@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+{% form_theme emailForm _self %}
+
+{% block form_row %}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+
+    {{- form_label(form, null, {
+        label_attr: { class: 'sr-only' }
+    }) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+{% endblock %}
+
+{% block title %}{{ 'profile.reset.title'|trans({}, 'messages') }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('register') }}
+{% endblock %}
+
+{% block body %}
+            <div class="col-sm-12">
+                <h2>{{ 'profile.reset.title'|trans({}, 'messages') }}</h2>
+
+                <div style="padding:5px; text-align: left"><small style="overflow-wrap: break-word;">Kein Problem! Gib deine Email Adresse ein, mit der du dich bei nakade.de einloggst.<br>
+                Du erhältst umgehend eine Email mit einem Link, über den du dein neues Passwort setzen kannst.
+                </small>
+                </div>
+
+                {{ form_start(emailForm) }}
+
+                {{ form_row(emailForm.email, {
+                    label: 'register.email',
+                    attr: { placeholder: 'register.email.required', autocomplete: "on" },
+                }) }}
+
+                {{ form_row(emailForm.captcha,  {
+                    label: 'register.reCaptcha'
+                }) }}
+
+                <button style="margin-top: 20px; white-space: nowrap" type="submit" class="btn btn-primary"><i class="fa fa-fw fa-envelope-o"></i> {{ 'contact.send'|trans({}, 'messages') }}</button>
+                {{ form_end(emailForm) }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('register') }}
+    <script src="https://www.google.com/recaptcha/api.js?hl=de" async defer></script>
+{% endblock %}

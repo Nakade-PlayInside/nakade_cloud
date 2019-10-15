@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\Model\UserResetFormModel;
+use App\Form\UserPwdResetType;
 use App\Tools\TokenGenerator;
 use App\Entity\NewsReader;
 use App\Entity\User;
@@ -182,7 +184,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * Edit Profile
+     * Edit Profile.
      *
      * @Route("/profile/edit", name="app_profile_edit")
      *
@@ -297,7 +299,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * Resend confirm mail
+     * Resend confirm mail.
      *
      * @Route("/profile/resent/confirm", name="app_profile_resent_confirm")
      *
@@ -397,4 +399,35 @@ class SecurityController extends AbstractController
         return $this->render('security/remove_profile.html.twig');
     }
 
+    /**
+     * @Route("/profile/reset", name="app_profile_reset")
+     */
+    public function resetPwd(Request $request)
+    {
+        $form = $this->createForm(UserPwdResetType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UserResetFormModel $model */
+            $model = $form->getData();
+            $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $model->email]);
+            $user->setResetToken(TokenGenerator::generateToken())
+                    ->setResetDate(new \DateTime());
+            //todo: new properties
+            //todo: token mail
+            //todo: action for pwd reset
+            //todo: proff time and token
+
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->flush();
+
+            $this->addFlash('success', 'Deine Passwort wurde aktualisiert!');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->render('security/reset_pwd.html.twig', [
+            'emailForm' => $form->createView(),
+        ]);
+    }
 }
