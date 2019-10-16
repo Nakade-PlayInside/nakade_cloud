@@ -2,7 +2,7 @@
 {% extends 'mailTemplate.html.twig' %}
 
 {% block mail_body %}
-    <h1 style="white-space: nowrap; display: flex; align-items: center">Bitte bestätige dein Konto.</h1>
+    <h1 style="display: flex; align-items: center">Bitte bestätige dein Konto.</h1>
 
     <p style="text-align: justify; color: rgb(85, 85, 85);">Du hast es fast geschafft. Bestätige nur noch unten dein Nakade Konto, um deine Registrierung abzuschliessen.</p>
     <a style="text-align:center; margin: auto; display: table;text-decoration: none" href="{{ absolute_url(path('app_confirm', { token: token }, true)) }}">

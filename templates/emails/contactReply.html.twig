@@ -3,7 +3,7 @@
 
 {% block mail_body %}
     <div>
-        <h2 style="white-space: nowrap; display: flex; align-items: center">Deine Anfrage vom {{ reply.recipient.createdAt | date('d.m.Y') }}</h2>
+        <h2 style="display: flex; align-items: center">Deine Anfrage vom {{ reply.recipient.createdAt | date('d.m.Y') }}</h2>
 
         <div style="text-align: justify; color: rgb(85, 85, 85);margin-bottom: 20px;">{{ reply.message }}
         <p>Mit 361 Grüßen</p>
