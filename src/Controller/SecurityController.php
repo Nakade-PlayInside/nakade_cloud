@@ -446,7 +446,7 @@ class SecurityController extends AbstractController
             throw new NotFoundHttpException('Data not found!');
         }
 
-        if (!$user->getResetAt() || new \DateTime() > $user->getResetAt()->format('+3 day')) {
+        if (!$user->getResetAt() || $user->getResetAt()->format('+3 day') >  new \DateTime()) {
             throw new NotFoundHttpException('Token expired!');
         }
 

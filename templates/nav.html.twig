@@ -20,9 +20,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('news_subscribe') }}">{{ 'navigation.news'|trans({}, 'messages') }}</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_register') }}">{{ 'navigation.register'|trans({}, 'messages') }}</a>
-            </li>
         </ul>
 {#        <form class="form-inline my-2 my-lg-0">#}
 {#            <input class="form-control mr-sm-2" type="text" placeholder="Suchen" aria-label="Search">#}
@@ -49,6 +46,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{{ path('app_login') }}">{{ 'navigation.login'|trans({}, 'messages') }}</a>
+                        <a class="dropdown-item" href="{{ path('app_register') }}">{{ 'navigation.register'|trans({}, 'messages') }}</a>
                     </div>
                 </li>
             {% endif %}

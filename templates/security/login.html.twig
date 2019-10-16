@@ -17,14 +17,16 @@
         <label class="sr-only required" for="login_email">{{ 'login.email'|trans({}, 'messages') }}</label>
         <input aria-label="{{ 'login.email'|trans({}, 'messages') }}" class="form-control" type="email" id="login_email" name="email" placeholder="{{ 'login.email'|trans({}, 'messages') }}" value="{{ last_username }}" required autofocus autocomplete="on">
 
-        <div class="input-group mb-3">
+        <div style="margin-bottom: 0 !important;" class="input-group mb-3">
             <label class="sr-only required" for="login_password">{{ 'login.password'|trans({}, 'messages') }}</label>
             <input class="toggle-password form-control" type="password" id="login_password" name="password" placeholder="{{ 'login.password'|trans({}, 'messages') }}" required autocomplete="off">
             <div class="input-group-append">
                 <div style="" class="toggle-eye input-group-text fa fa-eye"></div>
             </div>
         </div>
-
+        <div class="input-group mb-3">
+            <a style="color: #8b8b8b; font-size: smaller" title="Passwort neu setzen" data-toggle="tooltip" data-placement="right" href="{{ path('app_profile_forgotten') }}">Passwort vergessen?</a>
+        </div>
         <div class="input-group mb-3">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="login__remember_me" name="_remember_me" value="1">
