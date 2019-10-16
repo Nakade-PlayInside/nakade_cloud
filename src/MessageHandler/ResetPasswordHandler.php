@@ -42,11 +42,13 @@ class ResetPasswordHandler implements MessageHandlerInterface, LoggerAwareInterf
 
     private $mailer;
     private $twig;
+    private $emailNoReply;
 
-    public function __construct(Swift_Mailer $mailer, Environment $twig)
+    public function __construct(Swift_Mailer $mailer, Environment $twig, string $emailNoReply)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->emailNoReply = $emailNoReply;
     }
 
     public function __invoke(ResetPassword $resetPassword)
@@ -55,7 +57,7 @@ class ResetPasswordHandler implements MessageHandlerInterface, LoggerAwareInterf
         $email = $user->getEmail();
 
         $message = (new \Swift_Message('Zurücksetzen deines Passworts bei [nakade.de]'))
-                    ->setFrom('noreply@nakade.de')
+                    ->setFrom($this->emailNoReply)
                     ->setTo($email)
                     ->setBody(
                         $this->twig->render(

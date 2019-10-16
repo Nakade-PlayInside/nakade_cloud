@@ -7,6 +7,11 @@ parameters:
     locale: 'de'
     router.request_context.host: 'nakade.de'
     asset.request_context.base_path: '%router.request_context.base_url%'
+    #app params
+    app.news.send_date: 4
+    app.reset_token.valid_days: 3
+    app.email.no_reply: 'noreply@nakade.de'
+    app.email.service: 'service@nakade.de'
 
 services:
     # default configuration for services in *this* file
@@ -16,6 +21,9 @@ services:
         bind:
             $siteKey: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
             $secretKey: '%env(GOOGLE_RECAPTCHA_SECRET)%'
+            $newsSendDate: '%app.news.send_date%'
+            $emailNoReply: '%app.email.no_reply%'
+            $emailService: '%app.email.service%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

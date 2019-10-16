@@ -40,26 +40,15 @@ class ConfirmRegistrationHandler implements MessageHandlerInterface, LoggerAware
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var Swift_Mailer
-     */
     private $mailer;
-
-    /**
-     * @var Environment
-     */
     private $twig;
+    private $emailNoReply;
 
-    /**
-     * ConfirmRegistrationHandler constructor.
-     *
-     * @param Swift_Mailer $mailer
-     * @param Environment  $twig
-     */
-    public function __construct(Swift_Mailer $mailer, Environment $twig)
+    public function __construct(Swift_Mailer $mailer, Environment $twig, string $emailNoReply)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->emailNoReply = $emailNoReply;
     }
 
     public function __invoke(ConfirmRegistration $confirmRegistration)
@@ -67,7 +56,7 @@ class ConfirmRegistrationHandler implements MessageHandlerInterface, LoggerAware
         $user = $confirmRegistration->getUser();
 
         $message = (new \Swift_Message('Bestätige deine email Adresse'))
-                    ->setFrom('noreply@nakade.de')
+                    ->setFrom($this->emailNoReply)
                     ->setTo($user->getEmail())
                     ->setBody(
                         $this->twig->render('emails/confirmRegistration.html.twig', [

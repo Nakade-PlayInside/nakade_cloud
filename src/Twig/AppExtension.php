@@ -18,24 +18,13 @@ use Twig\Environment;
  */
 class AppExtension extends AbstractExtension
 {
-    /**
-     * @var Environment
-     */
     private $twig;
 
-    /**
-     * AppExtension constructor.
-     *
-     * @param Environment $twig
-     */
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
     }
 
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return [
@@ -52,7 +41,6 @@ class AppExtension extends AbstractExtension
      *
      * @param string $value expect date string in format Y-m-d eg. 2019-03-18
      *
-     * @return string
      */
     public function processLocale(string $value): string
     {
@@ -70,7 +58,6 @@ class AppExtension extends AbstractExtension
      *
      * @param string $value expect date string in format Y-m-d eg. 2019-03-18
      *
-     * @return string
      */
     public function processAlert(string $value): string
     {

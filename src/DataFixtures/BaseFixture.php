@@ -46,9 +46,6 @@ abstract class BaseFixture extends Fixture
      */
     private $manager;
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
@@ -57,8 +54,6 @@ abstract class BaseFixture extends Fixture
     }
 
     /**
-     * @param ObjectManager $manager
-     *
      * @return mixed
      */
     abstract protected function loadData(ObjectManager $manager);
@@ -73,11 +68,9 @@ abstract class BaseFixture extends Fixture
      *           return $user;
      *      });
      *
-     * @param int      $count
      * @param string   $groupName tag these created objects with this group name,
      *                            and use this later with getRandomReference(s)
      *                            to fetch only from this specific group
-     * @param callable $factory
      */
     protected function createMany(int $count, string $groupName, callable $factory)
     {

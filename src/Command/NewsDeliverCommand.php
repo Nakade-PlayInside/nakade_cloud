@@ -35,12 +35,15 @@ class NewsDeliverCommand extends Command
     private $newsDeliverer;
     private $entityManager;
     private $nextClubMeeting;
+    private $newsSendDate;
 
-    public function __construct(EntityManagerInterface $entityManager, NewsDeliverer $newsDeliverer, NextClubMeeting $nextClubMeeting)
+    public function __construct(EntityManagerInterface $entityManager, NewsDeliverer $newsDeliverer, NextClubMeeting $nextClubMeeting, int $newsSendDate)
     {
+
         $this->newsDeliverer = $newsDeliverer;
         $this->entityManager = $entityManager;
         $this->nextClubMeeting = $nextClubMeeting;
+        $this->newsSendDate = $newsSendDate;
         parent::__construct();
     }
 
@@ -94,8 +97,9 @@ class NewsDeliverCommand extends Command
 
     private function createSendDate(\DateTime $dueDate): \DateTime
     {
+        $modify = sprintf('-%s day', $this->newsSendDate);
         $sendDate = clone $dueDate;
-        $sendDate->modify('-4 day');
+        $sendDate->modify($modify);
 
         return $sendDate;
     }

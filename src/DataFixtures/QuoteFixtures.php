@@ -37,9 +37,6 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class QuoteFixtures extends BaseFixture
 {
-    /**
-     * @param ObjectManager $manager
-     */
     protected function loadData(ObjectManager $manager)
     {
         $this->createMany(10, 'main_quotes', function ($i) {

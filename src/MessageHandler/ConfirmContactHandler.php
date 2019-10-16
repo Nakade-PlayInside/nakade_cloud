@@ -40,11 +40,13 @@ class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInter
 
     private $mailer;
     private $twig;
+    private $emailNoReply;
 
-    public function __construct(Swift_Mailer $mailer, Environment $twig)
+    public function __construct(Swift_Mailer $mailer, Environment $twig, string $emailNoReply)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->emailNoReply = $emailNoReply;
     }
 
     public function __invoke(ConfirmContact $confirmContact)
@@ -52,7 +54,7 @@ class ConfirmContactHandler implements MessageHandlerInterface, LoggerAwareInter
         $contactMail = $confirmContact->getContactMail();
 
         $message = (new \Swift_Message('Ihre Kontaktanfrage bei [nakade.de]'))
-                    ->setFrom('noreply@nakade.de')
+                    ->setFrom($this->emailNoReply)
                     ->setTo($contactMail->getEmail())
                     ->setBody(
                         $this->twig->render(

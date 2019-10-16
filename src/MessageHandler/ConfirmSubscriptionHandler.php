@@ -43,11 +43,13 @@ class ConfirmSubscriptionHandler implements MessageHandlerInterface, LoggerAware
 
     private $mailer;
     private $twig;
+    private $emailNoReply;
 
-    public function __construct(Swift_Mailer $mailer, Environment $twig)
+    public function __construct(Swift_Mailer $mailer, Environment $twig, string $emailNoReply)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->emailNoReply = $emailNoReply;
     }
 
     public function __invoke(ConfirmSubscription $confirmSubscription)
@@ -56,7 +58,7 @@ class ConfirmSubscriptionHandler implements MessageHandlerInterface, LoggerAware
         $reader = $confirmSubscription->getNewsReader();
 
         $message = (new \Swift_Message('Bestätige deine email Adresse'))
-                    ->setFrom('noreply@nakade.de')
+                    ->setFrom($this->emailNoReply)
                     ->setTo($reader->getEmail())
                     ->setBody(
                         $this->twig->render('emails/confirmSubscription.html.twig', [

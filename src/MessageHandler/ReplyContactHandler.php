@@ -41,11 +41,13 @@ class ReplyContactHandler implements MessageHandlerInterface, LoggerAwareInterfa
 
     private $mailer;
     private $twig;
+    private $emailService;
 
-    public function __construct(Swift_Mailer $mailer, Environment $twig)
+    public function __construct(Swift_Mailer $mailer, Environment $twig, string $emailService)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->emailService = $emailService;
     }
 
     public function __invoke(ReplyContact $replyContact)
@@ -54,7 +56,7 @@ class ReplyContactHandler implements MessageHandlerInterface, LoggerAwareInterfa
         $email = $contactReply->getRecipient()->getEmail();
 
         $message = (new \Swift_Message('Antwort auf Ihre Kontaktanfrage bei [nakade.de]'))
-                    ->setFrom('service@nakade.de')
+                    ->setFrom($this->emailService)
                     ->setTo($email)
                     ->setBody(
                         $this->twig->render(

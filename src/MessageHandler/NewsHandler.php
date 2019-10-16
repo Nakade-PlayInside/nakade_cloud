@@ -40,18 +40,20 @@ class NewsHandler implements MessageHandlerInterface, LoggerAwareInterface
 
     private $mailer;
     private $twig;
+    private $emailNoReply;
 
-    public function __construct(Swift_Mailer $mailer, Environment $twig)
+    public function __construct(Swift_Mailer $mailer, Environment $twig, string $emailNoReply)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->emailNoReply = $emailNoReply;
     }
 
     public function __invoke(News $news)
     {
         $subject = sprintf('Nakade Spieltreff | Einladung zum Go im Mommsen-Eck [%s]', $news->getDate());
         $message = (new \Swift_Message($subject))
-                    ->setFrom('noreply@nakade.de')
+                    ->setFrom($this->emailNoReply)
                     ->setTo($news->getReader()->getEmail())
                     ->setBody(
                         $this->twig->render(
