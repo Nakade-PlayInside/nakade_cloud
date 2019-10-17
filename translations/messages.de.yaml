@@ -23,6 +23,13 @@
   "zip": "Postleitzahl"
 "ContactMail": "ContactMail"
 "easyAdmin":
+  "feature": "Feature"
+  "feature.help": "Vorschlag für ein neues Feature."
+  "feature.message": "Feature"
+  "feature.author": "Autor"
+  "feature.state": "Status"
+  "feature.createdAt": "erstellt"
+  "feature.comments": "Kommentare"
   "contact": "Kontakt"
   "contact.address": "Adresse"
   "contact.city": "Stadt"
@@ -153,3 +160,4 @@
   "unsubscribe.title": "News Storno"
   "success.title": "Newsanmeldung"
 "User": "User"
+"Feature": "Feature"

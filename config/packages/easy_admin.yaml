@@ -19,6 +19,8 @@ easy_admin:
           - { entity: NewsReader, label: 'easyAdmin.news.reader', icon: 'address-card-o'}
           - { entity: NewsLetter, label: 'easyAdmin.news.letter', icon: 'envelope-o'}
           - { label: 'easyAdmin.placeholder'}
+          - { entity: Feature, label: 'easyAdmin.feature', icon: 'plus-square-o'}
+          - { label: 'easyAdmin.placeholder'}
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
         actions:
@@ -48,7 +50,7 @@ easy_admin:
             label: 'easyAdmin.contact'
             help: 'easyAdmin.contact.help'
             templates:
-              list: 'admin/contact/list.html.twig'
+                list: 'admin/contact/list.html.twig'
             list:
                 actions: [-new, -edit,]
                 fields: [
@@ -79,12 +81,12 @@ easy_admin:
             class: App\Entity\User
             label: 'easyAdmin.user'
             search:
-              fields: ['email', 'fullName', 'id', 'nickName']
+                fields: ['email', 'fullName', 'id', 'nickName']
             templates:
-              list: 'admin/user/list.html.twig'
-              edit: 'admin/user/edit.html.twig'
+                list: 'admin/user/list.html.twig'
+                edit: 'admin/user/edit.html.twig'
             edit:
-              actions: [-delete]
+                actions: [-delete]
             list:
                 filters:
                   - { property: 'roles', type: 'App\Form\Filter\RoleFilterType' }
@@ -138,9 +140,9 @@ easy_admin:
             label: 'easyAdmin.news.letter'
             help: 'easyAdmin.news.letter.help'
             search:
-              fields: ['dueAt']
+                fields: ['dueAt']
             templates:
-              list:  'admin/news/list.html.twig'
+                list:  'admin/news/list.html.twig'
             list:
                 actions: [-edit, -show]
                 fields:
@@ -153,3 +155,32 @@ easy_admin:
                   - { property: 'dueAt', label: 'easyAdmin.user.firstName' }
                   - { property: 'sendAt', label: 'easyAdmin.user.lastName' }
                   - { property: 'NoRecipients', label: 'easyAdmin.user.email' }
+        Feature:
+            class: App\Entity\Feature
+            label: 'easyAdmin.feature'
+            help: 'easyAdmin.feature.help'
+            templates:
+                list:  'admin/feature/list.html.twig'
+                show:  'admin/feature/show.html.twig'
+                field_association: 'admin/feature/field_association.html.twig'
+            search:
+                fields: ['message']
+            list:
+                fields:
+                  - { property: 'id', label: 'easyAdmin.user.id' }
+                  - { property: 'message', label: 'easyAdmin.feature.message' }
+                  - { property: 'status', label: 'easyAdmin.feature.state' }
+                  - { property: 'comments', label: 'easyAdmin.feature.comments' }
+                  - { property: 'author', label: 'easyAdmin.feature.author' }
+                  - { property: 'createdAt', label: 'easyAdmin.feature.createdAt' }
+            form:
+                fields:
+                  - { property: 'message', label: 'easyAdmin.feature.message' }
+            show:
+                actions: [-delete, -edit]
+                fields:
+                  - { property: 'message', label: 'easyAdmin.feature.message' }
+                  - { property: 'status', label: 'easyAdmin.feature.state' }
+                  - { property: 'comments', label: 'easyAdmin.feature.comments' }
+                  - { property: 'author', label: 'easyAdmin.feature.author' }
+                  - { property: 'createdAt', label: 'easyAdmin.feature.createdAt' }

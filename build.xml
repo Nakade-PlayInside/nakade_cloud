@@ -6,7 +6,7 @@
     <property name="deployDir" value="/var/www/projekt/nakade" />
     <property name="saveDir" value="/var/www/projekt/LAST" />
     <!-- version -->
-    <property name="MINOR" value="1"/>
+    <property name="MINOR" value="2"/>
 
 
     <!-- AVAILABLE COMMANDS -->

@@ -23,11 +23,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\ContactMail;
+use App\Entity\Feature;
 use App\Entity\User;
 use App\Form\ContactReplyType;
 use App\Message\ReplyContact;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -48,6 +50,18 @@ class AdminController extends EasyAdminController
             $roles = $this->request->request->get('roles');
             $user->setRoles($roles);
         }
+        $this->getDoctrine()->getManager()->flush();
+    }
+
+    protected function persistFeatureEntity(Feature $feature)
+    {
+        $user = $this->getUser();
+        if (!assert($user instanceof User)) {
+            throw new UnexpectedTypeException($user, User::class);
+        }
+        $feature->setAuthor($user);
+
+        $this->getDoctrine()->getManager()->persist($feature);
         $this->getDoctrine()->getManager()->flush();
     }
 
@@ -115,7 +129,6 @@ class AdminController extends EasyAdminController
      */
     public function impersonate(Request $request): Response
     {
-
         $userId = $request->get('id');
         if (!$userId) {
             $this->addFlash('info', 'Switch User hat nicht funktioniert!');
