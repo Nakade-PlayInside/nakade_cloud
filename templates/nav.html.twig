@@ -32,11 +32,11 @@
                         <img alt="avatar" class="nav-profile-img rounded-circle" src="{{ app.user.avatarUrl(30) }}">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{{ path('app_profile') }}">{{'navigation.profile'|trans({}, 'messages') }}</a>
+                        <a class="dropdown-item" href="{{ path('app_profile') }}"><i class="fa fa-fw fa-user-circle-o"></i> {{'navigation.profile'|trans({}, 'messages') }}</a>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a class="dropdown-item" href="{{ path('easyadmin') }}">{{'navigation.admin'|trans({}, 'messages') }}</a>
+                            <a class="dropdown-item" href="{{ path('easyadmin') }}"><i class="fa fa-fw fa-cogs"></i> {{'navigation.admin'|trans({}, 'messages') }}</a>
                         {% endif %}
-                        <a class="dropdown-item" href="{{ path('app_logout') }}">{{'navigation.logout'|trans({}, 'messages') }}</a>
+                        <a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fa fa-fw fa-sign-out"></i> {{'navigation.logout'|trans({}, 'messages') }}</a>
                     </div>
                 </li>
             {% else %}
@@ -45,7 +45,7 @@
                         <img alt="ic_person" class="nav-profile-img rounded-circle" src="{{ asset('build/images/common/ic_person_24px.png') }}">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{{ path('app_login') }}">{{ 'navigation.login'|trans({}, 'messages') }}</a>
+                        <a class="dropdown-item" href="{{ path('app_login') }}"><i class="fa fa-fw fa-sign-in"></i> {{ 'navigation.login'|trans({}, 'messages') }}</a>
                         <a class="dropdown-item" href="{{ path('app_register') }}">{{ 'navigation.register'|trans({}, 'messages') }}</a>
                     </div>
                 </li>
