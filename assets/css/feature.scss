@@ -1,0 +1,42 @@
+.content {
+  min-width: 1000px;
+  background-color: white;
+
+  .content-header {
+    padding: 12px;
+    border-bottom: 1px solid #e3e7ee;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content-header-title {
+    align-self: center;
+    flex: 1;
+    text-align: left;
+  }
+
+  .title {
+    font-size: 1rem;
+    line-height: 24px;
+    margin: 0;
+  }
+}
+
+
+  table {
+    border-collapse: collapse;
+    color: #4c5367;
+
+    .datagrid {
+      border-spacing: 0;
+      width: 100%;
+
+      thead {
+        background-color: #8b8b8b;
+      }
+    }
+  }
+
+  thead {
+    background-color: #f8fafc;
+  }

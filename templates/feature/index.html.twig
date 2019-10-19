@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FeatureController!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('feature') }}
+{% endblock %}
+{% block body %}
+
+            <div class="content">
+                <section class="content-header ">
+                    <div class="d-flex flex-row justify-content-between align-content-center w-100">
+                        <div class="content-header-title">
+                            <h1 class="title">    Features</h1>
+                        </div>
+
+{#                        <div class="global-actions">#}
+{#                            <div class="form-action form-action-search  action-search">#}
+{#                                <form method="get" action="/admin/">#}
+{#                                    <input type="hidden" name="action" value="search">#}
+{#                                    <input type="hidden" name="entity" value="User">#}
+{#                                    <input type="hidden" name="menuIndex" value="0">#}
+{#                                    <input type="hidden" name="submenuIndex" value="-1">#}
+{#                                    <div class="form-group">#}
+{#                                        <div class="form-widget">#}
+{#                                            <input class="form-control" type="search" name="query" value="" placeholder="Suchen">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </form>#}
+{#                            </div>#}
+
+{#                            <div class="btn-group action-filters">#}
+{#                                <a href="/admin/?action=filters&amp;entity=User&amp;menuIndex=0&amp;submenuIndex=-1&amp;sortField=firstName&amp;sortDirection=ASC&amp;page=1&amp;referer=%252Fadmin%252F%253Faction%253Dlist%2526entity%253DUser%2526menuIndex%253D0%2526submenuIndex%253D-1%2526sortField%253DfirstName%2526sortDirection%253DASC%2526page%253D1&amp;referer_action=list" class="btn btn-secondary btn-labeled btn-labeled-right action-filters-button " data-modal="#modal-filters">#}
+{#                                    <i class="fa fa-filter fa-fw"></i> Filtern                </a>#}
+{#                            </div>#}
+
+{#                        </div>#}
+                    </div>
+
+
+
+                    <div id="modal-filters" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-secondary" id="modal-clear-button" formtarget="_self">
+                                        <i class="fa fa-close"></i> Zurücksetzen
+                                    </button>
+                                    <h5 class="modal-title">
+                                        <i class="fa fa-filter fa-fw"></i> Filtern
+                                    </h5>
+                                    <button type="button" data-dismiss="modal" class="btn btn-sm btn-primary" id="modal-apply-button" formtarget="_self">
+                                        <i class="fa fa-check"></i> Anwenden
+                                    </button>
+                                </div>
+                                <div class="modal-body p-0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </section>
+
+                <section id="main" class="content-body">
+
+                    <table class="table datagrid">
+                        <thead>
+                        <tr>
+                            <th>ID</th><th>Feature</th><th>Status</th><th>Kommentare</th><th>Autor</th><th>erstellt</th>
+                            <th>
+                                <span class="sr-only">Aktionen</span>
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for feature in allFeatures %}
+                            <tr data-id="{{ feature.id }}">
+                                <td>{{feature.id}}</td>
+                                <td>{{feature.message}}</td>
+                                <td>{{feature.status}}</td>
+                                <td>{{feature.comments|length}}</td>
+                                <td>{{feature.author}}</td>
+                                <td>{{feature.createdAt|date('d.m.Y')}}</td>
+                                <td><i class="fa fa-fw fa-search"></i><i class="fa fa-fw fa-pencil"><i class="fa fa-fw fa-remove"></i></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                    <form name="delete_form" method="post" action="/admin/?action=delete&amp;entity=User&amp;id=__id__&amp;referer=%2Fadmin%2F%3Faction%3Dlist%26entity%3DUser%26menuIndex%3D0%26submenuIndex%3D-1" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div class="form-group"><button type="submit" id="delete_form_submit" name="delete_form[submit]" class="btn-primary btn">Löschen</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="YgPk32yIFRj-clsSXQ19DqqbU4eICfouzR57lU5Vmrc"></div></form>
+
+                    <div id="modal-delete" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <h4>Soll das Element wirklich gelöscht werden?</h4>
+                                    <p>Aktion kann nicht rückgängig gemacht werden.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" data-dismiss="modal" class="btn btn-secondary">
+                                        <span class="btn-label">Abbrechen</span>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <section class="content-footer">
+
+
+                    <div class="list-pagination">
+                        <div class="list-pagination-counter">
+                            <strong>14</strong> Ergebnisse
+                        </div>
+
+                        <nav class="pager list-pagination-paginator first-page last-page">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">
+                                        <i class="fa fa-angle-left mx-1"></i> <span class="btn-label">Zurück</span>
+                                    </a>
+                                </li>
+
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">
+                                        <span class="btn-label">Nächste</span> <i class="fa fa-angle-right mx-1"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                </section>
+            </div>
+
+
+
+{% endblock %}
