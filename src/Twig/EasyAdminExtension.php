@@ -22,7 +22,9 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Entity\BugReport;
 use App\Entity\Feature;
+use App\Entity\TrackingInterface;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -47,23 +49,36 @@ class EasyAdminExtension extends \Twig_Extension
 
     public function filterActions(array $itemActions, $item)
     {
-        if ($item instanceof Feature && !$this->isAllowedToEdit($item->getAuthor())) {
-            unset($itemActions['delete']);
-            unset($itemActions['edit']);
+        if ($item instanceof TrackingInterface) {
+            if ($this->isRemovalDenied($item->getStatus())) {
+                unset($itemActions['delete']);
+            } elseif ($this->isNotAllowed($item->getAuthor())) {
+                unset($itemActions['delete']);
+                unset($itemActions['edit']);
+            }
         }
+
 
         return $itemActions;
     }
 
-    private function isAllowedToEdit(User $author): bool
+    private function isRemovalDenied(string $status): bool
+    {
+        $deletableState = [ 'open', 'rejected', 'closed' ];
+
+        return !in_array($status, $deletableState);
+    }
+
+    private function isNotAllowed(User $author): bool
     {
         if (in_array('ROLE_SUPER_ADMIN', $this->tokenStorage->getToken()->getUser()->getRoles())) {
-            return true;
-        }
-        if ($author === $this->tokenStorage->getToken()->getUser()) {
-            return true;
+            return false;
         }
 
-        return false;
+        if ($author === $this->tokenStorage->getToken()->getUser()) {
+            return false;
+        }
+
+        return true;
     }
 }

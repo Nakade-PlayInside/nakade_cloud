@@ -27,7 +27,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 /**
  * @ORM\MappedSuperclass()
  */
-abstract class Tracking
+abstract class Tracking implements TrackingInterface
 {
     use TimestampableEntity;
 
