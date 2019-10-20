@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Comment;
+use App\Entity\FeatureComment;
 use App\Entity\Feature;
 use App\Entity\User;
 use App\Form\CommentType;
@@ -53,8 +53,8 @@ class FeatureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment = $form->getData();
-            if (!assert($comment instanceof Comment)) {
-                throw new UnexpectedTypeException($comment, Comment::class);
+            if (!assert($comment instanceof FeatureComment)) {
+                throw new UnexpectedTypeException($comment, FeatureComment::class);
             }
             $user = $this->getUser();
             if (!assert($user instanceof User)) {

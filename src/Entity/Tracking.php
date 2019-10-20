@@ -27,7 +27,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 /**
  * @ORM\MappedSuperclass()
  */
-abstract class Comment
+abstract class Tracking
 {
     use TimestampableEntity;
 
@@ -39,10 +39,9 @@ abstract class Comment
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $author;
+    protected $closedAt;
 
     /**
      * @Assert\NotBlank
@@ -51,9 +50,39 @@ abstract class Comment
      */
     protected $message;
 
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    protected $status = 'open';
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $title;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $author;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(string $message): self
+    {
+        $this->message = $message;
+
+        return $this;
     }
 
     public function getAuthor(): ?User
@@ -68,14 +97,38 @@ abstract class Comment
         return $this;
     }
 
-    public function getMessage(): ?string
+    public function getClosedAt(): ?\DateTimeInterface
     {
-        return $this->message;
+        return $this->closedAt;
     }
 
-    public function setMessage(string $message): self
+    public function setClosedAt(?\DateTimeInterface $closedAt): self
     {
-        $this->message = $message;
+        $this->closedAt = $closedAt;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }

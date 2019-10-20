@@ -20,17 +20,30 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BugReportRepository")
  */
-class BugReport extends Feature
+class BugReport extends Tracking
 {
     /**
      * @ORM\Column(type="smallint")
      */
     private $priority;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\FeatureComment", mappedBy="feature")
+     */
+    private $comments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
+
 
     public function getPriority(): ?int
     {
@@ -40,6 +53,38 @@ class BugReport extends Feature
     public function setPriority(int $priority): self
     {
         $this->priority = $priority;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|FeatureComment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(BugComment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setBugReport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(BugComment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getBugReport() === $this) {
+                $comment->setBugReport(null);
+            }
+        }
 
         return $this;
     }

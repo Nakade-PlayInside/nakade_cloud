@@ -20,63 +20,29 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\MappedSuperclass()
+ * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
-abstract class Comment
+class FeatureComment extends Comment
 {
-    use TimestampableEntity;
-
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Feature", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $author;
+    private $feature;
 
-    /**
-     * @Assert\NotBlank
-     *
-     * @ORM\Column(type="text")
-     */
-    protected $message;
-
-    public function getId(): ?int
+    public function getFeature(): ?Feature
     {
-        return $this->id;
+        return $this->feature;
     }
 
-    public function getAuthor(): ?User
+    public function setFeature(?Feature $feature): self
     {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    public function getMessage(): ?string
-    {
-        return $this->message;
-    }
-
-    public function setMessage(string $message): self
-    {
-        $this->message = $message;
+        $this->feature = $feature;
 
         return $this;
     }
 }
+

@@ -20,62 +20,27 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\MappedSuperclass()
+ * @ORM\Entity(repositoryClass="App\Repository\BugCommentRepository")
  */
-abstract class Comment
+class BugComment extends Comment
 {
-    use TimestampableEntity;
-
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\BugReport", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $author;
+    private $bugReport;
 
-    /**
-     * @Assert\NotBlank
-     *
-     * @ORM\Column(type="text")
-     */
-    protected $message;
-
-    public function getId(): ?int
+    public function getBugReport(): ?BugReport
     {
-        return $this->id;
+        return $this->bugReport;
     }
 
-    public function getAuthor(): ?User
+    public function setBugReport(?BugReport $bugReport): self
     {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    public function getMessage(): ?string
-    {
-        return $this->message;
-    }
-
-    public function setMessage(string $message): self
-    {
-        $this->message = $message;
+        $this->bugReport = $bugReport;
 
         return $this;
     }
