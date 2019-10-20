@@ -28,7 +28,7 @@
     {% elseif 'list' == view %}
         <span class="badge badge-secondary">{{ value|length }}</span>
     {% endif %}
-{# a simple *-to-one value associated with an entity managed by this backend #}
+    {# a simple *-to-one value associated with an entity managed by this backend #}
 {% elseif link_parameters is defined and  link_parameters.entity != 'User' %}
     <a href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value|easyadmin_truncate }}</a>
 {% else %}

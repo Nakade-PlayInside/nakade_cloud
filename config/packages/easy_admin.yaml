@@ -170,7 +170,7 @@ easy_admin:
                 fields:
                   - { property: 'id', label: 'easyAdmin.user.id' }
                   - { property: 'title', label: 'easyAdmin.feature.title' }
-                  - { property: 'priority', label: 'easyAdmin.feature.priority' }
+#                  - { property: 'priority', label: 'easyAdmin.feature.priority' }
                   - { property: 'status', label: 'easyAdmin.feature.state' }
                   - { property: 'comments', label: 'easyAdmin.feature.comments' }
                   - { property: 'author', label: 'easyAdmin.feature.author' }
@@ -179,11 +179,11 @@ easy_admin:
                 fields:
                   - { property: 'title', label: 'easyAdmin.feature.title' }
                   - { property: 'message', label: 'easyAdmin.feature.message', type: 'text_editor' }
-                  - { property: 'priority',
-                      label: 'easyAdmin.feature.priority',
-                      type: 'choice',
-                      type_options: { choices: {'niedrig': 1, 'normal': 2, 'hoch': 3}}
-                    }
+#                  - { property: 'priority',
+#                      label: 'easyAdmin.feature.priority',
+#                      type: 'choice',
+#                      type_options: { choices: {'niedrig': 1, 'normal': 2, 'hoch': 3}}
+#                    }
             show:
                 actions: [-delete, -edit]
                 fields:

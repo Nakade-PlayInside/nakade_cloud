@@ -21,10 +21,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Feature;
-use App\Entity\FeatureComment;
 use App\Entity\User;
-use App\Form\FeatureCommentType;
+use App\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
- * 
+ *
  * @IsGranted("ROLE_ADMIN")
  */
 class FeatureController extends AbstractController
@@ -48,16 +48,16 @@ class FeatureController extends AbstractController
      */
     public function comment(Request $request, Feature $feature)
     {
-        $form = $this->createForm(FeatureCommentType::class);
+        $form = $this->createForm(CommentType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment = $form->getData();
-            if (assert($comment instanceof FeatureComment)) {
-                throw new UnexpectedTypeException($comment, FeatureComment::class);
+            if (!assert($comment instanceof Comment)) {
+                throw new UnexpectedTypeException($comment, Comment::class);
             }
             $user = $this->getUser();
-            if (assert($user instanceof User)) {
+            if (!assert($user instanceof User)) {
                 throw new UnexpectedTypeException($user, User::class);
             }
 

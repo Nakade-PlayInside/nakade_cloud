@@ -21,55 +21,93 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FeatureRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"feature" = "Feature", "bug" = "BugReport"})
  */
-class Feature extends FeatureSuperclassBase
+class Feature
 {
+    use TimestampableEntity;
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
-    private $status='open';
+    protected $id;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $closedAt;
+    protected $closedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FeatureComment", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="feature")
      */
-    private $comments;
+    protected $comments;
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(type="text")
+     */
+    protected $message;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    protected $status = 'open';
 
     /**
      * @Assert\NotBlank
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    protected $title;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $priority = 2;
+    protected $author;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
     }
 
-    public function getStatus(): ?string
+    public function getId(): ?int
     {
-        return $this->status;
+        return $this->id;
     }
 
-    public function setStatus(string $status): self
+    public function getMessage(): ?string
     {
-        $this->status = $status;
+        return $this->message;
+    }
+
+    public function setMessage(string $message): self
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
@@ -86,33 +124,14 @@ class Feature extends FeatureSuperclassBase
         return $this;
     }
 
-    /**
-     * @return Collection|FeatureComment[]
-     */
-    public function getComments(): Collection
+    public function getStatus(): ?string
     {
-        return $this->comments;
+        return $this->status;
     }
 
-    public function addComment(FeatureComment $comment): self
+    public function setStatus(string $status): self
     {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setParent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(FeatureComment $comment): self
-    {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
-            if ($comment->getParent() === $this) {
-                $comment->setParent(null);
-            }
-        }
+        $this->status = $status;
 
         return $this;
     }
@@ -129,14 +148,33 @@ class Feature extends FeatureSuperclassBase
         return $this;
     }
 
-    public function getPriority(): ?int
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
     {
-        return $this->priority;
+        return $this->comments;
     }
 
-    public function setPriority(int $priority): self
+    public function addComment(Comment $comment): self
     {
-        $this->priority = $priority;
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setFeature($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getFeature() === $this) {
+                $comment->setFeature(null);
+            }
+        }
 
         return $this;
     }

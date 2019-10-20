@@ -20,14 +20,14 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\MappedSuperclass()
+ * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
-class FeatureSuperclassBase
+class Comment
 {
     use TimestampableEntity;
 
@@ -36,25 +36,42 @@ class FeatureSuperclassBase
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    protected $id;
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     /**
      * @Assert\NotBlank
      *
      * @ORM\Column(type="text")
      */
-    protected $message;
+    private $message;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Feature", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $author;
-
+    private $feature;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 
     public function getMessage(): ?string
@@ -69,15 +86,16 @@ class FeatureSuperclassBase
         return $this;
     }
 
-    public function getAuthor(): ?User
+    public function getFeature(): ?Feature
     {
-        return $this->author;
+        return $this->feature;
     }
 
-    public function setAuthor(?User $author): self
+    public function setFeature(?Feature $feature): self
     {
-        $this->author = $author;
+        $this->feature = $feature;
 
         return $this;
     }
 }
+

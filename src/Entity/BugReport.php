@@ -23,24 +23,23 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\FeatureCommentRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\BugReportRepository")
  */
-class FeatureComment extends FeatureSuperclassBase
+class BugReport extends Feature
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Feature", inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="smallint")
      */
-    private $parent;
+    private $priority;
 
-    public function getParent(): ?Feature
+    public function getPriority(): ?int
     {
-        return $this->parent;
+        return $this->priority;
     }
 
-    public function setParent(?Feature $parent): self
+    public function setPriority(int $priority): self
     {
-        $this->parent = $parent;
+        $this->priority = $priority;
 
         return $this;
     }
