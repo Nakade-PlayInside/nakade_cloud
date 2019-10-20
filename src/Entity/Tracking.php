@@ -132,4 +132,6 @@ abstract class Tracking implements TrackingInterface
 
         return $this;
     }
+
+    abstract public function hasCommnent(): bool;
 }

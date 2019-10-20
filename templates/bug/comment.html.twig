@@ -1,0 +1,51 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+{% block head_stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('feature') }}
+{% endblock %}
+{% block content_title %}Neuer Kommentar{% endblock %}
+
+{% block main %}
+
+    {{ form_start(form) }}
+
+    <table class="feature">
+        <thead>
+        <tr >
+            <th title="Titel">{{ entity.title }}</th>
+            <th title="Status" class="status">{{ entity.status }}</th>
+            <th title="Autor">{{ entity.author }}</th>
+            <th title="erstellt am">{{ entity.createdAt|date('d.m.Y') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="4">{{ entity.message | raw}}</td>
+        </tr>
+        </tbody>
+    </table>
+    {{ form_row(form.message, {
+        label: 'easyAdmin.bug.comment',
+    }) }}
+
+        <div class="content-footer">
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary action-save">
+                    <i class="fa fa-fw fa-commenting-o"></i><span class="btn-label">Abschicken</span>
+                </button>
+                <a class=" btn btn-link pr-0 action-list" title="" href="{{ path('easyadmin', {
+                    'entity': 'BugReport',
+                    'action': 'show',
+                    'id': id,
+                    'menuIndex': 7,
+                }) }}" target="_self">Zurück</a>
+            </div>
+        </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+{% block content_footer_wrapper %}
+{% endblock %}

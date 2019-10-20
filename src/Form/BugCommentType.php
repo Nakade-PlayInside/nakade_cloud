@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -18,18 +20,34 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Entity;
+namespace App\Form;
+
+use App\Entity\BugComment;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-interface TrackingInterface
+class BugCommentType extends AbstractType
 {
-    public function getAuthor(): ?User;
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+                ->add('message', TextareaType::class, [])
+        ;
+    }
 
-    public function getStatus(): ?string;
-
-    public function hasCommnent(): bool;
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+                'data_class' => BugComment::class,
+        ]);
+    }
 }

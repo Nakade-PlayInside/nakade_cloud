@@ -32,10 +32,10 @@ class BugReport extends Tracking
     /**
      * @ORM\Column(type="smallint")
      */
-    private $priority;
+    private $priority = 2;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FeatureComment", mappedBy="feature")
+     * @ORM\OneToMany(targetEntity="App\Entity\BugComment", mappedBy="bugReport")
      */
     private $comments;
 
@@ -59,7 +59,7 @@ class BugReport extends Tracking
 
 
     /**
-     * @return Collection|FeatureComment[]
+     * @return Collection|BugComment[]
      */
     public function getComments(): Collection
     {
@@ -87,5 +87,10 @@ class BugReport extends Tracking
         }
 
         return $this;
+    }
+
+    public function hasCommnent(): bool
+    {
+        return $this->comments->count() > 0;
     }
 }

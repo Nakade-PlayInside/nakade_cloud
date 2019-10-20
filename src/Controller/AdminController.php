@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\BugReport;
 use App\Entity\ContactMail;
 use App\Entity\Feature;
 use App\Entity\User;
@@ -62,6 +63,18 @@ class AdminController extends EasyAdminController
         $feature->setAuthor($user);
 
         $this->getDoctrine()->getManager()->persist($feature);
+        $this->getDoctrine()->getManager()->flush();
+    }
+
+    protected function persistBugReportEntity(BugReport $bugReport)
+    {
+        $user = $this->getUser();
+        if (!assert($user instanceof User)) {
+            throw new UnexpectedTypeException($user, User::class);
+        }
+        $bugReport->setAuthor($user);
+
+        $this->getDoctrine()->getManager()->persist($bugReport);
         $this->getDoctrine()->getManager()->flush();
     }
 

@@ -22,8 +22,6 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Entity\BugReport;
-use App\Entity\Feature;
 use App\Entity\TrackingInterface;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -50,7 +48,7 @@ class EasyAdminExtension extends \Twig_Extension
     public function filterActions(array $itemActions, $item)
     {
         if ($item instanceof TrackingInterface) {
-            if ($this->isRemovalDenied($item->getStatus())) {
+            if ($this->isRemovalDenied($item->getStatus()) || $item->hasCommnent()) {
                 unset($itemActions['delete']);
             } elseif ($this->isNotAllowed($item->getAuthor())) {
                 unset($itemActions['delete']);
@@ -58,13 +56,12 @@ class EasyAdminExtension extends \Twig_Extension
             }
         }
 
-
         return $itemActions;
     }
 
     private function isRemovalDenied(string $status): bool
     {
-        $deletableState = [ 'open', 'rejected', 'closed' ];
+        $deletableState = ['open', 'rejected', 'closed'];
 
         return !in_array($status, $deletableState);
     }

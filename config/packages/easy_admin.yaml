@@ -20,6 +20,7 @@ easy_admin:
           - { entity: NewsLetter, label: 'easyAdmin.news.letter', icon: 'envelope-o'}
           - { label: 'easyAdmin.placeholder'}
           - { entity: Feature, label: 'easyAdmin.feature.title', icon: 'plus-square-o'}
+          - { entity: BugReport, label: 'easyAdmin.bug.title', icon: 'bug'}
           - { label: 'easyAdmin.placeholder'}
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
@@ -200,5 +201,63 @@ easy_admin:
                   - { property: 'comments', label: 'easyAdmin.feature.comments' }
                   - { property: 'author', label: 'easyAdmin.feature.author' }
                   - { property: 'createdAt', label: 'easyAdmin.feature.createdAt' }
+            edit:
+                actions: [-delete]
+        BugReport:
+            class: App\Entity\BugReport
+            label: 'easyAdmin.bug.title'
+            help: 'easyAdmin.bug.help'
+            templates:
+                list:  'admin/feature/list.html.twig'
+                new:  'admin/feature/new.html.twig'
+                show:  'admin/bug/show.html.twig'
+                field_association: 'admin/feature/field_association.html.twig'
+            search:
+                fields: ['message']
+            list:
+                fields:
+                  - { property: 'id', label: 'easyAdmin.user.id' }
+                  - { property: 'title', label: 'easyAdmin.bug.title' }
+                  - { property: 'priority', label: 'easyAdmin.bug.priority' }
+                  - { property: 'status', label: 'easyAdmin.bug.state' }
+                  - { property: 'comments', label: 'easyAdmin.bug.comments' }
+                  - { property: 'author', label: 'easyAdmin.bug.author' }
+                  - { property: 'createdAt', label: 'easyAdmin.bug.createdAt' }
+            form:
+                fields:
+                  - { property: 'title', label: 'easyAdmin.bug.title' }
+                  - { property: 'message', label: 'easyAdmin.bug.message', type: 'text_editor' }
+                  - { property: 'priority',
+                      label: 'easyAdmin.bug.priority',
+                      type: 'choice',
+                      type_options: {
+                        choices: {
+                          'low': 1,
+                          'normal': 2,
+                          'high': 3,
+                        }}
+                    }
+                  - { property: 'status',
+                      label: 'easyAdmin.bug.state',
+                      permission: 'ROLE_SUPER_ADMIN',
+                      type: 'choice',
+                      type_options: {
+                        choices: {
+                          'open': 'open',
+                          'ongoing': 'ongoing',
+                          'finished': 'finished',
+                          'reopened': 'reopened',
+                          'closed': 'closed',
+                          'rejected': 'rejected'
+                        }}
+                      }
+            show:
+                actions: [-delete, -edit]
+                fields:
+                  - { property: 'message', label: 'easyAdmin.bug.message' }
+                  - { property: 'status', label: 'easyAdmin.bug.state' }
+                  - { property: 'comments', label: 'easyAdmin.bug.comments' }
+                  - { property: 'author', label: 'easyAdmin.bug.author' }
+                  - { property: 'createdAt', label: 'easyAdmin.bug.createdAt' }
             edit:
                 actions: [-delete]

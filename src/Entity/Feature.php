@@ -69,4 +69,9 @@ class Feature extends Tracking
 
         return $this;
     }
+
+    public function hasCommnent(): bool
+    {
+        return $this->comments->count() > 0;
+    }
 }
