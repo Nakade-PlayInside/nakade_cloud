@@ -1,5 +1,5 @@
 easy_admin:
-    site_name: 'Nakade <img width="64px" height="64px" alt="Nakade" src="../images/nakade_256x256.png" /> Admin'
+    site_name: 'Nakade <img width="64px" height="64px" alt="Nakade" src="/images/nakade_256x256.png" /> Admin'
     formats:
         date:     'd-m-Y'
         time:     'H:i'
@@ -10,7 +10,7 @@ easy_admin:
         avatar_property_path: 'avatarUrl'
     design:
         assets:
-            favicon: '../images/nakade_256x256.png'
+            favicon: '/images/nakade_256x256.png'
         brand_color: '#1ABC9C'
         menu:
           - { entity: User, default: true, label: 'easyAdmin.user', icon: 'users'}
@@ -19,7 +19,7 @@ easy_admin:
           - { entity: NewsReader, label: 'easyAdmin.news.reader', icon: 'address-card-o'}
           - { entity: NewsLetter, label: 'easyAdmin.news.letter', icon: 'envelope-o'}
           - { label: 'easyAdmin.placeholder'}
-          - { entity: Feature, label: 'easyAdmin.feature', icon: 'plus-square-o'}
+          - { entity: Feature, label: 'easyAdmin.feature.title', icon: 'plus-square-o'}
           - { label: 'easyAdmin.placeholder'}
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
@@ -157,10 +157,11 @@ easy_admin:
                   - { property: 'NoRecipients', label: 'easyAdmin.user.email' }
         Feature:
             class: App\Entity\Feature
-            label: 'easyAdmin.feature'
+            label: 'easyAdmin.feature.title'
             help: 'easyAdmin.feature.help'
             templates:
                 list:  'admin/feature/list.html.twig'
+                new:  'admin/feature/new.html.twig'
                 show:  'admin/feature/show.html.twig'
                 field_association: 'admin/feature/field_association.html.twig'
             search:
@@ -168,14 +169,21 @@ easy_admin:
             list:
                 fields:
                   - { property: 'id', label: 'easyAdmin.user.id' }
-                  - { property: 'message', label: 'easyAdmin.feature.message' }
+                  - { property: 'title', label: 'easyAdmin.feature.title' }
+                  - { property: 'priority', label: 'easyAdmin.feature.priority' }
                   - { property: 'status', label: 'easyAdmin.feature.state' }
                   - { property: 'comments', label: 'easyAdmin.feature.comments' }
                   - { property: 'author', label: 'easyAdmin.feature.author' }
                   - { property: 'createdAt', label: 'easyAdmin.feature.createdAt' }
             form:
                 fields:
-                  - { property: 'message', label: 'easyAdmin.feature.message' }
+                  - { property: 'title', label: 'easyAdmin.feature.title' }
+                  - { property: 'message', label: 'easyAdmin.feature.message', type: 'text_editor' }
+                  - { property: 'priority',
+                      label: 'easyAdmin.feature.priority',
+                      type: 'choice',
+                      type_options: { choices: {'niedrig': 1, 'normal': 2, 'hoch': 3}}
+                    }
             show:
                 actions: [-delete, -edit]
                 fields:

@@ -1,9 +1,48 @@
 {% extends '@EasyAdmin/default/show.html.twig' %}
 
+{% block head_stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('feature') }}
+{% endblock %}
+
+{% block show_fields %}
+    <table class="feature">
+        <thead>
+            <tr >
+                <th title="Titel">{{ entity.title }}</th>
+                <th title="Status" class="status">{{ entity.status }}</th>
+                <th title="Autor">{{ entity.author }}</th>
+                <th title="erstellt am">{{ entity.createdAt|date('d.m.Y') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4">{{ entity.message | raw}}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% for comment in entity.comments %}
+        <table class="feature" >
+            <thead class="comment">
+            <tr>
+                <th>Kommentar #{{ loop.index }}</th>
+                <th title="Autor">{{ comment.author }}</th>
+                <th title="erstellt am">{{ comment.createdAt|date('d.m.Y') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="2">{{ comment.message | raw}}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% endfor %}
+
+{% endblock %}
 
 {% block item_actions %}
     {{ parent() }}
-    <a class="btn btn-primary action-new" href="#" target="_self">
+    <a class="btn btn-primary action-new" href="{{ path('app_feature_comment', {'id': entity.id}) }}" target="_self">
         <i class="fa fa-fw fa-commenting-o"></i> Kommentieren
     </a>
 {% endblock item_actions %}

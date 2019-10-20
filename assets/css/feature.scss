@@ -1,42 +1,42 @@
-.content {
-  min-width: 1000px;
+.feature {
+  border-collapse: collapse;
+  color: #4c5367;
   background-color: white;
 
-  .content-header {
-    padding: 12px;
-    border-bottom: 1px solid #e3e7ee;
-    display: flex;
-    flex-direction: column;
+  thead {
+    background-color: #dbf0fe;
+    th:first-child {
+      width: 100%;
+      padding-left: 10px;
+    }
+    th:last-child {
+      padding-right: 10px;
+    }
+    th {
+      cursor: pointer;
+      width: fit-content;
+      padding: 5px;
+    }
+    .status {
+      padding-right: 20px;
+      color: #00bb00;
+    }
   }
-
-  .content-header-title {
-    align-self: center;
-    flex: 1;
-    text-align: left;
+  tbody {
+    cursor: default;
+    td {
+      padding: 10px;
+    }
   }
-
-  .title {
-    font-size: 1rem;
-    line-height: 24px;
-    margin: 0;
+  .comment {
+    background-color: #e1e1e1
   }
 }
 
+.form-group label {
+  text-align: left;
+}
 
-  table {
-    border-collapse: collapse;
-    color: #4c5367;
-
-    .datagrid {
-      border-spacing: 0;
-      width: 100%;
-
-      thead {
-        background-color: #8b8b8b;
-      }
-    }
-  }
-
-  thead {
-    background-color: #f8fafc;
-  }
+.form-actions a {
+  margin-right: 20px;
+}
