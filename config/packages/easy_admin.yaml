@@ -16,13 +16,21 @@ easy_admin:
           - { entity: User, default: true, label: 'easyAdmin.user', icon: 'users'}
           - { entity: ContactMail, label: 'easyAdmin.contact', icon: 'inbox'}
           - { entity: Quotes, label: 'easyAdmin.quotes', icon: 'pencil-square-o'}
-          - { entity: NewsReader, label: 'easyAdmin.news.reader', icon: 'address-card-o'}
-          - { entity: NewsLetter, label: 'easyAdmin.news.letter', icon: 'envelope-o'}
+          - label: 'NEWS'
+            icon: 'newspaper-o'
+            children:
+              - { entity: NewsReader, label: 'easyAdmin.news.reader', icon: 'address-card-o'}
+              - { entity: NewsLetter, label: 'easyAdmin.news.letter', icon: 'envelope-o'}
+          - label: 'BUG TRACKER'
+            icon: 'bug'
+            children:
+              - { entity: Feature, label: 'easyAdmin.feature.title', icon: 'plus-square-o'}
+              - { entity: BugReport, label: 'easyAdmin.bug.title', icon: 'bug'}
+          - label: 'SERVER'
+            icon: server
+            children:
+              -  { label: 'PHP Info', route: easyadmin_phpinfo, icon: 'info' }
           - { label: 'easyAdmin.placeholder'}
-          - { entity: Feature, label: 'easyAdmin.feature.title', icon: 'plus-square-o'}
-          - { entity: BugReport, label: 'easyAdmin.bug.title', icon: 'bug'}
-          - { label: 'easyAdmin.placeholder'}
-          - { label: 'PHP Info', route: easyadmin_phpinfo, icon: 'info' }
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
         actions:

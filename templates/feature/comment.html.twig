@@ -33,11 +33,13 @@
                 <button type="submit" class="btn btn-primary action-save">
                     <i class="fa fa-fw fa-commenting-o"></i><span class="btn-label">Abschicken</span>
                 </button>
+                {% set params = app.request.query.all %}
                 <a class=" btn btn-link pr-0 action-list" title="" href="{{ path('easyadmin', {
-                    'entity': 'Feature',
-                    'action': 'show',
+                    'entity': params['parameters']['entity'],
+                    'action': params['parameters']['action'],
                     'id': id,
-                    'menuIndex': 6,
+                    'menuIndex': params['parameters']['menuIndex'],
+                    'submenuIndex': params['parameters']['submenuIndex'],
                 }) }}" target="_self">Zurück</a>
             </div>
         </div>

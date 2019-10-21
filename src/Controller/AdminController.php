@@ -84,6 +84,7 @@ class AdminController extends EasyAdminController
     public function replyContact(Request $request, MessageBusInterface $messageBus)
     {
         $contactId = $request->get('id');
+
         $contact = $this->getDoctrine()->getRepository(ContactMail::class)->find($contactId);
 
         $form = $this->createForm(ContactReplyType::class);

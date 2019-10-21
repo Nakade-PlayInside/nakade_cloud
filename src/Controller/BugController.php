@@ -50,6 +50,7 @@ class BugController extends AbstractController
     {
         $form = $this->createForm(BugCommentType::class);
         $form->handleRequest($request);
+        $params = $request->query->get('parameters');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment = $form->getData();
@@ -71,9 +72,10 @@ class BugController extends AbstractController
 
             return $this->redirectToRoute('easyadmin', [
                  'entity' => 'BugReport',
-                 'action' => 'show',
+                 'action' => $params['action'],
                  'id' => $bugReport->getId(),
-                 'menuIndex' => 7,
+                 'menuIndex' => $params['menuIndex'],
+                 'submenuIndex' => $params['submenuIndex'],
             ]);
         }
 

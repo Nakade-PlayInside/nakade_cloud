@@ -42,7 +42,8 @@
 
 {% block item_actions %}
     {{ parent() }}
-    <a class="btn btn-primary action-new" href="{{ path('app_bug_comment', {'id': entity.id}) }}" target="_self">
+    {% set parameters = app.request.query.all %}
+    <a class="btn btn-primary action-new" href="{{ path('app_bug_comment', {'id': entity.id, 'parameters': parameters}) }}" target="_self">
         <i class="fa fa-fw fa-commenting-o"></i> Kommentieren
     </a>
 {% endblock item_actions %}

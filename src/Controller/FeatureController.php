@@ -50,6 +50,7 @@ class FeatureController extends AbstractController
     {
         $form = $this->createForm(CommentType::class);
         $form->handleRequest($request);
+        $params = $request->query->get('parameters');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment = $form->getData();
@@ -71,9 +72,10 @@ class FeatureController extends AbstractController
 
             return $this->redirectToRoute('easyadmin', [
                  'entity' => 'Feature',
-                 'action' => 'show',
+                 'action' => $params['action'],
                  'id' => $feature->getId(),
-                 'menuIndex' => 6,
+                 'menuIndex' => $params['menuIndex'],
+                 'submenuIndex' => $params['submenuIndex'],
             ]);
         }
 
