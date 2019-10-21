@@ -22,9 +22,12 @@ namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
+ * @Gedmo\Loggable
+ *
  * @ORM\MappedSuperclass()
  */
 abstract class Tracking implements TrackingInterface
@@ -46,11 +49,15 @@ abstract class Tracking implements TrackingInterface
     /**
      * @Assert\NotBlank
      *
+     * @Gedmo\Versioned
+     *
      * @ORM\Column(type="text")
      */
     protected $message;
 
     /**
+     * @Gedmo\Versioned
+     *
      * @ORM\Column(type="string", length=20)
      */
     protected $status = 'open';

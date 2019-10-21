@@ -26,12 +26,15 @@ use App\Tools\TokenGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ *
+ * @Gedmo\Loggable
  *
  * @UniqueEntity(
  *     fields={"email"},
@@ -56,11 +59,15 @@ class User implements UserInterface
      *     checkMX=true
      * )
      *
+     * @Gedmo\Versioned
+     *
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
 
     /**
+     * @Gedmo\Versioned
+     *
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -116,12 +123,16 @@ class User implements UserInterface
     /**
      * Only a confirmed email address will receive mails.
      *
+     * @Gedmo\Versioned
+     *
      * @ORM\Column(type="boolean", options={"default": 0} )
      */
     private $confirmed = false;
 
     /**
      * Has registered for newsletter.
+     *
+     * @Gedmo\Versioned
      *
      * @ORM\Column(type="boolean", options={"default": 0} )
      */
@@ -130,6 +141,8 @@ class User implements UserInterface
     /**
      * Account can be locked if compromised.
      *
+     * @Gedmo\Versioned
+     *
      * @ORM\Column(type="boolean", options={"default": 0} )
      */
     private $locked = false;
@@ -137,12 +150,16 @@ class User implements UserInterface
     /**
      * Account can be disabled.
      *
+     * @Gedmo\Versioned
+     *
      * @ORM\Column(type="boolean", options={"default": 0} )
      */
     private $disabled = false;
 
     /**
      * A removed user is inactive, not allowed to sign in and only visible to admins or superAdmins.
+     *
+     * @Gedmo\Versioned
      *
      * @ORM\Column(type="boolean", options={"default": 0} )
      */

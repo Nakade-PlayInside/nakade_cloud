@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -18,13 +19,17 @@ declare(strict_types=1);
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
+ * @Gedmo\Loggable
+ *
  * @ORM\Entity(repositoryClass="App\Repository\BugReportRepository")
  */
 class BugReport extends Tracking
@@ -35,7 +40,10 @@ class BugReport extends Tracking
     private $priority = 2;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BugComment", mappedBy="bugReport")
+     * Fetch extra lazy is for performance issues. it just uses the count queries which we need for listing of the #comments.
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\BugComment", mappedBy="bugReport", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $comments;
 
@@ -43,7 +51,6 @@ class BugReport extends Tracking
     {
         $this->comments = new ArrayCollection();
     }
-
 
     public function getPriority(): ?int
     {
@@ -56,7 +63,6 @@ class BugReport extends Tracking
 
         return $this;
     }
-
 
     /**
      * @return Collection|BugComment[]

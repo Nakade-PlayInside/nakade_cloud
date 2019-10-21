@@ -47,7 +47,7 @@ class UserFixture extends BaseFixture
 
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(10, 'main_users', function ($i) {
+        $this->createMany(5, 'main_users', function ($i) {
             $user = new User();
             $user->setEmail(sprintf('spacebar%d@thespacebar.com', $i));
             $user->setFirstName($this->faker->firstName);
@@ -61,13 +61,58 @@ class UserFixture extends BaseFixture
             return $user;
         });
 
-        $this->createMany(3, 'admin_users', function ($i) {
+        $this->createMany(5, 'member_users', function ($i) {
+            $user = new User();
+            $user->setEmail(sprintf('member%d@thespacebar.com', $i));
+            $user->setFirstName($this->faker->firstName);
+            $user->setLastName($this->faker->lastName);
+            $user->setConfirmed(true);
+            $user->setRoles(['ROLE_MEMBER']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                'engage'
+            ));
+
+            return $user;
+        });
+
+        $this->createMany(5, 'team_users', function ($i) {
+            $user = new User();
+            $user->setEmail(sprintf('team%d@thespacebar.com', $i));
+            $user->setFirstName($this->faker->firstName);
+            $user->setLastName($this->faker->lastName);
+            $user->setConfirmed(true);
+            $user->setRoles(['ROLE_NAKADE_TEAM']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                'engage'
+            ));
+
+            return $user;
+        });
+
+        $this->createMany(5, 'admin_users', function ($i) {
             $user = new User();
             $user->setEmail(sprintf('admin%d@thespacebar.com', $i));
             $user->setFirstName($this->faker->firstName);
             $user->setLastName($this->faker->lastName);
             $user->setConfirmed(true);
             $user->setRoles(['ROLE_ADMIN']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                'engage'
+            ));
+
+            return $user;
+        });
+
+        $this->createMany(3, 'super_admin_users', function ($i) {
+            $user = new User();
+            $user->setEmail(sprintf('super%d@thespacebar.com', $i));
+            $user->setFirstName($this->faker->firstName);
+            $user->setLastName($this->faker->lastName);
+            $user->setConfirmed(true);
+            $user->setRoles(['ROLE_SUPER_ADMIN']);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
                 'engage'

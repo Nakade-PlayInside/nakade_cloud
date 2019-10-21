@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -31,7 +32,9 @@ use Faker\Generator;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 abstract class BaseFixture extends Fixture
@@ -40,9 +43,9 @@ abstract class BaseFixture extends Fixture
      * @var Generator
      */
     protected $faker;
-
+    private $referencesIndex = [];
     /**
-     * @var ObjectManager|null
+     * @var ObjectManager
      */
     private $manager;
 
@@ -53,9 +56,6 @@ abstract class BaseFixture extends Fixture
         $this->loadData($manager);
     }
 
-    /**
-     * @return mixed
-     */
     abstract protected function loadData(ObjectManager $manager);
 
     /**
@@ -68,9 +68,9 @@ abstract class BaseFixture extends Fixture
      *           return $user;
      *      });
      *
-     * @param string   $groupName tag these created objects with this group name,
-     *                            and use this later with getRandomReference(s)
-     *                            to fetch only from this specific group
+     * @param string $groupName tag these created objects with this group name,
+     *                          and use this later with getRandomReference(s)
+     *                          to fetch only from this specific group
      */
     protected function createMany(int $count, string $groupName, callable $factory)
     {
@@ -83,5 +83,23 @@ abstract class BaseFixture extends Fixture
             // store for usage later as groupName_#COUNT#
             $this->addReference(sprintf('%s_%d', $groupName, $i), $entity);
         }
+    }
+
+    protected function getRandomReference(string $className, string $groupName)
+    {
+        if (!isset($this->referencesIndex[$className])) {
+            $this->referencesIndex[$className] = [];
+            foreach ($this->referenceRepository->getReferences() as $key => $ref) {
+                if (0 === strpos($key, $groupName.'_')) {
+                    $this->referencesIndex[$className][] = $key;
+                }
+            }
+        }
+        if (empty($this->referencesIndex[$className])) {
+            throw new \Exception(sprintf('Cannot find any references for class "%s"', $className));
+        }
+        $randReferenceKey = $this->faker->randomElement($this->referencesIndex[$className]);
+
+        return $this->getReference($randReferenceKey);
     }
 }

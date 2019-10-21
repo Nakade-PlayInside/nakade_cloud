@@ -22,15 +22,21 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @Gedmo\Loggable
+ *
  * @ORM\Entity(repositoryClass="App\Repository\FeatureRepository")
  */
 class Feature extends Tracking
 {
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FeatureComment", mappedBy="feature")
+     * Fetch extra lazy is for performance issues. it just uses the count queries which we need for listing of the #comments.
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\FeatureComment", mappedBy="feature", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $comments;
 

@@ -22,13 +22,15 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QuotesRepository")
+ *
+ * @Gedmo\Loggable
  */
 class Quotes
 {
@@ -49,6 +51,8 @@ class Quotes
      *     message="Der Wert {{ value }} ist kein {{ type }}."
      * )
      *
+     * @Gedmo\Versioned
+     *
      * @ORM\Column(type="text")
      *
      * @var string
@@ -62,6 +66,8 @@ class Quotes
      *     type="string",
      *     message="Der Wert {{ value }} ist kein {{ type }}."
      * )
+     *
+     * @Gedmo\Versioned
      *
      * @ORM\Column(type="string", length=255)
      *
