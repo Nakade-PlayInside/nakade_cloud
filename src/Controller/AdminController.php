@@ -154,4 +154,20 @@ class AdminController extends EasyAdminController
 
         return $this->redirectToRoute('app_homepage', ['_switch_user' => $user->getEmail()]);
     }
+
+    /**
+     * @Route("/phpinfo", name="easyadmin_phpinfo")
+     */
+    public function phpInfoAction(): Response
+    {
+        if ($this->container->has('profiler')) {
+            $this->container->get('profiler')->disable();
+        }
+        ob_start();
+        phpinfo();
+        $str = ob_get_contents();
+        ob_get_clean();
+
+        return new Response($str);
+    }
 }

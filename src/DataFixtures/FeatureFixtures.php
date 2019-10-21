@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -22,23 +23,21 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Entity\Feature;
+use App\Entity\FeatureComment;
 use App\Entity\User;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class FeatureFixtures extends BaseFixture implements DependentFixtureInterface
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(10, 'main_features', function ($i) {
+        $this->createMany(20, 'main_features', function ($i) {
             $feature = new Feature();
             $feature->setTitle($this->faker->sentence);
             $feature->setMessage($this->faker->text);
@@ -46,6 +45,17 @@ class FeatureFixtures extends BaseFixture implements DependentFixtureInterface
             /** @var User $user */
             $user = $this->getRandomReference(User::class, 'admin_users');
             $feature->setAuthor($user);
+
+            for ($i = 0; $i < $this->faker->numberBetween(0, 8); ++$i) {
+                $entity = new FeatureComment();
+                $entity->setMessage($this->faker->text);
+                $user = $this->getRandomReference(User::class, 'admin_users');
+                $entity->setAuthor($user);
+
+                $this->getManager()->persist($entity);
+
+                $feature->addComment($entity);
+            }
 
             return $feature;
         });

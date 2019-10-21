@@ -22,6 +22,7 @@ easy_admin:
           - { entity: Feature, label: 'easyAdmin.feature.title', icon: 'plus-square-o'}
           - { entity: BugReport, label: 'easyAdmin.bug.title', icon: 'bug'}
           - { label: 'easyAdmin.placeholder'}
+          - { label: 'PHP Info', route: easyadmin_phpinfo, icon: 'info' }
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
         actions:

@@ -32,9 +32,7 @@ use Faker\Generator;
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 abstract class BaseFixture extends Fixture
@@ -45,7 +43,7 @@ abstract class BaseFixture extends Fixture
     protected $faker;
     private $referencesIndex = [];
     /**
-     * @var ObjectManager
+     * @var ObjectManager|null
      */
     private $manager;
 
@@ -101,5 +99,13 @@ abstract class BaseFixture extends Fixture
         $randReferenceKey = $this->faker->randomElement($this->referencesIndex[$className]);
 
         return $this->getReference($randReferenceKey);
+    }
+
+    /**
+     * @return ObjectManager|null
+     */
+    public function getManager(): ?ObjectManager
+    {
+        return $this->manager;
     }
 }

@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Entity\BugComment;
 use App\Entity\BugReport;
 use App\Entity\User;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -36,7 +37,7 @@ class BugReportFixtures extends BaseFixture implements DependentFixtureInterface
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(10, 'main_bugs', function ($i) {
+        $this->createMany(20, 'main_bugs', function ($i) {
             $bug = new BugReport();
             $bug->setTitle($this->faker->sentence);
             $bug->setPriority($this->faker->numberBetween(1, 3));
@@ -45,6 +46,17 @@ class BugReportFixtures extends BaseFixture implements DependentFixtureInterface
             /** @var User $user */
             $user = $this->getRandomReference(User::class, 'admin_users');
             $bug->setAuthor($user);
+
+            for ($i = 0; $i < $this->faker->numberBetween(0, 8); ++$i) {
+                $entity = new BugComment();
+                $entity->setMessage($this->faker->text);
+                $user = $this->getRandomReference(User::class, 'admin_users');
+                $entity->setAuthor($user);
+
+                $this->getManager()->persist($entity);
+
+                $bug->addComment($entity);
+            }
 
             return $bug;
         });
