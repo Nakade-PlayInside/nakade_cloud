@@ -39,7 +39,7 @@
                     <i class="fa fa-fw fa-envelope-o"></i><span class="btn-label">Abschicken</span>
                 </button>
                 <a class=" btn text-danger action-delete" title="" href="{{ path('app_contact_remove', { 'id': contact.id }) }}" target="_self"><i class="fa fa-fw fa-trash-o"></i> Löschen</a>
-                <a class=" btn btn-link pr-0 action-list" title="" href="/admin/?entity=ContactMail&amp;action=list&amp;menuIndex=1&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1" target="_self">Zurück zur Übersicht</a>
+                <a class=" btn btn-link pr-0 action-list" title="" href="{{ href }}" target="_self">Zurück zur Übersicht</a>
             </div>
         </div>
     {{ form_end(form) }}

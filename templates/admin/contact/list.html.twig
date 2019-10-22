@@ -7,9 +7,12 @@
         : '@EasyAdmin/default/includes/_actions.html.twig'
     %}
     {% if item.contactReplies is empty %}
-    <a class="action-app_contact_reply" title="Antworten" href="{{ path('app_contact_reply',{'id': _item_id}) }}" target="_self">
-        <i class="fa fa-fw fa-envelope-open-o"></i>
+    {% set parameters = app.request.query.all %}
+    <a class="action-app_contact_reply" title="Antworten" href="{{ path('app_contact_reply',{'id': _item_id, 'parameters': parameters}) }}" target="_self">
+        <i class="fa fa-fw fa-envelope"></i>
     </a>
+    {% else %}
+        <i style="color: lightgrey" class="fa fa-fw fa-envelope-open-o"></i>
     {% endif %}
 
     {{ include(_actions_template, {

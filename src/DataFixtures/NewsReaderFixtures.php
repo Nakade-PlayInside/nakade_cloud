@@ -20,27 +20,34 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Services;
+namespace App\DataFixtures;
 
-class ContentRetriever
+use App\Entity\ContactMail;
+use App\Entity\NewsReader;
+use App\Entity\User;
+use App\Entity\ContactReply;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
+class NewsReaderFixtures extends BaseFixture
 {
-    public function grab(string $url)
+    protected function loadData(ObjectManager $manager)
     {
+        $this->createMany(20, 'main_reader', function ($i) {
+            $reader = new NewsReader();
+            $reader->setEmail($this->faker->email);
+            $reader->setFirstName($this->faker->firstName);
+            $reader->setLastName($this->faker->lastName);
+            $reader->setConfirmed($this->faker->boolean);
 
-        //Snoopy https://github.com/r23/Snoopy
-        $ch = curl_init();
-        $timeout = 5;
+            return $reader;
+        });
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-
-        // Get URL content
-        $lines = curl_exec($ch);
-        // close handle to release resources
-        curl_close($ch);
-
-        //output, you can also save it locally on the server
-        return $lines;
+        $manager->flush();
     }
 }

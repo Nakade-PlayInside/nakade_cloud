@@ -25,11 +25,14 @@ use App\Entity\BugReport;
 use App\Entity\BugComment;
 use App\Entity\User;
 use App\Form\BugCommentType;
+use App\Services\ContentRetriever;
+use App\Services\Snoopy;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -84,5 +87,23 @@ class BugController extends AbstractController
                 'id' => $bugReport->getId(),
                 'entity' => $bugReport,
         ]);
+    }
+
+    /**
+     *  @Route("/bug/show", name="app_bug_show")
+     */
+    public function show(ContentRetriever $grabber)
+    {
+        $str='';
+        //$str = $grabber->grab('http://www.dgob.de/lmo/index.php');
+        //dd($str);
+
+        $snoopy = new Snoopy();
+        $snoopy->fetchlinks('http://www.dgob.de/lmo/lmo.php?action=table&amp;file=1920_bl2.l98');
+        //$snoopy->fetchtext('http://www.dgob.de/lmo/output/1920_bl2.l98-sp.html');
+        $snoopy->fetchtext('http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=1920_bl2.l98&st=1#');
+        dd($snoopy->results);
+
+        return new Response($str);
     }
 }

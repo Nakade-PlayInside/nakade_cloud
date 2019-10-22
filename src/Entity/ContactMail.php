@@ -156,7 +156,8 @@ class ContactMail
     protected $zipCode;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ContactReply", mappedBy="recipient")
+     * @ORM\OneToMany(targetEntity="App\Entity\ContactReply", mappedBy="recipient", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"createdAt" = "ASC"})
      */
     private $contactReplies;
 
@@ -316,7 +317,7 @@ class ContactMail
         return $this;
     }
 
-    public function removeContactResponse(ContactReply $contactReply): self
+    public function removeContactReply(ContactReply $contactReply): self
     {
         if ($this->contactReplies->contains($contactReply)) {
             $this->contactReplies->removeElement($contactReply);
@@ -327,5 +328,10 @@ class ContactMail
         }
 
         return $this;
+    }
+
+    public function isReplied(): bool
+    {
+        return $this->contactReplies->count() > 0;
     }
 }

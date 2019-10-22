@@ -23,6 +23,7 @@
   "zip": "Postleitzahl"
 "ContactMail": "ContactMail"
 "easyAdmin":
+  "show": "Anzeigen"
   "feature":
     "help": "Vorschlag für ein neues Feature."
     "title": "Feature"
@@ -49,6 +50,7 @@
   "contact.help": "Neue Anfragen bitte umgehend beantworten"
   "contact.phone": "Telefon"
   "contact.reply.message": "Antwort"
+  "contact.replied": "beantwortet"
   "contact.zip": "PLZ"
   "createdAt": "erstellt"
   "delete": "Löschen"
@@ -174,3 +176,8 @@
   "success.title": "Newsanmeldung"
 "User": "User"
 "Feature": "Feature"
+"NEWS": "NEWS"
+"BUG TRACKER": "BUG TRACKER"
+"BugReport": "BugReport"
+"SERVER": "SERVER"
+"PHP Info": "PHP Info"

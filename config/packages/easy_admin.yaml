@@ -1,9 +1,9 @@
 easy_admin:
     site_name: 'Nakade <img width="64px" height="64px" alt="Nakade" src="/images/nakade_256x256.png" /> Admin'
     formats:
-        date:     'd-m-Y'
+        date:     'd.m.Y'
         time:     'H:i'
-        datetime: 'd-m-Y'
+        datetime: 'd.m.Y'
     user:
         display_name: true
         display_avatar: true
@@ -34,7 +34,7 @@ easy_admin:
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
         actions:
-            - { name: show, icon: search, label: false, title: 'easyAdmin.update' }
+            - { name: show, icon: search, label: false, title: 'easyAdmin.show' }
             - { name: edit, icon: pencil, label: false, title: 'easyAdmin.update' }
             - { name: delete, icon: remove, label: false, title: 'easyAdmin.delete' }
     entities:
@@ -61,6 +61,7 @@ easy_admin:
             help: 'easyAdmin.contact.help'
             templates:
                 list: 'admin/contact/list.html.twig'
+                show: 'admin/contact/show.html.twig'
             list:
                 actions: [-new, -edit,]
                 fields: [
@@ -68,9 +69,7 @@ easy_admin:
                     { property: 'email', type: 'email', label: 'easyAdmin.user.email' },
                     { property: 'name', label: 'easyAdmin.user.name' },
                     { property: 'phone', label: 'easyAdmin.contact.phone' },
-                    { property: 'zipCode', label: 'easyAdmin.contact.zip' },
-                    { property: 'city', label: 'easyAdmin.contact.city' },
-                    { property: 'address', label: 'easyAdmin.contact.address' },
+                    { property: 'isReplied', label: 'easyAdmin.contact.replied', type: 'boolean' },
                     { property: 'createdAt', label: 'easyAdmin.createdAt' },
                     ]
                 sort: ['createdAt', 'DESC']
@@ -138,7 +137,7 @@ easy_admin:
                   - { property: 'lastName', label: 'easyAdmin.user.lastName' }
                   - { property: 'confirmed', help: 'Email Adresse ist bestätigt.', label: 'easyAdmin.user.confirmed' }
                   - { property: 'createdAt', label: 'easyAdmin.createdAt' }
-                sort: ['email', 'ASC']
+                sort: ['id', 'ASC']
             form:
                 fields:
                   - { property: 'firstName', label: 'easyAdmin.user.firstName' }

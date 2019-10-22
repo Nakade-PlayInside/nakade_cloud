@@ -1,0 +1,26 @@
+{% extends '@EasyAdmin/default/show.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('feature') }}
+{% endblock %}
+
+{% block show_fields %}
+    {{parent()}}
+    {% for reply in entity.contactReplies %}
+    <table class="feature" >
+        <thead class="comment">
+        <tr>
+            <th>Antwort #{{ loop.index }}</th>
+            <th title="Autor">{{ reply.editor }}</th>
+            <th title="erstellt am">{{ reply.createdAt|date('d.m.Y') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="2">{{ reply.message | raw}}</td>
+        </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+{% endblock %}

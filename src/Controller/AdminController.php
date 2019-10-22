@@ -84,8 +84,18 @@ class AdminController extends EasyAdminController
     public function replyContact(Request $request, MessageBusInterface $messageBus)
     {
         $contactId = $request->get('id');
-
+        $params = $request->get('parameters');
         $contact = $this->getDoctrine()->getRepository(ContactMail::class)->find($contactId);
+        $href = sprintf(
+            '/admin/?entity=%s&action=%s&menuIndex=%s&submenuIndex=%s&sortField=%s&sortDirection=%s&page=%s',
+            $params['entity'],
+            $params['action'],
+            $params['menuIndex'],
+            $params['submenuIndex'],
+            $params['sortField'],
+            $params['sortDirection'],
+            $params['page'],
+        );
 
         $form = $this->createForm(ContactReplyType::class);
         $form->handleRequest($request);
@@ -105,15 +115,20 @@ class AdminController extends EasyAdminController
             $this->addFlash('success', 'easyAdmin.flash.message.success');
 
             return $this->redirectToRoute('easyadmin', [
-                    'action' => 'list',
-                    'entity' => 'ContactMail',
-                    'menuIndex' => 1,
+                    'entity' => $params['entity'],
+                    'menuIndex' => $params['menuIndex'],
+                    'action' => $params['action'],
+                    'submenuIndex' => $params['submenuIndex'],
+                    'page' => $params['page'],
+                    'sortField' => $params['sortField'],
+                    'sortDirection' => $params['sortDirection'],
             ]);
         }
 
         return $this->render('admin/contact/reply.html.twig', [
                 'form' => $form->createView(),
                 'contact' => $contact,
+                'href' => $href,
         ]);
     }
 
