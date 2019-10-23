@@ -19,6 +19,8 @@
  */
 namespace App\Entity\Bundesliga;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,35 +47,24 @@ class BundesligaResults
     private $matchDay;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="smallint")
      */
-
-    private $homeTeam;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $awayTeam;
+    private $pointsAway;
 
     /**
      * @ORM\Column(type="smallint")
      */
-    private $pointsAwayTeam;
-
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private $pointsHomeTeam;
+    private $pointsHome;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $boardPointsAwayTeam;
+    private $boardPointsAway;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $boardPointsHomeTeam;
+    private $boardPointsHome;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -81,10 +72,26 @@ class BundesligaResults
     private $playedAt;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaDetails", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="results")
+     */
+    private $matches;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $details;
+    private $home;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $away;
+
+    public function __construct()
+    {
+        $this->matches = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -103,74 +110,50 @@ class BundesligaResults
         return $this;
     }
 
-    public function getHomeTeam(): ?string
+    public function getPointsAway(): ?int
     {
-        return $this->homeTeam;
+        return $this->pointsAway;
     }
 
-    public function setHomeTeam(string $homeTeam): self
+    public function setPointsTeam(int $pointsTeam): self
     {
-        $this->homeTeam = $homeTeam;
+        $this->pointsTeam = $pointsTeam;
 
         return $this;
     }
 
-    public function getAwayTeam(): ?string
+    public function getPointsHome(): ?int
     {
-        return $this->awayTeam;
+        return $this->pointsHome;
     }
 
-    public function setAwayTeam(string $awayTeam): self
+    public function setPointsHome(int $pointsHome): self
     {
-        $this->awayTeam = $awayTeam;
+        $this->pointsHome = $pointsHome;
 
         return $this;
     }
 
-    public function getPointsAwayTeam(): ?int
+    public function getBoardPointsAway(): ?int
     {
-        return $this->pointsAwayTeam;
+        return $this->boardPointsAway;
     }
 
-    public function setPointsAwayTeam(int $pointsAwayTeam): self
+    public function setBoardPointsAway(int $boardPointsAway): self
     {
-        $this->pointsAwayTeam = $pointsAwayTeam;
+        $this->boardPointsAway = $boardPointsAway;
 
         return $this;
     }
 
-    public function getPointsHomeTeam(): ?int
+    public function getBoardPointsHome(): ?int
     {
-        return $this->pointsHomeTeam;
+        return $this->boardPointsHome;
     }
 
-    public function setPointsHomeTeam(int $pointsHomeTeam): self
+    public function setBoardPointsHome(int $boardPointsHome): self
     {
-        $this->pointsHomeTeam = $pointsHomeTeam;
-
-        return $this;
-    }
-
-    public function getBoardPointsAwayTeam(): ?int
-    {
-        return $this->boardPointsAwayTeam;
-    }
-
-    public function setBoardPointsAwayTeam(int $boardPointsAwayTeam): self
-    {
-        $this->boardPointsAwayTeam = $boardPointsAwayTeam;
-
-        return $this;
-    }
-
-    public function getBoardPointsHomeTeam(): ?int
-    {
-        return $this->boardPointsHomeTeam;
-    }
-
-    public function setBoardPointsHomeTeam(int $boardPointsHomeTeam): self
-    {
-        $this->boardPointsHomeTeam = $boardPointsHomeTeam;
+        $this->boardPointsHome = $boardPointsHome;
 
         return $this;
     }
@@ -199,14 +182,57 @@ class BundesligaResults
         return $this;
     }
 
-    public function getDetails(): ?BundesligaDetails
+    /**
+     * @return Collection|BundesligaMatch[]
+     */
+    public function getMatches(): Collection
     {
-        return $this->details;
+        return $this->matches;
     }
 
-    public function setDetails(?BundesligaDetails $details): self
+    public function addMatch(BundesligaMatch $match): self
     {
-        $this->details = $details;
+        if (!$this->matches->contains($match)) {
+            $this->matches[] = $match;
+            $match->setResults($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(BundesligaMatch $match): self
+    {
+        if ($this->matches->contains($match)) {
+            $this->matches->removeElement($match);
+            // set the owning side to null (unless already changed)
+            if ($match->getResults() === $this) {
+                $match->setResults(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHome(): ?BundesligaTeam
+    {
+        return $this->home;
+    }
+
+    public function setHome(?BundesligaTeam $home): self
+    {
+        $this->home = $home;
+
+        return $this;
+    }
+
+    public function getAway(): ?BundesligaTeam
+    {
+        return $this->away;
+    }
+
+    public function setAway(?BundesligaTeam $away): self
+    {
+        $this->away = $away;
 
         return $this;
     }

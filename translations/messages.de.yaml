@@ -23,6 +23,20 @@
   "zip": "Postleitzahl"
 "ContactMail": "ContactMail"
 "easyAdmin":
+  "bundesliga":
+    "team.label": "Teams"
+    "opponent.label": "Gegner"
+    "match.label": "Spieltag"
+    "team.title": "Team"
+    "results.title": "Ergebnisse"
+    "player.title": "Spieler"
+    "player.help": "Das Nakade Team dieser Saison."
+    "menu": "BUNDESLIGA"
+    "season": "Saison"
+    "season.label": "Bundesliga Saison"
+    "season.title": "Bezeichnung"
+    "season.start": "start"
+    "season.end": "ende"
   "show": "Anzeigen"
   "feature":
     "help": "Vorschlag für ein neues Feature."
@@ -181,3 +195,5 @@
 "BugReport": "BugReport"
 "SERVER": "SERVER"
 "PHP Info": "PHP Info"
+"BundesligaSeason": "BundesligaSeason"
+"BundesligaResults": "BundesligaResults"

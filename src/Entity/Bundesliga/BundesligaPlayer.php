@@ -52,19 +52,19 @@ class BundesligaPlayer
     private $birthDay;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaTeam", mappedBy="players")
-     */
-    private $teams;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="player")
      */
     private $matches;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaSeason", mappedBy="players")
+     */
+    private $seasons;
+
     public function __construct()
     {
-        $this->teams = new ArrayCollection();
         $this->matches = new ArrayCollection();
+        $this->seasons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,34 +109,6 @@ class BundesligaPlayer
     }
 
     /**
-     * @return Collection|BundesligaTeam[]
-     */
-    public function getTeams(): Collection
-    {
-        return $this->teams;
-    }
-
-    public function addTeam(BundesligaTeam $team): self
-    {
-        if (!$this->teams->contains($team)) {
-            $this->teams[] = $team;
-            $team->addPlayer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTeam(BundesligaTeam $team): self
-    {
-        if ($this->teams->contains($team)) {
-            $this->teams->removeElement($team);
-            $team->removePlayer($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|BundesligaMatch[]
      */
     public function getMatches(): Collection
@@ -162,6 +134,34 @@ class BundesligaPlayer
             if ($match->getPlayer() === $this) {
                 $match->setPlayer(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BundesligaSeason[]
+     */
+    public function getSeasons(): Collection
+    {
+        return $this->seasons;
+    }
+
+    public function addBundesligaSeason(BundesligaSeason $bundesligaSeason): self
+    {
+        if (!$this->seasons->contains($bundesligaSeason)) {
+            $this->seasons[] = $bundesligaSeason;
+            $bundesligaSeason->addPlayer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBundesligaSeason(BundesligaSeason $bundesligaSeason): self
+    {
+        if ($this->seasons->contains($bundesligaSeason)) {
+            $this->seasons->removeElement($bundesligaSeason);
+            $bundesligaSeason->removePlayer($this);
         }
 
         return $this;

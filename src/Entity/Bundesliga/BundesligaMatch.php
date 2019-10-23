@@ -46,6 +46,11 @@ class BundesligaMatch
     private $season;
 
     /**
+     * @ORM\Column(type="smallint")
+     */
+    private $board;
+
+    /**
      * @ORM\Column(type="string", length=10)
      */
     private $color;
@@ -53,13 +58,25 @@ class BundesligaMatch
     /**
      * @ORM\Column(type="smallint")
      */
-    private $result;
+    private $points;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaOpponent", inversedBy="matches")
      * @ORM\JoinColumn(nullable=false)
      */
     private $opponent;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $opponentTeam;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaResults", inversedBy="matches")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $results;
 
     public function getId(): ?int
     {
@@ -102,14 +119,14 @@ class BundesligaMatch
         return $this;
     }
 
-    public function getResult(): ?int
+    public function getPoints(): ?int
     {
-        return $this->result;
+        return $this->points;
     }
 
-    public function setResult(int $result): self
+    public function setPoints(int $points): self
     {
-        $this->result = $result;
+        $this->points = $points;
 
         return $this;
     }
@@ -122,6 +139,42 @@ class BundesligaMatch
     public function setOpponent(?BundesligaOpponent $opponent): self
     {
         $this->opponent = $opponent;
+
+        return $this;
+    }
+
+    public function getBoard(): ?int
+    {
+        return $this->board;
+    }
+
+    public function setBoard(int $board): self
+    {
+        $this->board = $board;
+
+        return $this;
+    }
+
+    public function getOpponentTeam(): ?BundesligaTeam
+    {
+        return $this->opponentTeam;
+    }
+
+    public function setOpponentTeam(?BundesligaTeam $team): self
+    {
+        $this->opponentTeam = $team;
+
+        return $this;
+    }
+
+    public function getResults(): ?BundesligaResults
+    {
+        return $this->results;
+    }
+
+    public function setResults(?BundesligaResults $bundesligaResults): self
+    {
+        $this->results = $bundesligaResults;
 
         return $this;
     }

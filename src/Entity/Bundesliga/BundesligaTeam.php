@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -20,8 +19,6 @@ declare(strict_types=1);
  */
 namespace App\Entity\Bundesliga;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,60 +34,23 @@ class BundesligaTeam
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason", inversedBy="team", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $season;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaPlayer", inversedBy="teams")
-     */
-    private $players;
-
-    public function __construct()
-    {
-        $this->players = new ArrayCollection();
-    }
+    private $name;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getSeason(): ?BundesligaSeason
+    public function getName(): ?string
     {
-        return $this->season;
+        return $this->name;
     }
 
-    public function setSeason(BundesligaSeason $season): self
+    public function setName(string $name): self
     {
-        $this->season = $season;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|BundesligaPlayer[]
-     */
-    public function getPlayers(): Collection
-    {
-        return $this->players;
-    }
-
-    public function addPlayer(BundesligaPlayer $player): self
-    {
-        if (!$this->players->contains($player)) {
-            $this->players[] = $player;
-        }
-
-        return $this;
-    }
-
-    public function removePlayer(BundesligaPlayer $player): self
-    {
-        if ($this->players->contains($player)) {
-            $this->players->removeElement($player);
-        }
+        $this->name = $name;
 
         return $this;
     }

@@ -21,6 +21,15 @@ easy_admin:
             children:
               - { entity: NewsReader, label: 'easyAdmin.news.reader', icon: 'address-card-o'}
               - { entity: NewsLetter, label: 'easyAdmin.news.letter', icon: 'envelope-o'}
+          - label: 'easyAdmin.bundesliga.menu'
+            icon: 'star-o'
+            children:
+              - { entity: BundesligaSeason, label: 'easyAdmin.bundesliga.season', icon: 'calendar'}
+              - { entity: BundesligaPlayer, label: 'easyAdmin.bundesliga.player.title', icon: 'user'}
+              - { entity: BundesligaTeam, label: 'easyAdmin.bundesliga.team.label', icon: 'users'}
+              - { entity: BundesligaOpponent, label: 'easyAdmin.bundesliga.opponent.label', icon: 'address-book-o'}
+              - { entity: BundesligaMatch, label: 'easyAdmin.bundesliga.match.label', icon: 'balance-scale'}
+              - { entity: BundesligaResults, label: 'easyAdmin.bundesliga.results.title', icon: 'line-chart'}
           - label: 'BUG TRACKER'
             icon: 'bug'
             children:
@@ -269,3 +278,29 @@ easy_admin:
                   - { property: 'createdAt', label: 'easyAdmin.bug.createdAt' }
             edit:
                 actions: [-delete]
+        BundesligaSeason:
+          class: App\Entity\Bundesliga\BundesligaSeason
+          label: 'easyAdmin.bundesliga.season.label'
+          list:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'title', label: 'easyAdmin.bundesliga.season.title' }
+              - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
+              - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
+        BundesligaPlayer:
+          class: App\Entity\Bundesliga\BundesligaPlayer
+          label: 'easyAdmin.bundesliga.player.title'
+          help: 'easyAdmin.bundesliga.player.help'
+        BundesligaTeam:
+          class: App\Entity\Bundesliga\BundesligaTeam
+          label: 'easyAdmin.bundesliga.player.title'
+        BundesligaOpponent:
+          class: App\Entity\Bundesliga\BundesligaOpponent
+          label: 'easyAdmin.bundesliga.player.title'
+        BundesligaMatch:
+          class: App\Entity\Bundesliga\BundesligaMatch
+          label: 'easyAdmin.bundesliga.player.title'
+        BundesligaResults:
+          class: App\Entity\Bundesliga\BundesligaResults
+          label: 'easyAdmin.bundesliga.player.title'
+          help: 'easyAdmin.bundesliga.player.help'

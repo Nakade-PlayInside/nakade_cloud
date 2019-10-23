@@ -52,18 +52,19 @@ class BundesligaSeason
     private $endAt;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam", mappedBy="season", cascade={"persist", "remove"})
-     */
-    private $team;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="season")
      */
     private $matches;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaPlayer", inversedBy="seasons")
+     */
+    private $players;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
+        $this->players = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,23 +108,6 @@ class BundesligaSeason
         return $this;
     }
 
-    public function getTeam(): ?BundesligaTeam
-    {
-        return $this->team;
-    }
-
-    public function setTeam(BundesligaTeam $team): self
-    {
-        $this->team = $team;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $team->getSeason()) {
-            $team->setSeason($this);
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection|BundesligaMatch[]
      */
@@ -150,6 +134,32 @@ class BundesligaSeason
             if ($match->getSeason() === $this) {
                 $match->setSeason(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BundesligaPlayer[]
+     */
+    public function getPlayers(): Collection
+    {
+        return $this->players;
+    }
+
+    public function addPlayer(BundesligaPlayer $player): self
+    {
+        if (!$this->players->contains($player)) {
+            $this->players[] = $player;
+        }
+
+        return $this;
+    }
+
+    public function removePlayer(BundesligaPlayer $player): self
+    {
+        if ($this->players->contains($player)) {
+            $this->players->removeElement($player);
         }
 
         return $this;
