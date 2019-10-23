@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -18,6 +19,7 @@ declare(strict_types=1);
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity\Bundesliga;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -147,7 +149,7 @@ class BundesligaPlayer
         return $this->seasons;
     }
 
-    public function addBundesligaSeason(BundesligaSeason $bundesligaSeason): self
+    public function addSeason(BundesligaSeason $bundesligaSeason): self
     {
         if (!$this->seasons->contains($bundesligaSeason)) {
             $this->seasons[] = $bundesligaSeason;
@@ -157,7 +159,7 @@ class BundesligaPlayer
         return $this;
     }
 
-    public function removeBundesligaSeason(BundesligaSeason $bundesligaSeason): self
+    public function removeSeason(BundesligaSeason $bundesligaSeason): self
     {
         if ($this->seasons->contains($bundesligaSeason)) {
             $this->seasons->removeElement($bundesligaSeason);
@@ -165,5 +167,19 @@ class BundesligaPlayer
         }
 
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->firstName.' '.$this->lastName;
+    }
+
+    public function getAge(): ?string
+    {
+        if (!$this->birthDay) {
+            return '';
+        }
+
+        return (string) (new \DateTime('now'))->diff($this->birthDay)->y;
     }
 }

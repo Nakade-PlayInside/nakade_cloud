@@ -287,19 +287,65 @@ easy_admin:
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title' }
               - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
               - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
+          new:
+            fields:
+              - { property: 'title', label: 'easyAdmin.bundesliga.season.title', help: 'easyAdmin.bundesliga.season.help' }
+              - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
+              - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
         BundesligaPlayer:
           class: App\Entity\Bundesliga\BundesligaPlayer
           label: 'easyAdmin.bundesliga.player.title'
           help: 'easyAdmin.bundesliga.player.help'
+          list:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'name', label: 'easyAdmin.user.name' }
+              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay' }
+              - { property: 'age', label: 'easyAdmin.bundesliga.player.age' }
+              - { property: 'matches', label: 'easyAdmin.bundesliga.matches' }
+              - { property: 'seasons', label: 'easyAdmin.bundesliga.season', type: 'association', }
+          new:
+            fields:
+              - { property: 'firstName', label: 'easyAdmin.user.firstName' }
+              - { property: 'lastName', label: 'easyAdmin.user.lastName' }
+              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay' }
+              - { property: 'seasons', label: 'easyAdmin.bundesliga.season',
+                  type_options: { expanded: true, multiple: true }
+                }
+          edit:
+            fields:
+              - { property: 'firstName', label: 'easyAdmin.user.firstName' }
+              - { property: 'lastName', label: 'easyAdmin.user.lastName' }
+              - { property: 'seasons', label: 'easyAdmin.bundesliga.season',
+                  type_options: { expanded: true, multiple: true, choice_value: id , choice_label: title } }
         BundesligaTeam:
           class: App\Entity\Bundesliga\BundesligaTeam
-          label: 'easyAdmin.bundesliga.player.title'
+          label: 'easyAdmin.bundesliga.team.title'
+          list:
+            help: 'easyAdmin.bundesliga.team.help'
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'name', label: 'easyAdmin.user.name' }
+          new:
+            fields:
+              - { property: 'name', label: 'easyAdmin.user.name' }
         BundesligaOpponent:
           class: App\Entity\Bundesliga\BundesligaOpponent
           label: 'easyAdmin.bundesliga.player.title'
         BundesligaMatch:
           class: App\Entity\Bundesliga\BundesligaMatch
           label: 'easyAdmin.bundesliga.player.title'
+          new:
+            fields:
+              - { property: 'board', label: 'Brett' }
+              - { property: 'color', label: 'Farbe' }
+              - { property: 'player', label: 'Spieler',
+                  type_options: { choice_value: id , choice_label: name }}
+              - { property: 'opponent', label: 'Gegner'}
+              - { property: 'opponentTeam', label: 'Gegner Team',
+                  type_options: { choice_value: id , choice_label: name }}
+              - { property: 'season', label: 'Saison',
+                  type_options: { choice_value: id , choice_label: title }}
         BundesligaResults:
           class: App\Entity\Bundesliga\BundesligaResults
           label: 'easyAdmin.bundesliga.player.title'
