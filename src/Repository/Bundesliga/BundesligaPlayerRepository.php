@@ -17,35 +17,35 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace App\Repository;
+namespace App\Repository\Bundesliga;
 
-use App\Entity\FeatureComment;
+use App\Entity\Bundesliga\BundesligaPlayer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method FeatureComment|null find($id, $lockMode = null, $lockVersion = null)
- * @method FeatureComment|null findOneBy(array $criteria, array $orderBy = null)
- * @method FeatureComment[]    findAll()
- * @method FeatureComment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BundesligaPlayer|null find($id, $lockMode = null, $lockVersion = null)
+ * @method BundesligaPlayer|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BundesligaPlayer[]    findAll()
+ * @method BundesligaPlayer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CommentRepository extends ServiceEntityRepository
+class BundesligaPlayerRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, FeatureComment::class);
+        parent::__construct($registry, BundesligaPlayer::class);
     }
 
     // /**
-    //  * @return Comment[] Returns an array of Comment objects
+    //  * @return Player[] Returns an array of Player objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
+            ->orderBy('p.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -54,10 +54,10 @@ class CommentRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Comment
+    public function findOneBySomeField($value): ?Player
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

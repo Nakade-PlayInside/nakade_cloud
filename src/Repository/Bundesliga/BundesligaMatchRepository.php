@@ -17,51 +17,22 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace App\Repository;
+namespace App\Repository\Bundesliga;
 
-use App\Entity\FeatureComment;
+use App\Entity\Bundesliga\BundesligaMatch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method FeatureComment|null find($id, $lockMode = null, $lockVersion = null)
- * @method FeatureComment|null findOneBy(array $criteria, array $orderBy = null)
- * @method FeatureComment[]    findAll()
- * @method FeatureComment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BundesligaMatch|null find($id, $lockMode = null, $lockVersion = null)
+ * @method BundesligaMatch|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BundesligaMatch[]    findAll()
+ * @method BundesligaMatch[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CommentRepository extends ServiceEntityRepository
+class BundesligaMatchRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, FeatureComment::class);
+        parent::__construct($registry, BundesligaMatch::class);
     }
-
-    // /**
-    //  * @return Comment[] Returns an array of Comment objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Comment
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
