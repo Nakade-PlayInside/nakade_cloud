@@ -281,17 +281,31 @@ easy_admin:
         BundesligaSeason:
           class: App\Entity\Bundesliga\BundesligaSeason
           label: 'easyAdmin.bundesliga.season.label'
+          templates:
+#            field_association: 'admin/bundesliga/season/field_association.html.twig'
           list:
+            search:
+              fields: ['title', 'startAt', 'endAt']
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title' }
               - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
               - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
-          new:
+              - { property: 'players', label: 'easyAdmin.bundesliga.player.title' }
+              - { property: 'matches', label: 'easyAdmin.bundesliga.matches'}
+          form:
             fields:
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title', help: 'easyAdmin.bundesliga.season.help' }
               - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
               - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
+          show:
+            fields:
+              - { property: 'title', label: 'easyAdmin.bundesliga.season.title', help: 'easyAdmin.bundesliga.season.help' }
+              - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
+              - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
+              - { property: 'players', label: 'easyAdmin.bundesliga.player.title',
+                  template: "admin/bundesliga/season/field_association.html.twig",
+                }
         BundesligaPlayer:
           class: App\Entity\Bundesliga\BundesligaPlayer
           label: 'easyAdmin.bundesliga.player.title'

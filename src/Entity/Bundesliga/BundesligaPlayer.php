@@ -182,4 +182,10 @@ class BundesligaPlayer
 
         return (string) (new \DateTime('now'))->diff($this->birthDay)->y;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
 }

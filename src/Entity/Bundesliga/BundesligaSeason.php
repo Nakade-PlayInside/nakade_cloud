@@ -54,12 +54,12 @@ class BundesligaSeason
     private $endAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="season")
+     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="season", fetch="EXTRA_LAZY")
      */
     private $matches;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaPlayer", inversedBy="seasons")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaPlayer", inversedBy="seasons", fetch="EXTRA_LAZY")
      */
     private $players;
 
@@ -167,8 +167,8 @@ class BundesligaSeason
         return $this;
     }
 
-//    public function __toString()
-//    {
-//        return $this->title;
-//    }
+    public function __toString()
+    {
+        return $this->title;
+    }
 }
