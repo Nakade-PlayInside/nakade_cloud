@@ -36,12 +36,6 @@ class BundesligaResults
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $season;
-
-    /**
      * @ORM\Column(type="smallint")
      */
     private $matchDay;
@@ -88,6 +82,12 @@ class BundesligaResults
      */
     private $away;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $season;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
@@ -115,9 +115,9 @@ class BundesligaResults
         return $this->pointsAway;
     }
 
-    public function setPointsTeam(int $pointsTeam): self
+    public function setPointsAway(int $points): self
     {
-        $this->pointsTeam = $pointsTeam;
+        $this->pointsAway = $points;
 
         return $this;
     }
@@ -166,18 +166,6 @@ class BundesligaResults
     public function setPlayedAt(?\DateTimeInterface $playedAt): self
     {
         $this->playedAt = $playedAt;
-
-        return $this;
-    }
-
-    public function getSeason(): ?BundesligaSeason
-    {
-        return $this->season;
-    }
-
-    public function setSeason(BundesligaSeason $season): self
-    {
-        $this->season = $season;
 
         return $this;
     }
@@ -233,6 +221,18 @@ class BundesligaResults
     public function setAway(?BundesligaTeam $away): self
     {
         $this->away = $away;
+
+        return $this;
+    }
+
+    public function getSeason(): ?BundesligaSeason
+    {
+        return $this->season;
+    }
+
+    public function setSeason(?BundesligaSeason $season): self
+    {
+        $this->season = $season;
 
         return $this;
     }

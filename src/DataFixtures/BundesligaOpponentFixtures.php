@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Bundesliga\BundesligaTeam;
+use App\Entity\Bundesliga\BundesligaOpponent;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -30,16 +30,16 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaTeamFixtures extends BaseFixture
+class BundesligaOpponentFixtures extends BaseFixture
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(20, 'bl_team', function ($i) {
-            $team = new BundesligaTeam();
-            $name = ($i > 1) ? $this->faker->company : 'nakade';
-            $team->setName($name);
+        $this->createMany(30, 'bl_opponent', function ($i) {
+            $player = new BundesligaOpponent();
+            $player->setFirstName($this->faker->firstName);
+            $player->setLastName($this->faker->lastName);
 
-            return $team;
+            return $player;
         });
 
         $manager->flush();

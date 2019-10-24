@@ -53,10 +53,10 @@ class BundesligaMatch
     /**
      * @ORM\Column(type="string", length=10)
      */
-    private $color;
+    private $color='b';
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $points;
 
@@ -67,14 +67,14 @@ class BundesligaMatch
     private $opponent;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam", inversedBy="matches")
      * @ORM\JoinColumn(nullable=false)
      */
     private $opponentTeam;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaResults", inversedBy="matches")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $results;
 
@@ -177,5 +177,10 @@ class BundesligaMatch
         $this->results = $bundesligaResults;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getOpponentTeam()->getName();
     }
 }

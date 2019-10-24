@@ -19,6 +19,8 @@
  */
 namespace App\Entity\Bundesliga;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,6 +40,16 @@ class BundesligaTeam
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="opponentTeam", fetch="EXTRA_LAZY")
+     */
+    private $matches;
+
+    public function __construct()
+    {
+        $this->matches = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,5 +65,41 @@ class BundesligaTeam
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|BundesligaMatch[]
+     */
+    public function getMatches(): Collection
+    {
+        return $this->matches;
+    }
+
+    public function addMatch(BundesligaMatch $match): self
+    {
+        if (!$this->matches->contains($match)) {
+            $this->matches[] = $match;
+            $match->setOpponentTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(BundesligaMatch $match): self
+    {
+        if ($this->matches->contains($match)) {
+            $this->matches->removeElement($match);
+            // set the owning side to null (unless already changed)
+            if ($match->getOpponentTeam() === $this) {
+                $match->setOpponentTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

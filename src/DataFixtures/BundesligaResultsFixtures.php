@@ -22,7 +22,10 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Entity\Bundesliga\BundesligaResults;
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -30,18 +33,46 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaTeamFixtures extends BaseFixture
+class BundesligaResultsFixtures extends BaseFixture implements DependentFixtureInterface
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(20, 'bl_team', function ($i) {
-            $team = new BundesligaTeam();
-            $name = ($i > 1) ? $this->faker->company : 'nakade';
-            $team->setName($name);
+        $this->createMany(20, 'bl_results', function ($i) {
+            $result = new BundesligaResults();
 
-            return $team;
+            $result->setMatchDay($this->faker->numberBetween(0, 7));
+            $points = $this->faker->numberBetween(0, 8);
+            $result->setPointsHome($points);
+            $result->setPointsAway(8 - $points);
+            $result->setBoardPointsAway($result->getPointsAway());
+            $result->setBoardPointsHome($result->getPointsHome());
+            $result->setPlayedAt($this->faker->dateTimeThisDecade);
+
+            /** @var BundesligaSeason $season */
+            $season = $this->getRandomReference(BundesligaSeason::class, 'bl_season');
+            $result->setSeason($season);
+
+            /** @var BundesligaTeam $homeTeam */
+            $homeTeam = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
+            $result->setHome($homeTeam);
+
+            /** @var BundesligaTeam $awayTeam */
+            $awayTeam = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
+            $result->setAway($awayTeam);
+
+            return $result;
         });
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            BundesligaSeasonFixtures::class,
+            BundesligaPlayerFixtures::class,
+            BundesligaOpponentFixtures::class,
+            BundesligaTeamFixtures::class,
+        ];
     }
 }
