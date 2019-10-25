@@ -45,9 +45,15 @@ class BundesligaTeam
      */
     private $matches;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaSeason", mappedBy="teams")
+     */
+    private $seasons;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
+        $this->seasons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,5 +107,33 @@ class BundesligaTeam
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|BundesligaSeason[]
+     */
+    public function getSeasons(): Collection
+    {
+        return $this->seasons;
+    }
+
+    public function addSeason(BundesligaSeason $season): self
+    {
+        if (!$this->seasons->contains($season)) {
+            $this->seasons[] = $season;
+            $season->addTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeason(BundesligaSeason $season): self
+    {
+        if ($this->seasons->contains($season)) {
+            $this->seasons->removeElement($season);
+            $season->removeTeam($this);
+        }
+
+        return $this;
     }
 }

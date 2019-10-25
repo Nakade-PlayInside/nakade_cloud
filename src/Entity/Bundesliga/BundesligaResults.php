@@ -17,6 +17,7 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity\Bundesliga;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,12 +42,12 @@ class BundesligaResults
     private $matchDay;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $pointsAway;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $pointsHome;
 
@@ -235,5 +236,15 @@ class BundesligaResults
         $this->season = $season;
 
         return $this;
+    }
+
+    public function getPairing(): string
+    {
+        return $this->getHome()->getName().' - '.$this->getAway()->getName();
+    }
+
+    public function getResult(): string
+    {
+        return $this->getPointsHome().' : '.$this->getPointsAway();
     }
 }

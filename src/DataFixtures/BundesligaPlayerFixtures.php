@@ -23,8 +23,6 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Entity\Bundesliga\BundesligaPlayer;
-use App\Entity\Bundesliga\BundesligaSeason;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -32,7 +30,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaPlayerFixtures extends BaseFixture implements DependentFixtureInterface
+class BundesligaPlayerFixtures extends BaseFixture
 {
     protected function loadData(ObjectManager $manager)
     {
@@ -44,18 +42,9 @@ class BundesligaPlayerFixtures extends BaseFixture implements DependentFixtureIn
                 $player->setBirthDay($this->faker->dateTimeBetween('-70 years', '-15 years'));
             }
 
-            /** @var BundesligaSeason $season */
-            $season = $this->getRandomReference(BundesligaSeason::class, 'bl_season');
-            $player->addSeason($season);
-
             return $player;
         });
 
         $manager->flush();
-    }
-
-    public function getDependencies()
-    {
-        return [BundesligaSeasonFixtures::class];
     }
 }

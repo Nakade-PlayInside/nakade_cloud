@@ -22,7 +22,10 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Entity\Bundesliga\BundesligaTeam;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -30,26 +33,48 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaSeasonFixtures extends BaseFixture
+class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureInterface
 {
     protected function loadData(ObjectManager $manager)
     {
         $this->createMany(8, 'bl_season', function ($i) {
-
-            $startYear = 10+$i;
-            $title = sprintf('Saison 20%d/%d', $startYear, $startYear+1);
-            $startDate = sprintf('20%d-08-%d', $startYear, $this->faker->numberBetween(1,28));
-            $endDate = sprintf('20%d-05-%d', $startYear+1, $this->faker->numberBetween(1,28));
+            $startYear = 10 + $i;
+            $title = sprintf('Saison 20%d/%d', $startYear, $startYear + 1);
+            $startDate = sprintf('20%d-08-%d', $startYear, $this->faker->numberBetween(1, 28));
+            $endDate = sprintf('20%d-05-%d', $startYear + 1, $this->faker->numberBetween(1, 28));
 
             $season = new BundesligaSeason();
             $season->setTitle($title);
             $season->setStartAt(new \DateTime($startDate));
             $season->setEndAt(new \DateTime($endDate));
 
+            /** @var BundesligaTeam $team */
+            $team = $this->getReference('bl_team_1');
+            $season->addTeam($team);
+
+            while (sizeof($season->getTeams()) < 8) {
+                /** @var BundesligaTeam $team */
+                $team = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
+                $season->addTeam($team);
+            }
+
+            while (sizeof($season->getPlayers()) < 10) {
+                /** @var BundesligaPlayer $player */
+                $player = $this->getRandomReference(BundesligaPlayer::class, 'bl_player');
+                $season->addPlayer($player);
+            }
+
             return $season;
         });
 
         $manager->flush();
     }
-}
 
+    public function getDependencies()
+    {
+        return [
+            BundesligaTeamFixtures::class,
+            BundesligaPlayerFixtures::class,
+        ];
+    }
+}

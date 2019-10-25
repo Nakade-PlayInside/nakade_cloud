@@ -34,9 +34,9 @@ class BundesligaTeamFixtures extends BaseFixture
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(20, 'bl_team', function ($i) {
+        $this->createMany(30, 'bl_team', function ($i) {
             $team = new BundesligaTeam();
-            $name = ($i > 1) ? $this->faker->company : 'nakade';
+            $name = ($i > 1) ? $this->faker->city : 'Nakade';
             $team->setName($name);
 
             return $team;

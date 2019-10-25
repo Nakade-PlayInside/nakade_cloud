@@ -40,7 +40,7 @@ class BundesligaResultsFixtures extends BaseFixture implements DependentFixtureI
         $this->createMany(20, 'bl_results', function ($i) {
             $result = new BundesligaResults();
 
-            $result->setMatchDay($this->faker->numberBetween(0, 7));
+            $result->setMatchDay($this->faker->numberBetween(1, 8));
             $points = $this->faker->numberBetween(0, 8);
             $result->setPointsHome($points);
             $result->setPointsAway(8 - $points);
