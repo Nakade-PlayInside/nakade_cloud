@@ -299,6 +299,8 @@ easy_admin:
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title', help: 'easyAdmin.bundesliga.season.help' }
               - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
               - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
+              - { property: 'teams', label: 'easyAdmin.bundesliga.season.teams' }
+              - { property: 'players', label: 'easyAdmin.bundesliga.season.players' }
           show:
             fields:
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title', help: 'easyAdmin.bundesliga.season.help' }
@@ -307,6 +309,8 @@ easy_admin:
               - { property: 'players', label: 'easyAdmin.bundesliga.player.title',
                   template: "admin/bundesliga/season/field_association.html.twig",
                 }
+              - { property: 'teams', label: 'easyAdmin.bundesliga.season.teams'}
+
         BundesligaPlayer:
           class: App\Entity\Bundesliga\BundesligaPlayer
           label: 'easyAdmin.bundesliga.player.title'
@@ -317,6 +321,7 @@ easy_admin:
               - { property: 'name', label: 'easyAdmin.user.name' }
               - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay' }
               - { property: 'age', label: 'easyAdmin.bundesliga.player.age' }
+              - { property: 'emails', label: 'easyAdmin.bundesliga.player.emails' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.matches' }
               - { property: 'seasons', label: 'easyAdmin.bundesliga.season', type: 'association', }
           new:
@@ -324,21 +329,17 @@ easy_admin:
               - { property: 'firstName', label: 'easyAdmin.user.firstName' }
               - { property: 'lastName', label: 'easyAdmin.user.lastName' }
               - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay' }
-              - { property: 'seasons', label: 'easyAdmin.bundesliga.season',
-                  type_options: { expanded: true, multiple: true }
-                }
           edit:
             fields:
               - { property: 'firstName', label: 'easyAdmin.user.firstName' }
               - { property: 'lastName', label: 'easyAdmin.user.lastName' }
-              - { property: 'seasons', label: 'easyAdmin.bundesliga.season',
-                  type_options: { expanded: true, multiple: true, choice_value: id , choice_label: title } }
+              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay' }
+              - { property: 'emails', label: 'easyAdmin.bundesliga.player.email' }
           show:
             fields:
               - { property: 'firstName', label: 'easyAdmin.user.firstName' }
               - { property: 'lastName', label: 'easyAdmin.user.lastName' }
-              - { property: 'seasons', label: 'easyAdmin.bundesliga.season',
-                  type_options: { expanded: true, multiple: true, choice_value: id , choice_label: title } }
+              - { property: 'seasons', label: 'easyAdmin.bundesliga.season'}
               - { property: 'matches', label: 'easyAdmin.bundesliga.matches',
                   template: 'admin/bundesliga/player/match_association.html.twig' }
         BundesligaTeam:

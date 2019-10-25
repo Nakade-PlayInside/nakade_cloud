@@ -24,10 +24,18 @@ namespace App\Entity\Bundesliga;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaPlayerRepository")
+ * @ORM\Table(name="bundesliga_player",uniqueConstraints={@ORM\UniqueConstraint(name="player_idx", columns={"first_name", "last_name"})})
+ *
+ * @UniqueEntity(
+ *     fields={"firstName", "lastName"},
+ *     message="This player is already registered!"
+ * )
  */
 class BundesligaPlayer
 {
@@ -39,11 +47,13 @@ class BundesligaPlayer
     private $id;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
@@ -62,6 +72,16 @@ class BundesligaPlayer
      * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaSeason", mappedBy="players")
      */
     private $seasons;
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $emails = [];
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $phone = [];
 
     public function __construct()
     {
@@ -149,21 +169,21 @@ class BundesligaPlayer
         return $this->seasons;
     }
 
-    public function addSeason(BundesligaSeason $bundesligaSeason): self
+    public function addSeason(BundesligaSeason $season): self
     {
-        if (!$this->seasons->contains($bundesligaSeason)) {
-            $this->seasons[] = $bundesligaSeason;
-            $bundesligaSeason->addPlayer($this);
+        if (!$this->seasons->contains($season)) {
+            $this->seasons[] = $season;
+            $season->addPlayer($this);
         }
 
         return $this;
     }
 
-    public function removeSeason(BundesligaSeason $bundesligaSeason): self
+    public function removeSeason(BundesligaSeason $season): self
     {
-        if ($this->seasons->contains($bundesligaSeason)) {
-            $this->seasons->removeElement($bundesligaSeason);
-            $bundesligaSeason->removePlayer($this);
+        if ($this->seasons->contains($season)) {
+            $this->seasons->removeElement($season);
+            $season->removePlayer($this);
         }
 
         return $this;
@@ -186,6 +206,30 @@ class BundesligaPlayer
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function getEmails(): ?array
+    {
+        return $this->emails;
+    }
+
+    public function setEmails(?array $emails): self
+    {
+        $this->emails = $emails;
+
+        return $this;
+    }
+
+    public function getPhone(): ?array
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?array $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
     }
 
 }

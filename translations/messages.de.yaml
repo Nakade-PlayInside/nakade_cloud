@@ -43,6 +43,8 @@
     "player.age": "Alter"
     "player.firstName": "Vorname"
     "player.lastName": "Nachname"
+    "player.emails": "Email"
+    "player.phone": "Telefon"
     "player.name": "Name"
     "player.birthDay": "geb. am"
     "player.help": "Alle Spieler, die je für Nakade gespielt haben."

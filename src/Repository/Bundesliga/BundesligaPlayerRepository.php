@@ -17,6 +17,7 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaPlayer;
@@ -36,22 +37,18 @@ class BundesligaPlayerRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaPlayer::class);
     }
 
-    // /**
-    //  * @return Player[] Returns an array of Player objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findPlayerByIdWithSeasons($id)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $queryBuilder = $this->createQueryBuilder('p')
+               ->where('p.id = :player_id')
+               ->addSelect('seasons')
+               ->leftJoin('p.seasons', 'seasons')
+               ->setParameter('player_id', $id);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getOneOrNullResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Player

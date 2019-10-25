@@ -24,10 +24,17 @@ namespace App\Entity\Bundesliga;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaSeasonRepository")
+ *
+ * @UniqueEntity(
+ *     fields={"title"},
+ *     message="This season is already registered!"
+ * )
  */
 class BundesligaSeason
 {
@@ -39,7 +46,8 @@ class BundesligaSeason
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $title;
 
@@ -64,7 +72,7 @@ class BundesligaSeason
     private $players;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaTeam", inversedBy="seasons")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaTeam", inversedBy="seasons", fetch="EXTRA_LAZY")
      */
     private $teams;
 

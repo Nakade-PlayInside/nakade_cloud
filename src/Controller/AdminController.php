@@ -23,6 +23,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\BugReport;
+use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\ContactMail;
 use App\Entity\Feature;
 use App\Entity\User;
@@ -51,6 +53,18 @@ class AdminController extends EasyAdminController
             $roles = $this->request->request->get('roles');
             $user->setRoles($roles);
         }
+        $this->getDoctrine()->getManager()->flush();
+    }
+
+    protected function updateBundesligaPlayerEntity(BundesligaPlayer $player)
+    {
+        /** @var BundesligaPlayer $playerA */
+        $playerAsso = $this->getDoctrine()->getRepository(BundesligaPlayer::class)->findPlayerByIdWithSeasons($player->getId());
+
+        /** @var BundesligaSeason $season */
+        foreach($playerAsso->getSeasons() as $season) {
+            $season->addPlayer($player);
+        };
         $this->getDoctrine()->getManager()->flush();
     }
 
