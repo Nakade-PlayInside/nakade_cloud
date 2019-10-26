@@ -1,0 +1,1 @@
+{% if value %}<time datetime="{{ value|date('c') }}" title="{{ value|date('r') }}">{{ value|date(field_options.format) }}</time>{%  endif %}

@@ -1,0 +1,5 @@
+{% if value %}
+    <time datetime="{{ value|date('c') }}" title="{{ value|date('r') }}">{{ value|date(field_options.format) }}
+        <span class="birthday">({{ value|age }} {{'age.year'|trans({ }, 'messages')}})</span>
+    </time>
+{%  endif %}

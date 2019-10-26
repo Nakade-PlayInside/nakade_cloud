@@ -1,0 +1,17 @@
+{% if view == 'show' %}
+    {% if value|length > 0 %}
+        <ul class="player-contact">
+            {% for element in value %}
+                <li><i class="fa fa-fw fa-phone"></i>
+                    <a href="tel: {{ element }}">{{ element }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty collection-empty">
+            {{ include(entity_config.templates.label_empty) }}
+        </div>
+    {% endif %}
+{% else %}
+    {{ value|join(', ')|easyadmin_truncate }}#}
+{% endif %}

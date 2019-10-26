@@ -83,6 +83,11 @@ class BundesligaPlayer
      */
     private $phone = [];
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $dgobMember=false;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
@@ -228,6 +233,18 @@ class BundesligaPlayer
     public function setPhone(?array $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getDgobMember(): ?bool
+    {
+        return $this->dgobMember;
+    }
+
+    public function setDgobMember(bool $dgobMember): self
+    {
+        $this->dgobMember = $dgobMember;
 
         return $this;
     }

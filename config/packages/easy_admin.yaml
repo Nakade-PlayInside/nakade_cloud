@@ -1,5 +1,5 @@
 easy_admin:
-    site_name: 'Nakade <img width="64px" height="64px" alt="Nakade" src="/images/nakade_256x256.png" /> Admin'
+    site_name: 'Nakade <img width="64px" height="64px" alt="Nakade" src="/images/nakade_256x256.png" /> Admin Dashboard'
     formats:
         date:     'd.m.Y'
         time:     'H:i'
@@ -319,29 +319,31 @@ easy_admin:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'name', label: 'easyAdmin.user.name' }
-              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay' }
+              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay', template: 'admin/bundesliga/player/field_date.html.twig'}
               - { property: 'age', label: 'easyAdmin.bundesliga.player.age' }
-              - { property: 'emails', label: 'easyAdmin.bundesliga.player.emails' }
+              - { property: 'dgobMember', label: 'easyAdmin.bundesliga.player.dgob.member' }
+              - { property: 'emails', label: 'easyAdmin.bundesliga.player.emails', template: 'admin/bundesliga/player/field_json.html.twig' }
+              - { property: 'phone', label: 'easyAdmin.bundesliga.player.phone', template: 'admin/bundesliga/player/field_json.html.twig' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.matches' }
               - { property: 'seasons', label: 'easyAdmin.bundesliga.season', type: 'association', }
-          new:
+          form:
             fields:
+              - { type: group, label: 'easyAdmin.bundesliga.player.profile', icon: user-circle }
               - { property: 'firstName', label: 'easyAdmin.user.firstName' }
               - { property: 'lastName', label: 'easyAdmin.user.lastName' }
-              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay' }
-          edit:
-            fields:
-              - { property: 'firstName', label: 'easyAdmin.user.firstName' }
-              - { property: 'lastName', label: 'easyAdmin.user.lastName' }
-              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay' }
-              - { property: 'emails', label: 'easyAdmin.bundesliga.player.email' }
+              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay', type_options: { widget: 'single_text' } }
+              - { property: 'dgobMember', label: 'easyAdmin.bundesliga.player.dgob.member.label' }
+              - { type: group, label: 'easyAdmin.bundesliga.player.emails', icon: envelope, columns: 6 }
+              - { property: 'emails', label: 'easyAdmin.bundesliga.player.emails', type: 'collection' }
+              - { type: group, label: 'easyAdmin.bundesliga.player.phone', icon: phone, columns: 6  }
+              - { property: 'phone', label: 'easyAdmin.bundesliga.player.phone' , type: 'collection'}
           show:
             fields:
-              - { property: 'firstName', label: 'easyAdmin.user.firstName' }
-              - { property: 'lastName', label: 'easyAdmin.user.lastName' }
-              - { property: 'seasons', label: 'easyAdmin.bundesliga.season'}
-              - { property: 'matches', label: 'easyAdmin.bundesliga.matches',
-                  template: 'admin/bundesliga/player/match_association.html.twig' }
+              - { property: 'name', label: 'easyAdmin.user.name', css_class: 'player-name' }
+              - { property: 'birthDay', label: 'easyAdmin.bundesliga.player.birthDay.detail', template: 'admin/bundesliga/player/birthday.html.twig' }
+              - { property: 'dgobMember', label: 'easyAdmin.bundesliga.player.dgob.member.label'}
+              - { property: 'phone', label: 'easyAdmin.bundesliga.player.phone', template: 'admin/bundesliga/player/phone.html.twig' }
+              - { property: 'emails', label: 'easyAdmin.bundesliga.player.emails', template: 'admin/bundesliga/player/email.html.twig'}
         BundesligaTeam:
           class: App\Entity\Bundesliga\BundesligaTeam
           label: 'easyAdmin.bundesliga.team.title'

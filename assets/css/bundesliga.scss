@@ -1,0 +1,32 @@
+//easyAdmin
+
+.player-name {
+
+    .form-control {
+        min-height: unset !important;
+    }
+}
+
+.birthday {
+    color: #8b8b8b;
+    font-weight: bolder;
+}
+
+.player-contact {
+    list-style: none !important;
+    padding: 2px;
+    margin: 5px 0 !important;
+
+    .fa {
+        color: #8b8b8b;
+    }
+}
+
+.checked {
+    color: darkgreen;
+}
+.missing {
+    color: darkred;
+}
+
+

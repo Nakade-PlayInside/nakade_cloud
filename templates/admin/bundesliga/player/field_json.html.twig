@@ -1,0 +1,20 @@
+{% if view == 'show' %}
+    {% if value|length > 0 %}
+        <ul>
+            {% for element in value %}
+                <li>{{ element }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty collection-empty">
+            {{ include(entity_config.templates.label_empty) }}
+        </div>
+    {% endif %}
+{% else %}
+    {% if value|length > 0 %}
+        <i class="fa fa-fw fa-check checked"></i>
+    {% else %}
+        <i class="fa fa-fw fa-minus-circle missing"></i>
+    {% endif %}
+{#    {{ value|join(', ')|easyadmin_truncate }}#}
+{% endif %}

@@ -47,6 +47,7 @@ Encore
     .addEntry('register', './assets/js/register.js')
     .addEntry('reply', './assets/js/reply.js')
     .addEntry('feature', './assets/js/feature.js')
+    .addEntry('bundesliga', './assets/js/bundesliga.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

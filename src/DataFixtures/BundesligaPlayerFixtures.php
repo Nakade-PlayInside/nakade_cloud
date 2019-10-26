@@ -42,6 +42,24 @@ class BundesligaPlayerFixtures extends BaseFixture
                 $player->setBirthDay($this->faker->dateTimeBetween('-70 years', '-15 years'));
             }
 
+            $phone = [];
+            while (true) {
+                $phone[] = $this->faker->phoneNumber;
+                if ($this->faker->boolean()) {
+                    break;
+                }
+            }
+            $player->setPhone($phone);
+
+            $emails = [];
+            while (true) {
+                $emails[] = $this->faker->email;
+                if ($this->faker->boolean()) {
+                    break;
+                }
+            }
+            $player->setEmails($emails);
+
             return $player;
         });
 
