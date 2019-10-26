@@ -27,6 +27,7 @@ easy_admin:
               - { entity: BundesligaSeason, label: 'easyAdmin.bundesliga.season', icon: 'calendar'}
               - { entity: BundesligaPlayer, label: 'easyAdmin.bundesliga.player.title', icon: 'user'}
               - { entity: BundesligaTeam, label: 'easyAdmin.bundesliga.team.label', icon: 'users'}
+              - { entity: BundesligaExecutive, label: 'easyAdmin.bundesliga.executive', icon: 'legal'}
               - { entity: BundesligaOpponent, label: 'easyAdmin.bundesliga.opponent.label', icon: 'address-book-o'}
               - { entity: BundesligaMatch, label: 'easyAdmin.bundesliga.match.label', icon: 'balance-scale'}
               - { entity: BundesligaResults, label: 'easyAdmin.bundesliga.results.title', icon: 'line-chart'}
@@ -289,8 +290,11 @@ easy_admin:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title' }
+              - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
               - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
               - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
+              - { property: 'executive', label: 'easyAdmin.bundesliga.executive' }
+              - { property: 'deputy', label: 'easyAdmin.bundesliga.deputy' }
               - { property: 'teams', label: 'easyAdmin.bundesliga.season.teams' }
               - { property: 'players', label: 'easyAdmin.bundesliga.season.players' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.season.matches'}
@@ -310,7 +314,18 @@ easy_admin:
                   template: "admin/bundesliga/season/field_association.html.twig",
                 }
               - { property: 'teams', label: 'easyAdmin.bundesliga.season.teams'}
-
+        BundesligaExecutive:
+          class: App\Entity\Bundesliga\BundesligaExecutive
+          label: 'easyAdmin.bundesliga.executive'
+          list:
+            search:
+              fields: ['name', 'email']
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'name', label: 'easyAdmin.bundesliga.player.name' }
+              - { property: 'function', label: 'easyAdmin.bundesliga.executive.function' }
+              - { property: 'city', label: 'easyAdmin.bundesliga.executive.city' }
+              - { property: 'email', label: 'easyAdmin.user.email' }
         BundesligaPlayer:
           class: App\Entity\Bundesliga\BundesligaPlayer
           label: 'easyAdmin.bundesliga.player.title'

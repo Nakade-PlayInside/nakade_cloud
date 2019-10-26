@@ -215,7 +215,7 @@ class BundesligaPlayer
 
     public function getEmails(): ?array
     {
-        return $this->emails;
+        return array_unique($this->emails);
     }
 
     public function setEmails(?array $emails): self
@@ -227,7 +227,7 @@ class BundesligaPlayer
 
     public function getPhone(): ?array
     {
-        return $this->phone;
+        return array_unique($this->phone);
     }
 
     public function setPhone(?array $phone): self

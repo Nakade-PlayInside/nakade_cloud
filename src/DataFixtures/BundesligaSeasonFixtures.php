@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Entity\Bundesliga\BundesligaExecutive;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
@@ -48,11 +49,22 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
             $season->setStartAt(new \DateTime($startDate));
             $season->setEndAt(new \DateTime($endDate));
 
+            $league = sprintf("%d", $this->faker->numberBetween(2,5));
+            $season->setLeague($league);
+
+            /** @var BundesligaExecutive $executive */
+            $executive = $this->getRandomReference(BundesligaExecutive::class, 'bl_executive');
+            $season->setExecutive($executive);
+
+            /** @var BundesligaExecutive $deputy */
+            $deputy = $this->getRandomReference(BundesligaExecutive::class,'bl_executive');
+            $season->setDeputy($deputy);
+
             /** @var BundesligaTeam $team */
             $team = $this->getReference('bl_team_1');
             $season->addTeam($team);
 
-            while (sizeof($season->getTeams()) < 8) {
+            while (sizeof($season->getTeams()) < 12) {
                 /** @var BundesligaTeam $team */
                 $team = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
                 $season->addTeam($team);
@@ -75,6 +87,7 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
         return [
             BundesligaTeamFixtures::class,
             BundesligaPlayerFixtures::class,
+            BundesligaExecutiveFixtures::class,
         ];
     }
 }

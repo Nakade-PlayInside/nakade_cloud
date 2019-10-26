@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Entity\Bundesliga\BundesligaExecutive;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -30,38 +30,21 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaPlayerFixtures extends BaseFixture
+class BundesligaExecutiveFixtures extends BaseFixture
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(20, 'bl_player', function ($i) {
-            $player = new BundesligaPlayer();
-            $player->setFirstName($this->faker->firstName);
-            $player->setLastName($this->faker->lastName);
-            $player->setDgobMember($this->faker->boolean);
+        $this->createMany(20, 'bl_executive', function ($i) {
+            $executive = new BundesligaExecutive();
+            $executive->setFirstName($this->faker->firstName);
+            $executive->setLastName($this->faker->lastName);
+            $executive->setCity($this->faker->city);
+            $executive->setEmail($this->faker->email);
             if ($this->faker->boolean()) {
-                $player->setBirthDay($this->faker->dateTimeBetween('-70 years', '-15 years'));
+                $executive->setFunction('Stellvertreter');
             }
 
-            $phone = [];
-            while (true) {
-                $phone[] = $this->faker->phoneNumber;
-                if ($this->faker->boolean()) {
-                    break;
-                }
-            }
-            $player->setPhone($phone);
-
-            $emails = [];
-            while (true) {
-                $emails[] = $this->faker->email;
-                if ($this->faker->boolean()) {
-                    break;
-                }
-            }
-            $player->setEmails($emails);
-
-            return $player;
+            return $executive;
         });
 
         $manager->flush();

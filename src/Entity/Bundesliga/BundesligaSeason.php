@@ -76,6 +76,24 @@ class BundesligaSeason
      */
     private $teams;
 
+    /**
+     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=255)
+     */
+    private $league;
+
+    /**
+     * Ligaleiter
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaExecutive")
+     */
+    private $executive;
+
+    /**
+     * Stellvertreter
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaExecutive")
+     */
+    private $deputy;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
@@ -208,6 +226,42 @@ class BundesligaSeason
         if ($this->teams->contains($team)) {
             $this->teams->removeElement($team);
         }
+
+        return $this;
+    }
+
+    public function getLeague(): ?string
+    {
+        return $this->league;
+    }
+
+    public function setLeague(string $league): self
+    {
+        $this->league = $league;
+
+        return $this;
+    }
+
+    public function getExecutive(): ?BundesligaExecutive
+    {
+        return $this->executive;
+    }
+
+    public function setExecutive(?BundesligaExecutive $executive): self
+    {
+        $this->executive = $executive;
+
+        return $this;
+    }
+
+    public function getDeputy(): ?BundesligaExecutive
+    {
+        return $this->deputy;
+    }
+
+    public function setDeputy(?BundesligaExecutive $deputy): self
+    {
+        $this->deputy = $deputy;
 
         return $this;
     }

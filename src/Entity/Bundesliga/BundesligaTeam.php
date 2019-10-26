@@ -22,9 +22,15 @@ namespace App\Entity\Bundesliga;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaTeamRepository")
+ * @UniqueEntity(
+ *     fields={"name"},
+ *     message="This team is already registered!"
+ * )
  */
 class BundesligaTeam
 {
@@ -36,6 +42,7 @@ class BundesligaTeam
     private $id;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
      */
     private $name;
@@ -49,6 +56,21 @@ class BundesligaTeam
      * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaSeason", mappedBy="teams")
      */
     private $seasons;
+
+    /**
+     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $captain;
+
+    /**
+     * @Assert\Email(
+     *     message="Die Email {{ value }} ist ungültig.",
+     *     checkMX=true
+     * )
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $email;
 
     public function __construct()
     {
@@ -133,6 +155,30 @@ class BundesligaTeam
             $this->seasons->removeElement($season);
             $season->removeTeam($this);
         }
+
+        return $this;
+    }
+
+    public function getCaptain(): ?string
+    {
+        return $this->captain;
+    }
+
+    public function setCaptain(?string $captain): self
+    {
+        $this->captain = $captain;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

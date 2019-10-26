@@ -26,6 +26,10 @@
 "easyAdmin":
   "bundesliga":
     "team.label": "Teams"
+    "executive": "Ligaleiter"
+    "executive.city": "Stadt"
+    "executive.function": "Position"
+    "deputy": "Stellvertreter"
     "opponent.label": "Gegner"
     "match.label": "Spieltag"
     "match.color": "Farbe"
@@ -55,6 +59,7 @@
     "player.help": "Alle Spieler, die je für Nakade gespielt haben."
     "menu": "BUNDESLIGA"
     "season": "Saison"
+    "season.league": "Liga"
     "season.teams": "Mannschaften"
     "season.matches": "Paarungen"
     "season.players": "Spieler"
@@ -231,4 +236,5 @@
 "BundesligaTeam": "BundesligaTeam"
 "BundesligaOpponent": "BundesligaOpponent"
 "BundesligaMatch": "BundesligaMatch"
+"BundesligaExecutive": "BundesligaExecutive"
 "collection.button.label": "Hinzufügen"
