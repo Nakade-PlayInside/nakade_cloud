@@ -22,9 +22,11 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\TrackingInterface;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Twig\TwigFunction;
 
 class EasyAdminExtension extends \Twig_Extension
 {
@@ -33,6 +35,16 @@ class EasyAdminExtension extends \Twig_Extension
     public function __construct(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions()
+    {
+        return [
+                new TwigFunction('bundesliga_get_match_result', [$this, 'getMatchResult']),
+        ];
     }
 
     public function getFilters()
@@ -57,6 +69,22 @@ class EasyAdminExtension extends \Twig_Extension
         }
 
         return $itemActions;
+    }
+
+    public function getMatchResult(BundesligaMatch $item)
+    {
+        if (!$item->getResults() || !$item->getResults()->getPointsHome() || !$item->getResults()->getPointsAway()) {
+            return '0:0';
+        }
+
+        $opponentPts = $item->getResults()->getPointsAway();
+        $nakadePts = $item->getResults()->getPointsHome();
+        if ($item->getResults()->getHome() === $item->getId()) {
+            $opponentPts = $item->getResults()->getPointsHome();
+            $nakadePts = $item->getResults()->getPointsAway();
+        }
+
+        return sprintf('%d:%d', $nakadePts, $opponentPts);
     }
 
     private function isRemovalDenied(string $status): bool

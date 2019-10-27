@@ -43,7 +43,7 @@ class BundesligaTeam
 
     /**
      * @Assert\NotBlank
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
@@ -126,11 +126,6 @@ class BundesligaTeam
         return $this;
     }
 
-    public function __toString()
-    {
-        return $this->name;
-    }
-
     /**
      * @return Collection|BundesligaSeason[]
      */
@@ -181,5 +176,10 @@ class BundesligaTeam
         $this->email = $email;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

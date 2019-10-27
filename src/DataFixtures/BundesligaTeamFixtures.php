@@ -38,6 +38,8 @@ class BundesligaTeamFixtures extends BaseFixture
             $team = new BundesligaTeam();
             $name = ($i > 0) ? $this->faker->city : 'Nakade';
             $team->setName($name);
+            $team->setCaptain($this->faker->name);
+            $team->setEmail($this->faker->email);
 
             return $team;
         });

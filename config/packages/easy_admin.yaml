@@ -44,6 +44,7 @@ easy_admin:
           - { label: 'easyAdmin.exit', route: 'app_homepage', icon: 'home'}
     list:
         actions:
+            - { name: new, icon: plus-circle, title: 'easyAdmin.new' }
             - { name: show, icon: search, label: false, title: 'easyAdmin.show' }
             - { name: edit, icon: pencil, label: false, title: 'easyAdmin.update' }
             - { name: delete, icon: remove, label: false, title: 'easyAdmin.delete' }
@@ -282,11 +283,15 @@ easy_admin:
         BundesligaSeason:
           class: App\Entity\Bundesliga\BundesligaSeason
           label: 'easyAdmin.bundesliga.season.label'
-          templates:
-#            field_association: 'admin/bundesliga/season/field_association.html.twig'
           list:
+            actions:
+              - { name: new, icon: "plus-circle", title: 'easyAdmin.new', label: 'easyAdmin.bundesliga.season.new' }
             search:
               fields: ['title', 'startAt', 'endAt']
+            filters:
+                - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
+                - { property: 'executive', label: 'easyAdmin.bundesliga.executive' }
+                - { property: 'deputy', label: 'easyAdmin.bundesliga.deputy' }
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title' }
@@ -322,6 +327,8 @@ easy_admin:
           list:
             search:
               fields: ['name', 'email']
+            filters:
+              - { property: 'position', label: 'easyAdmin.bundesliga.executive.position' }
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'name', label: 'easyAdmin.bundesliga.player.name' }
@@ -348,6 +355,8 @@ easy_admin:
           label: 'easyAdmin.bundesliga.player.title'
           help: 'easyAdmin.bundesliga.player.help'
           list:
+            filters:
+              - { property: 'dgobMember', label: 'easyAdmin.bundesliga.player.dgob.member' }
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'name', label: 'easyAdmin.user.name' }
@@ -378,17 +387,32 @@ easy_admin:
               - { property: 'emails', label: 'easyAdmin.bundesliga.player.emails', template: 'admin/bundesliga/player/email.html.twig'}
         BundesligaTeam:
           class: App\Entity\Bundesliga\BundesligaTeam
-          label: 'easyAdmin.bundesliga.team.title'
+          label: 'easyAdmin.bundesliga.team.title.detail'
           list:
+            actions:
+              - { name: new, icon: "plus-circle", title: 'easyAdmin.new', label: 'easyAdmin.bundesliga.team.new' }
             help: 'easyAdmin.bundesliga.team.help'
+            filters:
+              - { property: 'name', label: 'easyAdmin.bundesliga.team.title' }
+              - { property: 'captain', label: 'easyAdmin.bundesliga.team.captain' }
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
-              - { property: 'name', label: 'easyAdmin.user.name' }
-              - { property: 'seasons', label: 'easyAdmin.bundesliga.seasons' }
+              - { property: 'name', label: 'easyAdmin.bundesliga.team.title' }
+              - { property: 'captain', label: 'easyAdmin.bundesliga.team.captain' }
+              - { property: 'email', label: 'easyAdmin.user.email' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.season.matches' }
-          new:
+          show:
             fields:
-              - { property: 'name', label: 'easyAdmin.user.name' }
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'name', label: 'easyAdmin.bundesliga.team.title' }
+              - { property: 'captain', label: 'easyAdmin.bundesliga.team.captain' }
+              - { property: 'email', label: 'easyAdmin.user.email' }
+              - { property: 'matches', label: 'easyAdmin.bundesliga.results.title', template: 'admin/bundesliga/team/matches.html.twig' }
+          form:
+            fields:
+              - { property: 'name', label: 'easyAdmin.bundesliga.team.title' }
+              - { property: 'captain', label: 'easyAdmin.bundesliga.team.captain', type_options: { required: false } }
+              - { property: 'email', label: 'easyAdmin.user.email' }
         BundesligaOpponent:
           class: App\Entity\Bundesliga\BundesligaOpponent
           label: 'easyAdmin.bundesliga.opponent.label'

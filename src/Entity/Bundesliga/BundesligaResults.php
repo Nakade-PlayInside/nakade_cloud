@@ -89,6 +89,7 @@ class BundesligaResults
      */
     private $season;
 
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
