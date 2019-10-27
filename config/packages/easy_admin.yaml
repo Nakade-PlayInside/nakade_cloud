@@ -307,9 +307,11 @@ easy_admin:
               - { property: 'players', label: 'easyAdmin.bundesliga.season.players' }
           show:
             fields:
-              - { property: 'title', label: 'easyAdmin.bundesliga.season.title', help: 'easyAdmin.bundesliga.season.help' }
+              - { property: 'title', label: 'easyAdmin.bundesliga.season.title' }
+              - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
               - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
               - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
+              - { property: 'executive', label: 'easyAdmin.bundesliga.executive' }
               - { property: 'players', label: 'easyAdmin.bundesliga.player.title',
                   template: "admin/bundesliga/season/field_association.html.twig",
                 }
@@ -323,8 +325,23 @@ easy_admin:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'name', label: 'easyAdmin.bundesliga.player.name' }
-              - { property: 'function', label: 'easyAdmin.bundesliga.executive.function' }
+              - { property: 'position', label: 'easyAdmin.bundesliga.executive.position' }
               - { property: 'city', label: 'easyAdmin.bundesliga.executive.city' }
+              - { property: 'email', label: 'easyAdmin.user.email' }
+          show:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'firstName', label: 'easyAdmin.bundesliga.player.firstName' }
+              - { property: 'lastName', label: 'easyAdmin.bundesliga.player.lastName' }
+              - { property: 'position', label: 'easyAdmin.bundesliga.executive.position' }
+              - { property: 'city', label: 'easyAdmin.bundesliga.executive.city' }
+              - { property: 'email', label: 'easyAdmin.user.email', type: 'email' }
+          form:
+            fields:
+              - { property: 'firstName', label: 'easyAdmin.bundesliga.player.firstName' }
+              - { property: 'lastName', label: 'easyAdmin.bundesliga.player.lastName' }
+              - { property: 'position', label: 'easyAdmin.bundesliga.executive.position' }
+              - { property: 'city', label: 'easyAdmin.bundesliga.executive.city', type_options: { required: false } }
               - { property: 'email', label: 'easyAdmin.user.email' }
         BundesligaPlayer:
           class: App\Entity\Bundesliga\BundesligaPlayer

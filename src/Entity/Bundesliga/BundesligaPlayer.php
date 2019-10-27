@@ -34,7 +34,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @UniqueEntity(
  *     fields={"firstName", "lastName"},
- *     message="This player is already registered!"
+ *     message="This person is already registered!"
  * )
  */
 class BundesligaPlayer

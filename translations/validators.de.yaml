@@ -8,5 +8,5 @@
 "email.exist": "Die email <{{ email }}> ist nicht registriert, unbestätigt oder gesperrt!"
 "password.msg": "Das Passwort muss mind. einen Buchstaben und eine Zahl enthalten."
 "This season is already registered!": "Diese Saison ist schon registriert!"
-"This player is already registered!": "Dieser Spieler ist schon registriert!"
+"This person is already registered!": "Diese Person ist schon registriert!"
 "This team is already registered!": "Diese Mannschaft ist schon registriert!"

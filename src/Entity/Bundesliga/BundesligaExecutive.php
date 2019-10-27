@@ -22,9 +22,16 @@ namespace App\Entity\Bundesliga;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaExecutiveRepository")
+ * @ORM\Table(name="bundesliga_executive",uniqueConstraints={@ORM\UniqueConstraint(name="name_idx", columns={"first_name", "last_name"})})
+ *
+ * @UniqueEntity(
+ *     fields={"firstName", "lastName"},
+ *     message="This person is already registered!"
+ * )
  */
 class BundesligaExecutive
 {
@@ -38,14 +45,14 @@ class BundesligaExecutive
     /**
      * @Assert\NotBlank
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
      * @Assert\NotBlank
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
@@ -54,7 +61,7 @@ class BundesligaExecutive
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $function = 'Ligaleiter';
+    private $position = 'Ligaleiter';
 
     /**
      * @Assert\NotBlank
@@ -101,14 +108,14 @@ class BundesligaExecutive
         return $this;
     }
 
-    public function getFunction(): ?string
+    public function getPosition(): ?string
     {
-        return $this->function;
+        return $this->position;
     }
 
-    public function setFunction(?string $function): self
+    public function setPosition(?string $position): self
     {
-        $this->function = $function;
+        $this->position = $position;
 
         return $this;
     }
