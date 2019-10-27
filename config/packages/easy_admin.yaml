@@ -416,12 +416,23 @@ easy_admin:
         BundesligaOpponent:
           class: App\Entity\Bundesliga\BundesligaOpponent
           label: 'easyAdmin.bundesliga.opponent.label'
+          help: 'easyAdmin.bundesliga.opponent.help'
           list:
+            filters:
+              - { property: 'firstName', label: 'easyAdmin.bundesliga.player.firstName' }
+              - { property: 'lastName', label: 'easyAdmin.bundesliga.player.lastName' }
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
-              - { property: 'name', label: 'easyAdmin.bundesliga.player.name' }
+              - { property: 'firstName', label: 'easyAdmin.bundesliga.player.firstName' }
+              - { property: 'lastName', label: 'easyAdmin.bundesliga.player.lastName' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.matches',
                   type_options: { choice_value: id , choice_label: name }}
+          show:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'firstName', label: 'easyAdmin.bundesliga.player.firstName' }
+              - { property: 'lastName', label: 'easyAdmin.bundesliga.player.lastName' }
+              - { property: 'matches', label: 'easyAdmin.bundesliga.matches', template: 'admin/bundesliga/opponent/matches.html.twig' }
         BundesligaMatch:
           class: App\Entity\Bundesliga\BundesligaMatch
           label: 'easyAdmin.bundesliga.matches'

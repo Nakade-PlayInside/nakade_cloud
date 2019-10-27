@@ -17,14 +17,23 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity\Bundesliga;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaOpponentRepository")
+ * @ORM\Table(name="bundesliga_opponent",uniqueConstraints={@ORM\UniqueConstraint(name="opponent_idx", columns={"first_name", "last_name"})})
+ *
+ * @UniqueEntity(
+ *     fields={"firstName", "lastName"},
+ *     message="This person is already registered!"
+ * )
  */
 class BundesligaOpponent
 {
@@ -36,12 +45,14 @@ class BundesligaOpponent
     private $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
@@ -86,7 +97,7 @@ class BundesligaOpponent
 
     public function getName(): ?string
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->firstName.' '.$this->lastName;
     }
 
     /**

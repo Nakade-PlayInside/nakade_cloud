@@ -1,0 +1,60 @@
+{# a *-to-many collection of values #}
+{% if value is iterable %}
+    {% if 'show' == view %}
+        {% if value|length > 0 %}
+            <ul class="{{ value|length < 2 ? 'inline' }}">
+                {% for item in value|slice(0, entity_config.show.max_results) %}
+                    <li>
+                        {% if link_parameters is defined %}
+                            {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
+                            {% set primary_key_value = '' ~ attribute(item, link_parameters.primary_key_name) %}
+                            <a href="{{ path('easyadmin', link_parameters|merge({ id: primary_key_value, referer: '' })) }}">
+                                {{ item.season}} - {{ item.season.league}}. Liga
+                                <span style="padding-left: 5px">(
+                                    Brett {{ item.board }}:
+                                    <span>
+                                    {% if item.color|lower=='b' %}
+                                        <i style="color: #4c5367" title="Schwarz" class="fa fa-fw fa-circle"></i>
+                                    {% else %}
+                                        <i title="Weiß" style="color: #4c5367" class="fa fa-fw fa-circle-o"></i>
+                                    {% endif %}
+                                    </span>
+                                    {{ item.player.name }}
+                                    {% if item.points is defined %}
+                                    <span style="padding-left: 3px">
+                                        {% if item.points == 2 %}
+                                            <i title="Sieg"  style="color:darkgreen" class="fa fa-fw fa-thumbs-up"></i>
+                                        {% elseif item.points == 1 %}
+                                            <i title="Unentschieden"  style="color: darkgreen" class="fa fa-fw fa-hand-grab-o"></i>
+                                        {% else %}
+                                            <i title="Niederlage"  style="color: darkred" class="fa fa-fw fa-thumbs-down"></i>
+                                        {% endif %}
+                                    </span>)
+                                    {% endif %} }
+                                </span>
+                            </a>
+                        {% else %}
+                            {{ item }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+
+                {% set _remaining_items = value|length - entity_config.show.max_results %}
+                {% if _remaining_items > 0 %}
+                    <li class="remaining-items">({{ 'show.remaining_items'|transchoice(_remaining_items, {}, 'EasyAdminBundle') }})</li>
+                {% endif %}
+            </ul>
+        {% else %}
+            <div class="empty collection-empty">
+                {{ include(entity_config.templates.label_empty) }}
+            </div>
+        {% endif %}
+    {% elseif 'list' == view %}
+        <span class="badge badge-secondary">{{ value|length }}</span>
+    {% endif %}
+{# a simple *-to-one value associated with an entity managed by this backend #}
+{% elseif link_parameters is defined %}
+    <a href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value|easyadmin_truncate }}</a>
+{% else %}
+    {{ value|easyadmin_truncate }}
+{% endif %}
