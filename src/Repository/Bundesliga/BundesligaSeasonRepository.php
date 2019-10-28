@@ -36,6 +36,7 @@ class BundesligaSeasonRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaSeason::class);
     }
 
+
     // /**
     //  * @return Season[] Returns an array of Season objects
     //  */

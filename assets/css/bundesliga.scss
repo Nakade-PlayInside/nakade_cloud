@@ -22,11 +22,39 @@
     }
 }
 
-.checked {
+.checked, .win {
     color: darkgreen;
 }
-.missing {
+.missing, .lost {
     color: darkred;
 }
 
+.stones {
+    color: #4c5367;
+}
 
+.result {
+    span:first-of-type, span:last-of-type {
+        padding-left: 5px;
+    }
+    input {
+        width: 100rem;
+    }
+}
+
+.bl-form {
+    label {
+        align-self: self-start;
+        flex: 30% 0 0;
+    }
+    div.bl-result {
+        span {
+            padding: 0 5px;
+            font-weight: bolder;
+        }
+
+        input {
+            width: 5rem;
+        }
+    }
+}

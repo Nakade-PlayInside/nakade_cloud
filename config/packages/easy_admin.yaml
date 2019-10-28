@@ -305,11 +305,18 @@ easy_admin:
               - { property: 'matches', label: 'easyAdmin.bundesliga.season.matches'}
           form:
             fields:
+              - { type: group, label: 'easyAdmin.bundesliga.season', icon: 'calendar', columns: 6 }
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title', help: 'easyAdmin.bundesliga.season.help' }
-              - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
-              - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
-              - { property: 'teams', label: 'easyAdmin.bundesliga.season.teams' }
-              - { property: 'players', label: 'easyAdmin.bundesliga.season.players' }
+              - { property: 'league', label: 'easyAdmin.bundesliga.season.league', help: 'easyAdmin.bundesliga.season.league.placeholder' }
+              - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start', type_options: { widget: 'single_text' } }
+              - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end', type_options: { widget: 'single_text' } }
+              - { type: group, label: 'easyAdmin.bundesliga.executive', icon: 'legal', columns: 6 }
+              - { property: 'executive', label: 'easyAdmin.bundesliga.executive', help: 'easyAdmin.bundesliga.season.executive.help' }
+              - { property: 'deputy', label: 'easyAdmin.bundesliga.deputy' }
+              - { type: group, label: 'easyAdmin.bundesliga.season.teams.league', icon: 'users', columns: 6 }
+              - { property: 'teams', label: 'easyAdmin.bundesliga.season.teams', help: 'easyAdmin.bundesliga.season.teams.help'}
+              - { type: group, label: 'easyAdmin.bundesliga.season.players.nakade', icon: 'user', columns: 6 }
+              - { property: 'players', label: 'easyAdmin.bundesliga.season.players', help: 'easyAdmin.bundesliga.season.players.help' }
           show:
             fields:
               - { property: 'title', label: 'easyAdmin.bundesliga.season.title' }
@@ -433,6 +440,45 @@ easy_admin:
               - { property: 'firstName', label: 'easyAdmin.bundesliga.player.firstName' }
               - { property: 'lastName', label: 'easyAdmin.bundesliga.player.lastName' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.matches', template: 'admin/bundesliga/opponent/matches.html.twig' }
+          form:
+            fields:
+              - { property: 'firstName', label: 'easyAdmin.bundesliga.player.firstName' }
+              - { property: 'lastName', label: 'easyAdmin.bundesliga.player.lastName' }
+        BundesligaResults:
+          class: App\Entity\Bundesliga\BundesligaResults
+          label: 'easyAdmin.bundesliga.results.title'
+          help: 'easyAdmin.bundesliga.results.help'
+          list:
+            filters:
+              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season'}
+              - { property: 'matchDay', label: 'easyAdmin.bundesliga.match.label' }
+              - { property: 'home', label: 'easyAdmin.bundesliga.results.home', template: 'admin/bundesliga/results/pairing_association.html.twig'}
+              - { property: 'away', label: 'easyAdmin.bundesliga.results.away', template: 'admin/bundesliga/results/pairing_association.html.twig' }
+              - { property: 'result', label: 'easyAdmin.bundesliga.results.result' }
+              - { property: 'matches', label: 'easyAdmin.bundesliga.matches' }
+          show:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season'}
+              - { property: 'matchDay', label: 'easyAdmin.bundesliga.match.label' }
+              - { property: 'playedAt', label: 'easyAdmin.bundesliga.results.date' }
+              - { property: 'pairing', label: 'easyAdmin.bundesliga.results.pairing', css_class: 'player-name' }
+              - { property: 'result', label: 'easyAdmin.bundesliga.results.result', css_class: 'player-name' }
+              - { property: 'boardPoints', label: 'easyAdmin.bundesliga.results.board.points', css_class: 'player-name' }
+              - { property: 'matches', label: 'easyAdmin.bundesliga.results.matches' }
+#          form:
+#            fields:
+#              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+#              - { property: 'matchDay', label: 'easyAdmin.bundesliga.match.label' }
+#              - { property: 'playedAt', label: 'easyAdmin.bundesliga.results.date', type_options: { widget: 'single_text' } }
+#              - { property: 'home', label: 'easyAdmin.bundesliga.results.home' }
+#              - { property: 'away', label: 'easyAdmin.bundesliga.results.away' }
+#              - { property: 'result', label: 'easyAdmin.bundesliga.results.points',
+#                  type: text,  css_class: 'player-name', help: 'easyAdmin.bundesliga.results.result.help' }
+#              - { property: 'matches', label: 'easyAdmin.bundesliga.results.matches', type: 'entity', type_options: { choice_label: 'board' }  }
         BundesligaMatch:
           class: App\Entity\Bundesliga\BundesligaMatch
           label: 'easyAdmin.bundesliga.matches'
@@ -450,28 +496,14 @@ easy_admin:
               - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team',
                   type_options: { choice_value: id , choice_label: name }}
               - { property: 'points', label: 'easyAdmin.bundesliga.match.points'}
-          new:
+          form:
             fields:
-              - { property: 'board', label: 'Brett' }
-              - { property: 'color', label: 'Farbe' }
+              - { property: 'season', label: 'Saison' }
+              - { property: 'board', label: 'Brett', type: 'choice', type_options: { choices: { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5 }} }
+              - { property: 'color', label: 'Farbe', type: 'choice', type_options: { choices: { 'Schwarz': 'b', 'Weiß': 'w' }} }
               - { property: 'player', label: 'Spieler',
                   type_options: { choice_value: id , choice_label: name }}
               - { property: 'opponent', label: 'Gegner'}
               - { property: 'opponentTeam', label: 'Gegner Team',
                   type_options: { choice_value: id , choice_label: name }}
-              - { property: 'season', label: 'Saison',
-                  type_options: { choice_value: id , choice_label: title }}
-        BundesligaResults:
-          class: App\Entity\Bundesliga\BundesligaResults
-          label: 'easyAdmin.bundesliga.player.title'
-          help: 'easyAdmin.bundesliga.player.help'
-          list:
-            fields:
-              - { property: 'id', label: 'easyAdmin.user.id' }
-              - { property: 'season', label: 'easyAdmin.bundesliga.season',
-                  type_options: { choice_value: id , choice_label: title }}
-              - { property: 'matchDay', label: 'easyAdmin.bundesliga.match.label' }
-              - { property: 'home', label: 'easyAdmin.bundesliga.results.home', template: 'admin/bundesliga/results/pairing_association.html.twig'}
-              - { property: 'away', label: 'easyAdmin.bundesliga.results.away', template: 'admin/bundesliga/results/pairing_association.html.twig' }
-              - { property: 'result', label: 'easyAdmin.bundesliga.results.result' }
-              - { property: 'matches', label: 'easyAdmin.bundesliga.matches' }
+

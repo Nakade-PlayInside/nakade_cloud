@@ -30,9 +30,14 @@ use App\Entity\Feature;
 use App\Entity\User;
 use App\Form\ContactReplyType;
 use App\Message\ReplyContact;
+use App\Repository\Bundesliga\BundesligaSeasonRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -199,5 +204,25 @@ class AdminController extends EasyAdminController
         ob_get_clean();
 
         return new Response($str);
+    }
+
+    protected function createBundesligaResultsEntityFormBuilder($entity, $view)
+    {
+        $form = parent::createEntityFormBuilder($entity, $view);
+        $form
+            ->add('matchDay', TextType::class)
+            ->add('playedAt', TextType::class)
+
+#              - { property: 'home', label: 'easyAdmin.bundesliga.results.home' }
+#              - { property: 'away', label: 'easyAdmin.bundesliga.results.away' }
+#              - { property: 'result', label: 'easyAdmin.bundesliga.results.points',
+            ->add('season', EntityType::class , [
+            'class' => BundesligaSeason::class,
+            'query_builder' => function (BundesligaSeasonRepository $repository) {
+                return $repository->createQueryBuilder('s')->andWhere('s.id =1')->orderBy('s.title', 'DESC');
+            },
+        ] );
+
+        return $form;
     }
 }

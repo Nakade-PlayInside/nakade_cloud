@@ -8,26 +8,26 @@
                         {% if link_parameters is defined %}
                             {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
                             {% set primary_key_value = '' ~ attribute(item, link_parameters.primary_key_name) %}
-                            <a href="{{ path('easyadmin', link_parameters|merge({ id: primary_key_value, referer: '' })) }}">
+                            <a class="result" href="{{ path('easyadmin', link_parameters|merge({ id: primary_key_value, referer: '' })) }}">
                                 {{ item.season}} - {{ item.season.league}}. Liga
-                                <span style="padding-left: 5px">(
+                                <span>(
                                     Brett {{ item.board }}:
                                     <span>
                                     {% if item.color|lower=='b' %}
-                                        <i style="color: #4c5367" title="Schwarz" class="fa fa-fw fa-circle"></i>
+                                        <i title="Schwarz" class="stones fa fa-fw fa-circle"></i>
                                     {% else %}
-                                        <i title="Weiß" style="color: #4c5367" class="fa fa-fw fa-circle-o"></i>
+                                        <i title="Weiß" class="stones fa fa-fw fa-circle-o"></i>
                                     {% endif %}
                                     </span>
                                     {{ item.player.name }}
                                     {% if item.points is defined %}
-                                    <span style="padding-left: 3px">
+                                    <span>
                                         {% if item.points == 2 %}
-                                            <i title="Sieg"  style="color:darkgreen" class="fa fa-fw fa-thumbs-up"></i>
+                                            <i title="Sieg" class="win fa fa-fw fa-thumbs-up"></i>
                                         {% elseif item.points == 1 %}
-                                            <i title="Unentschieden"  style="color: darkgreen" class="fa fa-fw fa-hand-grab-o"></i>
+                                            <i title="Unentschieden" class="win fa fa-fw fa-hand-grab-o"></i>
                                         {% else %}
-                                            <i title="Niederlage"  style="color: darkred" class="fa fa-fw fa-thumbs-down"></i>
+                                            <i title="Niederlage"  class="lost fa fa-fw fa-thumbs-down"></i>
                                         {% endif %}
                                     </span>)
                                     {% endif %} }

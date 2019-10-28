@@ -23,6 +23,7 @@ namespace App\Entity\Bundesliga;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaResultsRepository")
@@ -37,6 +38,7 @@ class BundesligaResults
     private $id;
 
     /**
+     * @Assert\Positive
      * @ORM\Column(type="smallint")
      */
     private $matchDay;
@@ -88,7 +90,6 @@ class BundesligaResults
      * @ORM\JoinColumn(nullable=false)
      */
     private $season;
-
 
     public function __construct()
     {
@@ -247,5 +248,20 @@ class BundesligaResults
     public function getResult(): string
     {
         return $this->getPointsHome().' : '.$this->getPointsAway();
+    }
+
+    public function setResult(string $result): string
+    {
+        $points = explode(':', $result);
+        $pointsHome = trim(array_shift($points));
+        $pointsAway = trim(implode(':', $points));
+
+        $this->setPointsHome((int) $pointsHome);
+        $this->setPointsAway((int) $pointsAway);
+    }
+
+    public function getBoardPoints(): string
+    {
+        return $this->getBoardPointsHome().' : '.$this->getBoardPointsAway();
     }
 }

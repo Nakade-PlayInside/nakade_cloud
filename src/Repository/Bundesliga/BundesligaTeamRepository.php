@@ -17,6 +17,7 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaTeam;
@@ -36,4 +37,19 @@ class BundesligaTeamRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaTeam::class);
     }
 
+    /**
+     * @param $value
+     * @return BUndesligaTeam[]|null
+     */
+    public function findTeamsBySeason($value)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.seasons', 's')
+            ->where('s.id=:id')
+            ->setParameter('id', $value)
+            ->orderBy('t.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }
