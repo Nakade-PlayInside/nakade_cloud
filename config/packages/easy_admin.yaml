@@ -467,18 +467,7 @@ easy_admin:
               - { property: 'playedAt', label: 'easyAdmin.bundesliga.results.date' }
               - { property: 'pairing', label: 'easyAdmin.bundesliga.results.pairing', css_class: 'player-name' }
               - { property: 'result', label: 'easyAdmin.bundesliga.results.result', css_class: 'player-name' }
-              - { property: 'boardPoints', label: 'easyAdmin.bundesliga.results.board.points', css_class: 'player-name' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.results.matches' }
-#          form:
-#            fields:
-#              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
-#              - { property: 'matchDay', label: 'easyAdmin.bundesliga.match.label' }
-#              - { property: 'playedAt', label: 'easyAdmin.bundesliga.results.date', type_options: { widget: 'single_text' } }
-#              - { property: 'home', label: 'easyAdmin.bundesliga.results.home' }
-#              - { property: 'away', label: 'easyAdmin.bundesliga.results.away' }
-#              - { property: 'result', label: 'easyAdmin.bundesliga.results.points',
-#                  type: text,  css_class: 'player-name', help: 'easyAdmin.bundesliga.results.result.help' }
-#              - { property: 'matches', label: 'easyAdmin.bundesliga.results.matches', type: 'entity', type_options: { choice_label: 'board' }  }
         BundesligaMatch:
           class: App\Entity\Bundesliga\BundesligaMatch
           label: 'easyAdmin.bundesliga.matches'

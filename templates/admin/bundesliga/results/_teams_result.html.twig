@@ -1,0 +1,18 @@
+        <fieldset>
+            {{ form_row(teamForm.home, {
+                label: 'easyAdmin.bundesliga.results.home',
+                placeholder: 'easyAdmin.bundesliga.results.team.help',
+                attr: { class: "form-widget"}
+            }) }}
+
+            {{ form_row(teamForm.away, {
+                label: 'easyAdmin.bundesliga.results.away',
+                placeholder: 'easyAdmin.bundesliga.results.team.help',
+                attr: { class: "form-widget"}
+            }) }}
+
+            <div class="form-group bl-result">
+                <label>{{ 'easyAdmin.bundesliga.results.points'|trans({}, 'messages') }}</label>
+                {{ form_widget(teamForm.boardPointsHome) }}<span>:</span>{{ form_widget(teamForm.boardPointsAway) }}
+            </div>
+        </fieldset>

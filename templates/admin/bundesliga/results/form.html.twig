@@ -1,0 +1,139 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+{% block head_stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('bundesliga') }}
+{% endblock %}
+{% block content_title %}Ergebnisformular {% if action == 'edit' %}ändern (# {{ id }}){% else %}erstellen{% endif %}{% endblock %}
+
+{% block main %}
+         {{ form_start(form) }}
+
+        <div class="row bl-form">
+        <div class="field-group col-6">
+           <fieldset>
+                {{ form_row(form.season, {
+                    label: 'easyAdmin.bundesliga.season',
+                    placeholder: 'easyAdmin.bundesliga.season.placeholder',
+                    attr: {
+                        'data-teams-result-url': path('admin_bundesliga_results_season_select'),
+                        class: "form-widget  js-results-form-season"
+                    }
+                }) }}
+
+               {{ form_row(form.matchDay, {
+                   label: 'easyAdmin.bundesliga.match.label',
+                   attr: { class: "form-widget"}
+               }) }}
+
+               <div class="form-group  field-date"><label for="bundesliga_results_playedAt" class="form-control-label">{{ "easyAdmin.bundesliga.results.playedAt" | trans({}, 'messages')}}</label>
+                   <div class="form-widget">
+                       <div class="datetime-widget datetime-widget-date" style="{% if form.playedAt.vars.value is empty %}display: none;{% endif %}">
+                           {{ form_widget(form.playedAt) }}
+                       </div>
+                       <div class="nullable-control">
+                           <label>
+                               <input type="checkbox" {% if form.playedAt.vars.value is empty %}checked="checked{% endif %}" autocomplete="disabled">
+                               kein Datum
+                           </label>
+                       </div>
+                   </div>
+               </div>
+           </fieldset>
+        </div>
+
+            <div class="field-group col-6 js-team-result-target">
+                {% if form.season is defined and form.season.vars.value is not empty %}
+                    <fieldset>
+                        {{ form_row(form.home, {
+                            label: 'easyAdmin.bundesliga.results.home',
+                            placeholder: 'easyAdmin.bundesliga.results.team.help',
+                            attr: { class: "form-widget"}
+                        }) }}
+
+                        {{ form_row(form.away, {
+                            label: 'easyAdmin.bundesliga.results.away',
+                            placeholder: 'easyAdmin.bundesliga.results.team.help',
+                            attr: { class: "form-widget"}
+                        }) }}
+
+                        <div class="form-group bl-result">
+                            <label>{{ 'easyAdmin.bundesliga.results.points'|trans({}, 'messages') }}</label>
+                            {{ form_widget(form.boardPointsHome) }}<span>:</span>{{ form_widget(form.boardPointsAway) }}
+                        </div>
+                    </fieldset>
+                {% endif %}
+            </div>
+
+        </div>
+
+    <div class="content-footer">
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary action-save">
+                <i class="fa fa-fw fa-plus-circle"></i><span class="btn-label"> Speichern</span>
+            </button>
+            {% if action == 'edit' %}
+            {% set remove_parameter = app.request.query.all %}
+            {% set remove_parameter = remove_parameter|merge({"action": 'delete'}) %}
+            <a class=" btn text-danger action-delete" title="" href="{{ path('easyadmin', remove_parameter)
+            }}" target="_self"><i class="fa fa-fw fa-trash-o"></i> Löschen</a>
+            {% endif %}
+
+            {% set list_parameter = app.request.query.all %}
+            {% set list_parameter = list_parameter|merge({"action": 'list'}) %}
+            <a class=" btn btn-link pr-0 action-list" title="" href="{{ path('easyadmin', list_parameter)  }}" target="_self">Zurück zur Übersicht</a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+    {% if action == 'edit' %}
+    <form name="delete_form" method="post" action="{{ path('easyadmin', remove_parameter) }}" id="delete-form" style="display: none">
+        <input type="hidden" name="_method" value="DELETE">
+        <div id="delete_form" style="display: none">
+            <div class="form-group">
+                <button type="submit" id="delete_form_submit" name="delete_form[submit]" class="btn-primary btn">Löschen</button>
+            </div>
+            <input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1">
+            <input type="hidden" id="delete_form__token" name="delete_form[_token]" value="vL5qHKmwPbTJVcGiimSdPYEuRr5d6PO8c14jIpLx2bo">
+        </div>
+    </form>
+    <div id="modal-delete" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4>Soll das Element wirklich gelöscht werden?</h4>
+                    <p>Aktion kann nicht rückgängig gemacht werden.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary">
+                        <span class="btn-label">Abbrechen</span>
+                    </button>
+
+                    <button type="button" data-dismiss="modal" class="btn btn-danger" id="modal-delete-button" formtarget="_self">
+                        <i class="fa fa-fw fa-trash-o"></i>                        <span class="btn-label">Löschen</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block content_footer_wrapper %}
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $('a.action-delete').on('click', function(e) {
+            e.preventDefault();
+
+            $('#modal-delete').modal({ backdrop: true, keyboard: true })
+                .off('click', '#modal-delete-button')
+                .on('click', '#modal-delete-button', function () {
+                    $('#delete-form').trigger('submit');
+                });
+        });
+    </script>
+{% endblock body_javascript %}

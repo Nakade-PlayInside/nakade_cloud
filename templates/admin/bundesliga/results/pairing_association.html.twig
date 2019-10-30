@@ -32,7 +32,7 @@
 {# a simple *-to-one value associated with an entity managed by this backend #}
 {% elseif link_parameters is defined %}
     {% set winnerStyle = '' %}
-    {% if item.home.name == value and item.pointsHome > 4 or item.away.name == value and item.pointsAway > 4 %}
+    {% if item.home.name == value and item.boardPointsHome > 4 or item.away.name == value and item.boardPointsAway > 4 %}
     {% set winnerStyle = 'font-weight:bolder;' %}
     {% endif %}
 

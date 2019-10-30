@@ -38,32 +38,26 @@ class BundesligaResults
     private $id;
 
     /**
+     * TODO: ASSERT RANGE #TEAMS-1
      * @Assert\Positive
      * @ORM\Column(type="smallint")
      */
     private $matchDay;
 
     /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $pointsAway;
-
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $pointsHome;
-
-    /**
+     * TODO: ASSERT POSITIVE OR 0
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $boardPointsAway;
 
     /**
+     * TODO: ASSERT POSITIVE OR 0
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $boardPointsHome;
 
     /**
+     * TODO: ASSERT DATE BETWEEN SEASON START AND END
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $playedAt;
@@ -74,12 +68,14 @@ class BundesligaResults
     private $matches;
 
     /**
+     * TODO: ASSERT UNIQUE PAIRING OF SEASON AND TEAMS
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      * @ORM\JoinColumn(nullable=false)
      */
     private $home;
 
     /**
+     * TODO: ASSERT UNIQUE PAIRING OF SEASON AND TEAMS
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -109,30 +105,6 @@ class BundesligaResults
     public function setMatchDay(int $matchDay): self
     {
         $this->matchDay = $matchDay;
-
-        return $this;
-    }
-
-    public function getPointsAway(): ?int
-    {
-        return $this->pointsAway;
-    }
-
-    public function setPointsAway(int $points): self
-    {
-        $this->pointsAway = $points;
-
-        return $this;
-    }
-
-    public function getPointsHome(): ?int
-    {
-        return $this->pointsHome;
-    }
-
-    public function setPointsHome(int $pointsHome): self
-    {
-        $this->pointsHome = $pointsHome;
 
         return $this;
     }
@@ -245,22 +217,8 @@ class BundesligaResults
         return $this->getHome()->getName().' - '.$this->getAway()->getName();
     }
 
+
     public function getResult(): string
-    {
-        return $this->getPointsHome().' : '.$this->getPointsAway();
-    }
-
-    public function setResult(string $result): string
-    {
-        $points = explode(':', $result);
-        $pointsHome = trim(array_shift($points));
-        $pointsAway = trim(implode(':', $points));
-
-        $this->setPointsHome((int) $pointsHome);
-        $this->setPointsAway((int) $pointsAway);
-    }
-
-    public function getBoardPoints(): string
     {
         return $this->getBoardPointsHome().' : '.$this->getBoardPointsAway();
     }

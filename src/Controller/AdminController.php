@@ -24,20 +24,17 @@ namespace App\Controller;
 
 use App\Entity\BugReport;
 use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\ContactMail;
 use App\Entity\Feature;
 use App\Entity\User;
+use App\Form\BundesligaResultsType;
 use App\Form\ContactReplyType;
 use App\Message\ReplyContact;
-use App\Repository\Bundesliga\BundesligaSeasonRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -67,9 +64,9 @@ class AdminController extends EasyAdminController
         $playerAsso = $this->getDoctrine()->getRepository(BundesligaPlayer::class)->findPlayerByIdWithSeasons($player->getId());
 
         /** @var BundesligaSeason $season */
-        foreach($playerAsso->getSeasons() as $season) {
+        foreach ($playerAsso->getSeasons() as $season) {
             $season->addPlayer($player);
-        };
+        }
         $this->getDoctrine()->getManager()->flush();
     }
 
@@ -206,23 +203,84 @@ class AdminController extends EasyAdminController
         return new Response($str);
     }
 
-    protected function createBundesligaResultsEntityFormBuilder($entity, $view)
+    protected function editBundesligaResultsAction()
     {
-        $form = parent::createEntityFormBuilder($entity, $view);
-        $form
-            ->add('matchDay', TextType::class)
-            ->add('playedAt', TextType::class)
+        $id = $this->request->get('id');
+        $params = $this->request->query->all();
 
-#              - { property: 'home', label: 'easyAdmin.bundesliga.results.home' }
-#              - { property: 'away', label: 'easyAdmin.bundesliga.results.away' }
-#              - { property: 'result', label: 'easyAdmin.bundesliga.results.points',
-            ->add('season', EntityType::class , [
-            'class' => BundesligaSeason::class,
-            'query_builder' => function (BundesligaSeasonRepository $repository) {
-                return $repository->createQueryBuilder('s')->andWhere('s.id =1')->orderBy('s.title', 'DESC');
-            },
-        ] );
+        $results = $this->em->getRepository(BundesligaResults::class)->find($id);
+        $form = $this->createForm(BundesligaResultsType::class, $results);
+        $form->handleRequest($this->request);
 
-        return $form;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $form->getData();
+
+            if (!assert($result instanceof BundesligaResults)) {
+                throw new UnexpectedTypeException($result, BundesligaResults::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($result);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.results.update.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+
+        $params['form'] = $form->createView();
+
+        return $this->render('admin/bundesliga/results/form.html.twig', $params);
+    }
+
+    protected function newBundesligaResultsAction()
+    {
+        $params = $this->request->query->all();
+
+        $form = $this->createForm(BundesligaResultsType::class);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $form->getData();
+
+            if (!assert($result instanceof BundesligaResults)) {
+                throw new UnexpectedTypeException($result, BundesligaResults::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($result);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.results.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+
+        $params['form'] = $form->createView();
+
+        return $this->render('admin/bundesliga/results/form.html.twig', $params);
+    }
+
+    /**
+     * @Route("/admin/bundesliga/results/season-select", name="admin_bundesliga_results_season_select")
+     */
+    public function getTeamsSeasonSelect(Request $request)
+    {
+
+        $seasonId = $request->query->get('seasonId');
+        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
+
+        $results = new BundesligaResults();
+        $results->setSeason($season);
+        $form = $this->createForm(BundesligaResultsType::class, $results);
+
+        // no field? Return an empty response
+        if (!$form->has('home') || !$form->has('away')) {
+            return new Response(null, 204);
+        }
+
+        return $this->render('admin/bundesliga/results/_teams_result.html.twig', [
+                'teamForm' => $form->createView(),
+        ]);
     }
 }

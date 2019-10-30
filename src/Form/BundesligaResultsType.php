@@ -32,6 +32,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -53,34 +56,43 @@ class BundesligaResultsType extends AbstractType
         /** @var BundesligaResults|null $results */
         $results = $options['data'] ?? null;
         $isEdit = $results && $results->getId();
-        $season = $results && $results->getSeason() ? $results->getSeason() : null;
-        $teams = $this->getTeams($season);
 
         $builder->add(
             'season',
             EntityType::class,
             [
-                'class' => BundesligaSeason::class,
-                'query_builder' => function (BundesligaSeasonRepository $repository) {
-                    return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
-                },
-            ]
+                        'class' => BundesligaSeason::class,
+                        'query_builder' => function (BundesligaSeasonRepository $repository) {
+                            return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
+                        },
+                ]
         )
                 ->add('matchDay')
                 ->add('playedAt', DateType::class, ['widget' => 'single_text', 'required' => false])
-                ->add('home', EntityType::class, [
-                    'placeholder' => 'Choose a Team',
-                    'class' => BundesligaTeam::class,
-                    'choices' => $teams,
-                ])
-                ->add('away', EntityType::class, [
-                    'placeholder' => 'Choose a Team',
-                    'class' => BundesligaTeam::class,
-                    'choices' => $teams,
-                ])
-                ->add('boardPointsHome', IntegerType::class, ['empty_data' => 0])
-                ->add('boardPointsAway', IntegerType::class, ['empty_data' => 0])
-            ;
+        ;
+
+        //preset listener for adding dynamic fields
+        $builder->addEventListener(
+                FormEvents::PRE_SET_DATA,
+                function (FormEvent $event) {
+                    /** @var BundesligaResults|null $data */
+                    $data = $event->getData();
+                    if (!$data) {
+                        return;
+                    }
+
+                    $this->setupTeamsAndResultFields($event->getForm(), $data->getSeason());
+                }
+        );
+
+        //if season was changed
+        $builder->get('season')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+                $form = $event->getForm();
+                $this->setupTeamsAndResultFields($form->getParent(), $form->getData());
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -88,6 +100,43 @@ class BundesligaResultsType extends AbstractType
         $resolver->setDefaults([
             'data_class' => BundesligaResults::class,
         ]);
+    }
+
+    private function setupTeamsAndResultFields(FormInterface $form, BundesligaSeason $season = null)
+    {
+        if (null === $season) {
+            $form->remove('home');
+            $form->remove('away');
+            $form->remove('boardPointsHome');
+            $form->remove('boardPointsHome');
+
+            return;
+        }
+
+        $choices = $this->getTeams($season);
+
+        if (null === $choices) {
+            $form->remove('home');
+            $form->remove('away');
+            $form->remove('boardPointsHome');
+            $form->remove('boardPointsHome');
+
+            return;
+        }
+
+        $form->add('home', EntityType::class, [
+                    'placeholder' => 'Choose a Team',
+                    'class' => BundesligaTeam::class,
+                    'choices' => $choices,
+        ])
+            ->add('away', EntityType::class, [
+                    'placeholder' => 'Choose a Team',
+                    'class' => BundesligaTeam::class,
+                    'choices' => $choices,
+            ])
+            ->add('boardPointsHome', IntegerType::class, ['required' => false])
+            ->add('boardPointsAway', IntegerType::class, ['required' => false])
+        ;
     }
 
     private function getTeams(BundesligaSeason $season = null)
