@@ -4,6 +4,8 @@
   "notChecked": "Captcha nicht vergessen!"
   "required": "Löse das Captcha!"
 "captcha.required": "Löse das Captcha!"
+"results.pairing": "Die Paarung <{{ string }}> ist nicht erlaubt!"
+"results.season.date": "Das Datum <{{ playDate }}> liegt außerhalb der Saison <{{ season }}>!"
 "email.unique": "Die email <{{ email }}> ist schon registriert!"
 "email.exist": "Die email <{{ email }}> ist nicht registriert, unbestätigt oder gesperrt!"
 "password.msg": "Das Passwort muss mind. einen Buchstaben und eine Zahl enthalten."

@@ -8,6 +8,10 @@
 {% block main %}
          {{ form_start(form) }}
 
+        <div>
+            {{ form_errors(form) }}
+        </div>
+
         <div class="row bl-form">
         <div class="field-group col-6">
            <fieldset>
@@ -58,6 +62,8 @@
 
                         <div class="form-group bl-result">
                             <label>{{ 'easyAdmin.bundesliga.results.points'|trans({}, 'messages') }}</label>
+                            {{ form_errors(form.boardPointsHome) }}
+                            {{ form_errors(form.boardPointsAway) }}
                             {{ form_widget(form.boardPointsHome) }}<span>:</span>{{ form_widget(form.boardPointsAway) }}
                         </div>
                     </fieldset>

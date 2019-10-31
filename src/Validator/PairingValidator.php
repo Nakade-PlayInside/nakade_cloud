@@ -17,19 +17,31 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Validator;
 
+use App\Entity\Bundesliga\BundesligaResults;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
 
-/**
- * @Annotation
- * @Target({"PROPERTY", "ANNOTATION"})
- */
-class UniqueReader extends Constraint
+class PairingValidator extends ConstraintValidator
 {
-    /*
-     * Any public properties become valid options for the annotation.
-     * Then, use these in your validator class.
-     */
-    public $message = "email.unique";
+    public function validate($object, Constraint $constraint)
+    {
+        /* @var $constraint \App\Validator\Pairing */
+        if (!assert($object instanceof BundesligaResults)) {
+            return;
+        }
+        if (!method_exists($object, 'getHome') || !method_exists($object, 'getAway')) {
+            return;
+        }
+        $home = $object->getHome()->getName();
+        $away = $object->getAway()->getName();
+
+        if ($home === $away) {
+            $this->context->buildViolation($constraint->message)
+                    ->setParameter('{{ string }}', $home.' - '.$away)
+                    ->addViolation();
+        }
+    }
 }

@@ -255,7 +255,6 @@ class AdminController extends EasyAdminController
 
             return $this->redirectToRoute('easyadmin', $params);
         }
-
         $params['form'] = $form->createView();
 
         return $this->render('admin/bundesliga/results/form.html.twig', $params);

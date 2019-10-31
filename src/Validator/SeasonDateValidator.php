@@ -19,17 +19,40 @@
  */
 namespace App\Validator;
 
+use App\Entity\Bundesliga\BundesligaResults;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
 
-/**
- * @Annotation
- * @Target({"PROPERTY", "ANNOTATION"})
- */
-class UniqueReader extends Constraint
+class SeasonDateValidator extends ConstraintValidator
 {
-    /*
-     * Any public properties become valid options for the annotation.
-     * Then, use these in your validator class.
-     */
-    public $message = "email.unique";
+    public function validate($object, Constraint $constraint)
+    {
+        /* @var $constraint \App\Validator\SeasonDate */
+        if (!assert($object instanceof BundesligaResults)) {
+            return;
+        }
+        if (!method_exists($object, 'getSeason') || !method_exists($object, 'getPlayedAt')) {
+            return;
+        }
+        if (!$object->getPlayedAt()) {
+            return;
+        }
+
+        if (!$object->getSeason()->getStartAt() || !$object->getSeason()->getEndAt()) {
+            return;
+        }
+        $seasonStart = $object->getSeason()->getStartAt();
+        $seasonEnd   = $object->getSeason()->getEndAt();
+        $playDate    = $object->getPlayedAt();
+
+        if ($playDate > $seasonStart && $seasonEnd > $playDate) {
+            return;
+        }
+
+        $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ playDate }}', $playDate->format('d.m.Y'))
+                ->setParameter('{{ season }}', $seasonStart->format('d.m.Y') . ' - ' . $seasonEnd->format('d.m.Y'))
+                ->addViolation();
+
+    }
 }

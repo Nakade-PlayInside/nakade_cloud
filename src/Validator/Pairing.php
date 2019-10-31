@@ -23,13 +23,21 @@ use Symfony\Component\Validator\Constraint;
 
 /**
  * @Annotation
- * @Target({"PROPERTY", "ANNOTATION"})
+ * @Target({"CLASS", "ANNOTATION"})
  */
-class UniqueReader extends Constraint
+class Pairing extends Constraint
 {
     /*
      * Any public properties become valid options for the annotation.
      * Then, use these in your validator class.
      */
-    public $message = "email.unique";
+    public $message = 'results.pairing';
+
+    /**
+     * allows to use an instance of that entity
+     */
+    public function getTargets()
+    {
+        return self::CLASS_CONSTRAINT;
+    }
 }

@@ -24,9 +24,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Pairing;
+use App\Validator\SeasonDate;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaResultsRepository")
+ * @Pairing()
+ * @SeasonDate
  */
 class BundesligaResults
 {
@@ -45,19 +49,18 @@ class BundesligaResults
     private $matchDay;
 
     /**
-     * TODO: ASSERT POSITIVE OR 0
+     * @Assert\PositiveOrZero()
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $boardPointsAway;
 
     /**
-     * TODO: ASSERT POSITIVE OR 0
+     * @Assert\PositiveOrZero()
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $boardPointsHome;
 
     /**
-     * TODO: ASSERT DATE BETWEEN SEASON START AND END
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $playedAt;
@@ -68,14 +71,12 @@ class BundesligaResults
     private $matches;
 
     /**
-     * TODO: ASSERT UNIQUE PAIRING OF SEASON AND TEAMS
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      * @ORM\JoinColumn(nullable=false)
      */
     private $home;
 
     /**
-     * TODO: ASSERT UNIQUE PAIRING OF SEASON AND TEAMS
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      * @ORM\JoinColumn(nullable=false)
      */
