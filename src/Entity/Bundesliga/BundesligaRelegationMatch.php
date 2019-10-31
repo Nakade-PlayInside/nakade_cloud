@@ -17,17 +17,18 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity\Bundesliga;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaMatchRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaRelegationMatchRepository")
  */
-class BundesligaMatch extends AbstractMatch
+class BundesligaRelegationMatch extends AbstractMatch
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaResults", inversedBy="matches")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaRelegation", inversedBy="matches")
      * @ORM\JoinColumn(nullable=true)
      */
     private $results;

@@ -94,6 +94,11 @@ class BundesligaSeason
      */
     private $deputy;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeamLineup", cascade={"persist", "remove"})
+     */
+    private $teamLineup;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
@@ -262,6 +267,18 @@ class BundesligaSeason
     public function setDeputy(?BundesligaExecutive $deputy): self
     {
         $this->deputy = $deputy;
+
+        return $this;
+    }
+
+    public function getTeamLineup(): ?BundesligaTeamLineup
+    {
+        return $this->teamLineup;
+    }
+
+    public function setTeamLineup(?BundesligaTeamLineup $teamLineup): self
+    {
+        $this->teamLineup = $teamLineup;
 
         return $this;
     }

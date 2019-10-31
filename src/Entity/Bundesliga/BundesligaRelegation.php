@@ -17,29 +17,55 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity\Bundesliga;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaMatchRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaRelegationRepository")
  */
-class BundesligaMatch extends AbstractMatch
+class BundesligaRelegation extends AbstractResults
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaResults", inversedBy="matches")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaRelegationMatch", mappedBy="results")
      */
-    private $results;
+    private $matches;
 
-    public function getResults(): ?ResultsInterface
+    public function __construct()
     {
-        return $this->results;
+        $this->matches = new ArrayCollection();
     }
 
-    public function setResults(?ResultsInterface $bundesligaResults): self
+    /**
+     * @return Collection|MatchInterface[]
+     */
+    public function getMatches(): Collection
     {
-        $this->results = $bundesligaResults;
+        return $this->matches;
+    }
+
+    public function addMatch(MatchInterface $match): self
+    {
+        if (!$this->matches->contains($match)) {
+            $this->matches[] = $match;
+            $match->setResults($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(MatchInterface $match): self
+    {
+        if ($this->matches->contains($match)) {
+            $this->matches->removeElement($match);
+            // set the owning side to null (unless already changed)
+            if ($match->getResults() === $this) {
+                $match->setResults(null);
+            }
+        }
 
         return $this;
     }

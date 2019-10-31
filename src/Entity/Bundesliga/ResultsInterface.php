@@ -17,30 +17,24 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity\Bundesliga;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaMatchRepository")
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaMatch extends AbstractMatch
+interface ResultsInterface
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaResults", inversedBy="matches")
-     * @ORM\JoinColumn(nullable=true)
+     * @return Collection|MatchInterface[]
      */
-    private $results;
+    public function getMatches(): Collection;
 
-    public function getResults(): ?ResultsInterface
-    {
-        return $this->results;
-    }
+    public function addMatch(MatchInterface $match);
 
-    public function setResults(?ResultsInterface $bundesligaResults): self
-    {
-        $this->results = $bundesligaResults;
-
-        return $this;
-    }
+    public function removeMatch(MatchInterface $match);
 }

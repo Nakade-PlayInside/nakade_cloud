@@ -24,78 +24,29 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator\Pairing;
-use App\Validator\SeasonDate;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaResultsRepository")
- * @Pairing()
- * @SeasonDate
  */
-class BundesligaResults
+class BundesligaResults extends AbstractResults
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
     /**
      * TODO: ASSERT RANGE #TEAMS-1
      * @Assert\Positive
+     *
      * @ORM\Column(type="smallint")
      */
     private $matchDay;
-
-    /**
-     * @Assert\PositiveOrZero()
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $boardPointsAway;
-
-    /**
-     * @Assert\PositiveOrZero()
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $boardPointsHome;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $playedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="results")
      */
     private $matches;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $home;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $away;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $season;
 
     public function __construct()
     {
         $this->matches = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getMatchDay(): ?int
@@ -110,51 +61,16 @@ class BundesligaResults
         return $this;
     }
 
-    public function getBoardPointsAway(): ?int
-    {
-        return $this->boardPointsAway;
-    }
-
-    public function setBoardPointsAway(int $boardPointsAway): self
-    {
-        $this->boardPointsAway = $boardPointsAway;
-
-        return $this;
-    }
-
-    public function getBoardPointsHome(): ?int
-    {
-        return $this->boardPointsHome;
-    }
-
-    public function setBoardPointsHome(int $boardPointsHome): self
-    {
-        $this->boardPointsHome = $boardPointsHome;
-
-        return $this;
-    }
-
-    public function getPlayedAt(): ?\DateTimeInterface
-    {
-        return $this->playedAt;
-    }
-
-    public function setPlayedAt(?\DateTimeInterface $playedAt): self
-    {
-        $this->playedAt = $playedAt;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|BundesligaMatch[]
+     * @return Collection|MatchInterface[]
      */
     public function getMatches(): Collection
     {
         return $this->matches;
     }
 
-    public function addMatch(BundesligaMatch $match): self
+
+    public function addMatch(MatchInterface $match): self
     {
         if (!$this->matches->contains($match)) {
             $this->matches[] = $match;
@@ -164,7 +80,7 @@ class BundesligaResults
         return $this;
     }
 
-    public function removeMatch(BundesligaMatch $match): self
+    public function removeMatch(MatchInterface $match): self
     {
         if ($this->matches->contains($match)) {
             $this->matches->removeElement($match);
@@ -177,50 +93,5 @@ class BundesligaResults
         return $this;
     }
 
-    public function getHome(): ?BundesligaTeam
-    {
-        return $this->home;
-    }
 
-    public function setHome(?BundesligaTeam $home): self
-    {
-        $this->home = $home;
-
-        return $this;
-    }
-
-    public function getAway(): ?BundesligaTeam
-    {
-        return $this->away;
-    }
-
-    public function setAway(?BundesligaTeam $away): self
-    {
-        $this->away = $away;
-
-        return $this;
-    }
-
-    public function getSeason(): ?BundesligaSeason
-    {
-        return $this->season;
-    }
-
-    public function setSeason(?BundesligaSeason $season): self
-    {
-        $this->season = $season;
-
-        return $this;
-    }
-
-    public function getPairing(): string
-    {
-        return $this->getHome()->getName().' - '.$this->getAway()->getName();
-    }
-
-
-    public function getResult(): string
-    {
-        return $this->getBoardPointsHome().' : '.$this->getBoardPointsAway();
-    }
 }
