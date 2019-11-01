@@ -1,15 +1,30 @@
 <?php
-
+/**
+ * @license MIT License <https://opensource.org/licenses/MIT>
+ *
+ * Copyright (c) 2019 Dr. Holger Maerz
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 namespace App\Entity\Bundesliga;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaTeamLineupRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaLineupRepository")
  */
-class BundesligaTeamLineup
+class BundesligaLineup
 {
     /**
      * @ORM\Id()
@@ -19,15 +34,10 @@ class BundesligaTeamLineup
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason", inversedBy="lineup")
      * @ORM\JoinColumn(nullable=false)
      */
     private $season;
-
-    /**
-     * @var ArrayCollection
-     */
-    private $players;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaPlayer")
@@ -83,11 +93,6 @@ class BundesligaTeamLineup
      */
     private $position10;
 
-    public function __construct()
-    {
-        $this->players = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -106,9 +111,9 @@ class BundesligaTeamLineup
     }
 
     /**
-     * @return Collection|BundesligaPlayer[]
+     * @return BundesligaPlayer[]
      */
-    public function getPlayers(): Collection
+    public function getPlayers(): array
     {
         $method = 'getPosition';
         $count = 1;
@@ -116,14 +121,22 @@ class BundesligaTeamLineup
         while (method_exists($this, $method.$count)) {
             $myMethod = $method.$count;
             $player = $this->$myMethod();
-            if ($player && !$this->players->contains($player)) {
-                $this->players->add($player);
+
+            if ($player) {
+                $allPlayers[$count] = $player;
             }
             ++$count;
         }
+
+        return array_unique($allPlayers);
     }
 
-    public function getPosition1(): BundesligaPlayer
+    public function getNumberOfPlayers(): int
+    {
+        return count($this->getPlayers());
+    }
+
+    public function getPosition1(): ?BundesligaPlayer
     {
         return $this->position1;
     }
@@ -176,7 +189,7 @@ class BundesligaTeamLineup
         return $this->position5;
     }
 
-    public function setPosition5(BundesligaPlayer $position5): self
+    public function setPosition5(?BundesligaPlayer $position5): self
     {
         $this->position5 = $position5;
 
@@ -188,7 +201,7 @@ class BundesligaTeamLineup
         return $this->position6;
     }
 
-    public function setPosition6(BundesligaPlayer $position6): self
+    public function setPosition6(?BundesligaPlayer $position6): self
     {
         $this->position6 = $position6;
 
@@ -200,7 +213,7 @@ class BundesligaTeamLineup
         return $this->position7;
     }
 
-    public function setPosition7(BundesligaPlayer $position7): self
+    public function setPosition7(?BundesligaPlayer $position7): self
     {
         $this->position7 = $position7;
 
@@ -212,7 +225,7 @@ class BundesligaTeamLineup
         return $this->position8;
     }
 
-    public function setPosition8(BundesligaPlayer $position8): self
+    public function setPosition8(?BundesligaPlayer $position8): self
     {
         $this->position8 = $position8;
 
@@ -224,7 +237,7 @@ class BundesligaTeamLineup
         return $this->position9;
     }
 
-    public function setPosition9(BundesligaPlayer $position9): self
+    public function setPosition9(?BundesligaPlayer $position9): self
     {
         $this->position9 = $position9;
 
@@ -236,10 +249,15 @@ class BundesligaTeamLineup
         return $this->position10;
     }
 
-    public function setPosition10(BundesligaPlayer $position10): self
+    public function setPosition10(?BundesligaPlayer $position10): self
     {
         $this->position10 = $position10;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return '$this->getId()';
     }
 }

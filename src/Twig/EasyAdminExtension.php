@@ -25,16 +25,19 @@ namespace App\Twig;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\TrackingInterface;
 use App\Entity\User;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Twig\TwigFunction;
 
 class EasyAdminExtension extends \Twig_Extension
 {
     private $tokenStorage;
+    private $propertyAccessor;
 
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(TokenStorageInterface $tokenStorage, PropertyAccessorInterface $propertyAccessor)
     {
         $this->tokenStorage = $tokenStorage;
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -44,6 +47,7 @@ class EasyAdminExtension extends \Twig_Extension
     {
         return [
                 new TwigFunction('bundesliga_get_match_result', [$this, 'getMatchResult']),
+                new TwigFunction('has_value', [$this, 'hasEntityValue']),
         ];
     }
 
@@ -71,20 +75,13 @@ class EasyAdminExtension extends \Twig_Extension
         return $itemActions;
     }
 
-    public function getMatchResult(BundesligaMatch $item)
+    public function hasEntityValue($item, $fieldName)
     {
-        if (!$item->getResults() || !$item->getResults()->getPointsHome() || !$item->getResults()->getPointsAway()) {
-            return '0:0';
+        if ($this->propertyAccessor->isReadable($item, $fieldName)) {
+            return $this->propertyAccessor->getValue($item, $fieldName) ? true : false;
         }
 
-        $opponentPts = $item->getResults()->getPointsAway();
-        $nakadePts = $item->getResults()->getPointsHome();
-        if ($item->getResults()->getHome() === $item->getId()) {
-            $opponentPts = $item->getResults()->getPointsHome();
-            $nakadePts = $item->getResults()->getPointsAway();
-        }
-
-        return sprintf('%d:%d', $nakadePts, $opponentPts);
+        return false;
     }
 
     private function isRemovalDenied(string $status): bool

@@ -95,9 +95,9 @@ class BundesligaSeason
     private $deputy;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeamLineup", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaLineup", mappedBy="season")
      */
-    private $teamLineup;
+    private $lineup;
 
     public function __construct()
     {
@@ -271,14 +271,14 @@ class BundesligaSeason
         return $this;
     }
 
-    public function getTeamLineup(): ?BundesligaTeamLineup
+    public function getLineup(): ?BundesligaLineup
     {
-        return $this->teamLineup;
+        return $this->lineup;
     }
 
-    public function setTeamLineup(?BundesligaTeamLineup $teamLineup): self
+    public function setLineup(?BundesligaLineup $lineup): self
     {
-        $this->teamLineup = $teamLineup;
+        $this->lineup = $lineup;
 
         return $this;
     }

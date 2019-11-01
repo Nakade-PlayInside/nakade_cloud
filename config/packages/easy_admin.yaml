@@ -25,6 +25,7 @@ easy_admin:
             icon: 'star-o'
             children:
               - { entity: BundesligaSeason, label: 'easyAdmin.bundesliga.season', icon: 'calendar'}
+              - { entity: BundesligaLineup, label: 'easyAdmin.bundesliga.lineup.title', icon: 'users'}
               - { entity: BundesligaPlayer, label: 'easyAdmin.bundesliga.player.title', icon: 'user'}
               - { entity: BundesligaTeam, label: 'easyAdmin.bundesliga.team.label', icon: 'users'}
               - { entity: BundesligaExecutive, label: 'easyAdmin.bundesliga.executive', icon: 'legal'}
@@ -301,7 +302,7 @@ easy_admin:
               - { property: 'executive', label: 'easyAdmin.bundesliga.executive' }
               - { property: 'deputy', label: 'easyAdmin.bundesliga.deputy' }
               - { property: 'teams', label: 'easyAdmin.bundesliga.season.teams' }
-              - { property: 'players', label: 'easyAdmin.bundesliga.season.players' }
+              - { property: 'lineup.numberOfPlayers', label: 'easyAdmin.bundesliga.lineup.title' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.season.matches'}
           form:
             fields:
@@ -407,14 +408,12 @@ easy_admin:
               - { property: 'name', label: 'easyAdmin.bundesliga.team.title' }
               - { property: 'captain', label: 'easyAdmin.bundesliga.team.captain' }
               - { property: 'email', label: 'easyAdmin.user.email' }
-              - { property: 'matches', label: 'easyAdmin.bundesliga.season.matches' }
           show:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'name', label: 'easyAdmin.bundesliga.team.title' }
               - { property: 'captain', label: 'easyAdmin.bundesliga.team.captain' }
               - { property: 'email', label: 'easyAdmin.user.email' }
-              - { property: 'matches', label: 'easyAdmin.bundesliga.results.title', template: 'admin/bundesliga/team/matches.html.twig' }
           form:
             fields:
               - { property: 'name', label: 'easyAdmin.bundesliga.team.title' }
@@ -495,4 +494,39 @@ easy_admin:
               - { property: 'opponent', label: 'Gegner'}
               - { property: 'opponentTeam', label: 'Gegner Team',
                   type_options: { choice_value: id , choice_label: name }}
-
+        BundesligaLineup:
+          class: App\Entity\Bundesliga\BundesligaLineup
+          label: 'easyAdmin.bundesliga.lineup.title'
+          templates:
+            show:  'admin/bundesliga/lineup/show.html.twig'
+          list:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season'}
+              - { property: 'numberOfPlayers', label: 'easyAdmin.bundesliga.season.players'}
+          show:
+            fields:
+              - { property: 'season', label: 'easyAdmin.bundesliga.season'}
+              - { property: 'position1', label: 'easyAdmin.bundesliga.lineup.position1' }
+              - { property: 'position2', label: 'easyAdmin.bundesliga.lineup.position2' }
+              - { property: 'position3', label: 'easyAdmin.bundesliga.lineup.position3' }
+              - { property: 'position4', label: 'easyAdmin.bundesliga.lineup.position4' }
+              - { property: 'position5', label: 'easyAdmin.bundesliga.lineup.position5' }
+              - { property: 'position6', label: 'easyAdmin.bundesliga.lineup.position6' }
+              - { property: 'position7', label: 'easyAdmin.bundesliga.lineup.position7' }
+              - { property: 'position8', label: 'easyAdmin.bundesliga.lineup.position8' }
+              - { property: 'position9', label: 'easyAdmin.bundesliga.lineup.position9' }
+              - { property: 'position10', label: 'easyAdmin.bundesliga.lineup.position10' }
+          form:
+            fields:
+              - { property: 'season', label: 'easyAdmin.bundesliga.season'}
+              - { property: 'position1', label: 'easyAdmin.bundesliga.lineup.position1' }
+              - { property: 'position2', label: 'easyAdmin.bundesliga.lineup.position2' }
+              - { property: 'position3', label: 'easyAdmin.bundesliga.lineup.position3' }
+              - { property: 'position4', label: 'easyAdmin.bundesliga.lineup.position4' }
+              - { property: 'position5', label: 'easyAdmin.bundesliga.lineup.position5' }
+              - { property: 'position6', label: 'easyAdmin.bundesliga.lineup.position6' }
+              - { property: 'position7', label: 'easyAdmin.bundesliga.lineup.position7' }
+              - { property: 'position8', label: 'easyAdmin.bundesliga.lineup.position8' }
+              - { property: 'position9', label: 'easyAdmin.bundesliga.lineup.position9' }
+              - { property: 'position10', label: 'easyAdmin.bundesliga.lineup.position10' }

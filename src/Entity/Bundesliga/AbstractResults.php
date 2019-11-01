@@ -160,9 +160,12 @@ abstract class AbstractResults implements ResultsInterface
         return $this->getHome()->getName().' - '.$this->getAway()->getName();
     }
 
-
     public function getResult(): string
     {
+        if (!$this->getBoardPointsHome() || $this->getBoardPointsAway()) {
+            return '0 : 0';
+        }
+
         return $this->getBoardPointsHome().' : '.$this->getBoardPointsAway();
     }
 }

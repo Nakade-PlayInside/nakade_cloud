@@ -67,7 +67,7 @@ abstract class AbstractMatch implements MatchInterface
     protected $opponent;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam", inversedBy="matches")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $opponentTeam;
