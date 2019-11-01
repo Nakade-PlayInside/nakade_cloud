@@ -46,14 +46,14 @@ abstract class AbstractResults implements ResultsInterface
      *
      * @ORM\Column(type="smallint", nullable=true)
      */
-    protected $boardPointsAway;
+    protected $boardPointsAway = 0;
 
     /**
      * @Assert\PositiveOrZero()
      *
      * @ORM\Column(type="smallint", nullable=true)
      */
-    protected $boardPointsHome;
+    protected $boardPointsHome = 0;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -162,10 +162,6 @@ abstract class AbstractResults implements ResultsInterface
 
     public function getResult(): string
     {
-        if (!$this->getBoardPointsHome() || $this->getBoardPointsAway()) {
-            return '0 : 0';
-        }
-
         return $this->getBoardPointsHome().' : '.$this->getBoardPointsAway();
     }
 }

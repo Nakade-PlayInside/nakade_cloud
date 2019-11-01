@@ -31,12 +31,14 @@
     {% endif %}
 {# a simple *-to-one value associated with an entity managed by this backend #}
 {% elseif link_parameters is defined %}
-    {% set winnerStyle = '' %}
-    {% if item.home.name == value and item.boardPointsHome > 4 or item.away.name == value and item.boardPointsAway > 4 %}
-    {% set winnerStyle = 'font-weight:bolder;' %}
+    {% if item.home.name == item.away.name %}
+        {% set winnerStyle = 'color: red' %}
+    {% elseif item.home.name == value and item.boardPointsHome > item.boardPointsAway or item.away.name == value and item.boardPointsAway > item.boardPointsHome %}
+        {% set winnerStyle = 'font-weight:bolder;' %}
+    {% else %}
+        {% set winnerStyle = '' %}
     {% endif %}
-
-    <a style="{{winnerStyle}}" href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value |capitalize }}</a>
+    <a style="{{ winnerStyle }}" href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value |capitalize }}</a>
 {% else %}
     {{ value|easyadmin_truncate }}
 {% endif %}

@@ -161,6 +161,11 @@ abstract class AbstractMatch implements MatchInterface
         return $this;
     }
 
+    public function getPairing()
+    {
+        return $this->getPlayer()->getName() . ' - ' . $this->getOpponent()->getName();
+    }
+
     public function __toString()
     {
         return $this->getOpponentTeam()->getName();

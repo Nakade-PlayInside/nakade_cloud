@@ -36,9 +36,12 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureInterface
 {
+    const GROUP_NAME = 'bl_season';
+    const COUNT = 8;
+
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(8, 'bl_season', function ($i) {
+        $this->createMany(self::COUNT, self::GROUP_NAME, function ($i) {
             $startYear = 10 + $i;
             $title = sprintf('Saison 20%d/%d', $startYear, $startYear + 1);
             $startDate = sprintf('20%d-08-%d', $startYear, $this->faker->numberBetween(1, 28));
@@ -64,16 +67,10 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
             $team = $this->getReference('bl_team_1');
             $season->addTeam($team);
 
-            while (sizeof($season->getTeams()) < 12) {
+            while (sizeof($season->getTeams()) < 10) {
                 /** @var BundesligaTeam $team */
                 $team = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
                 $season->addTeam($team);
-            }
-
-            while (sizeof($season->getPlayers()) < 10) {
-                /** @var BundesligaPlayer $player */
-                $player = $this->getRandomReference(BundesligaPlayer::class, 'bl_player');
-                $season->addPlayer($player);
             }
 
             return $season;

@@ -22,7 +22,9 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Bundesliga\BundesligaOpponent;
+use App\Entity\Bundesliga\BundesligaLineup;
+use App\Entity\Bundesliga\BundesligaPlayer;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -30,18 +32,42 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaOpponentFixtures extends BaseFixture
+class BundesligaLineupFixtures extends BaseFixture implements DependentFixtureInterface
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(50, 'bl_opponent', function ($i) {
-            $player = new BundesligaOpponent();
-            $player->setFirstName($this->faker->firstName);
-            $player->setLastName($this->faker->lastName);
+        $this->createMany(BundesligaSeasonFixtures::COUNT, 'bl_lineup', function ($i) {
+            $lineup = new BundesligaLineup();
+            $players = [];
+            while (count($players) < 10) {
+                $players[] = $this->getRandomReference(BundesligaPlayer::class, 'bl_player');
+            }
 
-            return $player;
+            $count = 1;
+            foreach (array_unique($players) as $player) {
+                $method = 'setPosition'.$count;
+                if (method_exists($lineup, $method)) {
+                    $lineup->$method($player);
+                }
+                ++$count;
+            }
+
+            $name = BundesligaSeasonFixtures::GROUP_NAME.'_'.$i;
+            if ($this->hasReference($name)) {
+                $season = $this->getReference($name);
+                $lineup->setSeason($season);
+            }
+
+            return $lineup;
         });
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+                BundesligaSeasonFixtures::class,
+        ];
     }
 }

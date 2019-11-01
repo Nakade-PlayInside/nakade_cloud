@@ -42,10 +42,8 @@ class BundesligaResultsFixtures extends BaseFixture implements DependentFixtureI
 
             $result->setMatchDay($this->faker->numberBetween(1, 8));
             $points = $this->faker->numberBetween(0, 8);
-            $result->setPointsHome($points);
-            $result->setPointsAway(8 - $points);
-            $result->setBoardPointsAway($result->getPointsAway());
-            $result->setBoardPointsHome($result->getPointsHome());
+            $result->setBoardPointsHome($points);
+            $result->setBoardPointsAway(8 - $points);
             $result->setPlayedAt($this->faker->dateTimeThisDecade);
 
             /** @var BundesligaSeason $season */
