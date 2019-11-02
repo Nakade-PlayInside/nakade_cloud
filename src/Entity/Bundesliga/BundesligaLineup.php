@@ -258,6 +258,6 @@ class BundesligaLineup
 
     public function __toString()
     {
-        return '$this->getId()';
+        return 'Lineup';
     }
 }

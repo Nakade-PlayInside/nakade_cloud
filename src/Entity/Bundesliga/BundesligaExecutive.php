@@ -59,13 +59,6 @@ class BundesligaExecutive
     /**
      * @Assert\NotBlank
      *
-     * @ORM\Column(type="string", length=255)
-     */
-    private $position = 'Ligaleiter';
-
-    /**
-     * @Assert\NotBlank
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
@@ -104,18 +97,6 @@ class BundesligaExecutive
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getPosition(): ?string
-    {
-        return $this->position;
-    }
-
-    public function setPosition(?string $position): self
-    {
-        $this->position = $position;
 
         return $this;
     }

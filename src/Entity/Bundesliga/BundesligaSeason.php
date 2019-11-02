@@ -47,6 +47,7 @@ class BundesligaSeason
 
     /**
      * @Assert\NotBlank
+     *
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $title;
@@ -78,6 +79,7 @@ class BundesligaSeason
 
     /**
      * @Assert\NotBlank
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $league;
@@ -95,7 +97,7 @@ class BundesligaSeason
     private $deputy;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaLineup", mappedBy="season")
+     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaLineup", mappedBy="season", fetch="EXTRA_LAZY")
      */
     private $lineup;
 
