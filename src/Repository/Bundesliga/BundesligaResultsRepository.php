@@ -47,7 +47,7 @@ class BundesligaResultsRepository extends ServiceEntityRepository
                 ->where('s.id=:id')
                 ->andWhere('h.name LIKE :team OR a.name LIKE :team')
                 ->setParameter('id', $seasonId)
-                ->setParameter('team', '%East%')
+                ->setParameter('team', '%Nakade%')
                 ->orderBy('r.matchDay', 'ASC')
                 ->getQuery()
                 ->getResult()

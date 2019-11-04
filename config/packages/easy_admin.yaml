@@ -457,7 +457,7 @@ easy_admin:
               - { property: 'playedAt', label: 'easyAdmin.bundesliga.results.date' }
               - { property: 'pairing', label: 'easyAdmin.bundesliga.results.pairing', css_class: 'player-name' }
               - { property: 'result', label: 'easyAdmin.bundesliga.results.result', css_class: 'player-name' }
-              - { property: 'matches', label: 'easyAdmin.bundesliga.results.matches' }
+              - { property: 'matches', label: 'easyAdmin.bundesliga.results.matches', template: 'admin/bundesliga/results/match_association.html.twig' }
         BundesligaMatch:
           class: App\Entity\Bundesliga\BundesligaMatch
           label: 'easyAdmin.bundesliga.matches'

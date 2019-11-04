@@ -101,6 +101,22 @@ abstract class BaseFixture extends Fixture
         return $this->getReference($randReferenceKey);
     }
 
+    protected function createResult(int $pointsHome): string
+    {
+        switch ($pointsHome) {
+            case 0:
+                $result = '0:2';
+                break;
+            case 1:
+                $result = '1:1';
+                break;
+            default:
+                $result = '2:0';
+        }
+
+        return $result;
+    }
+
     /**
      * @return ObjectManager|null
      */

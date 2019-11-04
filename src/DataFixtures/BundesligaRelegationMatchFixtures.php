@@ -47,7 +47,8 @@ class BundesligaRelegationMatchFixtures extends BaseFixture implements Dependent
             $match = new BundesligaRelegationMatch();
             $match->setBoard($this->faker->numberBetween(1, 5));
             $match->setColor($this->faker->boolean() ? 'w' : 'b');
-            $match->setResult($this->createResult());
+            $pointsHome = $this->faker->numberBetween(0, 2);
+            $match->setResult($this->createResult($pointsHome));
             if ($this->faker->boolean(10)) {
                 $match->setWinByDefault(true);
             }
@@ -76,23 +77,6 @@ class BundesligaRelegationMatchFixtures extends BaseFixture implements Dependent
         });
 
         $manager->flush();
-    }
-
-    private function createResult(): string
-    {
-        $pointsHome = $this->faker->numberBetween(0, 2);
-        switch ($pointsHome) {
-            case 0:
-                $result = '0:2';
-                break;
-            case 1:
-                $result = '1:1';
-                break;
-            default:
-                $result = '2:0';
-        }
-
-        return $result;
     }
 
     public function getDependencies()

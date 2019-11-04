@@ -64,7 +64,7 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
             $season->setDeputy($deputy);
 
             /** @var BundesligaTeam $team */
-            $team = $this->getReference('bl_team_1');
+            $team = $this->getReference('bl_team_nakade');
             $season->addTeam($team);
 
             while (sizeof($season->getTeams()) < 10) {
