@@ -8,10 +8,9 @@
                         {% if link_parameters is defined %}
                             {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
                             {% set primary_key_value = '' ~ attribute(item, link_parameters.primary_key_name) %}
-                            <a href="{{ path('easyadmin', link_parameters|merge({ id: primary_key_value, referer: '' })) }}">{{ item.team.name |capitalize}}</a>
+                            <a href="{{ path('easyadmin', link_parameters|merge({ id: primary_key_value, referer: '' })) }}">{{ item }}</a>
                         {% else %}
-                            {# important to show name #}
-                            {{ item.team.name|capitalize }}
+                            {{ item }}
                         {% endif %}
                     </li>
                 {% endfor %}
@@ -31,14 +30,7 @@
     {% endif %}
 {# a simple *-to-one value associated with an entity managed by this backend #}
 {% elseif link_parameters is defined %}
-    {% if item.home.name == item.away.name %}
-        {% set winnerStyle = 'color: red' %}
-    {% elseif item.home.name == value and item.boardPointsHome > item.boardPointsAway or item.away.name == value and item.boardPointsAway > item.boardPointsHome %}
-        {% set winnerStyle = 'font-weight:bolder;' %}
-    {% else %}
-        {% set winnerStyle = '' %}
-    {% endif %}
-    <a style="{{ winnerStyle }}" href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value }}</a>
+    <a href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value|easyadmin_truncate }}, {{ item.season.league }}. Liga</a>
 {% else %}
     {{ value|easyadmin_truncate }}
 {% endif %}

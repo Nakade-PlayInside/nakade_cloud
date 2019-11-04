@@ -31,9 +31,7 @@
     {% endif %}
 {# a simple *-to-one value associated with an entity managed by this backend #}
 {% elseif link_parameters is defined %}
-    {% if item.home.name == item.away.name %}
-        {% set winnerStyle = 'color: red' %}
-    {% elseif item.home.name == value and item.boardPointsHome > item.boardPointsAway or item.away.name == value and item.boardPointsAway > item.boardPointsHome %}
+    {% if item.player.name == value and item.result == '2:0' or item.opponent.name == value and item.result == '0:2' %}
         {% set winnerStyle = 'font-weight:bolder;' %}
     {% else %}
         {% set winnerStyle = '' %}

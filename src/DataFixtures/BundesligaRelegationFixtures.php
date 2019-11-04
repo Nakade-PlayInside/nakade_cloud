@@ -22,9 +22,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Bundesliga\BundesligaMatch;
-use App\Entity\Bundesliga\BundesligaOpponent;
-use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Entity\Bundesliga\BundesligaRelegation;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -32,61 +30,40 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaMatchFixtures extends BaseFixture implements DependentFixtureInterface
+class BundesligaRelegationFixtures extends BaseFixture implements DependentFixtureInterface
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(20, 'bl_match', function ($i) {
-            $match = new BundesligaMatch();
-            $match->setBoard($this->faker->numberBetween(1, 4));
-            $match->setColor($this->faker->boolean() ? 'w' : 'b');
-            $match->setResult($this->createResult());
+        $this->createMany(20, 'bl_relegation', function ($i) {
+            $relegation = new BundesligaRelegation();
+
+            $points = $this->faker->numberBetween(0, 10);
+            $relegation->setBoardPointsHome($points);
+            $relegation->setBoardPointsAway(10 - $points);
+            $relegation->setPlayedAt($this->faker->dateTimeThisDecade);
             if ($this->faker->boolean(10)) {
-                $match->setWinByDefault(true);
+                $relegation->setRound(2);
             }
 
             /** @var BundesligaSeason $season */
             $season = $this->getRandomReference(BundesligaSeason::class, 'bl_season');
-            $match->setSeason($season);
+            $relegation->setSeason($season);
 
-            /** @var BundesligaPlayer $player */
-            $player = $this->getRandomReference(BundesligaPlayer::class, 'bl_player');
-            $match->setPlayer($player);
+            /** @var BundesligaTeam $homeTeam */
+            $homeTeam = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
+            $relegation->setHome($homeTeam);
 
-            /** @var BundesligaOpponent $opponent */
-            $opponent = $this->getRandomReference(BundesligaOpponent::class, 'bl_opponent');
-            $match->setOpponent($opponent);
+            /** @var BundesligaTeam $awayTeam */
+            $awayTeam = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
+            $relegation->setAway($awayTeam);
 
-            /** @var BundesligaTeam $team */
-            $team = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
-            $match->setOpponentTeam($team);
-
-            return $match;
+            return $relegation;
         });
 
         $manager->flush();
-    }
-
-    private function createResult(): string
-    {
-        $pointsHome = $this->faker->numberBetween(0, 2);
-        switch ($pointsHome) {
-            case 0:
-                $result = '0:2';
-                break;
-            case 1:
-                $result = '1:1';
-                break;
-            default:
-                $result = '2:0';
-        }
-
-        return $result;
     }
 
     public function getDependencies()

@@ -56,9 +56,9 @@ abstract class AbstractMatch implements MatchInterface
     protected $color='b';
 
     /**
-     * @ORM\Column(type="smallint", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    protected $points;
+    protected $result = '0:0';
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaOpponent", inversedBy="matches")
@@ -71,6 +71,11 @@ abstract class AbstractMatch implements MatchInterface
      * @ORM\JoinColumn(nullable=false)
      */
     protected $opponentTeam;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $winByDefault = false;
 
     public function getId(): ?int
     {
@@ -113,18 +118,6 @@ abstract class AbstractMatch implements MatchInterface
         return $this;
     }
 
-    public function getPoints(): ?int
-    {
-        return $this->points;
-    }
-
-    public function setPoints(int $points): self
-    {
-        $this->points = $points;
-
-        return $this;
-    }
-
     public function getOpponent(): ?BundesligaOpponent
     {
         return $this->opponent;
@@ -161,14 +154,32 @@ abstract class AbstractMatch implements MatchInterface
         return $this;
     }
 
-    public function getPairing()
+    public function setResult(string $result): self
     {
-        return $this->getPlayer()->getName() . ' - ' . $this->getOpponent()->getName();
+        $this->result = $result;
+
+        return $this;
     }
 
     public function getResult()
     {
-        //todo: result 2:0, 1:1, 0:2, 0:0, kampflos
+        return $this->result;
+    }
+
+    public function isWinByDefault(): ?bool
+    {
+        return $this->winByDefault;
+    }
+
+    public function setWinByDefault(bool $winByDefault): self
+    {
+        $this->winByDefault = $winByDefault;
+
+        return $this;
+    }
+
+    public function getPairing()
+    {
         return $this->getPlayer()->getName() . ' - ' . $this->getOpponent()->getName();
     }
 

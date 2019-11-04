@@ -52,4 +52,22 @@ class BundesligaTeamRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+    /**
+     * @param $value
+     * @return BUndesligaTeam[]|null
+     */
+    public function findOpponentTeamsBySeason($value)
+    {
+        return $this->createQueryBuilder('t')
+                ->join('t.seasons', 's')
+                ->where('s.id=:id')
+                ->andWhere('t.name!=:name')
+                ->setParameter('id', $value)
+                ->setParameter('name', 'Nakade')
+                ->orderBy('t.name', 'ASC')
+                ->getQuery()
+                ->getResult()
+                ;
+    }
 }

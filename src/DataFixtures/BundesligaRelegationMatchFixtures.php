@@ -25,6 +25,8 @@ namespace App\DataFixtures;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaOpponent;
 use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Entity\Bundesliga\BundesligaRelegation;
+use App\Entity\Bundesliga\BundesligaRelegationMatch;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -37,13 +39,13 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaMatchFixtures extends BaseFixture implements DependentFixtureInterface
+class BundesligaRelegationMatchFixtures extends BaseFixture implements DependentFixtureInterface
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(20, 'bl_match', function ($i) {
-            $match = new BundesligaMatch();
-            $match->setBoard($this->faker->numberBetween(1, 4));
+        $this->createMany(20, 'bl_relegation_match', function ($i) {
+            $match = new BundesligaRelegationMatch();
+            $match->setBoard($this->faker->numberBetween(1, 5));
             $match->setColor($this->faker->boolean() ? 'w' : 'b');
             $match->setResult($this->createResult());
             if ($this->faker->boolean(10)) {
@@ -65,6 +67,10 @@ class BundesligaMatchFixtures extends BaseFixture implements DependentFixtureInt
             /** @var BundesligaTeam $team */
             $team = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
             $match->setOpponentTeam($team);
+
+            /** @var BundesligaRelegation $relegation */
+            $relegation = $this->getRandomReference(BundesligaRelegation::class, 'bl_relegation');
+            $match->setResults($relegation);
 
             return $match;
         });
@@ -96,6 +102,7 @@ class BundesligaMatchFixtures extends BaseFixture implements DependentFixtureInt
             BundesligaPlayerFixtures::class,
             BundesligaOpponentFixtures::class,
             BundesligaTeamFixtures::class,
+            BundesligaRelegationFixtures::class,
         ];
     }
 }

@@ -1,0 +1,8 @@
+{% if view == 'show' %}
+    {{ value|nl2br }}
+{% else %}
+    {% if value %}
+        <i style="color:red" class="fa fa-fw fa-exclamation"></i>
+    {% endif %}
+{#    {{ value|striptags|easyadmin_truncate }}#}
+{% endif %}

@@ -23,12 +23,14 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\BugReport;
+use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\ContactMail;
 use App\Entity\Feature;
 use App\Entity\User;
+use App\Form\BundesligaMatchType;
 use App\Form\BundesligaResultsType;
 use App\Form\ContactReplyType;
 use App\Message\ReplyContact;
@@ -281,5 +283,35 @@ class AdminController extends EasyAdminController
         return $this->render('admin/bundesliga/results/_teams_result.html.twig', [
                 'teamForm' => $form->createView(),
         ]);
+    }
+
+    protected function editBundesligaMatchAction()
+    {
+        $id = $this->request->get('id');
+        $params = $this->request->query->all();
+
+        $match = $this->em->getRepository(BundesligaMatch::class)->find($id);
+        $form = $this->createForm(BundesligaMatchType::class, $match);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $result = $form->getData();
+
+            if (!assert($result instanceof BundesligaResults)) {
+                throw new UnexpectedTypeException($result, BundesligaResults::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($result);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.results.update.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+
+        $params['form'] = $form->createView();
+
+        return $this->render('admin/bundesliga/match/form.html.twig', $params);
     }
 }

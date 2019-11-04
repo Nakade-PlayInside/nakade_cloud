@@ -20,8 +20,10 @@
 namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaResults;
+use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * @method BundesligaResults|null find($id, $lockMode = null, $lockVersion = null)
@@ -36,32 +38,19 @@ class BundesligaResultsRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaResults::class);
     }
 
-    // /**
-    //  * @return Results[] Returns an array of Results objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findBySeason($seasonId)
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->createQueryBuilder('r')
+                ->innerJoin('r.season', 's')
+                ->innerJoin(BundesligaTeam::class, 'h', expr\Join::WITH, 'h.id=r.home')
+                ->innerJoin(BundesligaTeam::class, 'a', expr\Join::WITH, 'a.id=r.away')
+                ->where('s.id=:id')
+                ->andWhere('h.name LIKE :team OR a.name LIKE :team')
+                ->setParameter('id', $seasonId)
+                ->setParameter('team', '%East%')
+                ->orderBy('r.matchDay', 'ASC')
+                ->getQuery()
+                ->getResult()
+                ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Results
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

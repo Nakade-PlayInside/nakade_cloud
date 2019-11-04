@@ -93,5 +93,8 @@ class BundesligaResults extends AbstractResults
         return $this;
     }
 
-
+    public function __toString(): string
+    {
+        return $this->getPairing();
+    }
 }

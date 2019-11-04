@@ -40,9 +40,6 @@ class BundesligaExecutiveFixtures extends BaseFixture
             $executive->setLastName($this->faker->lastName);
             $executive->setCity($this->faker->city);
             $executive->setEmail($this->faker->email);
-            if ($this->faker->boolean()) {
-                $executive->setPosition('Stellvertreter');
-            }
 
             return $executive;
         });

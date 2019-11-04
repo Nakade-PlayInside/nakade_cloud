@@ -1,0 +1,13 @@
+{% if view == 'show' %}
+    {% if item.color|lower == 'b' %}
+        {% set homeColor = 'fa-circle' %}
+        {% set awayColor = 'fa-circle-o' %}
+    {% else %}
+        {% set homeColor = 'fa-circle-o' %}
+        {% set awayColor = 'fa-circle' %}
+    {% endif %}
+    {% set player_params = { action: 'show', entity: 'BundesligaPlayer', primary_key_name: 'id', id: item.player.id } %}
+    {% set opponent_params = { action: 'show', entity: 'BundesligaOpponent', primary_key_name: 'id', id: item.opponent.id } %}
+     <a href="{{ path('easyadmin', player_params) }}" style="{% if item.result == '2:0' %}font-weight:bolder;{% endif %}"><i class="stones fa fa-fw {{homeColor}}"></i> {{ item.player.name }}</a> -
+     <a href="{{ path('easyadmin', opponent_params) }}" style="{% if item.result == '0:2' %}font-weight:bolder;{% endif %}">{{ item.opponent.name }} <i class="stones fa fa-fw {{awayColor}}"></i></a>
+ {% endif %}

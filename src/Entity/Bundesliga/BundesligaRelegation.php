@@ -34,6 +34,11 @@ class BundesligaRelegation extends AbstractResults
      */
     private $matches;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $round = 1;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
@@ -66,6 +71,18 @@ class BundesligaRelegation extends AbstractResults
                 $match->setResults(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRound(): ?int
+    {
+        return $this->round;
+    }
+
+    public function setRound(int $round): self
+    {
+        $this->round = $round;
 
         return $this;
     }
