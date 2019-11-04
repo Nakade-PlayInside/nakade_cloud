@@ -17,6 +17,7 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity\Bundesliga;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -26,6 +27,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class AbstractMatch implements MatchInterface
 {
+    const HOME_TEAM = 'Nakade';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -53,7 +56,7 @@ abstract class AbstractMatch implements MatchInterface
     /**
      * @ORM\Column(type="string", length=10)
      */
-    protected $color='b';
+    protected $color = 'b';
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -65,12 +68,6 @@ abstract class AbstractMatch implements MatchInterface
      * @ORM\JoinColumn(nullable=false)
      */
     protected $opponent;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    protected $opponentTeam;
 
     /**
      * @ORM\Column(type="boolean")
@@ -142,18 +139,6 @@ abstract class AbstractMatch implements MatchInterface
         return $this;
     }
 
-    public function getOpponentTeam(): ?BundesligaTeam
-    {
-        return $this->opponentTeam;
-    }
-
-    public function setOpponentTeam(?BundesligaTeam $team): self
-    {
-        $this->opponentTeam = $team;
-
-        return $this;
-    }
-
     public function setResult(string $result): self
     {
         $this->result = $result;
@@ -180,11 +165,23 @@ abstract class AbstractMatch implements MatchInterface
 
     public function getPairing()
     {
-        return $this->getPlayer()->getName() . ' - ' . $this->getOpponent()->getName();
+        return $this->getPlayer()->getName().' - '.$this->getOpponent()->getName();
+    }
+
+    public function getOpponentTeam(): ?BundesligaTeam
+    {
+        if (self::HOME_TEAM !== $this->getResults()->getHome()->getName() &&
+                self::HOME_TEAM !== $this->getResults()->getAway()->getName()) {
+            return null;
+        } elseif (self::HOME_TEAM === $this->getResults()->getHome()->getName()) {
+            return $this->getResults()->getAway();
+        }
+
+        return $this->getResults()->getHome();
     }
 
     public function __toString()
     {
-        return $this->getPlayer()->getName() . ' - ' . $this->getOpponent()->getName();
+        return $this->getPlayer()->getName().' - '.$this->getOpponent()->getName();
     }
 }

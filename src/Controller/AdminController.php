@@ -267,7 +267,6 @@ class AdminController extends EasyAdminController
      */
     public function getTeamsSeasonSelect(Request $request)
     {
-
         $seasonId = $request->query->get('seasonId');
         $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
 
@@ -295,16 +294,16 @@ class AdminController extends EasyAdminController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $result = $form->getData();
+            $match = $form->getData();
 
-            if (!assert($result instanceof BundesligaResults)) {
-                throw new UnexpectedTypeException($result, BundesligaResults::class);
+            if (!assert($match instanceof BundesligaMatch)) {
+                throw new UnexpectedTypeException($match, BundesligaMatch::class);
             }
 
-            $this->getDoctrine()->getManager()->persist($result);
+            $this->getDoctrine()->getManager()->persist($match);
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'easyAdmin.bundesliga.results.update.success');
+            $this->addFlash('success', 'easyAdmin.bundesliga.match.update.success');
             $params['action'] = 'list';
 
             return $this->redirectToRoute('easyadmin', $params);
@@ -313,5 +312,54 @@ class AdminController extends EasyAdminController
         $params['form'] = $form->createView();
 
         return $this->render('admin/bundesliga/match/form.html.twig', $params);
+    }
+
+    protected function newBundesligaMatchAction()
+    {
+        $params = $this->request->query->all();
+
+        $form = $this->createForm(BundesligaMatchType::class);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $match = $form->getData();
+
+            if (!assert($match instanceof BundesligaMatch)) {
+                throw new UnexpectedTypeException($match, BundesligaMatch::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($match);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.match.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+        $params['form'] = $form->createView();
+
+        return $this->render('admin/bundesliga/match/form.html.twig', $params);
+    }
+
+    /**
+     * @Route("/admin/bundesliga/match/season-select", name="admin_bundesliga_match_season_select")
+     */
+    public function getMatchSeasonSelect(Request $request)
+    {
+        $seasonId = $request->query->get('seasonId');
+        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
+
+        $match = new BundesligaMatch();
+        $match->setSeason($season);
+        $form = $this->createForm(BundesligaMatchType::class, $match);
+
+        // no field? Return an empty response
+        if (!$form->has('results')) {
+            return new Response(null, 204);
+        }
+
+        return $this->render('admin/bundesliga/match/_result_match.html.twig', [
+                'resultForm' => $form->createView(),
+        ]);
     }
 }

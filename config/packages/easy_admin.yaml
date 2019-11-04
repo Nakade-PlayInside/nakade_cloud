@@ -464,7 +464,6 @@ easy_admin:
           list:
             filters:
               - { property: 'season', label: 'easyAdmin.bundesliga.season' }
-              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team' }
               - { property: 'board', label: 'easyAdmin.bundesliga.match.board' }
               - { property: 'player', label: 'easyAdmin.bundesliga.player.title' }
               - { property: 'opponent', label: 'easyAdmin.bundesliga.opponent.label' }
@@ -472,7 +471,8 @@ easy_admin:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'season', label: 'easyAdmin.bundesliga.season' }
-              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team' }
+              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team', template: 'admin/bundesliga/match/opponentTeam.html.twig' }
+              - { property: 'results.matchDay', label: 'easyAdmin.bundesliga.match.label' }
               - { property: 'board', label: 'easyAdmin.bundesliga.match.board' }
               - { property: 'color', label: 'easyAdmin.bundesliga.match.color', template: 'admin/bundesliga/match/color_string.html.twig' }
               - { property: 'player', label: 'easyAdmin.bundesliga.matches.player', template: 'admin/bundesliga/match/pairing_association.html.twig'}
@@ -483,21 +483,11 @@ easy_admin:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'season', label: 'easyAdmin.bundesliga.season', template: 'admin/bundesliga/match/season.html.twig' }
-              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team' }
+              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team', template: 'admin/bundesliga/match/opponentTeam.html.twig', css_class: 'player-name' }
               - { property: 'board', label: 'easyAdmin.bundesliga.match.board' }
               - { property: 'player', label: 'easyAdmin.bundesliga.results.pairing', template: 'admin/bundesliga/match/show_match.html.twig'}
               - { property: 'result', label: 'easyAdmin.bundesliga.matches.result'}
               - { property: 'winByDefault', label: 'easyAdmin.bundesliga.match.winByDefault'}
-          form:
-            fields:
-              - { property: 'season', label: 'Saison' }
-              - { property: 'board', label: 'Brett', type: 'choice', type_options: { choices: { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5 }} }
-              - { property: 'color', label: 'Farbe', type: 'choice', type_options: { choices: { 'Schwarz': 'b', 'Weiß': 'w' }} }
-              - { property: 'player', label: 'Spieler',
-                  type_options: { choice_value: id , choice_label: name }}
-              - { property: 'opponent', label: 'Gegner'}
-              - { property: 'opponentTeam', label: 'Gegner Team',
-                  type_options: { choice_value: id , choice_label: name }}
         BundesligaLineup:
           class: App\Entity\Bundesliga\BundesligaLineup
           label: 'easyAdmin.bundesliga.lineup.title'
@@ -564,14 +554,12 @@ easy_admin:
           list:
             filters:
               - { property: 'season', label: 'easyAdmin.bundesliga.season' }
-              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team' }
               - { property: 'board', label: 'easyAdmin.bundesliga.match.board' }
               - { property: 'player', label: 'easyAdmin.bundesliga.player.title' }
               - { property: 'opponent', label: 'easyAdmin.bundesliga.opponent.label' }
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'season', label: 'easyAdmin.bundesliga.season' }
-              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.label' }
               - { property: 'board', label: 'easyAdmin.bundesliga.match.board' }
               - { property: 'color', label: 'easyAdmin.bundesliga.match.color', template: 'admin/bundesliga/match/color_string.html.twig' }
               - { property: 'pairing', label: 'easyAdmin.bundesliga.matches.pairing', template: 'admin/bundesliga/results/pairing_association.html.twig'}

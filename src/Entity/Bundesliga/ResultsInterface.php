@@ -37,4 +37,8 @@ interface ResultsInterface
     public function addMatch(MatchInterface $match);
 
     public function removeMatch(MatchInterface $match);
+
+    public function getHome(): ?BundesligaTeam;
+
+    public function getAway(): ?BundesligaTeam;
 }

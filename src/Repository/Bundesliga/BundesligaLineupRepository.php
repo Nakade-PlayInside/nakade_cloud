@@ -21,6 +21,7 @@ namespace App\Repository\Bundesliga;
 namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaLineup;
+use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -37,32 +38,4 @@ class BundesligaLineupRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaLineup::class);
     }
 
-    // /**
-    //  * @return BundesligaTeamLineup[] Returns an array of BundesligaTeamLineup objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?BundesligaTeamLineup
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

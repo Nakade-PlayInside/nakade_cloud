@@ -95,6 +95,6 @@ class BundesligaResults extends AbstractResults
 
     public function __toString(): string
     {
-        return $this->getPairing();
+        return $this->getPairing() . sprintf(' (%d. Spieltag)', $this->getMatchDay());
     }
 }

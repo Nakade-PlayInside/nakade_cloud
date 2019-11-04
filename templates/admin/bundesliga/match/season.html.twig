@@ -30,7 +30,7 @@
     {% endif %}
 {# a simple *-to-one value associated with an entity managed by this backend #}
 {% elseif link_parameters is defined %}
-    <a href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value|easyadmin_truncate }}, {{ item.season.league }}. Liga</a>
+    <a href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value|easyadmin_truncate }}, {{ item.season.league }}. Liga - {{item.results.matchDay}}. Spieltag</a>
 {% else %}
     {{ value|easyadmin_truncate }}
 {% endif %}

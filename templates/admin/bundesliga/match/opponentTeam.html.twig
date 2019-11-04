@@ -1,0 +1,2 @@
+    {% set _params = { action: 'show', entity: 'BundesligaTeam', primary_key_name: 'id', id: value.id } %}
+    <a href="{{ path('easyadmin', _params) }}">{{ value|striptags|easyadmin_truncate }}</a>
