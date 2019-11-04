@@ -31,7 +31,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class BundesligaResults extends AbstractResults
 {
     /**
-     * TODO: ASSERT RANGE #TEAMS-1
+     * TODO: ASSERT RANGE #TEAMS-1.
+     *
      * @Assert\Positive
      *
      * @ORM\Column(type="smallint")
@@ -39,10 +40,9 @@ class BundesligaResults extends AbstractResults
     private $matchDay;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="results")
+     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="results", cascade={"persist", "remove"})
      */
     private $matches;
-
 
     public function __construct()
     {
@@ -69,7 +69,6 @@ class BundesligaResults extends AbstractResults
         return $this->matches;
     }
 
-
     public function addMatch(MatchInterface $match): self
     {
         if (!$this->matches->contains($match)) {
@@ -95,6 +94,6 @@ class BundesligaResults extends AbstractResults
 
     public function __toString(): string
     {
-        return $this->getPairing() . sprintf(' (%d. Spieltag)', $this->getMatchDay());
+        return $this->getPairing().sprintf(' (%d. Spieltag)', $this->getMatchDay());
     }
 }

@@ -30,7 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
 class BundesligaRelegation extends AbstractResults
 {
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaRelegationMatch", mappedBy="results")
+     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaRelegationMatch", mappedBy="results", cascade={"persist", "remove"})
      */
     private $matches;
 

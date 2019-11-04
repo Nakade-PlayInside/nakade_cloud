@@ -80,6 +80,8 @@
     "results.points": "Ergebnis"
     "results.success": "Ergebnisformular hinzugefügt!"
     "results.update.success": "Ergebnisformular geändert!"
+    "relegation.success": "Relegation hinzugefügt!"
+    "relegation.update.success": "Relegation geändert!"
     "results.away": "Auswärts"
     "results.matchDay.help": Trage den Spieltag ein, zB. 4
     "results.home": "Heim"
