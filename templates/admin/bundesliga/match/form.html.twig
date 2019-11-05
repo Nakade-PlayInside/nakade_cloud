@@ -25,6 +25,16 @@
                     }
                 }) }}
 
+               {{ form_row(form.board, {
+                   label: 'easyAdmin.bundesliga.match.board',
+                   placeholder: 'easyAdmin.bundesliga.match.board.placeholder',
+               }) }}
+
+               {{ form_row(form.color, {
+                   label: 'easyAdmin.bundesliga.match.color',
+                   placeholder: 'easyAdmin.bundesliga.match.color.placeholder',
+               }) }}
+
            </fieldset>
         </div>
 
@@ -35,16 +45,6 @@
                     {{ form_row(form.results, {
                         label: 'easyAdmin.bundesliga.match.pairing',
                         placeholder: 'easyAdmin.bundesliga.match.pairing.placeholder',
-                    }) }}
-
-                    {{ form_row(form.board, {
-                        label: 'easyAdmin.bundesliga.match.board',
-                        placeholder: 'easyAdmin.bundesliga.match.board.placeholder',
-                    }) }}
-
-                    {{ form_row(form.color, {
-                        label: 'easyAdmin.bundesliga.match.color',
-                        placeholder: 'easyAdmin.bundesliga.match.color.placeholder',
                     }) }}
 
                     {{ form_row(form.player, {

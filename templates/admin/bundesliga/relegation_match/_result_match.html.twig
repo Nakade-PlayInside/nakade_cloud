@@ -5,25 +5,12 @@
                 placeholder: 'easyAdmin.bundesliga.match.pairing.placeholder',
             }) }}
 
-            {{ form_row(resultForm.board, {
-                label: 'easyAdmin.bundesliga.match.board',
-                placeholder: 'easyAdmin.bundesliga.match.board.placeholder',
-            }) }}
-
-            {{ form_row(resultForm.color, {
-                label: 'easyAdmin.bundesliga.match.color',
-                placeholder: 'easyAdmin.bundesliga.match.color.placeholder',
-            }) }}
-
             {{ form_row(resultForm.player, {
                 label: 'easyAdmin.bundesliga.matches.player',
                 placeholder: 'easyAdmin.bundesliga.match.player.placeholder',
             }) }}
 
-            {{ form_row(resultForm.opponent, {
-                label: 'easyAdmin.bundesliga.opponent.label',
-                placeholder: 'easyAdmin.bundesliga.match.opponent.placeholder',
-            }) }}
+            {{ form_row(resultForm.opponent, { label: 'easyAdmin.bundesliga.opponent.label' }) }}
 
             {{ form_row(resultForm.result, {
                 label: 'easyAdmin.bundesliga.results.points',
@@ -35,3 +22,6 @@
             }) }}
 
         </fieldset>
+
+        {{ encore_entry_script_tags('autocomplete') }}
+        {{ encore_entry_script_tags('bundesliga') }}

@@ -68,11 +68,6 @@ class BundesligaSeason
     private $matches;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaPlayer", inversedBy="seasons", fetch="EXTRA_LAZY")
-     */
-    private $players;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaTeam", inversedBy="seasons", fetch="EXTRA_LAZY")
      */
     private $teams;
@@ -104,7 +99,6 @@ class BundesligaSeason
     public function __construct()
     {
         $this->matches = new ArrayCollection();
-        $this->players = new ArrayCollection();
         $this->teams = new ArrayCollection();
     }
 
@@ -181,37 +175,6 @@ class BundesligaSeason
     }
 
     /**
-     * @return Collection|BundesligaPlayer[]
-     */
-    public function getPlayers(): Collection
-    {
-        return $this->players;
-    }
-
-    public function addPlayer(BundesligaPlayer $player): self
-    {
-        if (!$this->players->contains($player)) {
-            $this->players[] = $player;
-        }
-
-        return $this;
-    }
-
-    public function removePlayer(BundesligaPlayer $player): self
-    {
-        if ($this->players->contains($player)) {
-            $this->players->removeElement($player);
-        }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->title;
-    }
-
-    /**
      * @return Collection|BundesligaTeam[]
      */
     public function getTeams(): Collection
@@ -284,4 +247,10 @@ class BundesligaSeason
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->title;
+    }
+
 }

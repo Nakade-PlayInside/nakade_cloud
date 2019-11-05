@@ -40,7 +40,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class BundesligaMatchType extends AbstractType
@@ -68,6 +70,16 @@ class BundesligaMatchType extends AbstractType
                      },
                     ]
         )
+                ->add(
+                    'board',
+                    ChoiceType::class,
+                    ['choices' => $this->getBoardChoices()]
+                )
+                ->add(
+                    'color',
+                    ChoiceType::class,
+                    ['choices' => ['Schwarz' => 'b', 'Weiß' => 'w']]
+                )
         ;
 
         //preset listener for adding dynamic fields
@@ -128,8 +140,6 @@ class BundesligaMatchType extends AbstractType
     {
         if (null === $season) {
             $form->remove('results');
-            $form->remove('board');
-            $form->remove('color');
             $form->remove('player');
             $form->remove('opponent');
             $form->remove('result');
@@ -143,8 +153,6 @@ class BundesligaMatchType extends AbstractType
 
         if (null === $resultChoices) {
             $form->remove('results');
-            $form->remove('board');
-            $form->remove('color');
             $form->remove('player');
             $form->remove('opponent');
             $form->remove('result');
@@ -161,16 +169,7 @@ class BundesligaMatchType extends AbstractType
                     'choices' => $resultChoices,
             ]
         )
-            ->add(
-                'board',
-                ChoiceType::class,
-                ['choices' => $this->getBoardChoices()]
-            )
-            ->add(
-                'color',
-                ChoiceType::class,
-                ['choices' => ['Schwarz' => 'b', 'Weiß' => 'w']]
-            )
+
 
             ->add(
                 'player',

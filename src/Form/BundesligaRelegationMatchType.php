@@ -23,20 +23,16 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Bundesliga\BundesligaLineup;
-use App\Entity\Bundesliga\BundesligaMatch;
-use App\Entity\Bundesliga\BundesligaOpponent;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaRelegation;
 use App\Entity\Bundesliga\BundesligaRelegationMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Entity\Bundesliga\BundesligaTeam;
 use App\Repository\Bundesliga\BundesligaSeasonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -75,6 +71,16 @@ class BundesligaRelegationMatchType extends AbstractType
                      },
                     ]
         )
+                ->add(
+                    'board',
+                    ChoiceType::class,
+                    ['choices' => $this->getBoardChoices()]
+                )
+                ->add(
+                    'color',
+                    ChoiceType::class,
+                    ['choices' => ['Schwarz' => 'b', 'Weiß' => 'w']]
+                )
         ;
 
         //preset listener for adding dynamic fields
@@ -135,8 +141,6 @@ class BundesligaRelegationMatchType extends AbstractType
     {
         if (null === $season) {
             $form->remove('results');
-            $form->remove('board');
-            $form->remove('color');
             $form->remove('player');
             $form->remove('opponent');
             $form->remove('result');
@@ -150,8 +154,6 @@ class BundesligaRelegationMatchType extends AbstractType
 
         if (null === $resultChoices) {
             $form->remove('results');
-            $form->remove('board');
-            $form->remove('color');
             $form->remove('player');
             $form->remove('opponent');
             $form->remove('result');
@@ -159,7 +161,6 @@ class BundesligaRelegationMatchType extends AbstractType
 
             return;
         }
-
 
         $form->add(
             'results',
@@ -169,16 +170,6 @@ class BundesligaRelegationMatchType extends AbstractType
                     'choices' => $resultChoices,
             ]
         )
-            ->add(
-                'board',
-                ChoiceType::class,
-                ['choices' => $this->getBoardChoices()]
-            )
-            ->add(
-                'color',
-                ChoiceType::class,
-                ['choices' => ['Schwarz' => 'b', 'Weiß' => 'w']]
-            )
 
             ->add(
                 'player',
@@ -189,13 +180,7 @@ class BundesligaRelegationMatchType extends AbstractType
                     ]
             )
 
-            ->add(
-                'opponent',
-                EntityType::class,
-                [
-                            'class' => BundesligaOpponent::class,
-                    ]
-            )
+            ->add('opponent', BundesligaOpponentSelectType::class)
 
             ->add(
                 'result',

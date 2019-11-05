@@ -69,11 +69,6 @@ class BundesligaPlayer
     private $matches;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaSeason", mappedBy="players")
-     */
-    private $seasons;
-
-    /**
      * @ORM\Column(type="json", nullable=true)
      */
     private $emails = [];
@@ -161,34 +156,6 @@ class BundesligaPlayer
             if ($match->getPlayer() === $this) {
                 $match->setPlayer(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|BundesligaSeason[]
-     */
-    public function getSeasons(): Collection
-    {
-        return $this->seasons;
-    }
-
-    public function addSeason(BundesligaSeason $season): self
-    {
-        if (!$this->seasons->contains($season)) {
-            $this->seasons[] = $season;
-            $season->addPlayer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSeason(BundesligaSeason $season): self
-    {
-        if ($this->seasons->contains($season)) {
-            $this->seasons->removeElement($season);
-            $season->removePlayer($this);
         }
 
         return $this;

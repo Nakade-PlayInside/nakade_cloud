@@ -2,6 +2,7 @@
 {% block head_stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('bundesliga') }}
+    {{ encore_entry_link_tags('autocomplete') }}
 {% endblock %}
 {% block content_title %}Spiele {% if action == 'edit' %}ändern (# {{ id }}){% else %}erstellen{% endif %}{% endblock %}
 
@@ -24,6 +25,16 @@
                     }
                 }) }}
 
+               {{ form_row(form.board, {
+                   label: 'easyAdmin.bundesliga.match.board',
+                   placeholder: 'easyAdmin.bundesliga.match.board.placeholder',
+               }) }}
+
+               {{ form_row(form.color, {
+                   label: 'easyAdmin.bundesliga.match.color',
+                   placeholder: 'easyAdmin.bundesliga.match.color.placeholder',
+               }) }}
+
            </fieldset>
         </div>
 
@@ -36,15 +47,7 @@
                         placeholder: 'easyAdmin.bundesliga.match.pairing.placeholder',
                     }) }}
 
-                    {{ form_row(form.board, {
-                        label: 'easyAdmin.bundesliga.match.board',
-                        placeholder: 'easyAdmin.bundesliga.match.board.placeholder',
-                    }) }}
 
-                    {{ form_row(form.color, {
-                        label: 'easyAdmin.bundesliga.match.color',
-                        placeholder: 'easyAdmin.bundesliga.match.color.placeholder',
-                    }) }}
 
                     {{ form_row(form.player, {
                         label: 'easyAdmin.bundesliga.matches.player',
@@ -140,4 +143,5 @@
                 });
         });
     </script>
+    {{ encore_entry_script_tags('autocomplete') }}
 {% endblock body_javascript %}

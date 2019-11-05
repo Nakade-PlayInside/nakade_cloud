@@ -55,6 +55,7 @@ class OpponentTransformer implements DataTransformerInterface
         $repository = $this->entityManager->getRepository(BundesligaOpponent::class);
         $callback = $this->finderCallback;
         $opponent = $callback($repository, $value);
+
         if (!$opponent) {
             $opponent = new BundesligaOpponent();
             $opponent->setName($value);

@@ -365,7 +365,6 @@ easy_admin:
               - { property: 'emails', label: 'easyAdmin.bundesliga.player.emails', template: 'admin/bundesliga/player/field_json.html.twig' }
               - { property: 'phone', label: 'easyAdmin.bundesliga.player.phone', template: 'admin/bundesliga/player/field_json.html.twig' }
               - { property: 'matches', label: 'easyAdmin.bundesliga.matches' }
-              - { property: 'seasons', label: 'easyAdmin.bundesliga.season', type: 'association', }
           form:
             fields:
               - { type: group, label: 'easyAdmin.bundesliga.player.profile', icon: user-circle }
