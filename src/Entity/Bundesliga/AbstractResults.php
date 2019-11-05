@@ -63,18 +63,24 @@ abstract class AbstractResults implements ResultsInterface
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * * @Assert\NotNull()
      */
     protected $home;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Assert\NotNull()
      */
     protected $away;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Assert\NotNull()
      */
     protected $season;
 

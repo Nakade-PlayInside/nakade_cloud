@@ -70,4 +70,14 @@ class BundesligaTeamRepository extends ServiceEntityRepository
                 ->getResult()
                 ;
     }
+
+    public function findAllMatching(string $query, int $limit = 5)
+    {
+        return $this->createQueryBuilder('t')
+                ->andWhere('t.name LIKE :query')
+                ->setParameter('query', '%'.$query.'%')
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+    }
 }

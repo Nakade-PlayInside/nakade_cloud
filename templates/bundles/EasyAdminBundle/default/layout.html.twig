@@ -6,6 +6,11 @@
     {{ encore_entry_link_tags('bundesliga') }}
 {% endblock %}
 
+{% block head_javascript %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script>
+{% endblock head_javascript %}
+
 {% block body_javascript %}
     {{ parent() }}
     {{ encore_entry_script_tags('bundesliga') }}

@@ -26,12 +26,14 @@ use App\Entity\BugReport;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaRelegation;
+use App\Entity\Bundesliga\BundesligaRelegationMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\ContactMail;
 use App\Entity\Feature;
 use App\Entity\User;
 use App\Form\BundesligaMatchType;
+use App\Form\BundesligaRelegationMatchType;
 use App\Form\BundesligaRelegationType;
 use App\Form\BundesligaResultsType;
 use App\Form\ContactReplyType;
@@ -444,4 +446,82 @@ class AdminController extends EasyAdminController
         ]);
     }
 
+    protected function editBundesligaRelegationMatchAction()
+    {
+        $id = $this->request->get('id');
+        $params = $this->request->query->all();
+
+        $match = $this->em->getRepository(BundesligaRelegationMatch::class)->find($id);
+        $form = $this->createForm(BundesligaRelegationMatchType::class, $match);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $match = $form->getData();
+
+            if (!assert($match instanceof BundesligaRelegationMatch)) {
+                throw new UnexpectedTypeException($match, BundesligaRelegationMatch::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($match);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.match.update.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+
+        $params['form'] = $form->createView();
+
+        return $this->render('admin/bundesliga/relegation_match/form.html.twig', $params);
+    }
+
+    protected function newBundesligaRelegationMatchAction()
+    {
+        $params = $this->request->query->all();
+
+        $form = $this->createForm(BundesligaRelegationMatchType::class);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $match = $form->getData();
+
+            if (!assert($match instanceof BundesligaRelegationMatch)) {
+                throw new UnexpectedTypeException($match, BundesligaRelegationMatch::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($match);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.match.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+        $params['form'] = $form->createView();
+
+        return $this->render('admin/bundesliga/relegation_match/form.html.twig', $params);
+    }
+
+    /**
+     * @Route("/admin/bundesliga/relegation/match/season-select", name="admin_bundesliga_relegation_match_season_select")
+     */
+    public function getRelegationMatchSeasonSelect(Request $request)
+    {
+        $seasonId = $request->query->get('seasonId');
+        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
+
+        $match = new BundesligaRelegationMatch();
+        $match->setSeason($season);
+        $form = $this->createForm(BundesligaRelegationMatchType::class, $match);
+
+        // no field? Return an empty response
+        if (!$form->has('results')) {
+            return new Response(null, 204);
+        }
+
+        return $this->render('admin/bundesliga/relegation_match/_result_match.html.twig', [
+                'resultForm' => $form->createView(),
+        ]);
+    }
 }

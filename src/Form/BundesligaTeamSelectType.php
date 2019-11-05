@@ -22,49 +22,63 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Bundesliga\BundesligaRelegation;
-use App\Entity\Bundesliga\BundesligaSeason;
-use App\Repository\Bundesliga\BundesligaSeasonRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Form\DataTransformer\TeamTransformer;
+use App\Repository\Bundesliga\BundesligaTeamRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaRelegationType extends AbstractType
+class BundesligaTeamSelectType extends AbstractType
 {
+    private $router;
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router)
+    {
+        $this->router = $router;
+        $this->entityManager = $entityManager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
-            'season',
-            EntityType::class,
-            [
-                        'class' => BundesligaSeason::class,
-                        'query_builder' => function (BundesligaSeasonRepository $repository) {
-                            return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
-                        },
-                ]
-        )
-                ->add('round')
-                ->add('playedAt', DateType::class, ['widget' => 'single_text', 'required' => false])
-                ->add('home', BundesligaTeamSelectType::class)
-                ->add('away', BundesligaTeamSelectType::class)
-                ->add('boardPointsHome', IntegerType::class, ['required' => false])
-                ->add('boardPointsAway', IntegerType::class, ['required' => false]);
+        $builder->addModelTransformer(new TeamTransformer($this->entityManager, $options['finder_callback']));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => BundesligaRelegation::class,
+            'invalid_message' => 'Team not found!',
+            'finder_callback' => function (BundesligaTeamRepository $teamRepository, string $name) {
+                return $teamRepository->findOneBy(['name' => $name]);
+            },
         ]);
+    }
+
+    public function getParent()
+    {
+        return TextType::class;
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        //set autocomplete attributes by default
+        $attr = $view->vars['attr'];
+        $class = isset($attr['class']) ? $attr['class'].' ' : '';
+        $class .= 'js-user-autocomplete';
+
+        $attr['class'] = $class;
+
+        $attr['data-autocomplete-url'] = $this->router->generate('admin_utility_teams');
+        $view->vars['attr'] = $attr;
     }
 }

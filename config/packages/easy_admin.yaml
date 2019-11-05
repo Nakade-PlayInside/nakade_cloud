@@ -566,8 +566,19 @@ easy_admin:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team', template: 'admin/bundesliga/match/opponentTeam.html.twig' }
+              - { property: 'results.round', label: 'easyAdmin.bundesliga.relegation.round' }
               - { property: 'board', label: 'easyAdmin.bundesliga.match.board' }
               - { property: 'color', label: 'easyAdmin.bundesliga.match.color', template: 'admin/bundesliga/match/color_string.html.twig' }
               - { property: 'pairing', label: 'easyAdmin.bundesliga.matches.pairing', template: 'admin/bundesliga/results/pairing_association.html.twig'}
+              - { property: 'result', label: 'easyAdmin.bundesliga.matches.result'}
+              - { property: 'winByDefault', label: 'easyAdmin.bundesliga.match.winByDefault'}
+          show:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season', template: 'admin/bundesliga/relegation_match/season.html.twig' }
+              - { property: 'opponentTeam', label: 'easyAdmin.bundesliga.opponent.team', template: 'admin/bundesliga/match/opponentTeam.html.twig', css_class: 'player-name' }
+              - { property: 'board', label: 'easyAdmin.bundesliga.match.board' }
+              - { property: 'player', label: 'easyAdmin.bundesliga.results.pairing', template: 'admin/bundesliga/match/show_match.html.twig'}
               - { property: 'result', label: 'easyAdmin.bundesliga.matches.result'}
               - { property: 'winByDefault', label: 'easyAdmin.bundesliga.match.winByDefault'}

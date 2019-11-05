@@ -3,8 +3,10 @@
 namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaRelegation;
+use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * @method BundesligaRelegation|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,20 @@ class BundesligaRelegationRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaRelegation::class);
     }
 
-    // /**
-    //  * @return BundesligaRelegation[] Returns an array of BundesligaRelegation objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?BundesligaRelegation
+    public function findBySeason($seasonId)
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->createQueryBuilder('r')
+                ->innerJoin('r.season', 's')
+                ->innerJoin(BundesligaTeam::class, 'h', expr\Join::WITH, 'h.id=r.home')
+                ->innerJoin(BundesligaTeam::class, 'a', expr\Join::WITH, 'a.id=r.away')
+                ->where('s.id=:id')
+                ->andWhere('h.name LIKE :team OR a.name LIKE :team')
+                ->setParameter('id', $seasonId)
+                ->setParameter('team', '%Nakade%')
+                ->orderBy('r.round', 'ASC')
+                ->getQuery()
+                ->getResult()
+                ;
     }
-    */
 }
