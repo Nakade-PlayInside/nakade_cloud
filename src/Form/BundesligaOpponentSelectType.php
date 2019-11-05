@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\DataTransformer\TeamTransformer;
-use App\Repository\Bundesliga\BundesligaTeamRepository;
+use App\Form\DataTransformer\OpponentTransformer;
+use App\Repository\Bundesliga\BundesligaOpponentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -38,7 +38,7 @@ use Symfony\Component\Routing\RouterInterface;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaTeamSelectType extends AbstractType
+class BundesligaOpponentSelectType extends AbstractType
 {
     private $router;
     private $entityManager;
@@ -51,15 +51,15 @@ class BundesligaTeamSelectType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addModelTransformer(new TeamTransformer($this->entityManager, $options['finder_callback']));
+        $builder->addModelTransformer(new OpponentTransformer($this->entityManager, $options['finder_callback']));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'invalid_message' => 'Team not found!',
-            'finder_callback' => function (BundesligaTeamRepository $teamRepository, string $name) {
-                return $teamRepository->findOneBy(['name' => $name]);
+            'invalid_message' => 'Opponent not found!',
+            'finder_callback' => function (BundesligaOpponentRepository $repository, string $name) {
+                return $repository->findOneBy(['firstName' => $name]);
             },
         ]);
     }
@@ -74,12 +74,12 @@ class BundesligaTeamSelectType extends AbstractType
         //set autocomplete attributes by default
         $attr = $view->vars['attr'];
         $class = isset($attr['class']) ? $attr['class'].' ' : '';
-        $class .= 'js-user-autocomplete';
+        $class .= 'js-opponent-autocomplete';
 
         $attr['class'] = $class;
-        $attr['placeholder'] = " Finde oder Erstelle eine Mannschaft";
+        $attr['placeholder'] = " Finde oder Erstelle einen Gegner";
 
-        $attr['data-autocomplete-url'] = $this->router->generate('admin_utility_teams');
+        $attr['data-autocomplete-url'] = $this->router->generate('admin_utility_opponent');
         $view->vars['attr'] = $attr;
     }
 }

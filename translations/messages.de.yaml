@@ -49,6 +49,8 @@
     "opponent.label": "Gegner"
     "opponent.help": "Alle unsere Gegner gegen die wir irgendwann gespielt haben"
     "opponent.team": "Gegner Team"
+    "team.placeholder": "Finde oder Erstelle eine Mannschaft"
+    "oponent.placeholder": "Finde oder Erstelle einen Gegner"
     "player.age": "Alter"
     "player.birthDay": "geb. am"
     "player.birthDay.detail": "geboren am"

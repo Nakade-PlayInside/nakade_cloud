@@ -24,17 +24,14 @@ namespace App\Form;
 
 use App\Entity\Bundesliga\BundesligaLineup;
 use App\Entity\Bundesliga\BundesligaMatch;
-use App\Entity\Bundesliga\BundesligaOpponent;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Entity\Bundesliga\BundesligaTeam;
 use App\Repository\Bundesliga\BundesligaSeasonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -43,9 +40,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class BundesligaMatchType extends AbstractType
@@ -158,7 +153,6 @@ class BundesligaMatchType extends AbstractType
             return;
         }
 
-
         $form->add(
             'results',
             EntityType::class,
@@ -187,13 +181,7 @@ class BundesligaMatchType extends AbstractType
                     ]
             )
 
-            ->add(
-                'opponent',
-                EntityType::class,
-                [
-                            'class' => BundesligaOpponent::class,
-                    ]
-            )
+            ->add('opponent', BundesligaOpponentSelectType::class)
 
             ->add(
                 'result',

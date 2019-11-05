@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Bundesliga\BundesligaOpponent;
+use App\Repository\Bundesliga\BundesligaOpponentRepository;
 use App\Repository\Bundesliga\BundesligaTeamRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,6 +48,18 @@ class AdminUtilityController extends AbstractController
 
         return $this->json([
                 'teams' => $teams,
+        ], 200, [], ['groups' => ['main']]);
+    }
+
+    /**
+     * @Route("/admin/utility/opponent", methods="GET", name="admin_utility_opponent")
+     */
+    public function getOpponentApi(BundesligaOpponentRepository $repository, Request $request)
+    {
+        $opponent = $repository->findAllMatching($request->query->get('query'));
+
+        return $this->json([
+                'opponent' => $opponent,
         ], 200, [], ['groups' => ['main']]);
     }
 }

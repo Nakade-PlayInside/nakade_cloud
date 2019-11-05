@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -17,33 +19,48 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace App\Repository\Bundesliga;
+
+namespace App\Form\DataTransformer;
 
 use App\Entity\Bundesliga\BundesligaOpponent;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\DataTransformerInterface;
 
-/**
- * @method BundesligaOpponent|null find($id, $lockMode = null, $lockVersion = null)
- * @method BundesligaOpponent|null findOneBy(array $criteria, array $orderBy = null)
- * @method BundesligaOpponent[]    findAll()
- * @method BundesligaOpponent[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class BundesligaOpponentRepository extends ServiceEntityRepository
+class OpponentTransformer implements DataTransformerInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    private $finderCallback;
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager, callable $finderCallback)
     {
-        parent::__construct($registry, BundesligaOpponent::class);
+        $this->finderCallback = $finderCallback;
+        $this->entityManager = $entityManager;
     }
 
-    public function findAllMatching(string $query, int $limit = 5)
+    public function transform($value)
     {
-        return $this->createQueryBuilder('o')
-                ->andWhere('o.firstName LIKE :query')
-                ->orWhere('o.lastName LIKE :query')
-                ->setParameter('query', '%'.$query.'%')
-                ->setMaxResults($limit)
-                ->getQuery()
-                ->getResult();
+        if (null === $value) {
+            return '';
+        }
+
+        if (!$value instanceof BundesligaOpponent) {
+            throw new \LogicException('The BundesligaOpponentSelectType can only be used with BundesligaOpponent objects');
+        }
+
+        return $value->getName();
+    }
+
+    public function reverseTransform($value)
+    {
+        $repository = $this->entityManager->getRepository(BundesligaOpponent::class);
+        $callback = $this->finderCallback;
+        $opponent = $callback($repository, $value);
+        if (!$opponent) {
+            $opponent = new BundesligaOpponent();
+            $opponent->setName($value);
+            $this->entityManager->persist($opponent);
+        }
+
+        return $opponent;
     }
 }
