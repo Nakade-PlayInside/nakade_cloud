@@ -41,4 +41,6 @@ interface ResultsInterface
     public function getHome(): ?BundesligaTeam;
 
     public function getAway(): ?BundesligaTeam;
+
+    public function getPairing(): string;
 }

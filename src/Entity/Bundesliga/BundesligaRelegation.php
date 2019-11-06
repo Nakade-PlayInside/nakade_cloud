@@ -23,9 +23,15 @@ namespace App\Entity\Bundesliga;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaRelegationRepository")
+ *
+ * @UniqueEntity(
+ *     fields={"season", "home", "away"},
+ *     message="relegation.pairing.unique"
+ * )
  */
 class BundesligaRelegation extends AbstractResults
 {

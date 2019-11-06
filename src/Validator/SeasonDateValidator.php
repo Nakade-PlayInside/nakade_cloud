@@ -42,6 +42,7 @@ class SeasonDateValidator extends ConstraintValidator
         if (!$object->getSeason()->getStartAt() || !$object->getSeason()->getEndAt()) {
             return;
         }
+
         $seasonStart = $object->getSeason()->getStartAt();
         $seasonEnd = $object->getSeason()->getEndAt();
         $playDate = $object->getPlayedAt();

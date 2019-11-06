@@ -27,7 +27,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaPenaltyRepository")
  * @UniqueEntity(
  *    fields={"season", "team"},
- *    message="This penalty is already registered!"
+ *    message="penalty.unique"
  * )
  */
 class BundesligaPenalty

@@ -23,13 +23,18 @@ use Symfony\Component\Validator\Constraint;
 
 /**
  * @Annotation
- * @Target({"PROPERTY", "ANNOTATION"})
+ * @Target({"CLASS", "ANNOTATION"})
  */
-class UniqueSeasonLineup extends Constraint
+class UniqueMatchBoard extends Constraint
 {
     /*
      * Any public properties become valid options for the annotation.
      * Then, use these in your validator class.
      */
-    public $message = "lineup.season.unique";
+    public $message = "match.board.unique";
+
+    public function getTargets()
+    {
+        return self::CLASS_CONSTRAINT;
+    }
 }

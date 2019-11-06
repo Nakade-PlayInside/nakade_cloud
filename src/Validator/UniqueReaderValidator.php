@@ -44,6 +44,7 @@ class UniqueReaderValidator extends ConstraintValidator
         $existingUser = $this->readerRepository->findOneBy([
                 'email' => $value,
         ]);
+
         if (!$existingUser) {
             return;
         }

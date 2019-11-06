@@ -23,16 +23,20 @@ namespace App\Entity\Bundesliga;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaResultsRepository")
+ *
+ * @UniqueEntity(
+ *     fields={"season", "home", "away"},
+ *     message="result.pairing.unique"
+ * )
  */
 class BundesligaResults extends AbstractResults
 {
     /**
-     * TODO: ASSERT RANGE #TEAMS-1.
-     *
      * @Assert\Positive
      *
      * @ORM\Column(type="smallint")

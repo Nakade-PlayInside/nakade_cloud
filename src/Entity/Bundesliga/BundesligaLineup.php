@@ -20,11 +20,16 @@
 namespace App\Entity\Bundesliga;
 
 use App\Validator\UniquePosition;
-use App\Validator\UniqueSeasonLineup;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaLineupRepository")
+ *
+ * @UniqueEntity(
+ *     fields={"season"},
+ *     message="lineup.season.unique"
+ * )
  *
  * @UniquePosition()
  */
@@ -40,8 +45,6 @@ class BundesligaLineup
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason", inversedBy="lineup")
      * @ORM\JoinColumn(nullable=false)
-     *
-     * @UniqueSeasonLineup()
      */
     private $season;
 

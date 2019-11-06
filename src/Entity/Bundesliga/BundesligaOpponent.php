@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity(
  *     fields={"firstName", "lastName"},
- *     message="This person is already registered!"
+ *     message="opponent.unique"
  * )
  */
 class BundesligaOpponent

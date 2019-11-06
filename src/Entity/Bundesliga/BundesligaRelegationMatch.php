@@ -20,10 +20,19 @@
 
 namespace App\Entity\Bundesliga;
 
+use App\Validator\UniqueMatchBoard;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaRelegationMatchRepository")
+ *
+ *  @UniqueEntity(
+ *     fields={"season", "player", "opponent"},
+ *     message="match.pairing.unique"
+ * )
+ *
+ * @UniqueMatchBoard()
  */
 class BundesligaRelegationMatch extends AbstractMatch
 {

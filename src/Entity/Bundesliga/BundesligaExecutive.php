@@ -30,7 +30,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @UniqueEntity(
  *     fields={"firstName", "lastName"},
- *     message="This person is already registered!"
+ *     message="executive.unique"
  * )
  */
 class BundesligaExecutive

@@ -17,38 +17,48 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Validator;
 
-use App\Repository\Bundesliga\BundesligaLineupRepository;
+use App\Entity\Bundesliga\BundesligaMatch;
+use App\Repository\Bundesliga\BundesligaMatchRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class UniqueSeasonLineupValidator extends ConstraintValidator
+class UniqueMatchBoardValidator extends ConstraintValidator
 {
     private $repository;
 
-    public function __construct(BundesligaLineupRepository $repository)
+    public function __construct(BundesligaMatchRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($object, Constraint $constraint)
     {
-        /* @var $constraint \App\Validator\UniqueSeasonLineup */
-
-        if (null === $value || '' === $value) {
+        /* @var $constraint \App\Validator\UniqueMatchPairing */
+        if (!assert($object instanceof BundesligaMatch)) {
             return;
         }
 
-        $existingLineup = $this->repository->findOneBy([
-                'season' => $value,
+        $existing = $this->repository->findOneBy([
+            'season' => $object->getSeason(),
+            'board' => $object->getBoard(),
+            'results' => $object->getResults(),
         ]);
-        if (!$existingLineup) {
+
+        if (!$existing) {
+            return;
+        }
+
+        //update object
+        if ($object->getId() === $existing->getId()) {
             return;
         }
 
         $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ season }}', $value)
+            ->setParameter('{{ board }}', $object->getBoard())
+            ->setParameter('{{ pairing }}', $object->getResults()->getPairing())
             ->addViolation();
     }
 }

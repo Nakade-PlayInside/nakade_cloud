@@ -33,7 +33,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @UniqueEntity(
  *     fields={"title"},
- *     message="This season is already registered!"
+ *     message="season.unique"
  * )
  */
 class BundesligaSeason

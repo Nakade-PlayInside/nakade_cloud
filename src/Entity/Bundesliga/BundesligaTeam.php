@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaTeamRepository")
  * @UniqueEntity(
  *     fields={"name"},
- *     message="This team is already registered!"
+ *     message="team.unique"
  * )
  */
 class BundesligaTeam
