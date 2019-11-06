@@ -8,6 +8,8 @@
 "results.season.date": "Das Datum <{{ playDate }}> liegt außerhalb der Saison <{{ season }}>!"
 "email.unique": "Die email <{{ email }}> ist schon registriert!"
 "email.exist": "Die email <{{ email }}> ist nicht registriert, unbestätigt oder gesperrt!"
+"position.unique": "Aufstellungsfehler an Position {{ position }}. Der Spieler <{{ player }}> ist mehrfach aufgestellt!"
+"lineup.season.unique": "Die Aufstellung für die Saison <{{ season }}> ist schon registriert!"
 "password.msg": "Das Passwort muss mind. einen Buchstaben und eine Zahl enthalten."
 "This season is already registered!": "Diese Saison ist schon registriert!"
 "This person is already registered!": "Diese Person ist schon registriert!"

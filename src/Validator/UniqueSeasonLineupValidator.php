@@ -17,42 +17,38 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 namespace App\Validator;
 
-use App\Entity\Bundesliga\BundesligaResults;
+use App\Repository\Bundesliga\BundesligaLineupRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class SeasonDateValidator extends ConstraintValidator
+class UniqueSeasonLineupValidator extends ConstraintValidator
 {
-    public function validate($object, Constraint $constraint)
+    private $repository;
+
+    public function __construct(BundesligaLineupRepository $repository)
     {
-        /* @var $constraint \App\Validator\SeasonDate */
-        if (!assert($object instanceof BundesligaResults)) {
-            return;
-        }
-        if (!method_exists($object, 'getSeason') || !method_exists($object, 'getPlayedAt')) {
-            return;
-        }
-        if (!$object->getPlayedAt()) {
+        $this->repository = $repository;
+    }
+
+    public function validate($value, Constraint $constraint)
+    {
+        /* @var $constraint \App\Validator\UniqueSeasonLineup */
+
+        if (null === $value || '' === $value) {
             return;
         }
 
-        if (!$object->getSeason()->getStartAt() || !$object->getSeason()->getEndAt()) {
-            return;
-        }
-        $seasonStart = $object->getSeason()->getStartAt();
-        $seasonEnd = $object->getSeason()->getEndAt();
-        $playDate = $object->getPlayedAt();
-
-        if ($playDate > $seasonStart && $seasonEnd > $playDate) {
+        $existingLineup = $this->repository->findOneBy([
+                'season' => $value,
+        ]);
+        if (!$existingLineup) {
             return;
         }
 
         $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ playDate }}', $playDate->format('d.m.Y'))
-                ->setParameter('{{ season }}', $seasonStart->format('d.m.Y').' - '.$seasonEnd->format('d.m.Y'))
-                ->addViolation();
+            ->setParameter('{{ season }}', $value)
+            ->addViolation();
     }
 }

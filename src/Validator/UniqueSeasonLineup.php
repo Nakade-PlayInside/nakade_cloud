@@ -17,42 +17,19 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 namespace App\Validator;
 
-use App\Entity\Bundesliga\BundesligaResults;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
 
-class SeasonDateValidator extends ConstraintValidator
+/**
+ * @Annotation
+ * @Target({"PROPERTY", "ANNOTATION"})
+ */
+class UniqueSeasonLineup extends Constraint
 {
-    public function validate($object, Constraint $constraint)
-    {
-        /* @var $constraint \App\Validator\SeasonDate */
-        if (!assert($object instanceof BundesligaResults)) {
-            return;
-        }
-        if (!method_exists($object, 'getSeason') || !method_exists($object, 'getPlayedAt')) {
-            return;
-        }
-        if (!$object->getPlayedAt()) {
-            return;
-        }
-
-        if (!$object->getSeason()->getStartAt() || !$object->getSeason()->getEndAt()) {
-            return;
-        }
-        $seasonStart = $object->getSeason()->getStartAt();
-        $seasonEnd = $object->getSeason()->getEndAt();
-        $playDate = $object->getPlayedAt();
-
-        if ($playDate > $seasonStart && $seasonEnd > $playDate) {
-            return;
-        }
-
-        $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ playDate }}', $playDate->format('d.m.Y'))
-                ->setParameter('{{ season }}', $seasonStart->format('d.m.Y').' - '.$seasonEnd->format('d.m.Y'))
-                ->addViolation();
-    }
+    /*
+     * Any public properties become valid options for the annotation.
+     * Then, use these in your validator class.
+     */
+    public $message = "lineup.season.unique";
 }

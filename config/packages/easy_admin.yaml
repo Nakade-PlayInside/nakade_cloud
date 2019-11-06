@@ -495,7 +495,7 @@ easy_admin:
         BundesligaLineup:
           class: App\Entity\Bundesliga\BundesligaLineup
           label: 'easyAdmin.bundesliga.lineup.title'
-          help: 'Neue Spieler müssen angelegt werden, bevor du sie hinzufügen kannst.'
+          help: 'easyAdmin.bundesliga.lineup.help'
           templates:
             show:  'admin/bundesliga/lineup/show.html.twig'
           list:
