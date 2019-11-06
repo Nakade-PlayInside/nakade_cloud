@@ -24,6 +24,7 @@ easy_admin:
           - label: 'easyAdmin.bundesliga.menu'
             icon: 'star-o'
             children:
+              - { label: 'easyAdmin.bundesliga.league.games'}
               - { entity: BundesligaSeason, label: 'easyAdmin.bundesliga.season', icon: 'calendar'}
               - { entity: BundesligaPlayer, label: 'easyAdmin.bundesliga.player.title', icon: 'user'}
               - { entity: BundesligaLineup, label: 'easyAdmin.bundesliga.lineup.title', icon: 'users'}
@@ -32,9 +33,10 @@ easy_admin:
               - { entity: BundesligaOpponent, label: 'easyAdmin.bundesliga.opponent.label', icon: 'address-book-o'}
               - { entity: BundesligaResults, label: 'easyAdmin.bundesliga.results.title', icon: 'line-chart'}
               - { entity: BundesligaMatch, label: 'easyAdmin.bundesliga.season.matches', icon: 'balance-scale'}
+              - { entity: BundesligaPenalty, label: 'easyAdmin.bundesliga.penalty', icon: 'lemon-o'}
+              - { label: 'easyAdmin.bundesliga.relegation' }
               - { entity: BundesligaRelegation, label: 'easyAdmin.bundesliga.relegation', icon: 'bell-o'}
               - { entity: BundesligaRelegationMatch, label: 'easyAdmin.bundesliga.relegation.match', icon: 'balance-scale'}
-              - { entity: BundesligaPenalty, label: 'easyAdmin.bundesliga.penalty', icon: 'lemon-o'}
           - label: 'BUG TRACKER'
             icon: 'bug'
             children:
