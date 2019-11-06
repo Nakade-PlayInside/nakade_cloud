@@ -39,45 +39,35 @@ class BundesligaPenalty
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
-     */
-    private $season;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam", inversedBy="penalties")
      */
     private $team;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     /**
-     * @Assert\PositiveOrZero()
+     * @Assert\NegativeOrZero()
      *
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $boardPointPenalty;
 
     /**
-     * @Assert\PositiveOrZero()
+     * @Assert\NegativeOrZero()
      *
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $scorePointPenalty;
 
-    public function getSeason(): ?BundesligaTeam
-    {
-        return $this->season;
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $season;
 
-    public function setSeason(?BundesligaTeam $season): self
+    public function getId(): ?int
     {
-        $this->season = $season;
-
-        return $this;
+        return $this->id;
     }
 
     public function getBoardPointPenalty(): ?int
@@ -112,6 +102,18 @@ class BundesligaPenalty
     public function setTeam(?BundesligaTeam $team): self
     {
         $this->team = $team;
+
+        return $this;
+    }
+
+    public function getSeason(): ?BundesligaSeason
+    {
+        return $this->season;
+    }
+
+    public function setSeason(?BundesligaSeason $season): self
+    {
+        $this->season = $season;
 
         return $this;
     }

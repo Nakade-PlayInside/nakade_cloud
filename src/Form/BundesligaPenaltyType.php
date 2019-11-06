@@ -22,17 +22,15 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Bundesliga\BundesligaLineup;
-use App\Entity\Bundesliga\BundesligaPlayer;
-use App\Entity\Bundesliga\BundesligaRelegation;
-use App\Entity\Bundesliga\BundesligaRelegationMatch;
+use App\Entity\Bundesliga\BundesligaPenalty;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Entity\Bundesliga\BundesligaTeam;
 use App\Repository\Bundesliga\BundesligaSeasonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -41,12 +39,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaRelegationMatchType extends AbstractType
+class BundesligaPenaltyType extends AbstractType
 {
     private $entityManager;
 
@@ -57,37 +53,23 @@ class BundesligaRelegationMatchType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var BundesligaRelegationMatch|null $match */
-        $match = $options['data'] ?? null;
-        $isEdit = $match && $match->getId();
-
         $builder->add(
             'season',
             EntityType::class,
             [
-                     'class' => BundesligaSeason::class,
-                     'query_builder' => function (BundesligaSeasonRepository $repository) {
-                         return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
-                     },
-                    ]
+                        'class' => BundesligaSeason::class,
+                        'query_builder' => function (BundesligaSeasonRepository $repository) {
+                            return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
+                        },
+                ]
         )
-                ->add(
-                    'board',
-                    ChoiceType::class,
-                    ['choices' => $this->getBoardChoices()]
-                )
-                ->add(
-                    'color',
-                    ChoiceType::class,
-                    ['choices' => ['Schwarz' => 'b', 'Weiß' => 'w']]
-                )
         ;
 
         //preset listener for adding dynamic fields
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
-                /** @var BundesligaRelegationMatch|null $data */
+                /** @var BundesligaResults|null $data */
                 $data = $event->getData();
                 if (!$data) {
                     return;
@@ -110,85 +92,46 @@ class BundesligaRelegationMatchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => BundesligaRelegationMatch::class,
+            'data_class' => BundesligaPenalty::class,
         ]);
-    }
-
-    private function getBoardChoices()
-    {
-        $choices = [];
-        for ($i = 1; $i <= 5; ++$i) {
-            $board = sprintf('Brett %d', $i);
-            $choices[$board] = $i;
-        }
-
-        return $choices;
-    }
-
-    private function getRelegationChoices($season)
-    {
-        return $this->entityManager->getRepository(BundesligaRelegation::class)->findBySeason($season);
-    }
-
-    private function getPlayerChoices($season)
-    {
-        $lineup = $this->entityManager->getRepository(BundesligaLineup::class)->findOneBy(['season' => $season]);
-
-        return $lineup->getPlayers();
     }
 
     private function setupTeamsAndResultFields(FormInterface $form, BundesligaSeason $season = null)
     {
         if (null === $season) {
-            $form->remove('results');
-            $form->remove('player');
-            $form->remove('opponent');
-            $form->remove('result');
-            $form->remove('winByDefault');
+            $form->remove('team');
+            $form->remove('boardPointPenalty');
+            $form->remove('scorePointPenalty');
 
             return;
         }
 
-        $resultChoices = $this->getRelegationChoices($season);
-        $playerChoices = $this->getPlayerChoices($season);
+        $choices = $this->getTeams($season);
 
-        if (null === $resultChoices) {
-            $form->remove('results');
-            $form->remove('player');
-            $form->remove('opponent');
-            $form->remove('result');
-            $form->remove('winByDefault');
+        if (null === $choices) {
+            $form->remove('team');
+            $form->remove('boardPointPenalty');
+            $form->remove('scorePointPenalty');
 
             return;
         }
 
-        $form->add(
-            'results',
-            EntityType::class,
-            [
-                    'class' => BundesligaResults::class,
-                    'choices' => $resultChoices,
-            ]
-        )
+        $form->add('team', EntityType::class, [
+                    'placeholder' => 'Choose a Team',
+                    'class' => BundesligaTeam::class,
+                    'choices' => $choices,
+        ])
+            ->add('boardPointPenalty', IntegerType::class, ['required' => false])
+            ->add('scorePointPenalty', IntegerType::class, ['required' => false])
+        ;
+    }
 
-            ->add(
-                'player',
-                EntityType::class,
-                [
-                            'class' => BundesligaPlayer::class,
-                            'choices' => $playerChoices,
-                    ]
-            )
+    private function getTeams(BundesligaSeason $season = null)
+    {
+        if (!$season) {
+            return $this->entityManager->getRepository(BundesligaTeam::class)->findAll();
+        }
 
-            ->add('opponent', BundesligaOpponentSelectType::class)
-
-            ->add(
-                'result',
-                ChoiceType::class,
-                ['choices' => ['Sieg' => '2:0', 'Niederlage' => '0:2']]
-            )
-
-            ->add('winByDefault')
-            ;
+        return $this->entityManager->getRepository(BundesligaTeam::class)->findTeamsBySeason($season->getId());
     }
 }

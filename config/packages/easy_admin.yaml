@@ -34,6 +34,7 @@ easy_admin:
               - { entity: BundesligaMatch, label: 'easyAdmin.bundesliga.season.matches', icon: 'balance-scale'}
               - { entity: BundesligaRelegation, label: 'easyAdmin.bundesliga.relegation', icon: 'bell-o'}
               - { entity: BundesligaRelegationMatch, label: 'easyAdmin.bundesliga.relegation.match', icon: 'balance-scale'}
+              - { entity: BundesligaPenalty, label: 'easyAdmin.bundesliga.penalty', icon: 'lemon-o'}
           - label: 'BUG TRACKER'
             icon: 'bug'
             children:
@@ -581,3 +582,20 @@ easy_admin:
               - { property: 'player', label: 'easyAdmin.bundesliga.results.pairing', template: 'admin/bundesliga/match/show_match.html.twig'}
               - { property: 'result', label: 'easyAdmin.bundesliga.matches.result'}
               - { property: 'winByDefault', label: 'easyAdmin.bundesliga.match.winByDefault'}
+        BundesligaPenalty:
+          class: App\Entity\Bundesliga\BundesligaPenalty
+          label: 'easyAdmin.bundesliga.penalty'
+          list:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'team', label: 'easyAdmin.bundesliga.penalty.team' }
+              - { property: 'boardPointPenalty', label: 'easyAdmin.bundesliga.penalty.board.points' }
+              - { property: 'scorePointPenalty', label: 'easyAdmin.bundesliga.penalty.score.points' }
+          show:
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'team', label: 'easyAdmin.bundesliga.penalty.team' }
+              - { property: 'boardPointPenalty', label: 'easyAdmin.bundesliga.penalty.board.points' }
+              - { property: 'scorePointPenalty', label: 'easyAdmin.bundesliga.penalty.score.points' }

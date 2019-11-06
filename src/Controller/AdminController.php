@@ -24,6 +24,7 @@ namespace App\Controller;
 
 use App\Entity\BugReport;
 use App\Entity\Bundesliga\BundesligaMatch;
+use App\Entity\Bundesliga\BundesligaPenalty;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaRelegation;
 use App\Entity\Bundesliga\BundesligaRelegationMatch;
@@ -33,6 +34,7 @@ use App\Entity\ContactMail;
 use App\Entity\Feature;
 use App\Entity\User;
 use App\Form\BundesligaMatchType;
+use App\Form\BundesligaPenaltyType;
 use App\Form\BundesligaRelegationMatchType;
 use App\Form\BundesligaRelegationType;
 use App\Form\BundesligaResultsType;
@@ -522,6 +524,85 @@ class AdminController extends EasyAdminController
 
         return $this->render('admin/bundesliga/relegation_match/_result_match.html.twig', [
                 'resultForm' => $form->createView(),
+        ]);
+    }
+
+    protected function editBundesligaPenaltyAction()
+    {
+        $id = $this->request->get('id');
+        $params = $this->request->query->all();
+
+        $penalty = $this->em->getRepository(BundesligaPenalty::class)->find($id);
+        $form = $this->createForm(BundesligaPenaltyType::class, $penalty);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $penalty = $form->getData();
+
+            if (!assert($penalty instanceof BundesligaPenalty)) {
+                throw new UnexpectedTypeException($penalty, BundesligaPenalty::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($penalty);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.penalty.update.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+
+        $params['form'] = $form->createView();
+
+        return $this->render('admin/bundesliga/penalty/form.html.twig', $params);
+    }
+
+    protected function newBundesligaPenaltyAction()
+    {
+        $params = $this->request->query->all();
+
+        $form = $this->createForm(BundesligaPenaltyType::class);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $penalty = $form->getData();
+
+            if (!assert($penalty instanceof BundesligaPenalty)) {
+                throw new UnexpectedTypeException($penalty, BundesligaPenalty::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($penalty);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.penalty.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+        $params['form'] = $form->createView();
+
+        return $this->render('admin/bundesliga/penalty/form.html.twig', $params);
+    }
+
+    /**
+     * @Route("/admin/bundesliga/penalty/season-select", name="admin_bundesliga_penalty_season_select")
+     */
+    public function getPenaltySeasonSelect(Request $request)
+    {
+        $seasonId = $request->query->get('seasonId');
+        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
+
+        $penalty = new BundesligaPenalty();
+        $penalty->setSeason($season);
+        $form = $this->createForm(BundesligaPenaltyType::class, $penalty);
+
+        // no field? Return an empty response
+        if (!$form->has('team')) {
+            return new Response(null, 204);
+        }
+
+        return $this->render('admin/bundesliga/penalty/_team_penalty.html.twig', [
+                'form' => $form->createView(),
         ]);
     }
 }

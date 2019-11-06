@@ -40,7 +40,7 @@ class BundesligaResults extends AbstractResults
     private $matchDay;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="results", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="results")
      */
     private $matches;
 
