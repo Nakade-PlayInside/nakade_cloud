@@ -101,7 +101,6 @@ class BundesligaResultsFixtures extends BaseFixture implements DependentFixtureI
             }
             $match->setPlayer(array_shift($players));
             $match->setSeason($season);
-            $match->setOpponentTeam($team);
 
             /** @var BundesligaOpponent $opponent */
             $opponent = $this->getRandomReference(BundesligaOpponent::class, 'bl_opponent');

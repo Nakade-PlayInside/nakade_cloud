@@ -35,9 +35,18 @@ class BundesligaController extends AbstractController
         //dd($str);
 
         $snoopy = new Snoopy();
-        $snoopy->fetchlinks('http://www.dgob.de/lmo/lmo.php?action=table&amp;file=1920_bl2.l98');
+        //$snoopy->fetchlinks('http://www.dgob.de/lmo/lmo.php?action=table&amp;file=1920_bl2.l98');
         //$snoopy->fetchtext('http://www.dgob.de/lmo/output/1920_bl2.l98-sp.html');
-        $snoopy->fetchtext('http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=1920_bl2.l98&st=1#');
+        //$snoopy->fetchtext('http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=1920_bl2.l98&st=1#');
+        $snoopy->fetch('http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=1920_bl2.l98&st=1#');
+
+        $action = 'results';
+        $season = '1920'; //season years
+        $league = 'bl2';
+        $matchDay = '1';
+        $_link_params = sprintf("action=%s&tabtype=0&file=%s_%s.l98&st=%s", $action, $season, $league, $matchDay);
+
+        $snoopy->fetch('http://www.dgob.de/lmo/lmo.php?' . $_link_params);
 
 //        if($snoopy->fetch("http://www.slashdot.org/"))
 //        {
@@ -50,17 +59,17 @@ class BundesligaController extends AbstractController
 //        }
 //        else
 //            echo "error fetching document: ".$snoopy->error."\n"
-       // dd($snoopy->results);
-        foreach($snoopy->results as $string) {
-
-            if (strpos($string, 'Bundesliga-Manager:')) {
-                $pos = strpos($string, 'Bundesliga-Manager:');
-                $result = substr($string, $pos);
-                dd($result);
-            }
-
-        }
-
+        dd($snoopy->results);
+//        foreach($snoopy->results as $string) {
+//
+//            if (strpos($string, 'Bundesliga-Manager:')) {
+//                $pos = strpos($string, 'Bundesliga-Manager:');
+//                $result = substr($string, $pos);
+//                dd($result);
+//            }
+//
+//        }
+//
 
         return $this->render('bundesliga/index.html.twig', [
             'controller_name' => 'BundesligaController',

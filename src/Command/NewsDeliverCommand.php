@@ -72,7 +72,7 @@ class NewsDeliverCommand extends Command
         //news was already sent
         $newsletter = $this->entityManager->getRepository(NewsLetter::class)->findOneBy(['dueAt' => $dueDate]);
         if ($newsletter) {
-            $io->comment('News is already delivered.');
+            $io->comment('News already delivered.');
 
             return;
         }

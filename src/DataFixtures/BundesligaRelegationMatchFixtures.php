@@ -65,10 +65,6 @@ class BundesligaRelegationMatchFixtures extends BaseFixture implements Dependent
             $opponent = $this->getRandomReference(BundesligaOpponent::class, 'bl_opponent');
             $match->setOpponent($opponent);
 
-            /** @var BundesligaTeam $team */
-            $team = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
-            $match->setOpponentTeam($team);
-
             /** @var BundesligaRelegation $relegation */
             $relegation = $this->getRandomReference(BundesligaRelegation::class, 'bl_relegation');
             $match->setResults($relegation);

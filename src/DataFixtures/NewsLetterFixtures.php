@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -18,37 +20,33 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Repository;
+namespace App\DataFixtures;
 
 use App\Entity\NewsLetter;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * @method NewsLetter|null find($id, $lockMode = null, $lockVersion = null)
- * @method NewsLetter|null findOneBy(array $criteria, array $orderBy = null)
- * @method NewsLetter[]    findAll()
- * @method NewsLetter[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
  */
-class NewsLetterRepository extends ServiceEntityRepository
+class NewsLetterFixtures extends BaseFixture
 {
-    public function __construct(ManagerRegistry $registry)
+    protected function loadData(ObjectManager $manager)
     {
-        parent::__construct($registry, NewsLetter::class);
+        $this->createMany(20, 'main_news', function ($i) {
+            $news = new NewsLetter();
+            $dueDate = $this->faker->dateTimeThisDecade();
+            $news->setDueAt($dueDate);
+
+            $sendDate = clone $dueDate;
+            $sendDate->modify('-4 day');
+            $news->setSendAt($sendDate);
+            $news->setNoRecipients($this->faker->numberBetween(10, 150));
+
+            return $news;
+        });
+
+        $manager->flush();
     }
-
-    public function findOneByDueDate(\DateTimeInterface $dueDate): ?NewsLetter
-    {
-        $from = new \DateTime($dueDate->format('Y-m-d').' 00:00:00');
-        $to = new \DateTime($dueDate->format('Y-m-d').' 23:59:59');
-
-        return $this->createQueryBuilder('n')
-                ->andWhere('n.dueAt BETWEEN :from AND :to')
-                ->setParameter('from', $from)
-                ->setParameter('to', $to)
-                ->getQuery()
-                ->getOneOrNullResult()
-                ;
-    }
-
 }

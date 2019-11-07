@@ -38,16 +38,65 @@
                 <button type="submit" class="btn btn-primary action-save">
                     <i class="fa fa-fw fa-envelope-o"></i><span class="btn-label">Abschicken</span>
                 </button>
-                <a class=" btn text-danger action-delete" title="" href="{{ path('app_contact_remove', { 'id': contact.id }) }}" target="_self"><i class="fa fa-fw fa-trash-o"></i> Löschen</a>
-                <a class=" btn btn-link pr-0 action-list" title="" href="{{ href }}" target="_self">Zurück zur Übersicht</a>
+                {% set remove_parameter = app.request.query.all %}
+                {% set remove_parameter = remove_parameter|merge({"action": 'delete'}) %}
+                <a class=" btn text-danger action-delete" title="" href="{{ path('easyadmin', remove_parameter)
+                }}" target="_self"><i class="fa fa-fw fa-trash-o"></i> Löschen</a>
+                {% set list_parameter = app.request.query.all %}
+                {% set list_parameter = list_parameter|merge({"action": 'list'}) %}
+                <a class=" btn btn-link pr-0 action-list" title="" href="{{ path('easyadmin', list_parameter)  }}" target="_self">Zurück zur Übersicht</a>
             </div>
         </div>
     {{ form_end(form) }}
 
+        <form name="delete_form" method="post" action="{{ path('app_contact_remove', remove_parameter) }}" id="delete-form" style="display: none">
+                <input type="hidden" name="_method" value="DELETE">
+                <div id="delete_form" style="display: none">
+                    <div class="form-group">
+                        <button type="submit" id="delete_form_submit" name="delete_form[submit]" class="btn-primary btn">Löschen</button>
+                    </div>
+                    <input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1">
+                    <input type="hidden" id="delete_form__token" name="delete_form[_token]" value="vL5qHKmwPbTJVcGiimSdPYEuRr5d6PO8c14jIpLx2bo">
+                </div>
+        </form>
+        <div id="modal-delete" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>Soll das Element wirklich gelöscht werden?</h4>
+                        <p>Aktion kann nicht rückgängig gemacht werden.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-secondary">
+                            <span class="btn-label">Abbrechen</span>
+                        </button>
 
+                        <button type="button" data-dismiss="modal" class="btn btn-danger" id="modal-delete-button" formtarget="_self">
+                            <i class="fa fa-fw fa-trash-o"></i>                        <span class="btn-label">Löschen</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 {% endblock %}
 
 
 {% block content_footer_wrapper %}
 {% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $('a.action-delete').on('click', function(e) {
+            e.preventDefault();
+
+            $('#modal-delete').modal({ backdrop: true, keyboard: true })
+                .off('click', '#modal-delete-button')
+                .on('click', '#modal-delete-button', function () {
+                    $('#delete-form').trigger('submit');
+                });
+        });
+    </script>
+{% endblock body_javascript %}
