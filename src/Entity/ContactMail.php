@@ -67,8 +67,7 @@ class ContactMail
      * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Email(
-     *     message="Die Email {{ value }} ist ungültig.",
-     *     checkMX=true
+     *     message="Die Email {{ value }} ist ungültig."
      * )
      *
      * @ORM\Column(type="string", length=160)

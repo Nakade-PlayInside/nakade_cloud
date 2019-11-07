@@ -55,8 +55,7 @@ class User implements UserInterface
     /**
      * @Assert\NotBlank
      * @Assert\Email(
-     *     message="Die Email {{ value }} ist ungültig.",
-     *     checkMX=true
+     *     message="Die Email {{ value }} ist ungültig."
      * )
      *
      * @Gedmo\Versioned

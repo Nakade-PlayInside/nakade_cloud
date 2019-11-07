@@ -63,8 +63,7 @@ class BundesligaTeam
 
     /**
      * @Assert\Email(
-     *     message="Die Email {{ value }} ist ungültig.",
-     *     checkMX=true
+     *     message="Die Email {{ value }} ist ungültig."
      * )
      * @ORM\Column(type="string", length=255, nullable=true)
      */

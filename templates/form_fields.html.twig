@@ -1,6 +1,6 @@
 # Google ReCaptcha
 {% block google_recaptcha_errors %}
-    {% filter spaceless %}
+    {% apply spaceless %}
         <span class="invalid-feedback d-block">
             <span class="d-block" style="text-align: left">
                 {% for error in errors  %}
@@ -8,10 +8,10 @@
                 {% endfor %}
             </span>
         </span>
-    {% endfilter %}
+    {% endapply %}
 {% endblock %}
 {% block google_recaptcha_widget %}
-    {% filter spaceless %}
+    {% apply spaceless %}
         <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
-    {% endfilter %}
+    {% endapply %}
 {% endblock %}

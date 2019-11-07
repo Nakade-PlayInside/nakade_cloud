@@ -48,8 +48,7 @@ class NewsReader
     /**
      * @Assert\NotBlank
      * @Assert\Email(
-     *     message="Die Email {{ value }} ist ungültig.",
-     *     checkMX=true
+     *     message="Die Email {{ value }} ist ungültig."
      * )
      *
      * @ORM\Column(type="string", length=180, unique=true)
