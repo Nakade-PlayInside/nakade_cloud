@@ -29,12 +29,11 @@ class MatchModel
     public $awayPlayer;
     public $board;
     public $color;
+    public $winByDefault = false;
 
-    public function __construct(string $color, string $result, PlayerModel $homePlayer, PlayerModel $awayPlayer)
+    public function __construct(string $color, string $result)
     {
         $this->color = $color;
         $this->result = $result;
-        $this->homePlayer = $homePlayer;
-        $this->awayPlayer = $awayPlayer;
     }
 }

@@ -22,13 +22,14 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB\Model;
 
-class TeamModel
+class KGSIdModel
 {
-    public $name;
-    public $kgsId;
+    public $homeId;
+    public $awayId;
+    public $rawKgsId;
 
-    public function __construct(string $name)
+    public function __construct(string $rawKgsId)
     {
-        $this->name = trim($name);
+        $this->rawKgsId = $rawKgsId;
     }
 }

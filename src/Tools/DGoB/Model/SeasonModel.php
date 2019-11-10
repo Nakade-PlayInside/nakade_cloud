@@ -22,13 +22,14 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB\Model;
 
-class TeamModel
+class SeasonModel
 {
-    public $name;
-    public $kgsId;
+    public $title;
+    public $league;
+    public $results = [];
 
-    public function __construct(string $name)
+    public function __construct(string $league)
     {
-        $this->name = trim($name);
+        $this->league = $league;
     }
 }

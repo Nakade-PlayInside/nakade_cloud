@@ -36,10 +36,9 @@ class PairingsCatcher
                 continue;
             }
 
-            $kgsId = (new KGSidCatcher())->extract($data);
-            if ($kgsId) {
-                $model->kgsIdHome = array_shift($kgsId);
-                $model->kgsIdAway = array_shift($kgsId);
+            $kgsIdModel = (new KGSidCatcher())->extract($data);
+            if ($kgsIdModel) {
+                $model->kgsIdModel = $kgsIdModel;
             }
 
             //"2:0 (s) Darius Dobranis 2d - Malte Kracht 2d "

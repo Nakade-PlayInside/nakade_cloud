@@ -26,18 +26,34 @@ use App\Tools\DGoB\Model\PlayerModel;
 
 class NameCatcher
 {
-    //eg Darius Dobranis 2d
-    const PATTERN = '#^(.*)\s\d.#';
+    //eg Darius Dobranis 2d or Sven Gusbert (10k)
+    const PATTERN = '#^(.*)(\s\(?\d{1,2}[dDkKp]\)?)#';
 
-    public function extract(string $field): PlayerModel
+    public function extract(string $field): ?PlayerModel
     {
-        if (false === preg_match(self::PATTERN, $field, $matches)) {
+        $name = $field;
+        $res = preg_match(self::PATTERN, $field, $matches);
+        if (false === $res) {
             throw new \LogicException(sprintf('Expected pattern in field "%s" not found ', $field));
         }
-        $name = trim($matches[1]);
+
+        if (1 === $res) {
+            $name = trim($matches[1]);
+        }
 
         $parts = explode(' ', $name);
+
+        //kampflos
+        if (count($parts) < 2) {
+            return null;
+        }
+
         $lastName = array_pop($parts);
+        $pos = strpos($lastName, '(');
+        if ($pos > 0) {
+            $lastName = substr($lastName, 0, $pos);
+        }
+
         $firstName = array_shift($parts);
 
         while ($parts) {

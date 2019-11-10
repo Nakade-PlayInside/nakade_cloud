@@ -30,6 +30,9 @@ class MatchCatcher
 
     public function extract(string $field): ?MatchModel
     {
+        //correction
+        $field = str_replace('!', '', $field);
+
         $result = preg_match(self::PATTERN, $field, $matches);
         if (false === $result) {
             throw new \LogicException(sprintf('Expected pattern in field "%s" not found ', $field));
@@ -41,16 +44,28 @@ class MatchCatcher
 
         $result = $matches[1];
         $color = $matches[2];
+        $model = new MatchModel($color, $result);
+
         $homePlayer = trim($matches[3]);
         $awayPlayer = trim($matches[4]);
 
         $nameCatcher = new NameCatcher();
         $playerHome = $nameCatcher->extract($homePlayer);
-        $playerHome->color = $color;
+        if ($playerHome) {
+            $playerHome->color = $color;
+            $model->homePlayer = $playerHome;
+        }
 
         $playerAway = $nameCatcher->extract($awayPlayer);
-        $playerAway->color = ('w' === $color ? 'b' : 'w');
+        if ($playerAway) {
+            $playerAway->color = ('w' === $color ? 'b' : 'w');
+            $model->awayPlayer = $playerAway;
+        }
 
-        return new MatchModel($color, $result, $playerHome, $playerAway);
+        if (!$playerHome || !$playerAway) {
+            $model->winByDefault = true;
+        }
+
+        return $model;
     }
 }

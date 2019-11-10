@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB;
 
-use App\Tools\DGoB\Model\PairingModel;
 use App\Tools\DGoB\Model\ResultModel;
 use App\Tools\DGoB\Model\TeamModel;
 use Symfony\Component\DomCrawler\Crawler;
@@ -92,8 +91,12 @@ class ResultCatcher
 
         if ($pairingModel) {
             $result->matches = $pairingModel->getMatches();
-            $result->homeTeam->kgsId = $pairingModel->kgsIdHome;
-            $result->awayTeam->kgsId = $pairingModel->kgsIdAway;
+
+            if ($pairingModel->getKgsIdModel()) {
+                $result->rawKgsId = $pairingModel->getKgsIdModel()->rawKgsId;
+                $result->homeTeam->kgsId = $pairingModel->getKgsIdModel()->homeId;
+                $result->awayTeam->kgsId = $pairingModel->getKgsIdModel()->awayId;
+            }
         }
     }
 }

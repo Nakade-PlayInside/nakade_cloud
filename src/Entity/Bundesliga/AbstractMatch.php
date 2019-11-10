@@ -38,7 +38,7 @@ abstract class AbstractMatch implements MatchInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaPlayer", inversedBy="matches")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $player;
 
@@ -65,7 +65,7 @@ abstract class AbstractMatch implements MatchInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaOpponent", inversedBy="matches")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $opponent;
 

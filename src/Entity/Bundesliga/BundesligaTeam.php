@@ -28,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaTeamRepository")
+ *
  * @UniqueEntity(
  *     fields={"name"},
  *     message="team.unique"
@@ -39,16 +40,28 @@ class BundesligaTeam
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
      * @Groups("main")
      */
     private $id;
 
     /**
      * @Assert\NotBlank
+     *
      * @ORM\Column(type="string", length=255, unique=true)
+     *
      * @Groups("main")
      */
     private $name;
+
+    /**
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(type="string", length=20, nullable=true)
+     *
+     * @Groups("main")
+     */
+    private $kgsId;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Bundesliga\BundesligaSeason", mappedBy="teams")
@@ -57,6 +70,7 @@ class BundesligaTeam
 
     /**
      * @Assert\NotBlank
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $captain;
@@ -150,9 +164,16 @@ class BundesligaTeam
         return $this;
     }
 
-    public function __toString()
+    public function getKgsId(): ?string
     {
-        return $this->name;
+        return $this->kgsId;
+    }
+
+    public function setKgsId(string $kgsId): self
+    {
+        $this->kgsId = $kgsId;
+
+        return $this;
     }
 
     /**
@@ -185,4 +206,10 @@ class BundesligaTeam
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
 }

@@ -35,7 +35,8 @@ class BundesligaTeamFixtures extends BaseFixture
     protected function loadData(ObjectManager $manager)
     {
         $team = new BundesligaTeam();
-        $team->setName('Nakade');
+        $team->setName('Nakade Berlin');
+        $team->setKgsId('nakade');
         $team->setCaptain('Maurice Wohabi');
         $team->setEmail($this->faker->email);
 
@@ -46,6 +47,7 @@ class BundesligaTeamFixtures extends BaseFixture
             $team = new BundesligaTeam();
             $name = ($this->faker->city);
             $team->setName($name);
+            $team->setKgsId(strtolower(substr($name, 0, 5)));
             $team->setCaptain($this->faker->name);
             $team->setEmail($this->faker->email);
 

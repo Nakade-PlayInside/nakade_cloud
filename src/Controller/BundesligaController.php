@@ -19,8 +19,6 @@
  */
 namespace App\Controller;
 
-use App\Services\Snoopy;
-use App\Tools\DGoB\MatchDayCatcher;
 use App\Tools\DGoB\SeasonCatcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,31 +30,11 @@ class BundesligaController extends AbstractController
      */
     public function index()
     {
-        $str = '';
-        //$str = $grabber->grab('http://www.dgob.de/lmo/index.php');
-        //dd($str);
+        $seasonCatcher = new SeasonCatcher('2018_2019', '3b');
+        $season = $seasonCatcher->extract();
 
-        $seasonCatcher = new SeasonCatcher('2');
-        $results = $seasonCatcher->extract();
-//
-//        $snoopy = new Snoopy();
-//        //$snoopy->fetchlinks('http://www.dgob.de/lmo/lmo.php?action=table&amp;file=1920_bl2.l98');
-//        //$snoopy->fetchtext('http://www.dgob.de/lmo/output/1920_bl2.l98-sp.html');
-//        //$snoopy->fetchtext('http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=1920_bl2.l98&st=1#');
-//        $snoopy->fetch('http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=1920_bl2.l98&st=1#');
-//
-//        $action = 'results';
-//        $season = '1920'; //season years
-//        $league = 'bl2';
-//        $matchDay = '9';
-//        $linkParams = sprintf("action=%s&tabtype=0&file=%s_%s.l98&st=%s", $action, $season, $league, $matchDay);
-//
-//        $snoopy->fetch('http://www.dgob.de/lmo/lmo.php?' . $linkParams);
-//        $html = $snoopy->results;
-//
-//        $results = (new MatchDayCatcher($html))->extract($matchDay);
+        dd($season);
 
-        dd($results);
         return $this->render('bundesliga/index.html.twig', [
             'controller_name' => 'BundesligaController',
         ]);

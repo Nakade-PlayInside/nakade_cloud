@@ -31,6 +31,7 @@ class ResultModel
     public $homeTeam;
     public $awayTeam;
     public $matchDay;
+    public $rawKgsId;
 
     public function __construct(TeamModel $homeTeam, TeamModel $awayTeam, string $date)
     {

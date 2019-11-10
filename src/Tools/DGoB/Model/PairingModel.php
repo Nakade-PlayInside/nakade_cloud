@@ -24,8 +24,7 @@ namespace App\Tools\DGoB\Model;
 
 class PairingModel
 {
-    public $kgsIdHome;
-    public $kgsIdAway;
+    public $kgsIdModel;
     private $matches = [];
 
     public function addMatch(MatchModel $match)
@@ -36,5 +35,10 @@ class PairingModel
     public function getMatches(): array
     {
         return $this->matches;
+    }
+
+    public function getKgsIdModel(): ?KGSIdModel
+    {
+        return $this->kgsIdModel;
     }
 }
