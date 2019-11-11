@@ -591,6 +591,7 @@ easy_admin:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'matchDay', label: 'easyAdmin.bundesliga.match.label' }
               - { property: 'team', label: 'easyAdmin.bundesliga.penalty.team' }
               - { property: 'boardPointPenalty', label: 'easyAdmin.bundesliga.penalty.board.points' }
               - { property: 'scorePointPenalty', label: 'easyAdmin.bundesliga.penalty.score.points' }
@@ -598,6 +599,7 @@ easy_admin:
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
               - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'matchDay', label: 'easyAdmin.bundesliga.match.label' }
               - { property: 'team', label: 'easyAdmin.bundesliga.penalty.team' }
               - { property: 'boardPointPenalty', label: 'easyAdmin.bundesliga.penalty.board.points' }
               - { property: 'scorePointPenalty', label: 'easyAdmin.bundesliga.penalty.score.points' }

@@ -30,7 +30,7 @@ class BundesligaController extends AbstractController
      */
     public function index()
     {
-        $seasonCatcher = new SeasonCatcher('2018_2019', '3b');
+        $seasonCatcher = new SeasonCatcher('2012_2013', '5');
         $season = $seasonCatcher->extract();
 
         dd($season);

@@ -65,6 +65,11 @@ class BundesligaPenalty
      */
     private $season;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $matchDay;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -114,6 +119,18 @@ class BundesligaPenalty
     public function setSeason(?BundesligaSeason $season): self
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    public function getMatchDay(): ?int
+    {
+        return $this->matchDay;
+    }
+
+    public function setMatchDay(int $matchDay): self
+    {
+        $this->matchDay = $matchDay;
 
         return $this;
     }

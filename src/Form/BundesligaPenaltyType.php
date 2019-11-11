@@ -63,6 +63,7 @@ class BundesligaPenaltyType extends AbstractType
                         },
                 ]
         )
+            ->add('matchDay')
         ;
 
         //preset listener for adding dynamic fields
