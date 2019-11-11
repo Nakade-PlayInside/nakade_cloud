@@ -17,9 +17,13 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Controller;
 
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Tools\DGoB\SeasonCatcher;
+use App\Tools\DGoB\Transfer\ResultTransfer;
+use App\Tools\DGoB\Transfer\SeasonTransfer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,12 +32,18 @@ class BundesligaController extends AbstractController
     /**
      * @Route("/bundesliga", name="bundesliga")
      */
-    public function index()
+    public function index(SeasonTransfer $seasonTransfer, ResultTransfer $resultTransfer)
     {
         $seasonCatcher = new SeasonCatcher('2012_2013', '5');
-        $season = $seasonCatcher->extract();
+        $seasonModel = $seasonCatcher->extract();
 
-        dd($season);
+        $season = $seasonTransfer->transfer($seasonModel);
+
+        foreach ($seasonModel->results as $resultModel) {
+            $result = $resultTransfer->transfer($season, $resultModel);
+        }
+
+
 
         return $this->render('bundesliga/index.html.twig', [
             'controller_name' => 'BundesligaController',

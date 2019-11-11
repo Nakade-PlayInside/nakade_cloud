@@ -20,20 +20,40 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Tools\DGoB\Model;
+namespace App\Tools\DGoB\Transfer;
 
-class TeamModel
+use App\Entity\Bundesliga\BundesligaResults;
+use App\Entity\Bundesliga\BundesligaSeason;
+use App\Tools\DGoB\Model\ResultModel;
+use App\Tools\DGoB\Model\SeasonModel;
+use Doctrine\ORM\EntityManagerInterface;
+
+class SeasonTransfer
 {
-    public $name;
-    public $kgsId;
+    private $manager;
 
-    public function __construct(string $name)
+    public function __construct(EntityManagerInterface $manager)
     {
-        $name = strip_tags($name);
-        $name = urlencode($name);
-        $name = str_replace('%C2%A0', '', $name);
-        $name = urldecode($name);
-        $name = trim($name);
-        $this->name = $name;
+        $this->manager = $manager;
+    }
+
+    public function transfer(SeasonModel $model): BundesligaSeason
+    {
+        $season = $this->manager->getRepository(BundesligaSeason::class)->findOneBy(
+            [
+                'title' => $model->title,
+            ]
+        );
+
+        if (!$season) {
+            $season = new BundesligaSeason();
+            $season->setTitle($model->title)
+                ->setLeague($model->league);
+
+            $this->manager->persist($season);
+            $this->manager->flush();
+        }
+
+        return $season;
     }
 }

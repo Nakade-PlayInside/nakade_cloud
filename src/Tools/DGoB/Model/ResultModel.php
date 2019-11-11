@@ -24,11 +24,16 @@ namespace App\Tools\DGoB\Model;
 
 class ResultModel
 {
+    /** @var MatchModel[] */
     public $matches = [];
     public $boardPointsHome;
     public $boardPointsAway;
     public $date;
+
+    /** @var TeamModel */
     public $homeTeam;
+
+    /** @var TeamModel */
     public $awayTeam;
     public $matchDay;
     public $rawKgsId;
@@ -38,5 +43,47 @@ class ResultModel
         $this->homeTeam = $homeTeam;
         $this->awayTeam = $awayTeam;
         $this->date = $date;
+    }
+
+    public function getMatchDay(): int
+    {
+        return (int) $this->matchDay;
+    }
+
+    public function getBoardPointsHome(): int
+    {
+        if (!$this->boardPointsHome) {
+            return 0;
+        }
+
+        $this->boardPointsHome = trim($this->boardPointsHome);
+        if ('_' === $this->boardPointsHome) {
+            $this->boardPointsHome = 0;
+        }
+
+        return (int) $this->boardPointsHome;
+    }
+
+    public function getBoardPointsAway(): int
+    {
+        if (!$this->boardPointsAway) {
+            return 0;
+        }
+
+        $this->boardPointsAway = trim($this->boardPointsAway);
+        if ('_' === $this->boardPointsAway) {
+            $this->boardPointsAway = 0;
+        }
+
+        return (int) $this->boardPointsAway;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        if (!$this->date) {
+            return null;
+        }
+
+        return \DateTime::createFromFormat('d.m.Y H:i', $this->date);
     }
 }

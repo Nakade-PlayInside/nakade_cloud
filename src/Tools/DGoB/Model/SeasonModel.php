@@ -26,6 +26,8 @@ class SeasonModel
 {
     public $title;
     public $league;
+
+    /** @var ResultModel[] $results */
     public $results = [];
 
     public function __construct(string $league)
