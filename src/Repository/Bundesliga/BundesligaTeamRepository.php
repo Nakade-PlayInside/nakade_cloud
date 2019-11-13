@@ -39,6 +39,7 @@ class BundesligaTeamRepository extends ServiceEntityRepository
 
     /**
      * @param $value
+     *
      * @return BUndesligaTeam[]|null
      */
     public function findTeamsBySeason($value)
@@ -53,24 +54,6 @@ class BundesligaTeamRepository extends ServiceEntityRepository
             ;
     }
 
-    /**
-     * @param $value
-     * @return BUndesligaTeam[]|null
-     */
-    public function findOpponentTeamsBySeason($value)
-    {
-        return $this->createQueryBuilder('t')
-                ->join('t.seasons', 's')
-                ->where('s.id=:id')
-                ->andWhere('t.name!=:name')
-                ->setParameter('id', $value)
-                ->setParameter('name', 'Nakade')
-                ->orderBy('t.name', 'ASC')
-                ->getQuery()
-                ->getResult()
-                ;
-    }
-
     public function findAllMatching(string $query, int $limit = 5)
     {
         return $this->createQueryBuilder('t')
@@ -79,5 +62,23 @@ class BundesligaTeamRepository extends ServiceEntityRepository
                 ->setMaxResults($limit)
                 ->getQuery()
                 ->getResult();
+    }
+
+    public function findSimilarTeam(string $value)
+    {
+        $value = str_replace('!', '%', $value);
+        $value = str_replace('ue', '%', $value);
+        $value = str_replace('-', '_', $value);
+
+        try {
+            return $this->createQueryBuilder('t')
+                    ->andWhere('t.name LIKE :value')
+                    ->setParameter('value', '%'.$value)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+        } catch (\Exception $e) {
+            $msg = sprintf('%s[value: %s]', $e->getMessage(), $value);
+            throw new \LogicException($msg);
+        }
     }
 }

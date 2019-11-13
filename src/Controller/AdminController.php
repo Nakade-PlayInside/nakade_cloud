@@ -66,18 +66,6 @@ class AdminController extends EasyAdminController
         $this->getDoctrine()->getManager()->flush();
     }
 
-    protected function updateBundesligaPlayerEntity(BundesligaPlayer $player)
-    {
-        /** @var BundesligaPlayer $playerA */
-        $playerAsso = $this->getDoctrine()->getRepository(BundesligaPlayer::class)->findPlayerByIdWithSeasons($player->getId());
-
-        /** @var BundesligaSeason $season */
-        foreach ($playerAsso->getSeasons() as $season) {
-            $season->addPlayer($player);
-        }
-        $this->getDoctrine()->getManager()->flush();
-    }
-
     protected function persistFeatureEntity(Feature $feature)
     {
         $user = $this->getUser();

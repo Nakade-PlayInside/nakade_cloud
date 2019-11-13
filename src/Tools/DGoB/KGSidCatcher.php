@@ -73,7 +73,7 @@ class KGSidCatcher
     private function removeTrailing(string $kgsId): string
     {
         $kgsId = str_replace('0', '', $kgsId);
-        $kgsId = str_replace('Brett', '', $kgsId);
+        $kgsId = str_ireplace('Brett', '', $kgsId);
 
         return $kgsId;
     }

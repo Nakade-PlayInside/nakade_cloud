@@ -20,39 +20,19 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Tools\DGoB\Model;
+namespace App\Tools\DGoB\Transfer\Helper;
 
-class MatchModel
+class ResultHelper
 {
-    public $result;
-    public $homePlayer;
-    public $awayPlayer;
-    public $board;
-    public $color;
-    public $winByDefault = false;
+    const HOME_TEAM = 'Nakade';
 
-    public function __construct(string $color, string $result)
+    public static function getResult(string $teamName, string $result): string
     {
-        $this->color = $color;
-        $this->result = $result;
-    }
-
-    public function getHomePlayer(): ?PlayerModel
-    {
-        return $this->homePlayer;
-    }
-
-    public function getAwayPlayer(): ?PlayerModel
-    {
-        return $this->awayPlayer;
-    }
-
-    public function getColor(): string
-    {
-        if ('s' === $this->color) {
-            $this->color = 'b';
+        if (false !== stripos($teamName, self::HOME_TEAM)) {
+            return $result;
         }
+        $parts = explode(':', $result);
 
-        return $this->color;
+        return sprintf('%s:%s', array_pop($parts), $parts[0]);
     }
 }

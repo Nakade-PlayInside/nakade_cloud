@@ -37,28 +37,4 @@ class BundesligaPlayerRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaPlayer::class);
     }
 
-    public function findPlayerByIdWithSeasons($id)
-    {
-        $queryBuilder = $this->createQueryBuilder('p')
-               ->where('p.id = :player_id')
-               ->addSelect('seasons')
-               ->leftJoin('p.seasons', 'seasons')
-               ->setParameter('player_id', $id);
-
-        $query = $queryBuilder->getQuery();
-
-        return $query->getOneOrNullResult();
-    }
-
-    /*
-    public function findOneBySomeField($value): ?Player
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

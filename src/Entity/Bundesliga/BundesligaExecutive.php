@@ -57,8 +57,6 @@ class BundesligaExecutive
     private $lastName;
 
     /**
-     * @Assert\NotBlank
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
@@ -67,7 +65,7 @@ class BundesligaExecutive
      * @Assert\Email(
      *     message="Die Email {{ value }} ist ungültig."
      * )
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $email;
 

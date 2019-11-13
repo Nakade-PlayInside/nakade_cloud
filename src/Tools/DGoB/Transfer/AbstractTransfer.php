@@ -20,39 +20,18 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Tools\DGoB\Model;
+namespace App\Tools\DGoB\Transfer;
 
-class MatchModel
+use Doctrine\ORM\EntityManagerInterface;
+
+abstract class AbstractTransfer
 {
-    public $result;
-    public $homePlayer;
-    public $awayPlayer;
-    public $board;
-    public $color;
-    public $winByDefault = false;
+    const HOME_TEAM = 'Nakade';
 
-    public function __construct(string $color, string $result)
+    protected $manager;
+
+    public function __construct(EntityManagerInterface $manager)
     {
-        $this->color = $color;
-        $this->result = $result;
-    }
-
-    public function getHomePlayer(): ?PlayerModel
-    {
-        return $this->homePlayer;
-    }
-
-    public function getAwayPlayer(): ?PlayerModel
-    {
-        return $this->awayPlayer;
-    }
-
-    public function getColor(): string
-    {
-        if ('s' === $this->color) {
-            $this->color = 'b';
-        }
-
-        return $this->color;
+        $this->manager = $manager;
     }
 }

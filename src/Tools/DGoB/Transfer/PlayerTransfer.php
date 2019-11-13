@@ -20,39 +20,32 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Tools\DGoB\Model;
+namespace App\Tools\DGoB\Transfer;
 
-class MatchModel
+use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Tools\DGoB\Model\PlayerModel;
+
+class PlayerTransfer extends AbstractTransfer
 {
-    public $result;
-    public $homePlayer;
-    public $awayPlayer;
-    public $board;
-    public $color;
-    public $winByDefault = false;
-
-    public function __construct(string $color, string $result)
+    public function transfer(PlayerModel $model): BundesligaPlayer
     {
-        $this->color = $color;
-        $this->result = $result;
-    }
+        $player = $this->manager->getRepository(BundesligaPlayer::class)->findOneBy(
+            [
+                'firstName' => $model->firstName,
+                'lastName' => $model->lastName,
+            ]
+        );
 
-    public function getHomePlayer(): ?PlayerModel
-    {
-        return $this->homePlayer;
-    }
+        if (!$player) {
+            $player = new BundesligaPlayer();
+            $player->setFirstName($model->firstName)
+                ->setLastName($model->lastName);
 
-    public function getAwayPlayer(): ?PlayerModel
-    {
-        return $this->awayPlayer;
-    }
-
-    public function getColor(): string
-    {
-        if ('s' === $this->color) {
-            $this->color = 'b';
+            $this->manager->persist($player);
         }
 
-        return $this->color;
+        $this->manager->flush();
+
+        return $player;
     }
 }

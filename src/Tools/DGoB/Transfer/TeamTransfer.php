@@ -24,20 +24,12 @@ namespace App\Tools\DGoB\Transfer;
 
 use App\Entity\Bundesliga\BundesligaTeam;
 use App\Tools\DGoB\Model\TeamModel;
-use Doctrine\ORM\EntityManagerInterface;
 
-class TeamTransfer
+class TeamTransfer extends AbstractTransfer
 {
-    private $manager;
-
-    public function __construct(EntityManagerInterface $manager)
-    {
-        $this->manager = $manager;
-    }
-
     public function transfer(TeamModel $model): BundesligaTeam
     {
-        $team = $this->manager->getRepository(BundesligaTeam::class)->findOneBy(['name' => $model->name]);
+        $team = $this->manager->getRepository(BundesligaTeam::class)->findSimilarTeam($model->name);
         if (!$team) {
             $team = new BundesligaTeam();
             $team->setName($model->name);

@@ -22,21 +22,11 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB\Transfer;
 
-use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Tools\DGoB\Model\ResultModel;
 use App\Tools\DGoB\Model\SeasonModel;
-use Doctrine\ORM\EntityManagerInterface;
 
-class SeasonTransfer
+class SeasonTransfer extends AbstractTransfer
 {
-    private $manager;
-
-    public function __construct(EntityManagerInterface $manager)
-    {
-        $this->manager = $manager;
-    }
-
     public function transfer(SeasonModel $model): BundesligaSeason
     {
         $season = $this->manager->getRepository(BundesligaSeason::class)->findOneBy(

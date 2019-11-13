@@ -20,10 +20,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Bundesliga\BundesligaSeason;
-use App\Tools\DGoB\SeasonCatcher;
-use App\Tools\DGoB\Transfer\ResultTransfer;
-use App\Tools\DGoB\Transfer\SeasonTransfer;
+use App\Tools\DGoB\Transfer\BundesligaTransfer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -32,21 +29,13 @@ class BundesligaController extends AbstractController
     /**
      * @Route("/bundesliga", name="bundesliga")
      */
-    public function index(SeasonTransfer $seasonTransfer, ResultTransfer $resultTransfer)
+    public function index(BundesligaTransfer $transfer)
     {
-        $seasonCatcher = new SeasonCatcher('2012_2013', '5');
-        $seasonModel = $seasonCatcher->extract();
-
-        $season = $seasonTransfer->transfer($seasonModel);
-
-        foreach ($seasonModel->results as $resultModel) {
-            $result = $resultTransfer->transfer($season, $resultModel);
-        }
-
-
+        $transfer->transfer('2019_2020', '2', true);
 
         return $this->render('bundesliga/index.html.twig', [
             'controller_name' => 'BundesligaController',
         ]);
     }
+
 }

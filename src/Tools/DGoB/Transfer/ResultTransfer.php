@@ -24,24 +24,13 @@ namespace App\Tools\DGoB\Transfer;
 
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Entity\Bundesliga\BundesligaTeam;
 use App\Tools\DGoB\Model\ResultModel;
-use Doctrine\ORM\EntityManagerInterface;
 
-class ResultTransfer
+class ResultTransfer extends AbstractTransfer
 {
-    private $manager;
-    private $teamTransfer;
-
-    public function __construct(EntityManagerInterface $manager, TeamTransfer $teamTransfer)
+    public function transfer(BundesligaSeason $season, ResultModel $model, BundesligaTeam $home, BundesligaTeam $away): BundesligaResults
     {
-        $this->manager = $manager;
-        $this->teamTransfer = $teamTransfer;
-    }
-
-    public function transfer(BundesligaSeason $season, ResultModel $model): BundesligaResults
-    {
-        $home = $this->teamTransfer->transfer($model->homeTeam);
-        $away = $this->teamTransfer->transfer($model->awayTeam);
         $result = $this->manager->getRepository(BundesligaResults::class)->findOneBy(
             [
                 'season' => $season,

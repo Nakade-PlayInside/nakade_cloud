@@ -55,8 +55,6 @@ class BundesligaTeam
     private $name;
 
     /**
-     * @Assert\NotBlank
-     *
      * @ORM\Column(type="string", length=20, nullable=true)
      *
      * @Groups("main")
@@ -69,8 +67,6 @@ class BundesligaTeam
     private $seasons;
 
     /**
-     * @Assert\NotBlank
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $captain;
