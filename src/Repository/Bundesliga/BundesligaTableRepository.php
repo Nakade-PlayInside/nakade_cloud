@@ -19,32 +19,16 @@ class BundesligaTableRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaTable::class);
     }
 
-    // /**
-    //  * @return BundesligaTable[] Returns an array of BundesligaTable objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findLastMatchDay(string $season, string $league)
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('t')
+            ->select('MAX(t.matchDay) as lastMatchDay')
+            ->where('t.season LIKE :season')
+            ->andWhere('t.league LIKE :league')
+            ->setParameter('season', '%'.$season.'%')
+            ->setParameter('league', '%'.$league.'%')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getSingleScalarResult()
+            ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?BundesligaTable
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

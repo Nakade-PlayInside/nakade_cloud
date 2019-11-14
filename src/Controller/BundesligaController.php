@@ -20,6 +20,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
 use App\Tools\Bundesliga\TableCatcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,11 +31,23 @@ class BundesligaController extends AbstractController
     /**
      * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), , defaults={"matchDays": 1})
      */
-    public function index(TableCatcher $tableCatcher, string $matchDay)
+    public function actualSeason(TableCatcher $tableCatcher, string $matchDay)
     {
-        $season = '2019_2020';
-        $league = '2';
-        $actualSeason = true;
+
+        //todo: actualSeason in fixtures
+        //todo: actualSason by actualFlag ... redirect if not found
+        //todo: easy Admin anpassung
+        //todo: partials
+        $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find(8);
+        $league = $actualSeason->getLeague();
+        $season = $actualSeason->getDGoBIndex();
+        $lastMatchDay = $this->getDoctrine()->getRepository(BundesligaTable::class)->findLastMatchDay($season, $league);
+        $maxMatchDays = $actualSeason->getTeams()->count() - 1;
+        $matchDays = range(1, $maxMatchDays);
+
+        if ((int) $matchDay > (int) $lastMatchDay) {
+            $matchDay = $lastMatchDay;
+        }
 
         $table = $this->getDoctrine()->getRepository(BundesligaTable::class)->findBy(
             [
@@ -45,15 +58,10 @@ class BundesligaController extends AbstractController
             ['position' => 'ASC']
         );
 
+        //todo: make a cmd
         if (0 === count($table)) {
             /** @var BundesligaTable[] $table */
-            $table = $tableCatcher->extract($season, $league, $matchDay, $actualSeason);
-        }
-
-        $matchDays = range(1, 9);
-        if ($actualSeason) {
-            //todo Datenbankabfrage
-            $lastMatchDay = 2;
+            $table = $tableCatcher->extract($season, $league, $matchDay);
         }
 
         //TODO: CMD for data grabbing

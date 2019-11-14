@@ -12,6 +12,7 @@
 "opponent.unique": "Dieser Gegner ist schon registriert!"
 "player.unique": "Dieser Spieler ist schon registriert!"
 "season.unique": "Diese Saison ist schon registriert!"
+"season.title": "Formatfehler! Erwartet werden die Jahreszahlen als <2019/19>, z.B. <Saison 2019/20>. Gefunden wurde <{{ value }}>!"
 "team.unique": "Diese Mannschaft ist schon registriert!"
 "table.unique": "Diese Tabellenreihe ist schon registriert!"
 "executive.unique": "Der Ligaleiter ist schon registriert!"

@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -27,48 +25,22 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-/**
- * Class ReCaptchaValidator!
- *
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- * @author Dr. H.Maerz <holger@nakade.de>
- */
-class ReCaptchaValidator extends ConstraintValidator
+class SeasonTitleValidator extends ConstraintValidator
 {
-    private $reCaptchaVerifier;
+    const PATTERN = '#.*\d{4}\/\d{2}#';
 
-    public function __construct(ReCaptchaVerifier $reCaptchaVerifier)
-    {
-        $this->reCaptchaVerifier = $reCaptchaVerifier;
-    }
-
-    /**
-     * @param mixed $value
-     */
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof ReCaptcha) {
-            throw new UnexpectedTypeException($constraint, ReCaptcha::class);
+        if (!$constraint instanceof SeasonTitle) {
+            throw new UnexpectedTypeException($constraint, SeasonTitle::class);
         }
 
-        $data = $this->reCaptchaVerifier->verify();
-
-        if (array_key_exists(ReCaptchaVerifier::NOT_CHECKED, $data)) {
-            $this->context->buildViolation('recaptcha.notChecked')->addViolation();
-
+        if (1 === preg_match(self::PATTERN, $value, $matches)) {
             return;
         }
 
-        if (!$data[ReCaptchaVerifier::SUCCESS]) {
-            //if no error code is given
-            if (0 === count($data[ReCaptchaVerifier::ERROR_CODES])) {
-                $this->context->buildViolation('recaptcha.required')->addViolation();
-            }
-
-            foreach ($data[ReCaptchaVerifier::ERROR_CODES] as $errorCode) {
-                $this->context->buildViolation($errorCode)->addViolation();
-            }
-        }
+        $this->context->buildViolation($constraint->message)
+            ->setParameter('{{ value }}', $value)
+            ->addViolation();
     }
 }

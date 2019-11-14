@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Bundesliga;
 
+use App\Validator\SeasonTitle;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -46,7 +47,7 @@ class BundesligaSeason
     private $id;
 
     /**
-     * @Assert\NotBlank
+     * @SeasonTitle()
      *
      * @ORM\Column(type="string", length=255, unique=true)
      */
@@ -87,16 +88,14 @@ class BundesligaSeason
     private $executive;
 
     /**
-     * Stellvertreter.
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaExecutive")
-     */
-    private $deputy;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaLineup", mappedBy="season", fetch="EXTRA_LAZY")
      */
     private $lineup;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $actualSeason = false;
 
     public function __construct()
     {
@@ -226,18 +225,6 @@ class BundesligaSeason
         return $this;
     }
 
-    public function getDeputy(): ?BundesligaExecutive
-    {
-        return $this->deputy;
-    }
-
-    public function setDeputy(?BundesligaExecutive $deputy): self
-    {
-        $this->deputy = $deputy;
-
-        return $this;
-    }
-
     public function getLineup(): ?BundesligaLineup
     {
         return $this->lineup;
@@ -250,8 +237,30 @@ class BundesligaSeason
         return $this;
     }
 
+    public function isActualSeason(): bool
+    {
+        return $this->actualSeason;
+    }
+
+    public function setActualSeason(bool $actualSeason): self
+    {
+        $this->actualSeason = $actualSeason;
+
+        return $this;
+    }
+
+    public function getDGoBIndex()
+    {
+        $pattern = '#.*(\d{4})\/(\d{2})#';
+        preg_match($pattern, $this->getTitle(), $matches);
+
+        return sprintf("%s_20%s", $matches[1], $matches[2]);
+    }
+
     public function __toString()
     {
         return $this->title;
     }
+
+
 }

@@ -25,7 +25,6 @@
 "age.year": "Jahre"
 "easyAdmin":
   "bundesliga":
-    "deputy": "Stellvertreter"
     "executive": "Ligaleiter"
     "executive.city": "Stadt"
     "executive.position": "Position"
@@ -98,6 +97,7 @@
     "results.help": "Alle Spiele, alle Ergebnisse der Ligen mit Beteiligung unserer Mannschaft."
     "relegation.round": "Runde"
     "season": "Saison"
+    "season.actual": "aktuelle Saison"
     "season.placeholder": "Wähle eine Saison"
     "season.end": "Ende"
     "season.help": "z.B.: Saison 2018/19"
