@@ -79,12 +79,6 @@ class BundesligaTeam
      */
     private $email;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaPenalty", mappedBy="team")
-     */
-    private $penalties;
-
-
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
@@ -168,37 +162,6 @@ class BundesligaTeam
     public function setKgsId(string $kgsId): self
     {
         $this->kgsId = $kgsId;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|BundesligaPenalty[]
-     */
-    public function getPenalties(): Collection
-    {
-        return $this->penalties;
-    }
-
-    public function addPenalty(BundesligaPenalty $penalty): self
-    {
-        if (!$this->penalties->contains($penalty)) {
-            $this->penalties[] = $penalty;
-            $penalty->setTeam($this);
-        }
-
-        return $this;
-    }
-
-    public function removePenalty(BundesligaPenalty $penalty): self
-    {
-        if ($this->penalties->contains($penalty)) {
-            $this->penalties->removeElement($penalty);
-            // set the owning side to null (unless already changed)
-            if ($penalty->getTeam() === $this) {
-                $penalty->setTeam(null);
-            }
-        }
 
         return $this;
     }
