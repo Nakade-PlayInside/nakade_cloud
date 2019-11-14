@@ -1,0 +1,99 @@
+//DGoB Bundesliga
+
+.bundesliga {
+    background-color: #adb7e7;
+    border: #4c5367 1px solid;
+    cursor: default;
+
+    caption {
+        caption-side: top;
+        font-weight: bolder;
+        text-align: center;
+        padding-bottom: 0;
+    }
+    tr {
+        background-color: #F0F8FF;
+    }
+
+    td {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+
+    td:first-child {
+        text-align: right;
+    }
+
+    .head {
+        background-color: midnightblue;
+        color: white;
+        font-weight: bolder;
+        td {
+            padding-top: 4px;
+        }
+
+
+    }
+
+    .meister {
+        background-color: #0F0;
+    }
+
+    .aufsteiger {
+        background-color: #9F9;
+    }
+
+    .relegation {
+        background-color: #FCC;
+    }
+
+    .absteiger {
+        background-color: #F99;
+    }
+
+    .nakade {
+        font-weight: bold;
+    }
+
+    .team {
+        text-align: left;
+    }
+
+    .games {
+        padding-left: 10px;
+        padding-right: 15px
+    }
+
+    .board {
+        padding-left: 10px;
+        padding-right: 15px
+    }
+
+    .points {
+        padding-right: 10px
+    }
+
+    .matchDaySelect {
+        background-color: midnightblue;
+        color: white;
+        text-align: center !important;
+        padding-top: 4px;
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        span {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .actual {
+            font-weight: bold;
+        }
+
+        .notPlayed {
+            color: #8b8b8b;
+        }
+    }
+}

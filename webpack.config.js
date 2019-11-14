@@ -49,6 +49,7 @@ Encore
     .addEntry('feature', './assets/js/feature.js')
     .addEntry('bundesliga', './assets/js/bundesliga.js')
     .addEntry('autocomplete', './assets/js/algolia-autocomplete.js')
+    .addEntry('dgob', './assets/js/dgob.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

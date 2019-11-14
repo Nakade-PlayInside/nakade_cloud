@@ -20,22 +20,52 @@
 
 namespace App\Controller;
 
-use App\Tools\DGoB\Transfer\BundesligaTransfer;
+use App\Entity\Bundesliga\BundesligaTable;
+use App\Tools\Bundesliga\TableCatcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BundesligaController extends AbstractController
 {
     /**
-     * @Route("/bundesliga", name="bundesliga")
+     * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), , defaults={"matchDays": 1})
      */
-    public function index(BundesligaTransfer $transfer)
+    public function index(TableCatcher $tableCatcher, string $matchDay)
     {
-        $transfer->transfer('2019_2020', '2', true);
+        $season = '2019_2020';
+        $league = '2';
+        $actualSeason = true;
+
+        $table = $this->getDoctrine()->getRepository(BundesligaTable::class)->findBy(
+            [
+                'season' => $season,
+                'league' => $league,
+                'matchDay' => $matchDay,
+            ],
+            ['position' => 'ASC']
+        );
+
+        if (0 === count($table)) {
+            /** @var BundesligaTable[] $table */
+            $table = $tableCatcher->extract($season, $league, $matchDay, $actualSeason);
+        }
+
+        $matchDays = range(1, 9);
+        if ($actualSeason) {
+            //todo Datenbankabfrage
+            $lastMatchDay = 2;
+        }
+
+        //TODO: CMD for data grabbing
+        //BundesligaTransfer $transfer
+        // $transfer->transfer('2019_2020', '2', true);
 
         return $this->render('bundesliga/index.html.twig', [
-            'controller_name' => 'BundesligaController',
+            'table' => $table,
+            'title' => $table[0]->getTitle(),
+            'matchDays' => $matchDays,
+            'actual' => $matchDay,
+            'lastMatchDay' => $lastMatchDay,
         ]);
     }
-
 }

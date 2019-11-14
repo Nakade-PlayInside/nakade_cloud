@@ -1,20 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BundesligaController!{% endblock %}
+{% block title %}Aktuelle Saison{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('dgob') }}
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <table class="bundesliga">
+        <caption>{{ title }}</caption>
+        <tr class="head">
+            <td colspan ="3"></td>
+            <td data-toggle="tooltip" data-placement="top" title="Spiele">Sp</td>
+            <td data-toggle="tooltip" data-placement="top" title="Siege">s</td>
+            <td data-toggle="tooltip" data-placement="top" title="Unentschieden">u</td>
+            <td data-toggle="tooltip" data-placement="top" title="Niederlage">n</td>
+            <td data-toggle="tooltip" data-placement="top" title="Brettpunkte">BP</td>
+            <td data-toggle="tooltip" data-placement="top" title="Punkte">Pkt</td>
+        </tr>
+    {% for  data in table %}
+        <tr class="{{ data.cSS }}">
+            <td>{{ data.position }}</td>
+            <td data-toggle="tooltip" data-placement="right" title='Tendenz'><img alt='Tendenz' src="{{ data.imgSrc }}"></td>
+            <td class="team">{{ data.team }}</td>
+            <td class="games">{{ data.games }}</td>
+            <td>{{ data.wins }}</td>
+            <td>{{ data.draws }}</td>
+            <td>{{ data.losses }}</td>
+            <td class="board">{{ data.boardPoints }}</td>
+            <td class="points">{{ data.points }}</td>
+        </tr>
+    {% endfor %}
+        <tr>
+            <td colspan ="9" class="matchDaySelect">
+            {% for  matchDay in matchDays %}
+                <span class="
+                    {% if actual == matchDay %}actual {% endif %}
+                    {% if matchDay > lastMatchDay %}notPlayed{% endif %}">
+                    {% if matchDay <= lastMatchDay %}
+                        <a data-toggle="tooltip" title="
+                            {% if actual == matchDay %}aktueller Spieltag
+                            {% else %}zum Spieltag {{ matchDay }}
+                            {% endif %}" href="
+                                {% if actual == matchDay %}#
+                            {% else %}
+                                {{ path('bundesliga_table_matchDay', { 'matchDay': matchDay }) }}
+                            {% endif %}
+                            ">
+                            {{ matchDay }}
+                        </a>
+                    {% else %}
+                        {{ matchDay }}
+                    {% endif %}
+                </span>
+            {% endfor %}
+            </td>
+        </tr>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/mumm/workspace/nakade_cloud_v3/nakade/src/Controller/BundesligaController.php'|file_link(0) }}">src/Controller/BundesligaController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/mumm/workspace/nakade_cloud_v3/nakade/templates/bundesliga/index.html.twig'|file_link(0) }}">templates/bundesliga/index.html.twig</a></code></li>
-    </ul>
 </div>
 {% endblock %}
