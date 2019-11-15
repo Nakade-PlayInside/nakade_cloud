@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -18,36 +20,52 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Repository\Bundesliga;
+namespace App\Entity\Listener;
 
 use App\Entity\Bundesliga\BundesligaSeason;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
-/**
- * @method BundesligaSeason|null find($id, $lockMode = null, $lockVersion = null)
- * @method BundesligaSeason|null findOneBy(array $criteria, array $orderBy = null)
- * @method BundesligaSeason[]    findAll()
- * @method BundesligaSeason[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class BundesligaSeasonRepository extends ServiceEntityRepository
+class BundesligaSeasonListener
 {
-    public function __construct(ManagerRegistry $registry)
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager)
     {
-        parent::__construct($registry, BundesligaSeason::class);
+        $this->manager = $manager;
     }
 
     /**
-     * used for SeasonListener.
+     * PostPersist is needed always to unset property.
      */
-    public function findActualSeasons(BundesligaSeason $actual): array
+    public function prePersist(BundesligaSeason $season, LifecycleEventArgs $event)
     {
-        return $this->createQueryBuilder('s')
-                ->where('s.actualSeason=true')
-                ->andWhere('s.id != :id')
-                ->setParameter('id', $actual->getId())
-                ->getQuery()
-                ->getResult()
-                ;
+        //todo
+    }
+
+    public function postPersist(BundesligaSeason $season, LifecycleEventArgs $event)
+    {
+        if ($season->isActualSeason()) {
+            $this->unsetActualSeasons($season);
+        }
+    }
+
+    public function postUpdate(BundesligaSeason $season, LifecycleEventArgs $event)
+    {
+        if ($season->isActualSeason()) {
+            $this->unsetActualSeasons($season);
+        }
+    }
+
+    private function unsetActualSeasons(BundesligaSeason $season)
+    {
+        $result = $this->manager->getRepository(BundesligaSeason::class)->findBy(['actualSeason' => true]);
+        foreach ($result as $actual) {
+            if ($actual === $season) {
+                continue;
+            }
+            $actual->setActualSeason(false);
+        }
+        $this->manager->flush();
     }
 }

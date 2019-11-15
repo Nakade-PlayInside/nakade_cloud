@@ -45,3 +45,8 @@ services:
 
     App\Form\ReCaptchaType\:
         resource: '../src/Form/ReCaptchaType.php'
+
+    season_listener:
+        class: 'App\Entity\Listener\BundesligaSeasonListener'
+        tags:
+            name: 'doctrine.orm.entity_listener'

@@ -312,6 +312,7 @@ easy_admin:
               - { property: 'league', label: 'easyAdmin.bundesliga.season.league', help: 'easyAdmin.bundesliga.season.league.placeholder' }
               - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start', type_options: { widget: 'single_text' } }
               - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end', type_options: { widget: 'single_text' } }
+              - { property: 'actualSeason', label: 'easyAdmin.bundesliga.season.actual' }
               - { type: group, label: 'easyAdmin.bundesliga.executive', icon: 'legal', columns: 6 }
               - { property: 'executive', label: 'easyAdmin.bundesliga.executive', help: 'easyAdmin.bundesliga.season.executive.help' }
               - { type: group, label: 'easyAdmin.bundesliga.season.teams.league', icon: 'users', columns: 6 }
@@ -322,6 +323,7 @@ easy_admin:
               - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
               - { property: 'startAt', label: 'easyAdmin.bundesliga.season.start' }
               - { property: 'endAt', label: 'easyAdmin.bundesliga.season.end' }
+              - { property: 'actualSeason', label: 'easyAdmin.bundesliga.season.actual' }
               - { property: 'executive', label: 'easyAdmin.bundesliga.executive' }
               - { property: 'lineup', label: 'easyAdmin.bundesliga.player.title', template: "admin/bundesliga/season/field_association.html.twig" }
               - { property: 'teams', label: 'easyAdmin.bundesliga.season.teams'}

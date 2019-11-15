@@ -31,6 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaSeasonRepository")
+ * @ORM\EntityListeners({"App\Entity\Listener\BundesligaSeasonListener"})
  *
  * @UniqueEntity(
  *     fields={"title"},

@@ -34,9 +34,7 @@ class BundesligaController extends AbstractController
     public function actualSeason(TableCatcher $tableCatcher, string $matchDay)
     {
 
-        //todo: actualSeason in fixtures
         //todo: actualSason by actualFlag ... redirect if not found
-        //todo: easy Admin anpassung
         //todo: partials
         $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find(8);
         $league = $actualSeason->getLeague();

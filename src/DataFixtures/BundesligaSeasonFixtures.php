@@ -68,6 +68,10 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
                 $season->addTeam($team);
             }
 
+            if (1 === $i) {
+                $season->setActualSeason(true);
+            }
+
             return $season;
         });
 
