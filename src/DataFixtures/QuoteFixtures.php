@@ -41,7 +41,7 @@ class QuoteFixtures extends BaseFixture
     {
         $this->createMany(10, 'main_quotes', function ($i) {
             $quote = new Quotes();
-            $quote->setQuote($this->faker->sentence);
+            $quote->setQuote($this->faker->sentences(5, true));
             $quote->setDetails($this->faker->lastName.', '.$this->faker->century);
 
             return $quote;
