@@ -3,7 +3,7 @@
         <caption>Nächster Spieltag</caption>
         <tr>
             <td>{{ model.nextResult.pairing}}</td>
-            <td class="result">{{ model.nextResult.playedAt| date('d. F Y')}}</td>
+            <td class="result">{{ model.nextResult.playedAt | locale_datetime }}</td>
         </tr>
     </table>
 {% endif %}
