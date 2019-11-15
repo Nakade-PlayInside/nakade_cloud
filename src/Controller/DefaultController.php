@@ -26,6 +26,7 @@ namespace App\Controller;
 use App\Entity\Quotes;
 use App\Form\ContactType;
 use App\Message\ConfirmContact;
+use App\Services\ActualTableService;
 use App\Tools\NextClubMeeting;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,15 +42,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="app_homepage")
+     * @Route("/{matchDay}", name="app_homepage", requirements={"matchDay"="\d+"}))
      */
-    public function index(): Response
+    public function index(ActualTableService $tableService, int $matchDay = null): Response
     {
+        $table = $tableService->retrieveTable($matchDay);
         $entityManager = $this->getDoctrine()->getManager();
         $quotes = $entityManager->getRepository(Quotes::class)->findAll();
         shuffle($quotes);
 
-        return $this->render('default/index.html.twig', ['quotes' => $quotes]);
+        return $this->render('default/index.html.twig', [
+                'model' => $table,
+                'quotes' => $quotes,
+        ]);
     }
 
     /**

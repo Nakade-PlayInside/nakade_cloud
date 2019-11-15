@@ -50,4 +50,20 @@ class BundesligaSeasonRepository extends ServiceEntityRepository
                 ->getResult()
                 ;
     }
+
+    /**
+     * used for actual season.
+     */
+    public function findLastSeason(): ?BundesligaSeason
+    {
+        try {
+            return $this->createQueryBuilder('s')
+                    ->orderBy('s.id', 'DESC')
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
 }

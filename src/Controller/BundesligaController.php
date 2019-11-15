@@ -20,8 +20,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Services\ActualTableService;
+use App\Services\Model\TableModel;
 use App\Tools\Bundesliga\TableCatcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,35 +32,19 @@ class BundesligaController extends AbstractController
     /**
      * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), , defaults={"matchDays": 1})
      */
-    public function actualSeason(TableCatcher $tableCatcher, string $matchDay)
+    public function actualSeason(TableCatcher $tableCatcher, ActualTableService $tableService, string $matchDay)
     {
+
+        /** @var TableModel $model */
+        $model = $tableService->retrieveTable($matchDay);
 
         //todo: actualSason by actualFlag ... redirect if not found
         //todo: partials
-        $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find(8);
-        $league = $actualSeason->getLeague();
-        $season = $actualSeason->getDGoBIndex();
-        $lastMatchDay = $this->getDoctrine()->getRepository(BundesligaTable::class)->findLastMatchDay($season, $league);
-        $maxMatchDays = $actualSeason->getTeams()->count() - 1;
-        $matchDays = range(1, $maxMatchDays);
-
-        if ((int) $matchDay > (int) $lastMatchDay) {
-            $matchDay = $lastMatchDay;
-        }
-
-        $table = $this->getDoctrine()->getRepository(BundesligaTable::class)->findBy(
-            [
-                'season' => $season,
-                'league' => $league,
-                'matchDay' => $matchDay,
-            ],
-            ['position' => 'ASC']
-        );
 
         //todo: make a cmd
-        if (0 === count($table)) {
+        if (0 === count($model->getActualTable())) {
             /** @var BundesligaTable[] $table */
-            $table = $tableCatcher->extract($season, $league, $matchDay);
+            $table = $tableCatcher->extract($model->getSeason()->getDGoBIndex(), $model->getSeason()->getLeague(), $model->getMatchDay());
         }
 
         //TODO: CMD for data grabbing
@@ -67,11 +52,7 @@ class BundesligaController extends AbstractController
         // $transfer->transfer('2019_2020', '2', true);
 
         return $this->render('bundesliga/index.html.twig', [
-            'table' => $table,
-            'title' => $table[0]->getTitle(),
-            'matchDays' => $matchDays,
-            'actual' => $matchDay,
-            'lastMatchDay' => $lastMatchDay,
+            'model'  => $model,
         ]);
     }
 }

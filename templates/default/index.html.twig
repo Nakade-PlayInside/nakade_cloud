@@ -4,13 +4,11 @@
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('home') }}
+    {{ encore_entry_link_tags('dgob') }}
 {% endblock %}
 
 {% block sidebar %}
-    <div style="padding-top: 120px; ">
-        <h5 style="text-align: center">Aktueller Spieltag 2.Liga</h5>
-        <img class="img-fluid rounded mx-auto d-block" src="{{ asset('build/images/spieltag.png') }}">
-    </div>
+
 {% endblock %}
 {% block body %}
     <h2>{{ 'home.welcome'|trans({}, 'messages') }}</h2>
@@ -22,6 +20,10 @@
         Wir veranstalten einen regelmäßigen <a class="internal" title="zum Spieltreff" href="{{ path('app_clubs') }}">Spieltreff</a> in unmittelbarer Nähe zum Ku'Damm in Berlin.<br>
         <a class="internal" title="zur Registrierung" href="{{ path('app_register') }}">Registriere dich</a> und lerne uns kennen. Mögen die Steine mit dir sein!
     </div>
+
+    <center>
+    {{ include('bundesliga/table.html.twig') }}
+    </center>
 
     <div class="nakade-quotes">
         <div id="carouselQuotes" class="carousel slide" data-ride="carousel">

@@ -19,16 +19,22 @@ class BundesligaTableRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaTable::class);
     }
 
-    public function findLastMatchDay(string $season, string $league)
+    /**
+     * used for actual season service.
+     */
+    public function findLastMatchDay(string $season, string $league): ?string
     {
-        return $this->createQueryBuilder('t')
-            ->select('MAX(t.matchDay) as lastMatchDay')
-            ->where('t.season LIKE :season')
-            ->andWhere('t.league LIKE :league')
-            ->setParameter('season', '%'.$season.'%')
-            ->setParameter('league', '%'.$league.'%')
-            ->getQuery()
-            ->getSingleScalarResult()
-            ;
+        try {
+            return $this->createQueryBuilder('t')
+                    ->select('MAX(t.matchDay) as lastMatchDay')
+                    ->where('t.season LIKE :season')
+                    ->andWhere('t.league LIKE :league')
+                    ->setParameter('season', '%'.$season.'%')
+                    ->setParameter('league', '%'.$league.'%')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

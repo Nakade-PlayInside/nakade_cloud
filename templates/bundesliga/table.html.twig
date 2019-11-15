@@ -1,0 +1,52 @@
+{% if model and model.actualTable %}
+    <table class="bundesliga">
+        <caption>{{ model.title }}</caption>
+        <tr class="head">
+            <td colspan ="3"></td>
+            <td data-toggle="tooltip" data-placement="top" title="Spiele">Sp</td>
+            <td data-toggle="tooltip" data-placement="top" title="Siege">s</td>
+            <td data-toggle="tooltip" data-placement="top" title="Unentschieden">u</td>
+            <td data-toggle="tooltip" data-placement="top" title="Niederlage">n</td>
+            <td data-toggle="tooltip" data-placement="top" title="Brettpunkte">BP</td>
+            <td data-toggle="tooltip" data-placement="top" title="Punkte">Pkt</td>
+        </tr>
+    {% for  data in model.actualTable %}
+        <tr class="{{ data.cSS }}">
+            <td>{{ data.position }}</td>
+            <td data-toggle="tooltip" data-placement="right" title='Tendenz'><img alt='Tendenz' src="{{ data.imgSrc }}"></td>
+            <td class="team">{{ data.team }}</td>
+            <td class="games">{{ data.games }}</td>
+            <td>{{ data.wins }}</td>
+            <td>{{ data.draws }}</td>
+            <td>{{ data.losses }}</td>
+            <td class="board">{{ data.boardPoints }}</td>
+            <td class="points">{{ data.points }}</td>
+        </tr>
+    {% endfor %}
+        <tr>
+            <td colspan ="9" class="matchDaySelect">
+            {% for  matchDay in model.matchDayRange %}
+                <span class="
+                    {% if matchDay == model.matchDay %}actual {% endif %}
+                    {% if matchDay > model.lastMatchDay %}notPlayed{% endif %}">
+                    {% if matchDay <= model.lastMatchDay %}
+                        <a data-toggle="tooltip" title="
+                            {% if matchDay == model.matchDay %}aktueller Spieltag
+                            {% else %}zum Spieltag {{ matchDay }}
+                            {% endif %}" href="
+                                {% if matchDay == model.matchDay %}#
+                            {% else %}
+                                {{ path(app.request.attributes.get('_route'), { 'matchDay': matchDay }) }}
+                            {% endif %}
+                            ">
+                            {{ matchDay }}
+                        </a>
+                    {% else %}
+                        {{ matchDay }}
+                    {% endif %}
+                </span>
+            {% endfor %}
+            </td>
+        </tr>
+    </table>
+{% endif %}
