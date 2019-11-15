@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 
+use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Quotes;
 use App\Form\ContactType;
 use App\Message\ConfirmContact;
@@ -46,9 +47,9 @@ class DefaultController extends AbstractController
      */
     public function index(ActualTableService $tableService, int $matchDay = null): Response
     {
+
         $table = $tableService->retrieveTable($matchDay);
-        $entityManager = $this->getDoctrine()->getManager();
-        $quotes = $entityManager->getRepository(Quotes::class)->findAll();
+        $quotes = $this->getDoctrine()->getRepository(Quotes::class)->findAll();
         shuffle($quotes);
 
         return $this->render('default/index.html.twig', [

@@ -1,0 +1,9 @@
+{% if model and model.actualTable and model.nextResult %}
+    <table class="bundesliga pairing">
+        <caption>Nächster Spieltag</caption>
+        <tr>
+            <td>{{ model.nextResult.pairing}}</td>
+            <td class="result">{{ model.nextResult.playedAt| date('d. F Y')}}</td>
+        </tr>
+    </table>
+{% endif %}

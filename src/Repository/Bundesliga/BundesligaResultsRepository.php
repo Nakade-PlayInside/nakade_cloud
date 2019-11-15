@@ -17,6 +17,7 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaResults;
@@ -52,5 +53,26 @@ class BundesligaResultsRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult()
                 ;
+    }
+
+    public function findNakadeResult(int $seasonId, int $matchDay): ?BundesligaResults
+    {
+        try {
+            return $this->createQueryBuilder('r')
+                    ->innerJoin('r.season', 's')
+                    ->innerJoin(BundesligaTeam::class, 'h', expr\Join::WITH, 'h.id=r.home')
+                    ->innerJoin(BundesligaTeam::class, 'a', expr\Join::WITH, 'a.id=r.away')
+                    ->where('s.id=:id')
+                    ->andWhere('h.name LIKE :team OR a.name LIKE :team')
+                    ->andWhere('r.matchDay= :matchDay')
+                    ->setParameter('id', $seasonId)
+                    ->setParameter('team', '%Nakade%')
+                    ->setParameter('matchDay', $matchDay)
+                    ->getQuery()
+                    ->getOneOrNullResult()
+                    ;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

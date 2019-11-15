@@ -22,9 +22,8 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Bundesliga\BundesligaExecutive;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Entity\Bundesliga\BundesligaTeam;
+use App\Entity\Bundesliga\BundesligaTable;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -33,43 +32,44 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureInterface
+class BundesligaTableFixtures extends BaseFixture implements DependentFixtureInterface
 {
-    const GROUP_NAME = 'bl_season';
-    const COUNT = 8;
-
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(self::COUNT, self::GROUP_NAME, function ($i) {
-            $startYear = 10 + $i;
-            $title = sprintf('Saison 20%d/%d', $startYear, $startYear + 1);
-            $startDate = sprintf('20%d-08-%d', $startYear, $this->faker->numberBetween(1, 28));
-            $endDate = sprintf('20%d-05-%d', $startYear + 1, $this->faker->numberBetween(1, 28));
+        /** @var BundesligaSeason $season */
+        $season = $this->getReference('bl_season_7');
+        $season->setActualSeason(true);
 
-            $season = new BundesligaSeason();
-            $season->setTitle($title);
-            $season->setStartAt(new \DateTime($startDate));
-            $season->setEndAt(new \DateTime($endDate));
+        $matchDay = 1;
+        $position = 1;
+        foreach ($season->getTeams() as $team) {
+            $table = new BundesligaTable();
+            $boardPoints = $matchDay * 4;
+            $table->setPosition($position)
+                ->setLeague($season->getLeague())
+                ->setMatchDay((string) $matchDay)
+                ->setTeam($team->getName())
+                ->setGames((string) $matchDay)
+                ->setWins('0')
+                ->setDraws((string) $matchDay)
+                ->setLosses('0')
+                ->setBoardPoints((string) $boardPoints)
+                ->setImgSrc('http://www.dgob.de/lmo/img/lmo-tab0.gif')
+                ->setSeason($season->getDGoBIndex())
+                ->setPoints((string) $matchDay)
+            ;
 
-            $league = sprintf('%d', $this->faker->numberBetween(2, 5));
-            $season->setLeague($league);
-
-            /** @var BundesligaExecutive $executive */
-            $executive = $this->getRandomReference(BundesligaExecutive::class, 'bl_executive');
-            $season->setExecutive($executive);
-
-            /** @var BundesligaTeam $team */
-            $team = $this->getReference('bl_team_nakade');
-            $season->addTeam($team);
-
-            while (sizeof($season->getTeams()) < 10) {
-                /** @var BundesligaTeam $team */
-                $team = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
-                $season->addTeam($team);
+            if ($position < 3) {
+                $table->setTendency(BundesligaTable::TENDENCY_AUFSTEIGER);
+            } elseif (8 === $position) {
+                $table->setTendency(BundesligaTable::TENDENCY_RELEGATION);
+            } elseif ($position > 8) {
+                $table->setTendency(BundesligaTable::TENDENCY_ABSTEIGER);
             }
 
-            return $season;
-        });
+            $manager->persist($table);
+            ++$position;
+        }
 
         $manager->flush();
     }
@@ -77,9 +77,7 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
     public function getDependencies()
     {
         return [
-            BundesligaTeamFixtures::class,
-            BundesligaPlayerFixtures::class,
-            BundesligaExecutiveFixtures::class,
+            BundesligaSeasonFixtures::class,
         ];
     }
 }

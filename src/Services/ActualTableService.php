@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
 use App\Services\Model\TableModel;
@@ -62,9 +63,20 @@ class ActualTableService
             return null;
         }
 
+        $result = $this->manager->getRepository(BundesligaResults::class)->findNakadeResult($actualSeason->getId(), (int) $matchDay);
+        if ($result) {
+            $model->setResult($result);
+        }
+        $nextResult = $this->manager->getRepository(BundesligaResults::class)->findNakadeResult($actualSeason->getId(), (int) $matchDay + 1);
+        if ($nextResult) {
+            $model->setNextResult($nextResult);
+        }
+
         return $model->setActualTable($table);
 
     }
+
+    //private function findResult($actualSeason->getId(), $matchDay)
 
     private function calcMatchDayRange(BundesligaSeason $actualSeason): array
     {

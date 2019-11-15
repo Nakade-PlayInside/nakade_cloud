@@ -1,6 +1,7 @@
 {% if model and model.actualTable %}
+    {% include 'bundesliga/result.html.twig' %}
     <table class="bundesliga">
-        <caption>{{ model.title }}</caption>
+        <caption>{{ model.title }} - {{ model.matchDay }}. Spieltag</caption>
         <tr class="head">
             <td colspan ="3"></td>
             <td data-toggle="tooltip" data-placement="top" title="Spiele">Sp</td>
@@ -49,4 +50,5 @@
             </td>
         </tr>
     </table>
+    {% include 'bundesliga/nextMatch.html.twig' %}
 {% endif %}

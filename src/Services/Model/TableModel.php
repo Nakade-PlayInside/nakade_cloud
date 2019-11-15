@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Services\Model;
 
+use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
 
@@ -32,6 +33,8 @@ class TableModel
     private $season;
     private $matchDay;
     private $lastMatchDay;
+    private $result;
+    private $nextResult;
 
     public function __construct(BundesligaSeason $season, int $matchDay, string $lastMatchDay)
     {
@@ -91,4 +94,29 @@ class TableModel
 
         return $this;
     }
+
+    public function getResult(): ?BundesligaResults
+    {
+        return $this->result;
+    }
+
+    public function setResult(BundesligaResults $result): self
+    {
+        $this->result = $result;
+
+        return $this;
+    }
+
+    public function getNextResult(): ?BundesligaResults
+    {
+        return $this->nextResult;
+    }
+
+    public function setNextResult(BundesligaResults $nextResult): self
+    {
+        $this->nextResult = $nextResult;
+
+        return $this;
+    }
+
 }

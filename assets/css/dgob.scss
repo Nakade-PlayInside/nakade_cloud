@@ -11,6 +11,7 @@
         text-align: center;
         padding-bottom: 0;
     }
+
     tr {
         background-color: #F0F8FF;
     }
@@ -28,6 +29,7 @@
         background-color: midnightblue;
         color: white;
         font-weight: bolder;
+
         td {
             padding-top: 4px;
         }
@@ -83,6 +85,7 @@
             color: white;
             text-decoration: none;
         }
+
         span {
             padding-left: 5px;
             padding-right: 5px;
@@ -95,5 +98,26 @@
         .notPlayed {
             color: #8b8b8b;
         }
+    }
+}
+
+.pairing {
+    font-weight: bolder;
+    font-size: larger;
+    border-style: none !important;
+    background-color: unset !important;
+
+    caption {
+        caption-side: top;
+        font-weight: bolder;
+        text-align: center;
+        padding-bottom: 0;
+    }
+    tr {
+        background-color: unset !important;
+    }
+
+    .result {
+        padding-left: 20px;
     }
 }
