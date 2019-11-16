@@ -18,30 +18,44 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Controller;
+namespace App\Command;
 
 use App\Services\ActualTableGrabber;
-use App\Services\ActualTableService;
-use App\Services\Model\TableModel;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-class BundesligaController extends AbstractController
+class ActualTableGrabberCommand extends Command
 {
-    /**
-     * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), , defaults={"matchDays": 1})
-     */
-    public function actualSeason(ActualTableGrabber $grabber, ActualTableService $tableService, string $matchDay)
+    protected static $defaultName = 'app:table:grabber';
+    private $grabber;
+
+    public function __construct(ActualTableGrabber $grabber)
     {
-        /** @var TableModel $model */
-        $model = $tableService->retrieveTable($matchDay);
+        parent::__construct();
+        $this->grabber = $grabber;
+    }
 
-        //TODO: CMD for data grabbing
-        //BundesligaTransfer $transfer
-        // $transfer->transfer('2019_2020', '2', true);
+    protected function configure()
+    {
+        $this
+            ->setDescription('Grabs actual result table from the DGoB Site.')
+            ->setHelp('If a new table is found, the new table is stored in the database.')
+        ;
+    }
 
-        return $this->render('bundesliga/index.html.twig', [
-            'model' => $model,
-        ]);
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+
+        $table = $this->grabber->retrieveTable();
+        if (!$table) {
+            $io->caution('New table still not set. Probably Next time!');
+
+            return;
+        }
+
+        $io->success('New table found.');
     }
 }

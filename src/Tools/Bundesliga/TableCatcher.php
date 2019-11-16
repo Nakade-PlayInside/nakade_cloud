@@ -45,7 +45,7 @@ class TableCatcher
         $this->manager = $manager;
     }
 
-    public function extract(string $season, string $league, string $matchDay, $actualSeason = true): array
+    public function extract(string $season, string $league, string $matchDay, $actualSeason = true): ?array
     {
         //http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=Saison_2013_2014/1314_bl2.l98&st=3
         $linkParams = $this->createLinkParams($season, $league, $matchDay, $actualSeason);
@@ -54,6 +54,10 @@ class TableCatcher
 
         $crawler = new Crawler($html);
         $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(1);
+        //return empty array if there are no data: this matchDay is not yet played
+        if (!$domNode) {
+            return null;
+        }
 
         $cellCatcher = new CellCatcher($season, $league, $matchDay);
 

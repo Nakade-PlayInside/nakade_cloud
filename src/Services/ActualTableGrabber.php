@@ -22,20 +22,30 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Services\Model\TableModel;
+use App\Entity\Bundesliga\BundesligaTable;
+use App\Tools\Bundesliga\TableCatcher;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Find the actual table by database search
+ * Retrieve the actual result table from the DGoB site. Return an empty array if no new table is found.
+ * If a table is found it is persisted in the database.
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ActualTableService extends AbstractTableService
+class ActualTableGrabber extends AbstractTableService
 {
-    public function retrieveTable(int $matchDay = null): ?TableModel
+    private $tableCatcher;
+
+    public function __construct(EntityManagerInterface $manager, TableCatcher $tableCatcher)
+    {
+        parent::__construct($manager);
+        $this->tableCatcher = $tableCatcher;
+    }
+
+    public function retrieveTable(): ?array
     {
         $actualSeason = $this->findActualSeason();
         if (!$actualSeason) {
@@ -46,38 +56,11 @@ class ActualTableService extends AbstractTableService
         if (!$lastMatchDay) {
             return null;
         }
+        $nextMatchDay = (int) $lastMatchDay + 1;
 
-        if (!$matchDay || (int) $matchDay > (int) $lastMatchDay) {
-            $matchDay = $lastMatchDay;
-        }
+        /** @var BundesligaTable[] $table */
+        $table = $this->tableCatcher->extract($actualSeason->getDGoBIndex(), $actualSeason->getLeague(), (string) $nextMatchDay);
 
-        $model = new TableModel($actualSeason, (int) $matchDay, $lastMatchDay);
-
-        $matchDayRange = $this->calcMatchDayRange($actualSeason);
-        $model->setMatchDayRange($matchDayRange);
-
-        $table = $this->findActualTable($actualSeason, $matchDay);
-        if (!$table) {
-            return null;
-        }
-
-        $result = $this->manager->getRepository(BundesligaResults::class)->findNakadeResult($actualSeason->getId(), (int) $matchDay);
-        if ($result) {
-            $model->setResult($result);
-        }
-        $nextResult = $this->manager->getRepository(BundesligaResults::class)->findNakadeResult($actualSeason->getId(), (int) $matchDay + 1);
-        if ($nextResult) {
-            $model->setNextResult($nextResult);
-        }
-
-        return $model->setActualTable($table);
-
-    }
-
-    private function calcMatchDayRange(BundesligaSeason $actualSeason): array
-    {
-        $maxMatchDays = $actualSeason->getTeams()->count() - 1;
-
-        return range(1, $maxMatchDays);
+        return $table;
     }
 }
