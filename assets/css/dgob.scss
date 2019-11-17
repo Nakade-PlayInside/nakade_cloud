@@ -1,9 +1,9 @@
 //DGoB Bundesliga
 
 .bundesliga {
-    background-color: #adb7e7;
     border: #4c5367 1px solid;
     cursor: default;
+
 
     caption {
         caption-side: top;
@@ -14,11 +14,14 @@
 
     tr {
         background-color: #F0F8FF;
+        ;
     }
 
     td {
-        padding-left: 3px;
-        padding-right: 3px;
+        padding: 3px;
+        white-space: nowrap;
+        border: unset;
+
     }
 
     td:first-child {
@@ -33,8 +36,10 @@
         td {
             padding-top: 4px;
         }
+    }
 
-
+    .hide {
+        display: none;
     }
 
     .meister {
@@ -63,16 +68,19 @@
 
     .games {
         padding-left: 10px;
-        padding-right: 15px
+        padding-right: 10px;
+        text-align: right;
     }
 
     .board {
         padding-left: 10px;
-        padding-right: 15px
+        padding-right: 10px;
+        text-align: right;
     }
 
     .points {
-        padding-right: 10px
+        padding-right: 15px;
+        text-align: right;
     }
 
     .matchDaySelect {
@@ -101,23 +109,33 @@
     }
 }
 
+.nextMatchDay {
+    padding-bottom: 1rem;
+}
+
 .pairing {
+
     font-weight: bolder;
     font-size: larger;
     border-style: none !important;
-    background-color: unset !important;
-
-    caption {
-        caption-side: top;
+    h1 {
+        color: #6c757d;
+        font-size: large;
         font-weight: bolder;
-        text-align: center;
-        padding-bottom: 0;
     }
-    tr {
-        background-color: unset !important;
+    ul {
+        list-style-type: none;
+        display: inline-block;
+        padding-inline-start: unset;
+        margin: 0;
+        li {
+            font-weight: bolder;
+            white-space: nowrap;
+        }
     }
 
     .result {
         padding-left: 20px;
+        white-space: nowrap;
     }
 }

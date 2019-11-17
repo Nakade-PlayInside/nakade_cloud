@@ -51,7 +51,7 @@ class TableCatcher
         $linkParams = $this->createLinkParams($season, $league, $matchDay, $actualSeason);
         $this->snoopy->fetch(self::DGOB_URI.$linkParams);
         $html = $this->snoopy->results;
-
+        
         $crawler = new Crawler($html);
         $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(1);
         //return empty array if there are no data: this matchDay is not yet played

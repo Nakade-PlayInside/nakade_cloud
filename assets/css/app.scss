@@ -9,8 +9,11 @@ $color-site: '#8b8b8b';
 body {
     background-image: url("../images/background/wood8.jpeg");
     background-color: $color-site;
-    padding-top: 5rem;
+}
 
+.max-width {
+    width: available;
+    width: -moz-available;
 }
 
 .error {
@@ -27,6 +30,10 @@ body {
         color: rgba(0, 0, 0, 0.5);
         ;
     }
+}
+
+.container-fluid {
+    padding: unset;
 }
 
 main > .container {

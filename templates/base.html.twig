@@ -19,9 +19,8 @@
         </div>
     {% endif %}
 
-    {{ include('nav.html.twig') }}
-
     <div class="container-fluid">
+        {{ include('nav.html.twig') }}
         <div class="row">
             <nav class="col-md-3 d-none d-md-block bg-transparent sidebar">
                 <div class="sidebar-sticky">
@@ -47,12 +46,11 @@
                 </div>
             </main><!-- /.container -->
         </div>
+        {{ include('footer.html.twig') }}
     </div>
 
-    {{ include('footer.html.twig') }}
-
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
     </body>
 </html>

@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
 use App\Tools\Bundesliga\TableCatcher;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,10 +52,11 @@ class ActualTableGrabber extends AbstractTableService
         }
 
         $lastMatchDay = $this->findLastMatchDay($actualSeason);
-        if (!$lastMatchDay) {
-            return null;
+        if ($lastMatchDay) {
+            $nextMatchDay = (int) $lastMatchDay + 1;
+        } else {
+            $nextMatchDay = 1;
         }
-        $nextMatchDay = (int) $lastMatchDay + 1;
 
         /** @var BundesligaTable[] $table */
         $table = $this->tableCatcher->extract($actualSeason->getDGoBIndex(), $actualSeason->getLeague(), (string) $nextMatchDay);
