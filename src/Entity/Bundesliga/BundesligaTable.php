@@ -7,9 +7,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaTableRepository")
-
+ * @ORM\Table(
+ *      name="bundesliga_table",
+ *      uniqueConstraints={@ORM\UniqueConstraint(columns={"season", "league", "games", "position"}
+ *      )}
+ * )
+ *
  * @UniqueEntity(
- *     fields={"season", "league", "matchDay", "position"},
+ *     fields={"season", "league", "games", "position"},
  *     message="table.unique"
  * )
  */

@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Tools\Bundesliga;
 
+use App\Entity\Bundesliga\BundesligaTable;
 use App\Services\Snoopy;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -51,7 +52,7 @@ class TableCatcher
         $linkParams = $this->createLinkParams($season, $league, $matchDay, $actualSeason);
         $this->snoopy->fetch(self::DGOB_URI.$linkParams);
         $html = $this->snoopy->results;
-        
+
         $crawler = new Crawler($html);
         $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(1);
         //return empty array if there are no data: this matchDay is not yet played
@@ -72,7 +73,7 @@ class TableCatcher
 
             $model = $cellCatcher->extract($rowNode->childNodes);
 
-            if ($model) {
+            if ($model && $this->isNew($model)) {
                 $this->manager->persist($model);
                 $data[] = $model;
             }
@@ -80,6 +81,19 @@ class TableCatcher
         $this->manager->flush();
 
         return $data;
+    }
+
+    //prevents unique constraint exception
+    private function isNew(BundesligaTable $table): bool
+    {
+        return null === $this->manager->getRepository(BundesligaTable::class)->findOneBy(
+            [
+                'season' => $table->getSeason(),
+                'league' => $table->getLeague(),
+                'position' => $table->getPosition(),
+                'games' => $table->getGames(),
+            ]
+        );
     }
 
     private function createLinkParams(string $season, string $league, string $matchDay, bool $actualSeason)
