@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB\Transfer;
 
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
 use App\Tools\DGoB\Model\SeasonModel;
 use App\Tools\DGoB\SeasonCatcher;
@@ -37,15 +38,27 @@ class BundesligaTransfer extends AbstractTransfer
         $this->transferFactory = $transferFactory;
     }
 
+    /**
+     * For a new season, you first have to create it.
+     * Older seasons from the archive will be created but you have to provide the year span (eg 2019_2020) and the league.
+     * DO NOT FORGET THE ACTUAL SEASON FLAG SET TO FALSE!
+     */
     public function transfer(string $yearSpan, string $league, bool $actualSeason = true): SeasonModel
     {
         $seasonCatcher = new SeasonCatcher($yearSpan, $league, $actualSeason);
         $seasonModel = $seasonCatcher->extract();
 
+        /** @var BundesligaSeason $season */
         $season = $this->transferFactory->getTransfer(TransferFactory::SEASON_TRANSFER)->transfer($seasonModel);
         foreach ($seasonModel->results as $resultModel) {
+            /** @var BundesligaTeam $home */
             $home = $this->transferFactory->getTransfer(TransferFactory::TEAM_TRANSFER)->transfer($resultModel->homeTeam);
+            $season->addTeam($home);
+            /** @var BundesligaTeam $away */
             $away = $this->transferFactory->getTransfer(TransferFactory::TEAM_TRANSFER)->transfer($resultModel->awayTeam);
+            $season->addTeam($away);
+
+            //TeamTransfer is looking for similar names
             $result = $this->transferFactory->getTransfer(TransferFactory::RESULT_TRANSFER)->transfer($season, $resultModel, $home, $away);
 
             //no match details during actual season due to data mismatches on DGoB site

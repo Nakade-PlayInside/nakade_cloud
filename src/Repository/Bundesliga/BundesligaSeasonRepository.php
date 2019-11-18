@@ -52,7 +52,7 @@ class BundesligaSeasonRepository extends ServiceEntityRepository
     }
 
     /**
-     * used for actual season.
+     * used for actual season if no actual season is found.
      */
     public function findLastSeason(): ?BundesligaSeason
     {

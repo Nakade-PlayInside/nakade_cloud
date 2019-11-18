@@ -31,7 +31,7 @@ class BundesligaController extends AbstractController
     /**
      * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), , defaults={"matchDays": 1})
      */
-    public function actualSeason(ActualTableGrabber $grabber, ActualTableService $tableService, string $matchDay)
+    public function actualSeason(ActualTableService $tableService, string $matchDay)
     {
         /** @var TableModel $model */
         $model = $tableService->retrieveTable($matchDay);

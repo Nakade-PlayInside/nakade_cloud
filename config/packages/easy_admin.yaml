@@ -33,6 +33,7 @@ easy_admin:
               - { entity: BundesligaOpponent, label: 'easyAdmin.bundesliga.opponent.label', icon: 'address-book-o'}
               - { entity: BundesligaResults, label: 'easyAdmin.bundesliga.results.title', icon: 'line-chart'}
               - { entity: BundesligaMatch, label: 'easyAdmin.bundesliga.season.matches', icon: 'balance-scale'}
+              - { entity: BundesligaTable, label: 'easyAdmin.bundesliga.table', icon: 'line-chart'}
               - { label: 'easyAdmin.bundesliga.relegation' }
               - { entity: BundesligaRelegation, label: 'easyAdmin.bundesliga.relegation', icon: 'bell-o'}
               - { entity: BundesligaRelegationMatch, label: 'easyAdmin.bundesliga.relegation.match', icon: 'balance-scale'}
@@ -586,3 +587,58 @@ easy_admin:
               - { property: 'player', label: 'easyAdmin.bundesliga.results.pairing', template: 'admin/bundesliga/match/show_match.html.twig'}
               - { property: 'result', label: 'easyAdmin.bundesliga.matches.result'}
               - { property: 'winByDefault', label: 'easyAdmin.bundesliga.match.winByDefault'}
+        BundesligaTable:
+          class: App\Entity\Bundesliga\BundesligaTable
+          label: 'easyAdmin.bundesliga.table'
+          list:
+            filters:
+              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'matchDay', label: 'easyAdmin.bundesliga.table.matchDay' }
+              - { property: 'team', label: 'easyAdmin.bundesliga.table.team' }
+            fields:
+              - { property: 'id', label: 'easyAdmin.user.id' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
+              - { property: 'matchDay', label: 'easyAdmin.bundesliga.table.matchDay.abbr' }
+              - { property: 'position', label: 'easyAdmin.bundesliga.table.position.abbr' }
+              - { property: 'team', label: 'easyAdmin.bundesliga.table.team' }
+              - { property: 'games', label: 'easyAdmin.bundesliga.table.games.abbr' }
+              - { property: 'wins', label: 'easyAdmin.bundesliga.table.wins.abbr'}
+              - { property: 'draws', label: 'easyAdmin.bundesliga.table.draws.abbr'}
+              - { property: 'losses', label: 'easyAdmin.bundesliga.table.losses.abbr'}
+              - { property: 'boardPoints', label: 'easyAdmin.bundesliga.table.board.points.abbr'}
+              - { property: 'points', label: 'easyAdmin.bundesliga.table.points.abbr'}
+          show:
+            fields:
+              - { property: 'team', label: 'easyAdmin.bundesliga.table.team' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
+              - { property: 'matchDay', label: 'easyAdmin.bundesliga.table.matchDay' }
+              - { property: 'position', label: 'easyAdmin.bundesliga.table.position'}
+              - { property: 'games', label: 'easyAdmin.bundesliga.table.games' }
+              - { property: 'wins', label: 'easyAdmin.bundesliga.table.wins'}
+              - { property: 'draws', label: 'easyAdmin.bundesliga.table.draws'}
+              - { property: 'losses', label: 'easyAdmin.bundesliga.table.losses'}
+              - { property: 'boardPoints', label: 'easyAdmin.bundesliga.table.board.points'}
+              - { property: 'points', label: 'easyAdmin.bundesliga.table.points'}
+              - { property: 'tendency', label: 'easyAdmin.bundesliga.table.tendency'}
+              - { property: 'imgSrc', label: 'easyAdmin.bundesliga.table.img.src'}
+          form:
+            fields:
+              - { type: group, label: 'easyAdmin.bundesliga.season', icon: 'calendar', columns: 6 }
+              - { property: 'team', label: 'easyAdmin.bundesliga.table.team' }
+              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
+              - { type: group, label: 'easyAdmin.bundesliga.table.matchDay', icon: area-chart, columns: 6 }
+              - { property: 'matchDay', label: 'easyAdmin.bundesliga.table.matchDay' }
+              - { property: 'position', label: 'easyAdmin.bundesliga.table.position' }
+              - { type: group, label: 'easyAdmin.bundesliga.table.stats', icon: bar-chart, columns: 6 }
+              - { property: 'games', label: 'easyAdmin.bundesliga.table.games' }
+              - { property: 'wins', label: 'easyAdmin.bundesliga.table.wins'}
+              - { property: 'draws', label: 'easyAdmin.bundesliga.table.draws'}
+              - { property: 'losses', label: 'easyAdmin.bundesliga.table.losses'}
+              - { type: group, label: 'easyAdmin.bundesliga.table.points', icon: line-chart, columns: 6 }
+              - { property: 'boardPoints', label: 'easyAdmin.bundesliga.table.board.points'}
+              - { property: 'points', label: 'easyAdmin.bundesliga.table.points'}
+              - { property: 'tendency', label: 'easyAdmin.bundesliga.table.tendency'}
+              - { property: 'imgSrc', label: 'easyAdmin.bundesliga.table.img.src'}

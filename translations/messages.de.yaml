@@ -120,6 +120,27 @@
     "seasons": "Saisons"
     "relegation": "Relegation"
     "relegation.match": Relegationsspiele
+    "table": Tabelle
+    "table.matchDay": Spieltag
+    "table.matchDay.abbr": ST
+    "table.position": Platz
+    "table.position.abbr": P
+    "table.games": Spiele
+    "table.games.abbr": Spl
+    "table.wins": Siege
+    "table.wins.abbr": S
+    "table.draws": Unentschieden
+    "table.draws.abbr": U
+    "table.team": Mannschaft
+    "table.losses": Niederlagen
+    "table.losses.abbr": N
+    "table.board.points": Brettpunkte
+    "table.board.points.abbr": BP
+    "table.tendency": Tendenz
+    "table.img.src": ImgSrc
+    "table.stats": Statistik
+    "table.points": Punkte
+    "table.points.abbr": Pkt
     "team.captain": "Kapitän"
     "team.help": "Unser Team und alle Mannschaften gegen die wir je gespielt haben!"
     "team.label": "Teams"
