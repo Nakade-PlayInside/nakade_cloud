@@ -261,26 +261,4 @@ class AdminUtilityController extends AbstractController
                 'resultForm' => $form->createView(),
         ]);
     }
-
-    /**
-     * @Route("/admin/bundesliga/penalty/season-select", name="admin_bundesliga_penalty_season_select")
-     */
-    public function getPenaltySeasonSelect(Request $request)
-    {
-        $seasonId = $request->query->get('seasonId');
-        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
-
-        $penalty = new BundesligaPenalty();
-        $penalty->setSeason($season);
-        $form = $this->createForm(BundesligaPenaltyType::class, $penalty);
-
-        // no field? Return an empty response
-        if (!$form->has('team')) {
-            return new Response(null, 204);
-        }
-
-        return $this->render('admin/bundesliga/penalty/_team_penalty.html.twig', [
-                'form' => $form->createView(),
-        ]);
-    }
 }

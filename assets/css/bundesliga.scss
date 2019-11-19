@@ -64,4 +64,65 @@
     table {
         border: red 1px solid !important;
     }
+
+}
+
+.matchDay {
+    text-align: left;
+    color: #8b8b8b;
+
+    fieldset {
+        border-radius: 0.6rem;
+        padding: 20px;
+        background: #e3e7ed;
+        border: #8b8b8b 1px solid;
+        margin-bottom: 1rem;
+
+        legend {
+            width: unset;
+            padding: 0 5px;
+            text-align: left;
+            font-size: medium;
+        }
+
+        i {
+            color: #1b1e21;
+        }
+
+        div:last-child {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+    }
+
+    .algolia-autocomplete {
+        width: unset !important;
+        display: unset !important;
+    }
+    .algolia-autocomplete .aa-input {
+        width: unset !important;
+    }
+    .form-check {
+        margin-left: 20px;
+        display: inline-flex;
+        color: #1b1e21;
+    }
+
+
+    .form-control {
+        display: inline-flex;
+        min-width: 300px;
+        width: max-content;
+    }
+}
+
+.matchDay-info {
+    color: #4c5367;
+    span {
+        padding-left: 10px;
+    }
+}
+
+.bundesliga-result {
+    padding-left: 20px;
 }

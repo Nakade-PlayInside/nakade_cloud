@@ -20,28 +20,84 @@
 
 namespace App\Controller;
 
+use App\Entity\Bundesliga\BundesligaMatch;
+use App\Entity\Bundesliga\BundesligaResults;
+use App\Entity\Bundesliga\BundesligaSeason;
+use App\Form\BundesligaMatchType;
+use App\Form\CaptainResultInputType;
+use App\Form\MatchDayResultType;
+use App\Form\Model\ResultModel;
 use App\Services\ActualTableGrabber;
 use App\Services\ActualTableService;
 use App\Services\Model\TableModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BundesligaController extends AbstractController
 {
     /**
-     * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), , defaults={"matchDays": 1})
+     * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), defaults={"matchDays": 1})
      */
     public function actualSeason(ActualTableService $tableService, string $matchDay)
     {
         /** @var TableModel $model */
         $model = $tableService->retrieveTable($matchDay);
 
-        //TODO: CMD for data grabbing
-        //BundesligaTransfer $transfer
-        // $transfer->transfer('2019_2020', '2', true);
-
         return $this->render('bundesliga/index.html.twig', [
             'model' => $model,
         ]);
     }
+
+    /**
+     * @Route("/bundesliga/actualMatchDay", name="bundesliga_actual_matchDay")
+     */
+    public function actualMatch(ActualTableService $tableService, Request $request)
+    {
+        $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
+        if (!$actualSeason) {
+            return $actualSeason;
+        }
+
+        $matchDay = $this->getDoctrine()->getRepository(BundesligaResults::class)->findActualMatchDay($actualSeason);
+        $matchDay=1;
+        $result = $this->getDoctrine()
+                ->getRepository(BundesligaResults::class)
+                ->findNakadeResult($actualSeason->getId(), $matchDay);
+
+        $model= new ResultModel();
+        $model->season = $actualSeason;
+        $model->results = $result;
+
+
+        $form = $this->createForm(CaptainResultInputType::class, $model);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $match = $form->getData();
+
+            if (!assert($match instanceof BundesligaMatch)) {
+                throw new UnexpectedTypeException($match, BundesligaMatch::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($match);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'easyAdmin.bundesliga.match.success');
+            $params['action'] = 'list';
+
+            return $this->redirectToRoute('easyadmin', $params);
+        }
+        $params['form'] = $form->createView();
+
+        return $this->render('bundesliga/form.matchday.html.twig',
+            [
+                'form' => $form->createView(),
+                'model' =>  $model,
+
+            ]
+        );
+    }
+
 }

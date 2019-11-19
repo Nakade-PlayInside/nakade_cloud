@@ -22,12 +22,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\DataTransformer\OpponentTransformer;
-use App\Repository\Bundesliga\BundesligaOpponentRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,52 +34,37 @@ use Symfony\Component\Routing\RouterInterface;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaOpponentSelectType extends AbstractType
+class CaptainSelectResultType extends AbstractType
 {
     private $router;
-    private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
-        $this->entityManager = $entityManager;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function getParent()
     {
-        $builder->addModelTransformer(new OpponentTransformer($this->entityManager, $options['finder_callback']));
+        return ChoiceType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'invalid_message' => 'Opponent not found!',
-            'finder_callback' => function (BundesligaOpponentRepository $repository, string $fullName) {
-                $names = explode(' ', $fullName);
-                $firstName = array_shift($names);
-                $lastName = implode(' ', $names);
-
-                return $repository->findOneBy(['firstName' => $firstName, 'lastName' => $lastName]);
-            },
+                'choices' => ['bundesliga.nakade.win' => '2:0', 'bundesliga.draw' => '1:1', 'bundesliga.nakade.loss' => '0:2'],
         ]);
-    }
-
-    public function getParent()
-    {
-        return TextType::class;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        //set autocomplete attributes by default
+        //set result calculate attributes by default
         $attr = $view->vars['attr'];
         $class = isset($attr['class']) ? $attr['class'].' ' : '';
-        $class .= 'js-opponent-autocomplete';
+        $class .= 'js-result-select';
 
         $attr['class'] = $class;
         $attr['placeholder'] = 'bundesliga.nakade.opponent.find';
 
-        $attr['data-autocomplete-url'] = $this->router->generate('admin_utility_opponent');
         $view->vars['attr'] = $attr;
     }
 }

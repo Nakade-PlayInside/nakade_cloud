@@ -24,13 +24,13 @@ namespace App\Entity\Bundesliga;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaPlayerRepository")
- * @ORM\Table(name="bundesliga_player",uniqueConstraints={@ORM\UniqueConstraint(name="player_idx", columns={"first_name", "last_name"})})
+ * @ORM\Table(name="bundesliga_player", uniqueConstraints={@ORM\UniqueConstraint(name="player_idx", columns={"first_name", "last_name"})})
  *
  * @UniqueEntity(
  *     fields={"firstName", "lastName"},
@@ -81,7 +81,7 @@ class BundesligaPlayer
     /**
      * @ORM\Column(type="boolean")
      */
-    private $dgobMember=false;
+    private $dgobMember = false;
 
     public function __construct()
     {
@@ -215,5 +215,4 @@ class BundesligaPlayer
 
         return $this;
     }
-
 }

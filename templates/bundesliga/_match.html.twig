@@ -1,0 +1,28 @@
+{% if model.nakadeHome and pair or not model.nakadeHome and not pair %}
+    {% set home = match.player %}
+    {% set away = match.opponent %}
+{% else  %}
+    {% set away = match.player %}
+    {% set home = match.opponent %}
+{% endif %}
+{% if pair %}
+    {% set homeColor = 'fa-circle' %}
+    {% set awayColor = 'fa-circle-o' %}
+{% else %}
+    {% set homeColor = 'fa-circle-o' %}
+    {% set awayColor = 'fa-circle' %}
+{% endif %}
+<fieldset>
+   <legend>{{ legend }}</legend>
+   <div>
+       <i class="fa fa-fw {{ homeColor }}"></i>{{ form_widget(home) }} - {{ form_widget(away) }}<i class="fa fa-fw {{ awayColor }}"></i>
+   </div>
+   <div>
+       {{ form_widget(match.result,
+            {
+              placeholder: 'bundesliga.result.choose'
+            }
+          )
+       }}{{ form_widget(match.winByDefault, { 'label': 'bundesliga.result.winByDefault' }) }}
+   </div>
+</fieldset>

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('autocomplete') }}
+    {{ encore_entry_link_tags('bundesliga') }}
+{% endblock %}
+{% block title %}Ergebnisse eintragen{% endblock %}
+
+{% block body %}
+
+    <h5 class="matchDay-info">{{ model.season.title }} - Liga {{ model.season.league }}: <span>{{ model.results.matchDay }}. Spieltag</span></h5>
+     {{ form_start(form) }}
+        <h3>{{ model.results.pairing }}<span class="bundesliga-result js-calculate-result">{{ model.results.boardPointsHome }}:{{ model.results.boardPointsAway }}</span></h3>
+        <div>
+            {{ form_errors(form) }}
+        </div>
+
+        <div class="matchDay">
+            {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.firstBoardMatch, 'legend': 'Erstes Brett', 'pair': true} %}
+            {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.secondBoardMatch, 'legend': 'Zweites Brett', 'pair': false} %}
+            {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.thirdBoardMatch, 'legend': 'Drittes Brett', 'pair': true} %}
+            {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.fourthBoardMatch, 'legend': 'Viertes Brett', 'pair': false} %}
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('bundesliga') }}
+    {{ encore_entry_script_tags('autocomplete') }}
+{% endblock %}

@@ -22,68 +22,43 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\DataTransformer\OpponentTransformer;
-use App\Repository\Bundesliga\BundesligaOpponentRepository;
+use App\Form\Model\ResultModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaOpponentSelectType extends AbstractType
+class CaptainResultInputType extends AbstractType
 {
-    private $router;
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->router = $router;
         $this->entityManager = $entityManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addModelTransformer(new OpponentTransformer($this->entityManager, $options['finder_callback']));
+        /** @var ResultModel|null $results */
+        $results = $options['data'] ?? null;
+        $choices = $results->season->getLineup()->getPlayers();
+
+        $builder->add('firstBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
+                ->add('secondBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
+                ->add('thirdBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
+                ->add('fourthBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'invalid_message' => 'Opponent not found!',
-            'finder_callback' => function (BundesligaOpponentRepository $repository, string $fullName) {
-                $names = explode(' ', $fullName);
-                $firstName = array_shift($names);
-                $lastName = implode(' ', $names);
-
-                return $repository->findOneBy(['firstName' => $firstName, 'lastName' => $lastName]);
-            },
+            'data_class' => ResultModel::class,
         ]);
-    }
-
-    public function getParent()
-    {
-        return TextType::class;
-    }
-
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        //set autocomplete attributes by default
-        $attr = $view->vars['attr'];
-        $class = isset($attr['class']) ? $attr['class'].' ' : '';
-        $class .= 'js-opponent-autocomplete';
-
-        $attr['class'] = $class;
-        $attr['placeholder'] = 'bundesliga.nakade.opponent.find';
-
-        $attr['data-autocomplete-url'] = $this->router->generate('admin_utility_opponent');
-        $view->vars['attr'] = $attr;
     }
 }

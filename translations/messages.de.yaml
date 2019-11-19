@@ -329,6 +329,13 @@
 "Brett 4": "Brett 4"
 "Brett 5": "Brett 5"
 "Sieg": "Sieg"
+"bundesliga.nakade.win": Sieg für Nakade
+"bundesliga.nakade.loss": Niederlage für Nakade
+"bundesliga.draw": Unentschieden
+"bundesliga.nakade.player.choose": Wähle einen Nakade Spieler
+"bundesliga.nakade.opponent.find":  Finde oder Erstelle einen Gegner
 "Unentschieden": "Unentschieden"
 "Niederlage": "Niederlage"
 "BundesligaPenalty": "BundesligaPenalty"
+"bundesliga.result.choose": Wähle ein Ergebnis
+"bundesliga.result.winByDefault": kampflos

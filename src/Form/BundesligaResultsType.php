@@ -61,11 +61,11 @@ class BundesligaResultsType extends AbstractType
             'season',
             EntityType::class,
             [
-                        'class' => BundesligaSeason::class,
-                        'query_builder' => function (BundesligaSeasonRepository $repository) {
-                            return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
-                        },
-                ]
+                'class' => BundesligaSeason::class,
+                'query_builder' => function (BundesligaSeasonRepository $repository) {
+                    return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
+                },
+            ]
         )
                 ->add('matchDay')
                 ->add('playedAt', DateType::class, ['widget' => 'single_text', 'required' => false])
@@ -73,16 +73,16 @@ class BundesligaResultsType extends AbstractType
 
         //preset listener for adding dynamic fields
         $builder->addEventListener(
-                FormEvents::PRE_SET_DATA,
-                function (FormEvent $event) {
-                    /** @var BundesligaResults|null $data */
-                    $data = $event->getData();
-                    if (!$data) {
-                        return;
-                    }
-
-                    $this->setupTeamsAndResultFields($event->getForm(), $data->getSeason());
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) {
+                /** @var BundesligaResults|null $data */
+                $data = $event->getData();
+                if (!$data) {
+                    return;
                 }
+
+                $this->setupTeamsAndResultFields($event->getForm(), $data->getSeason());
+            }
         );
 
         //if season was changed

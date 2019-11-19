@@ -48,7 +48,7 @@ Encore
     .addEntry('reply', './assets/js/reply.js')
     .addEntry('feature', './assets/js/feature.js')
     .addEntry('bundesliga', './assets/js/bundesliga.js')
-    .addEntry('autocomplete', './assets/js/algolia-autocomplete.js')
+    .addEntry('autocomplete', './assets/js/nakade-autocomplete.js')
     .addEntry('dgob', './assets/js/dgob.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
@@ -90,7 +90,7 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    .autoProvidejQuery()
 
     // uncomment if you use API Platform Admin (composer req api-admin)
     //.enableReactPreset()
