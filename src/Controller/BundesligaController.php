@@ -23,11 +23,8 @@ namespace App\Controller;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Form\BundesligaMatchType;
 use App\Form\CaptainResultInputType;
-use App\Form\MatchDayResultType;
 use App\Form\Model\ResultModel;
-use App\Services\ActualTableGrabber;
 use App\Services\ActualTableService;
 use App\Services\Model\TableModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -61,15 +58,14 @@ class BundesligaController extends AbstractController
         }
 
         $matchDay = $this->getDoctrine()->getRepository(BundesligaResults::class)->findActualMatchDay($actualSeason);
-        $matchDay=1;
+        $matchDay = 1;
         $result = $this->getDoctrine()
                 ->getRepository(BundesligaResults::class)
                 ->findNakadeResult($actualSeason->getId(), $matchDay);
 
-        $model= new ResultModel();
+        $model = new ResultModel();
         $model->season = $actualSeason;
         $model->results = $result;
-
 
         $form = $this->createForm(CaptainResultInputType::class, $model);
         $form->handleRequest($request);
@@ -94,10 +90,8 @@ class BundesligaController extends AbstractController
         return $this->render('bundesliga/form.matchday.html.twig',
             [
                 'form' => $form->createView(),
-                'model' =>  $model,
-
+                'model' => $model,
             ]
         );
     }
-
 }

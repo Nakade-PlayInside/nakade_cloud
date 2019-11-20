@@ -22,11 +22,9 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Bundesliga\BundesligaMatch;
-use App\Entity\Bundesliga\BundesligaOpponent;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Entity\Bundesliga\BundesligaTeam;
+use App\Tools\HarmonicPairing;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -37,100 +35,68 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class BundesligaResultsFixtures extends BaseFixture implements DependentFixtureInterface
 {
+    private $pairing;
+
+    public function __construct(HarmonicPairing $pairing)
+    {
+        $this->pairing = $pairing;
+    }
+
     protected function loadData(ObjectManager $manager)
     {
-        for ($count = 0; $count < BundesligaSeasonFixtures::COUNT; ++$count) {
-            $season = $this->getSeason($count);
-            $allTeams = $season->getTeams();
-            $matchDay = 1;
+        $allSeasons = $this->getReferencesKeysByGroup(BundesligaSeason::class, 'bl_season');
+        $count = 0;
 
-            foreach ($allTeams as $team) {
-                if ('Nakade' === $team->getName()) {
-                    continue;
-                }
-
-                $result = new BundesligaResults();
-
-                $result->setMatchDay($matchDay);
-                $result->setPlayedAt($this->faker->dateTimeThisDecade);
-                $result->setSeason($season);
-
-                $home = $this->getReference('bl_team_nakade');
-                $away = $team;
-                if (0 === $matchDay % 2) {
-                    $away = $home;
-                    $home = $team;
-                }
-                $result->setHome($home);
-                $result->setAway($away);
-                $points = $this->createMatches($season, $team, $result);
-
-                if ('Nakade' === $result->getHome()->getName()) {
-                    $result->setBoardPointsHome($points);
-                    $result->setBoardPointsAway(8 - $points);
-                } else {
-                    $result->setBoardPointsAway($points);
-                    $result->setBoardPointsHome(8 - $points);
-                }
-
-                $manager->persist($result);
-                $this->addReference(sprintf('bl_results_%d_%d', $count, $matchDay), $result);
-
-                ++$matchDay;
+        /* @var BundesligaSeason $season */
+        foreach ($allSeasons as $seasonKey) {
+            $season = $this->getReference($seasonKey);
+            $allPairings = $this->pairing->getPairings($season->getTeams()->toArray());
+            foreach ($allPairings as $matchDay => $matches) {
+                $this->createMatches($manager, $matchDay, $season, $matches, $count);
             }
+            ++$count;
         }
 
         $manager->flush();
     }
 
-    private function createMatches(BundesligaSeason $season, BundesligaTeam $team, BundesligaResults $results): int
+    private function createMatches(ObjectManager $manager, int $matchDay, BundesligaSeason $season, array $matches, int $seasonCount)
     {
-        $players = $season->getLineup()->getPlayers();
-        shuffle($players);
-        $points = 0;
+        $count = 0;
+        foreach ($matches as $match) {
+            $results = new BundesligaResults();
+            $results->setSeason($season);
+            $results->setMatchDay((int) $matchDay);
+            $results->setHome($match[0]);
+            $results->setAway($match[1]);
 
-        for ($i = 1; $i <= 4; ++$i) {
-            $match = new BundesligaMatch();
-            $match->setBoard($i);
-            $match->setColor($this->faker->boolean() ? 'w' : 'b');
-            $pointsHome = $this->faker->numberBetween(0, 2);
-
-            $match->setResult($this->createResult($pointsHome));
-            if ($pointsHome === 2 && $this->faker->boolean()) {
-                $match->setWinByDefault(true);
+            if ($season->getStartAt()) {
+                $playDate = clone $season->getStartAt();
+                $dateTime = \DateTime::createFromFormat('Y-m-d', $playDate->format('Y-m-d'));
+                $days = sprintf('+%d days', ($matchDay * 30) + 3);
+                $results->setPlayedAt($dateTime->modify($days));
             }
-            $match->setPlayer(array_shift($players));
-            $match->setSeason($season);
 
-            /** @var BundesligaOpponent $opponent */
-            $opponent = $this->getRandomReference(BundesligaOpponent::class, 'bl_opponent');
-            $match->setOpponent($opponent);
-            $match->setResults($results);
-            //for correct result
-            $points += $pointsHome;
-            $this->getManager()->persist($match);
+            $homePoints = $this->faker->numberBetween(0, 8);
+            $awayPoints = 8 - $homePoints;
+            $results->setBoardPointsHome($homePoints);
+            $results->setBoardPointsAway($awayPoints);
+
+            if ($season->isActualSeason() && $matchDay > 3) {
+                $results->setBoardPointsHome(0);
+                $results->setBoardPointsAway(0);
+            }
+
+            $manager->persist($results);
+            $this->addReference(sprintf('bl_results_%d_%d_%d', $seasonCount, $matchDay, $count), $results);
+            ++$count;
         }
-
-        return $points;
-    }
-
-    private function getSeason($count): BundesligaSeason
-    {
-        $name = BundesligaSeasonFixtures::GROUP_NAME.'_'.$count;
-        if (!$this->hasReference($name)) {
-            throw new \LogicException(sprintf('Expected reference "%s" not found.', $name));
-        }
-
-        return $this->getReference($name);
     }
 
     public function getDependencies()
     {
         return [
             BundesligaSeasonFixtures::class,
-            BundesligaLineupFixtures::class,
-            BundesligaOpponentFixtures::class,
-            BundesligaTeamFixtures::class,
         ];
     }
 }

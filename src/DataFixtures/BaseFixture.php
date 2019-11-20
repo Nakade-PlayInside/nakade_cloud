@@ -30,7 +30,6 @@ use Faker\Generator;
 /**
  * Class BaseFixture!
  *
- *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
@@ -101,6 +100,22 @@ abstract class BaseFixture extends Fixture
         return $this->getReference($randReferenceKey);
     }
 
+    protected function getReferencesKeysByGroup(string $className, string $groupName)
+    {
+        $references = [];
+        foreach ($this->referenceRepository->getReferences() as $key => $ref) {
+            if (0 === strpos($key, $groupName.'_')) {
+                $references[] = $key;
+            }
+        }
+
+        if (empty($references)) {
+            throw new \Exception(sprintf('Cannot find any references for class "%s"', $className));
+        }
+
+        return $references;
+    }
+
     protected function createResult(int $pointsHome): string
     {
         switch ($pointsHome) {
@@ -117,9 +132,6 @@ abstract class BaseFixture extends Fixture
         return $result;
     }
 
-    /**
-     * @return ObjectManager|null
-     */
     public function getManager(): ?ObjectManager
     {
         return $this->manager;

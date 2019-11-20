@@ -34,40 +34,73 @@ class BundesligaPlayerFixtures extends BaseFixture
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(20, 'bl_player', function ($i) {
+        $count = 0;
+        foreach ($this->getData() as $names) {
             $player = new BundesligaPlayer();
-            $player->setFirstName($this->faker->firstName);
-            $player->setLastName($this->faker->lastName);
+            $player->setFirstName($names[0]);
+            $player->setLastName($names[1]);
             $player->setDgobMember($this->faker->boolean);
             if ($this->faker->boolean()) {
                 $player->setBirthDay($this->faker->dateTimeBetween('-70 years', '-15 years'));
             }
+            $player->setPhone($this->getPhoneNumber());
+            $player->setEmails($this->getEmails());
 
-            if ($this->faker->boolean()) {
-                $phone = [];
-                while (true) {
-                    $phone[] = $this->faker->phoneNumber;
-                    if ($this->faker->boolean()) {
-                        break;
-                    }
-                }
-                $player->setPhone($phone);
-            }
+            $manager->persist($player);
 
-            if ($this->faker->boolean()) {
-                $emails = [];
-                while (true) {
-                    $emails[] = $this->faker->email;
-                    if ($this->faker->boolean()) {
-                        break;
-                    }
-                }
-                $player->setEmails($emails);
-            }
-
-            return $player;
-        });
+            // store for usage later as groupName_#COUNT#
+            $this->addReference(sprintf('bl_player_%d', $count), $player);
+            ++$count;
+        }
 
         $manager->flush();
+    }
+
+    private function getPhoneNumber(): array
+    {
+        $phone = [];
+        if ($this->faker->boolean(90)) {
+            while (true) {
+                $phone[] = $this->faker->phoneNumber;
+                if ($this->faker->boolean()) {
+                    break;
+                }
+            }
+        }
+
+        return $phone;
+    }
+
+    private function getEmails(): array
+    {
+        $emails = [];
+        if ($this->faker->boolean(90)) {
+            while (true) {
+                $emails[] = $this->faker->email;
+                if ($this->faker->boolean()) {
+                    break;
+                }
+            }
+        }
+
+        return $emails;
+    }
+
+    private function getData(): array
+    {
+        $data[] = ['Seolki', 'Hong'];
+        $data[] = ['Matthias', 'Knöpke'];
+        $data[] = ['Bernhard', 'Runge'];
+        $data[] = ['Fabian', 'Ulbricht'];
+        $data[] = ['Holger', 'Maerz'];
+        $data[] = ['Maurice', 'Wohabi'];
+        $data[] = ['Robert', 'Deutschmann'];
+        $data[] = ['Sascha', 'Kompass'];
+        $data[] = ['Martina', 'Maerz'];
+        $data[] = ['Pandau', 'Ting'];
+        $data[] = ['Marco', 'Dellermann'];
+        $data[] = ['Thomas', 'Göttsche'];
+
+        return $data;
     }
 }

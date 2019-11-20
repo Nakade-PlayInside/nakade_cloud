@@ -24,6 +24,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Bundesliga\BundesligaLineup;
 use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Entity\Bundesliga\BundesligaSeason;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -36,38 +37,59 @@ class BundesligaLineupFixtures extends BaseFixture implements DependentFixtureIn
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(BundesligaSeasonFixtures::COUNT, 'bl_lineup', function ($i) {
+        $allSeasons = $this->getReferencesKeysByGroup(BundesligaSeason::class, 'bl_season');
+        $count = 0;
+
+        /** @var BundesligaSeason $season */
+        foreach ($allSeasons as $seasonKey) {
             $lineup = new BundesligaLineup();
-            $players = [];
-            while (count($players) < 10) {
-                $players[] = $this->getRandomReference(BundesligaPlayer::class, 'bl_player');
-            }
+            $season = $this->getReference($seasonKey);
+            $lineup->setSeason($season);
+            $this->setPlayersLineUp($lineup);
 
-            $count = 1;
-            foreach (array_unique($players) as $player) {
-                $method = 'setPosition'.$count;
-                if (method_exists($lineup, $method)) {
-                    $lineup->$method($player);
-                }
-                ++$count;
-            }
-
-            $name = BundesligaSeasonFixtures::GROUP_NAME.'_'.$i;
-            if ($this->hasReference($name)) {
-                $season = $this->getReference($name);
-                $lineup->setSeason($season);
-            }
-
-            return $lineup;
-        });
+            $manager->persist($lineup);
+            // store for usage later as groupName_#COUNT#
+            $this->addReference(sprintf('bl_lineup_%d', $count), $lineup);
+            ++$count;
+        }
 
         $manager->flush();
+    }
+
+    private function setPlayersLineUp(BundesligaLineup $lineup)
+    {
+        $refName = $this->getPlayers();
+
+        $pos = 1;
+        while (count($refName) > 0) {
+            $name = array_shift($refName);
+            $player = $this->getReference($name);
+            $method = 'setPosition'.$pos;
+            if (method_exists($lineup, $method)) {
+                $lineup->$method($player);
+            }
+            ++$pos;
+        }
+    }
+
+    /**
+     * @return BundesligaPlayer[]
+     *
+     * @throws \Exception
+     */
+    private function getPlayers(): array
+    {
+        $allPlayers = $this->getReferencesKeysByGroup(BundesligaPlayer::class, 'bl_player');
+        shuffle($allPlayers);
+
+        return array_slice($allPlayers, 0, $this->faker->numberBetween(6, 10));
     }
 
     public function getDependencies()
     {
         return [
-                BundesligaSeasonFixtures::class,
+            BundesligaSeasonFixtures::class,
+            BundesligaPlayerFixtures::class,
         ];
     }
 }

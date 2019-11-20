@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -36,9 +37,23 @@ class BundesligaTableFixtures extends BaseFixture implements DependentFixtureInt
 {
     protected function loadData(ObjectManager $manager)
     {
-        /** @var BundesligaSeason $season */
-        $season = $this->getReference('bl_season_7');
-        $season->setActualSeason(true);
+
+        return;
+        $allResults = $this->getReferencesKeysByGroup(BundesligaResults::class, 'bl_results_');
+        $count = 0;
+
+        /* @var BundesligaResults $result */
+        foreach ($allResults as $resultKey) {
+            $result = $this->getReference($resultKey);
+
+            $allPairings = $this->pairing->getPairings($season->getTeams()->toArray());
+            foreach ($allPairings as $matchDay => $matches) {
+                $this->createMatches($manager, $matchDay, $season, $matches, $count);
+            }
+            ++$count;
+        }
+
+        $manager->flush();
 
         $matchDay = 1;
         $position = 1;

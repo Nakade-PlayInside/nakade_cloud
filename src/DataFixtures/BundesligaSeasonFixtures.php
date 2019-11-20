@@ -41,7 +41,7 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
     protected function loadData(ObjectManager $manager)
     {
         $this->createMany(self::COUNT, self::GROUP_NAME, function ($i) {
-            $startYear = 10 + $i;
+            $startYear = 11 + $i;
             $title = sprintf('Saison 20%d/%d', $startYear, $startYear + 1);
             $startDate = sprintf('20%d-08-%d', $startYear, $this->faker->numberBetween(1, 28));
             $endDate = sprintf('20%d-05-%d', $startYear + 1, $this->faker->numberBetween(1, 28));
@@ -67,6 +67,9 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
                 $team = $this->getRandomReference(BundesligaTeam::class, 'bl_team');
                 $season->addTeam($team);
             }
+            if ($i === self::COUNT - 1) {
+                $season->setActualSeason(true);
+            }
 
             return $season;
         });
@@ -78,7 +81,6 @@ class BundesligaSeasonFixtures extends BaseFixture implements DependentFixtureIn
     {
         return [
             BundesligaTeamFixtures::class,
-            BundesligaPlayerFixtures::class,
             BundesligaExecutiveFixtures::class,
         ];
     }

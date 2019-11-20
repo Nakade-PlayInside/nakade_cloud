@@ -99,4 +99,25 @@ class BundesligaResultsRepository extends ServiceEntityRepository
         }
 
     }
+
+    //used in BUndesligaController
+    public function findPositionTable(BundesligaSeason $season, int $matchDay): ?string
+    {
+        try {
+            return $this->createQueryBuilder('r')
+                    ->innerJoin('r.season', 's')
+                    ->innerJoin(BundesligaTeam::class, 'h', expr\Join::WITH, 'h.id=r.home')
+                    ->innerJoin(BundesligaTeam::class, 'a', expr\Join::WITH, 'a.id=r.away')
+                    ->andWhere('s.id=:id')
+                    ->andWhere('r.matchDay <= :matchDay')
+                    ->setParameter('id', $season)
+                    ->setParameter('matchDay', $matchDay)
+                    ->getQuery()
+                    ->getResult()
+                    ;
+        } catch (\Exception $e) {
+            return null;
+        }
+
+    }
 }
