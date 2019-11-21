@@ -97,17 +97,17 @@ class BundesligaResultsRepository extends ServiceEntityRepository
         } catch (\Exception $e) {
             return null;
         }
-
     }
 
-    //used in BUndesligaController
-    public function findPositionTable(BundesligaSeason $season, int $matchDay): ?string
+    /**
+     * used for table fixtures.
+     *
+     * @return BundesligaResults[]
+     */
+    public function findPositionTable(BundesligaSeason $season, int $matchDay): array
     {
-        try {
-            return $this->createQueryBuilder('r')
-                    ->innerJoin('r.season', 's')
-                    ->innerJoin(BundesligaTeam::class, 'h', expr\Join::WITH, 'h.id=r.home')
-                    ->innerJoin(BundesligaTeam::class, 'a', expr\Join::WITH, 'a.id=r.away')
+        return $this->createQueryBuilder('r')
+                    ->leftJoin('r.season', 's')
                     ->andWhere('s.id=:id')
                     ->andWhere('r.matchDay <= :matchDay')
                     ->setParameter('id', $season)
@@ -115,9 +115,25 @@ class BundesligaResultsRepository extends ServiceEntityRepository
                     ->getQuery()
                     ->getResult()
                     ;
-        } catch (\Exception $e) {
-            return null;
-        }
+    }
 
+    /**
+     * used for match fixtures.
+     *
+     * @return BundesligaResults[]|null
+     */
+    public function findNakadeResultsBySeason(BundesligaSeason $season): array
+    {
+        return $this->createQueryBuilder('r')
+                ->innerJoin('r.season', 's')
+                ->innerJoin(BundesligaTeam::class, 'h', expr\Join::WITH, 'h.id=r.home')
+                ->innerJoin(BundesligaTeam::class, 'a', expr\Join::WITH, 'a.id=r.away')
+                ->where('s.id=:season')
+                ->andWhere('h.name LIKE :team OR a.name LIKE :team')
+                ->setParameter('season', $season)
+                ->setParameter('team', '%Nakade%')
+                ->getQuery()
+                ->getResult()
+                ;
     }
 }

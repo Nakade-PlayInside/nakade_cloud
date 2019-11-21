@@ -22,9 +22,10 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Tools\Model\TableStatsModel;
+use App\Tools\TableStats;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -35,44 +36,50 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class BundesligaTableFixtures extends BaseFixture implements DependentFixtureInterface
 {
+    private $stats;
+
+    public function __construct(TableStats $stats)
+    {
+        $this->stats = $stats;
+    }
+
     protected function loadData(ObjectManager $manager)
     {
+        $allSeasons = $this->getReferencesKeysByGroup(BundesligaSeason::class, 'bl_season');
 
-        return;
-        $allResults = $this->getReferencesKeysByGroup(BundesligaResults::class, 'bl_results_');
-        $count = 0;
-
-        /* @var BundesligaResults $result */
-        foreach ($allResults as $resultKey) {
-            $result = $this->getReference($resultKey);
-
-            $allPairings = $this->pairing->getPairings($season->getTeams()->toArray());
-            foreach ($allPairings as $matchDay => $matches) {
-                $this->createMatches($manager, $matchDay, $season, $matches, $count);
+        /* @var BundesligaSeason $season */
+        foreach ($allSeasons as $seasonKey) {
+            $season = $this->getReference($seasonKey);
+            for ($matchDay = 1; $matchDay < 10; ++$matchDay) {
+                $matchResults = $this->stats->getStats($season, $matchDay);
+                $this->createTable($manager, $season, $matchResults, (string) $matchDay);
             }
-            ++$count;
         }
 
         $manager->flush();
+    }
 
-        $matchDay = 1;
+    private function createTable(ObjectManager $manager, BundesligaSeason $season, array $matchResults, string $matchDay)
+    {
         $position = 1;
-        foreach ($season->getTeams() as $team) {
+        while (!empty($matchResults)) {
+            /** @var TableStatsModel $model */
+            $model = array_shift($matchResults);
             $table = new BundesligaTable();
-            $boardPoints = $matchDay * 4;
-            $table->setPosition($position)
-                ->setLeague($season->getLeague())
-                ->setMatchDay((string) $matchDay)
-                ->setTeam($team->getName())
-                ->setGames((string) $matchDay)
-                ->setWins('0')
-                ->setDraws((string) $matchDay)
-                ->setLosses('0')
-                ->setBoardPoints((string) $boardPoints)
-                ->setImgSrc('http://www.dgob.de/lmo/img/lmo-tab0.gif')
+
+            $table->setPoints((string) $model->points)
+                ->setPosition($position)
+                ->setWins((string) $model->wins)
+                ->setDraws((string) $model->draws)
+                ->setLosses((string) $model->losses)
+                ->setGames((string) $model->games)
+                ->setBoardPoints((string) $model->boardPoints)
+                ->setTeam($model->team->getName())
+                ->setMatchDay($matchDay)
                 ->setSeason($season->getDGoBIndex())
-                ->setPoints((string) $matchDay)
-            ;
+                ->setLeague($season->getLeague())
+                ->setImgSrc('http://www.dgob.de/lmo/img/lmo-tab0.gif')
+                ;
 
             if ($position < 3) {
                 $table->setTendency(BundesligaTable::TENDENCY_AUFSTEIGER);
@@ -85,14 +92,12 @@ class BundesligaTableFixtures extends BaseFixture implements DependentFixtureInt
             $manager->persist($table);
             ++$position;
         }
-
-        $manager->flush();
     }
 
     public function getDependencies()
     {
         return [
-            BundesligaSeasonFixtures::class,
+            BundesligaResultsFixtures::class,
         ];
     }
 }

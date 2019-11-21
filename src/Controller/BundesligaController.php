@@ -23,10 +23,12 @@ namespace App\Controller;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Entity\Bundesliga\BundesligaTeam;
 use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
 use App\Services\ActualTableService;
 use App\Services\Model\TableModel;
+use App\Tools\TableStats;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +60,6 @@ class BundesligaController extends AbstractController
         }
 
         $matchDay = $this->getDoctrine()->getRepository(BundesligaResults::class)->findActualMatchDay($actualSeason);
-        $matchDay = 1;
         $result = $this->getDoctrine()
                 ->getRepository(BundesligaResults::class)
                 ->findNakadeResult($actualSeason->getId(), $matchDay);

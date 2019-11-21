@@ -34,7 +34,7 @@ class BundesligaOpponentFixtures extends BaseFixture
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(50, 'bl_opponent', function ($i) {
+        $this->createMany(100, 'bl_opponent', function ($i) {
             $player = new BundesligaOpponent();
             $player->setFirstName($this->faker->firstName);
             $player->setLastName($this->faker->lastName);

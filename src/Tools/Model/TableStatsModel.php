@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -19,10 +20,22 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Tools;
+namespace App\Tools\Model;
 
+use App\Entity\Bundesliga\BundesligaTeam;
 
-class Positioning
+class TableStatsModel
 {
+    public $team;
+    public $games = 0;
+    public $wins = 0;
+    public $draws = 0;
+    public $losses = 0;
+    public $boardPoints = 0;
+    public $points = 0;
 
+    public function __construct(BundesligaTeam $team)
+    {
+        $this->team = $team;
+    }
 }

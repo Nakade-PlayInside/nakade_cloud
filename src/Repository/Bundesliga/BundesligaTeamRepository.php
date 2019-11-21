@@ -20,6 +20,8 @@
 
 namespace App\Repository\Bundesliga;
 
+use App\Entity\Bundesliga\BundesligaResults;
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;

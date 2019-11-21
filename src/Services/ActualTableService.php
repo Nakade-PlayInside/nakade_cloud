@@ -38,6 +38,7 @@ class ActualTableService extends AbstractTableService
     public function retrieveTable(int $matchDay = null): ?TableModel
     {
         $actualSeason = $this->findActualSeason();
+
         if (!$actualSeason) {
             return null;
         }
