@@ -1,0 +1,13 @@
+{% if model and model.actualTable %}
+    {% include 'bundesliga/_result.html.twig' %}
+    {% include 'bundesliga/_table.html.twig' %}
+    {% if model and model.actualTable and model.nextResult %}
+        <div class="bundesliga pairing">
+            <h1>Nächster Spieltag</h1>
+            <ul class="d-md-inline-flex">
+                <li>{{ model.nextResult.pairing}}</li>
+                <li class="result">{{ model.nextResult.playedAt | locale_datetime }}</li>
+            </ul>
+        </div>
+    {% endif %}
+{% endif %}

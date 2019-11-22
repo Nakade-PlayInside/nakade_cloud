@@ -1,0 +1,58 @@
+<div class="table-responsive-sm d-inline-flex p-2">
+<table class="bundesliga table">
+    <caption>{{ model.title }} - {{ model.matchDay }}. Spieltag</caption>
+    <tr class="head">
+        <td colspan ="3"></td>
+        <td class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Spiele">Sp</td>
+        <td class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Siege">s</td>
+        <td class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Unentschieden">u</td>
+        <td class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Niederlage">n</td>
+        <td class="board" data-toggle="tooltip" data-placement="top" title="Brettpunkte">BP</td>
+        <td class="points" data-toggle="tooltip" data-placement="top" title="Punkte">Pkt</td>
+    </tr>
+{% for  data in model.actualTable %}
+    <tr class="{{ data.cSS }}">
+        <td>{{ data.position }}</td>
+        <td data-toggle="tooltip" data-placement="right" title='Tendenz'><img alt='Tendenz' src="{{ data.imgSrc }}"></td>
+        <td class="team">{{ data.team }}</td>
+        <td class="hide d-sm-table-cell games">{{ data.games }}</td>
+        <td class="hide d-sm-table-cell">{{ data.wins }}</td>
+        <td class="hide d-sm-table-cell">{{ data.draws }}</td>
+        <td class="hide d-sm-table-cell">{{ data.losses }}</td>
+        <td class="board">{{ data.boardPoints }}</td>
+        <td class="points">{{ data.points }}</td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td colspan ="9" class="matchDaySelect">
+        {% for  matchDay in model.matchDayRange %}
+            <span class="
+                {% if matchDay == model.matchDay %}actual {% endif %}
+                {% if matchDay > model.lastMatchDay %}notPlayed{% endif %}">
+                {% if matchDay <= model.lastMatchDay %}
+                    <a data-toggle="tooltip" title="
+                        {% if matchDay == model.matchDay %}aktueller Spieltag
+                        {% else %}zum Spieltag {{ matchDay }}
+                        {% endif %}" href="
+                        {% if matchDay == model.matchDay %}
+                             {% if parentUrl is defined %}
+                                {{ parentUrl }}?seasonId={{ model.season.id }}&matchDay={{ matchDay }}
+                             {% else %}#
+                             {% endif %}
+                        {% elseif parentUrl is defined %}
+                            {{ parentUrl }}?seasonId={{ model.season.id }}&matchDay={{ matchDay }}
+                        {% else %}
+                            {{ path(app.request.attributes.get('_route'), { 'seasonId': model.season.id ,'matchDay': matchDay }) }}
+                        {% endif %}
+                        ">
+                        {{ matchDay }}
+                    </a>
+                {% else %}
+                    {{ matchDay }}
+                {% endif %}
+            </span>
+        {% endfor %}
+        </td>
+    </tr>
+</table>
+</div>

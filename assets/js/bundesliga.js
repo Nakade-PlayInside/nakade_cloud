@@ -4,17 +4,17 @@ import '../css/bundesliga.scss';
 import $ from 'jquery';
 
 //remove autocomplete form input elements
-$(document).ready(function(){
-    $( document ).on( 'focus', ':input', function(){
-        $( this ).attr( 'autocomplete', 'disabled' );
+$(document).ready(function () {
+    $(document).on('focus', ':input', function () {
+        $(this).attr('autocomplete', 'disabled');
     });
 });
 
 //showing and updating team choices on seasonSelect
-$(document).ready(function() {
+$(document).ready(function () {
     var $seasonSelect = $('.js-results-form-season');
     var $teamsResultTarget = $('.js-team-result-target');
-    $seasonSelect.on('change', function(e) {
+    $seasonSelect.on('change', function (e) {
         $.ajax({
             url: $seasonSelect.data('teams-result-url'),
             data: {
@@ -24,6 +24,7 @@ $(document).ready(function() {
                 if (!html) {
                     $teamsResultTarget.find('select').remove();
                     $teamsResultTarget.addClass('d-none');
+
                     return;
                 }
                 // Replace the current field and show
@@ -35,11 +36,12 @@ $(document).ready(function() {
     });
 });
 
+
 //showing and updating result on resultSelect
-$(document).ready(function() {
+$(document).ready(function () {
     var $resultSelect = $('.js-result-select');
     var $resultTarget = $('.js-calculate-result');
-    $resultSelect.on('change', function(e) {
+    $resultSelect.on('change', function (e) {
         var $nakade = 0;
         var $opponent = 0;
         $resultSelect.each(function () {
@@ -73,4 +75,31 @@ $(document).ready(function() {
         //     }
         // });
     });
+});
+
+
+
+//select Season
+$(document).ready(function () {
+    const $seasonSelect = $('.js-season-select');
+    const $seasonTarget = $('.js-season-table');
+
+    $seasonSelect.on('change', function (e) {
+        $.ajax({
+            url: $seasonSelect.data('url'),
+            data: {
+                seasonId: $seasonSelect.val(),
+                parentUrl: window.location.origin + window.location.pathname,
+            },
+            success: function (html) {
+                if (!html) {
+                    return;
+                }
+                // Replace the current field and show
+                $seasonTarget
+                .html(html)
+            }
+        });
+    });
+
 });

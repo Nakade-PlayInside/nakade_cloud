@@ -20,12 +20,41 @@
 
 namespace App\Controller;
 
+use App\Entity\Bundesliga\BundesligaSeason;
+use App\Services\BundesligaTableService;
+use App\Services\Model\TableModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BundesligaUtilityController extends AbstractController
 {
 
+    /**
+     * @Route("/bundesliga/season-select", name="bundesliga_season_select")
+     */
+    public function getSeasonSelect(BundesligaTableService $tableService, Request $request)
+    {
+        $seasonId = $request->query->get('seasonId');
+        $parentUrl = $request->query->get('parentUrl');
+
+        /** @var TableModel $model */
+        $model = $tableService->retrieveTable($seasonId, null);
+        // no field? Return an empty response
+        if (!$model) {
+            return new Response(null, 204);
+        }
+
+        $allSeasons = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findAll();
+        $matches = $model->getResult()->getMatches();
+
+        return $this->render('bundesliga/_seasonTable.html.twig', [
+                'allSeasons' => $allSeasons,
+                'matches' => $matches,
+                'model' => $model,
+                'parentUrl' => $parentUrl,
+        ]);
+    }
 
 }

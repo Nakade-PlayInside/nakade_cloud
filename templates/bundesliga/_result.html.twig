@@ -1,0 +1,9 @@
+{% if model and model.actualTable and model.result %}
+    <div class="bundesliga pairing">
+        <h1>Aktuelles Ergebnis</h1>
+        <ul class="d-md-inline-flex">
+            <li>{{ model.result.pairing}}</li>
+            <li class="result">{{ model.result.result }}</li>
+        </ul>
+    </div>
+{% endif %}

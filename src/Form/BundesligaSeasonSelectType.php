@@ -22,43 +22,36 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Form\Model\ResultModel;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Bundesliga\BundesligaSeason;
+use App\Repository\Bundesliga\BundesligaSeasonRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class CaptainResultInputType extends AbstractType
+class BundesligaSeasonSelectType extends AbstractType
 {
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var ResultModel|null $results */
-        $results = $options['data'] ?? null;
-        $choices = $results->season->getLineup()->getPlayers();
-
-        $builder->add('firstBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
-                ->add('secondBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
-                ->add('thirdBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
-                ->add('fourthBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
+        $builder->add(
+            'season',
+            EntityType::class,
+            [
+                'class' => BundesligaSeason::class,
+                'query_builder' => function (BundesligaSeasonRepository $repository) {
+                    return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
+                },
+            ]
+        )
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function getParent()
     {
-        $resolver->setDefaults([
-            'data_class' => ResultModel::class,
-        ]);
+        return EntityType::class;
     }
 }

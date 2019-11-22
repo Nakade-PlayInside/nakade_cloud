@@ -27,51 +27,68 @@ use App\Entity\Bundesliga\BundesligaSeason;
 use App\Services\Model\TableModel;
 
 /**
- * Find the actual table by database search
+ * Find table by season.
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ActualTableService extends AbstractTableService
+class BundesligaTableService extends AbstractTableService
 {
-    public function retrieveTable(int $matchDay = null): ?TableModel
+    public function retrieveTable(string $seasonId = null, int $matchDay = null): ?TableModel
     {
-        $actualSeason = $this->findActualSeason();
-
-        if (!$actualSeason) {
+        $season = $this->findSeason($seasonId);
+        if (!$season) {
             return null;
         }
 
-        $lastMatchDay = $this->findLastMatchDay($actualSeason);
+        $lastMatchDay = (int) $this->findLastMatchDay($season);
         if (!$lastMatchDay) {
             return null;
         }
 
-        if (!$matchDay || (int) $matchDay > (int) $lastMatchDay) {
+        //no provided matchDay, find last matchDay
+        if (!$matchDay) {
             $matchDay = $lastMatchDay;
         }
 
-        $model = new TableModel($actualSeason, (int) $matchDay, $lastMatchDay);
+        //offset
+        if ($matchDay > $lastMatchDay) {
+            $matchDay = $lastMatchDay;
+        }
 
-        $matchDayRange = $this->calcMatchDayRange($actualSeason);
+        $model = new TableModel($season, $matchDay, (string) $lastMatchDay);
+        $matchDayRange = $this->calcMatchDayRange($season);
         $model->setMatchDayRange($matchDayRange);
 
-        $table = $this->findActualTable($actualSeason, $matchDay);
+        //find table
+        $table = $this->findActualTable($season, $matchDay);
         if (!$table) {
             return null;
         }
 
-        $result = $this->manager->getRepository(BundesligaResults::class)->findNakadeResult($actualSeason->getId(), (int) $matchDay);
+        //get result if set
+        $result = $this->manager->getRepository(BundesligaResults::class)->findNakadeResult($season->getId(), $matchDay);
         if ($result) {
             $model->setResult($result);
         }
-        $nextResult = $this->manager->getRepository(BundesligaResults::class)->findNakadeResult($actualSeason->getId(), (int) $matchDay + 1);
+        //next match pairing
+        $nextResult = $this->manager->getRepository(BundesligaResults::class)->findNakadeResult($season->getId(), $matchDay + 1);
         if ($nextResult) {
             $model->setNextResult($nextResult);
         }
 
         return $model->setActualTable($table);
+    }
+
+    private function findSeason(string $seasonId = null): ?BundesligaSeason
+    {
+        //if no season provided, find actual season
+        if (!$seasonId) {
+            return $this->findActualSeason();
+        }
+
+        return $this->manager->getRepository(BundesligaSeason::class)->find($seasonId);
     }
 
     private function calcMatchDayRange(BundesligaSeason $actualSeason): array

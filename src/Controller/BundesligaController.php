@@ -23,12 +23,12 @@ namespace App\Controller;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Entity\Bundesliga\BundesligaTeam;
 use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
 use App\Services\ActualTableService;
+use App\Services\BundesligaTableService;
 use App\Services\Model\TableModel;
-use App\Tools\TableStats;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BundesligaController extends AbstractController
 {
     /**
-     * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), defaults={"matchDays": 1})
+     * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), defaults={"matchDay": 1})
      */
     public function actualSeason(ActualTableService $tableService, string $matchDay)
     {
@@ -94,5 +94,32 @@ class BundesligaController extends AbstractController
                 'model' => $model,
             ]
         );
+    }
+
+    /**
+     * @Route("/bundesliga/season/archive", name="bundesliga_season_archive")
+     * @IsGranted("ROLE_USER")
+     */
+    public function showSeasonArchive(BundesligaTableService $tableService, Request $request)
+    {
+        $seasonId = $matchDay = null;
+        if ($request->query->has('seasonId')) {
+            $seasonId = $request->query->get('seasonId');
+        }
+        if ($request->query->has('matchDay')) {
+            $matchDay = $request->query->get('matchDay');
+        }
+
+        /** @var TableModel $model */
+        $model = $tableService->retrieveTable($seasonId, $matchDay);
+
+        $allSeasons = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findAll();
+        $matches = $model->getResult()->getMatches();
+
+        return $this->render('bundesliga/season.matchDay.html.twig', [
+                'allSeasons' => $allSeasons,
+                'matches' => $matches,
+                'model' => $model,
+        ]);
     }
 }

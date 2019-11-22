@@ -1,0 +1,18 @@
+{% if model and model.actualTable %}
+    {% include 'bundesliga/_result.html.twig' %}
+
+    {% if matches %}
+    <table style="margin-top: 20px">
+        {% for match in matches %}
+            <tr>
+                <td style="{% if match.result != '0:2' %}font-weight:bolder;{% endif %}">{{ match.player }}</td>
+                <td style="padding:0 15px">-</td>
+                <td>{{ match.opponent }}</td>
+                <td style="padding-left: 15px;">{{ match.result }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+     {% endif %}
+
+    {% include 'bundesliga/_table.html.twig' %}
+{% endif %}
