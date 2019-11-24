@@ -21,7 +21,7 @@
         </div>
         <center>
             <div class="js-season-table">
-            {{ include('bundesliga/_seasonTable.html.twig') }}
+            {%  include 'bundesliga/_seasonTable.html.twig' with {'showMatches': true} %}
             </div>
         </center>
     </div>

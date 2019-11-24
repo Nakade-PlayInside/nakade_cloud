@@ -1,13 +1,17 @@
 {% if model and model.actualTable %}
-    {% include 'bundesliga/_result.html.twig' %}
-    {% include 'bundesliga/_table.html.twig' %}
-    {% if model and model.actualTable and model.nextResult %}
-        <div class="bundesliga pairing">
-            <h1>Nächster Spieltag</h1>
-            <ul class="d-md-inline-flex">
-                <li>{{ model.nextResult.pairing}}</li>
-                <li class="result">{{ model.nextResult.playedAt | locale_datetime }}</li>
-            </ul>
-        </div>
-    {% endif %}
+    <center>
+    <div class="js-season-table">
+        {% include 'bundesliga/_result.html.twig' %}
+        {% include 'bundesliga/_table.html.twig' with { 'uri': 'bundesliga_matchDay_select' } %}
+        {% if model and model.actualTable and model.nextResult %}
+            <div class="bundesliga pairing">
+                <h1>Nächster Spieltag</h1>
+                <ul class="d-md-inline-flex">
+                    <li>{{ model.nextResult.pairing}}</li>
+                    <li class="result">{{ model.nextResult.playedAt | locale_datetime }}</li>
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+    </center>
 {% endif %}

@@ -19,8 +19,8 @@
         Wir veranstalten einen regelmäßigen <a class="internal" title="zum Spieltreff" href="{{ path('app_clubs') }}">Spieltreff</a> in unmittelbarer Nähe zum Ku'Damm in Berlin.<br>
         <a class="internal" title="zur Registrierung" href="{{ path('app_register') }}">Registriere dich</a> und lerne uns kennen. Mögen die Steine mit dir sein!
     </div>
-    <div class="container">
-        {{ include('bundesliga/_actualTable.html.twig') }}
+    <div class="container js-season-table">
+        {% include 'bundesliga/_actualTable.html.twig' with { 'url': 'bundesliga_matchDay_select'} %}
     </div>
 
     {% if 1==2 %}
@@ -66,4 +66,5 @@
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('home') }}
+    {{ encore_entry_script_tags('dgob') }}
 {% endblock %}

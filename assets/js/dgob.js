@@ -27,3 +27,25 @@ $(document).ready(function () {
     });
 
 });
+
+//select MatchDay
+$(document).on('click', '.js-matchDay-select', function () {
+    const $matchDaySelect = $('.js-matchDay-select');
+    const $seasonTarget = $('.js-season-table');
+    var targetMatchDay = ($(this).data('md'))
+
+    $.ajax({
+        url: $matchDaySelect.data('url'),
+        data: {
+            matchDay: targetMatchDay,
+        },
+        success: function (html) {
+            if (!html) {
+                return;
+            }
+            // Replace the current field and show
+            $seasonTarget
+                .html(html)
+        }
+    });
+});

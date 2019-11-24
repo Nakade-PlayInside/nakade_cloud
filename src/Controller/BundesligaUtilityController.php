@@ -30,17 +30,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BundesligaUtilityController extends AbstractController
 {
-
     /**
      * @Route("/bundesliga/season-select", name="bundesliga_season_select")
      */
     public function getSeasonSelect(BundesligaTableService $tableService, Request $request)
     {
         $seasonId = $request->query->get('seasonId');
-        $parentUrl = $request->query->get('parentUrl');
+        $matchDay = $request->query->get('matchDay');
 
         /** @var TableModel $model */
-        $model = $tableService->retrieveTable($seasonId, null);
+        $model = $tableService->retrieveTable($seasonId, $matchDay);
         // no field? Return an empty response
         if (!$model) {
             return new Response(null, 204);
@@ -53,8 +52,27 @@ class BundesligaUtilityController extends AbstractController
                 'allSeasons' => $allSeasons,
                 'matches' => $matches,
                 'model' => $model,
-                'parentUrl' => $parentUrl,
         ]);
     }
 
+    /**
+     * @Route("/bundesliga/matchDay-select", name="bundesliga_matchDay_select")
+     */
+    public function getMatchDaySelect(BundesligaTableService $tableService, Request $request)
+    {
+        $seasonId = $request->query->get('seasonId');
+        $matchDay = $request->query->get('matchDay');
+
+        /** @var TableModel $model */
+        $model = $tableService->retrieveTable($seasonId, $matchDay);
+        // no field? Return an empty response
+        if (!$model) {
+            return new Response(null, 204);
+        }
+
+        return $this->render('bundesliga/_actualTable.html.twig', [
+                'model' => $model,
+                'url'   => 'bundesliga_matchDay_select',
+        ]);
+    }
 }

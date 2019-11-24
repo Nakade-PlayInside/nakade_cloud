@@ -1,6 +1,5 @@
 {% if model and model.actualTable %}
     {% include 'bundesliga/_result.html.twig' %}
-
     {% if matches %}
     <table class="matches">
         {% for match in matches %}
@@ -16,5 +15,5 @@
     </table>
      {% endif %}
 
-    {% include 'bundesliga/_table.html.twig' %}
+    {% include 'bundesliga/_table.html.twig' with { 'url': 'bundesliga_season_select' } %}
 {% endif %}

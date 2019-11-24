@@ -1,3 +1,5 @@
+
+
 <div class="table-responsive-sm d-inline-flex p-2">
 <table class="bundesliga table">
     <caption>{{ model.title }} - {{ model.matchDay }}. Spieltag</caption>
@@ -26,30 +28,23 @@
     <tr>
         <td colspan ="9" class="matchDaySelect">
         {% for  matchDay in model.matchDayRange %}
-            <span class="
-                {% if matchDay == model.matchDay %}actual {% endif %}
-                {% if matchDay > model.lastMatchDay %}notPlayed{% endif %}">
-                {% if matchDay <= model.lastMatchDay %}
-                    <a data-toggle="tooltip" title="
-                        {% if matchDay == model.matchDay %}aktueller Spieltag
-                        {% else %}zum Spieltag {{ matchDay }}
-                        {% endif %}" href="
-                        {% if matchDay == model.matchDay %}
-                             {% if parentUrl is defined %}
-                                {{ parentUrl }}?seasonId={{ model.season.id }}&matchDay={{ matchDay }}
-                             {% else %}#
-                             {% endif %}
-                        {% elseif parentUrl is defined %}
-                            {{ parentUrl }}?seasonId={{ model.season.id }}&matchDay={{ matchDay }}
-                        {% else %}
-                            {{ path(app.request.attributes.get('_route'), { 'seasonId': model.season.id ,'matchDay': matchDay }) }}
-                        {% endif %}
-                        ">
-                        {{ matchDay }}
-                    </a>
+            {% set _title = "zum Spieltag " ~ matchDay %}
+            {% set _class = "" %}
+            {% if matchDay == model.matchDay %}
+                {% set _title = "aktueller Spieltag" %}
+                {% set _class = "actual " %}
+            {% elseif matchDay > model.lastMatchDay %}
+                {% set _class = "notPlayed " %}
+            {% endif %}
+            <span class="{{ _class }}">
+                {% if matchDay == model.matchDay %}
+                    <a title="{{ _title }}" href="#"> {{ matchDay }} </a>
+                {% elseif matchDay <= model.lastMatchDay %}
+                    <a class="js-matchDay-select" data-md="{{ matchDay }}"  data-url="{{ path(url, { 'seasonId': model.season.id }) }}" title="{{ _title }}" href="#"> {{ matchDay }} </a>
                 {% else %}
                     {{ matchDay }}
                 {% endif %}
+
             </span>
         {% endfor %}
         </td>
