@@ -62,7 +62,7 @@ class BundesligaTableService extends AbstractTableService
         //problem league 5! more than 10 teams
         if ($matchDay > self::MAX_MATCH_DAYS) {
             $matchDay = self::MAX_MATCH_DAYS;
-            $lastMatchDay  = self::MAX_MATCH_DAYS;
+            $lastMatchDay = self::MAX_MATCH_DAYS;
         }
 
         $model = new TableModel($season, $matchDay, (string) $lastMatchDay);
@@ -102,6 +102,9 @@ class BundesligaTableService extends AbstractTableService
     private function calcMatchDayRange(BundesligaSeason $actualSeason): array
     {
         $maxMatchDays = $actualSeason->getTeams()->count() - 1;
+        if ($maxMatchDays > self::MAX_MATCH_DAYS) {
+            $maxMatchDays = self::MAX_MATCH_DAYS;
+        }
 
         return range(1, $maxMatchDays);
     }
