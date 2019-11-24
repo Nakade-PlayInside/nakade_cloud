@@ -9,12 +9,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaTableRepository")
  * @ORM\Table(
  *      name="bundesliga_table",
- *      uniqueConstraints={@ORM\UniqueConstraint(columns={"season", "league", "games", "position"}
+ *      uniqueConstraints={@ORM\UniqueConstraint(columns={"season", "league", "games", "position", "match_day"}
  *      )}
  * )
  *
  * @UniqueEntity(
- *     fields={"season", "league", "games", "position"},
+ *     fields={"season", "league", "games", "position", "matchDay"},
  *     message="table.unique"
  * )
  */

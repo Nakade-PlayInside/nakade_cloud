@@ -115,9 +115,12 @@ class BundesligaController extends AbstractController
 
         /** @var TableModel $model */
         $model = $tableService->retrieveTable($seasonId, $matchDay);
-
+        $matches = null;
         $allSeasons = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findAll();
-        $matches = $model->getResult()->getMatches();
+        if ($model) {
+            $matches = $model->getResult()->getMatches();
+        }
+
 
         return $this->render('bundesliga/season.matchDay.html.twig', [
                 'allSeasons' => $allSeasons,

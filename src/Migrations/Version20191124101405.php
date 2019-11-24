@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191117163958 extends AbstractMigration
+final class Version20191124101405 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,8 @@ final class Version20191117163958 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_389B3D96F0E45BA93EB4C318FF232B31462CE4F5 ON bundesliga_table (season, league, games, position)');
+        $this->addSql('ALTER TABLE bundesliga_season DROP no_match_days');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_389B3D96F0E45BA93EB4C318FF232B31462CE4F5E1EE884E ON bundesliga_table (season, league, games, position, match_day)');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +31,7 @@ final class Version20191117163958 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP INDEX UNIQ_389B3D96F0E45BA93EB4C318FF232B31462CE4F5 ON bundesliga_table');
+        $this->addSql('ALTER TABLE bundesliga_season ADD no_match_days SMALLINT UNSIGNED DEFAULT 10 NOT NULL');
+        $this->addSql('DROP INDEX UNIQ_389B3D96F0E45BA93EB4C318FF232B31462CE4F5E1EE884E ON bundesliga_table');
     }
 }

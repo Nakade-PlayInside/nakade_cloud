@@ -35,6 +35,8 @@ use App\Services\Model\TableModel;
  */
 class BundesligaTableService extends AbstractTableService
 {
+    const MAX_MATCH_DAYS = 10;
+
     public function retrieveTable(string $seasonId = null, int $matchDay = null): ?TableModel
     {
         $season = $this->findSeason($seasonId);
@@ -58,8 +60,8 @@ class BundesligaTableService extends AbstractTableService
         }
 
         //problem league 5! more than 10 teams
-        if ($matchDay > $season->getNoMatchDays()) {
-            $matchDay = $season->getNoMatchDays();
+        if ($matchDay > self::MAX_MATCH_DAYS) {
+            $matchDay = self::MAX_MATCH_DAYS;
         }
 
         $model = new TableModel($season, $matchDay, (string) $lastMatchDay);

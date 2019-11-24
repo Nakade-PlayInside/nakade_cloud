@@ -13,7 +13,7 @@
         <div>
             <select id="season-select" class="js-season-select form-control season-select" data-url="{{ path('bundesliga_season_select') }}">
                 {% for season in allSeasons %}
-                    <option{% if season == model.season %} selected="selected"{% endif %} value="{{ season.id }}">
+                    <option{% if model and season == model.season %} selected="selected"{% endif %} value="{{ season.id }}">
                         {{ season.title }}
                     </option>
                 {% endfor %}
