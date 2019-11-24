@@ -98,6 +98,11 @@ class BundesligaSeason
      */
     private $actualSeason = false;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=false, options={"unsigned":true, "default":10})
+     */
+    private $noMatchDays = 10;
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
@@ -261,6 +266,18 @@ class BundesligaSeason
     public function __toString()
     {
         return $this->title;
+    }
+
+    public function getNoMatchDays(): ?int
+    {
+        return $this->noMatchDays;
+    }
+
+    public function setNoMatchDays(?int $noMatchDays): self
+    {
+        $this->noMatchDays = $noMatchDays;
+
+        return $this;
     }
 
 

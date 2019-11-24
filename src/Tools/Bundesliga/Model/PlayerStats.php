@@ -20,38 +20,25 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Form;
+namespace App\Tools\Bundesliga\Model;
 
-use App\Entity\Bundesliga\BundesligaSeason;
-use App\Repository\Bundesliga\BundesligaSeasonRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
+use App\Entity\Bundesliga\BundesligaPlayer;
 
-/**
- * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- * @author Dr. H.Maerz <holger@nakade.de>
- */
-class BundesligaSeasonSelectType extends AbstractType
+class PlayerStats
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->add(
-            'season',
-            EntityType::class,
-            [
-                'class' => BundesligaSeason::class,
-                'query_builder' => function (BundesligaSeasonRepository $repository) {
-                    return $repository->createQueryBuilder('s')->orderBy('s.title', 'DESC');
-                },
-            ]
-        )
-        ;
-    }
+    public $wins = 0;
+    public $draws = 0;
+    public $losses = 0;
+    public $games = 0;
+    public $white = 0;
+    public $black = 0;
+    public $firstBoard = 0;
+    public $secondBoard = 0;
+    public $thirdBoard = 0;
+    public $fourthBoard = 0;
+    public $player;
 
-    public function getParent()
-    {
-        return EntityType::class;
+    public function __construct(BundesligaPlayer $player) {
+        $this->player = $player;
     }
 }

@@ -137,3 +137,23 @@
         white-space: nowrap;
     }
 }
+
+.season-select {
+    margin-bottom: 20px;
+}
+
+.matches {
+    margin-top: 20px;
+
+    .point-maker {
+        font-weight: bolder;
+    }
+
+    .versus {
+        padding:0 15px;
+    }
+
+    .match-result {
+        padding-left: 15px;
+    }
+}

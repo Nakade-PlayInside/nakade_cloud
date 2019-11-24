@@ -56,6 +56,9 @@ class CellCatcher
         ;
 
         $node = $rowCrawler->filter(self::TABLE_CELL)->getNode(0);
+        if (!$node) {
+            return null;
+        }
         $model->setPosition((int) $node->textContent);
 
         /** @var $node \DOMElement */

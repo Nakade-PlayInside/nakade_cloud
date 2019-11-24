@@ -28,6 +28,7 @@ use App\Form\Model\ResultModel;
 use App\Services\ActualTableService;
 use App\Services\BundesligaTableService;
 use App\Services\Model\TableModel;
+use App\Tools\Bundesliga\Model\PlayerStats;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -88,7 +89,8 @@ class BundesligaController extends AbstractController
         }
         $params['form'] = $form->createView();
 
-        return $this->render('bundesliga/form.matchday.html.twig',
+        return $this->render(
+            'bundesliga/form.matchday.html.twig',
             [
                 'form' => $form->createView(),
                 'model' => $model,
@@ -98,6 +100,7 @@ class BundesligaController extends AbstractController
 
     /**
      * @Route("/bundesliga/season/archive", name="bundesliga_season_archive")
+     *
      * @IsGranted("ROLE_USER")
      */
     public function showSeasonArchive(BundesligaTableService $tableService, Request $request)
@@ -119,6 +122,64 @@ class BundesligaController extends AbstractController
         return $this->render('bundesliga/season.matchDay.html.twig', [
                 'allSeasons' => $allSeasons,
                 'matches' => $matches,
+                'model' => $model,
+        ]);
+    }
+
+    /**
+     * @Route("/bundesliga/season/player", name="bundesliga_season_player")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function showSeasonPlayer(BundesligaTableService $tableService, Request $request)
+    {
+        $seasonId = $playerId = null;
+        if ($request->query->has('seasonId')) {
+            $seasonId = $request->query->get('seasonId');
+        }
+        if ($request->query->has('playerId')) {
+            $playerId = $request->query->get('playerId');
+        }
+
+        /** @var BundesligaMatch[] $matches */
+        $matches = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findPlayerMatches($seasonId, $playerId);
+
+        $model = new PlayerStats($matches[0]->getPlayer());
+        foreach ($matches as $match) {
+            'w' === $match->getColor() ? $model->white++ : $model->black++;
+
+            switch ($match->getResult()) {
+                case '2:0':
+                    $model->wins++;
+                    ++$model->games;
+                    break;
+                case '1:1':
+                    $model->draws++;
+                    ++$model->games;
+                    break;
+                case '0:2':
+                    $model->losses++;
+                    ++$model->games;
+                    break;
+            }
+
+            switch ($match->getBoard()) {
+                case 1:
+                    $model->firstBoard++;
+                    break;
+                case 2:
+                    $model->secondBoard++;
+                    break;
+                case 3:
+                    $model->thirdBoard++;
+                    break;
+                case 4:
+                    $model->fourthBoard++;
+                    break;
+            }
+        }
+
+        return $this->render('bundesliga/season.player.html.twig', [
                 'model' => $model,
         ]);
     }

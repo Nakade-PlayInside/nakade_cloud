@@ -52,14 +52,12 @@ class TableCatcher
         $linkParams = $this->createLinkParams($season, $league, $matchDay, $actualSeason);
         $this->snoopy->fetch(self::DGOB_URI.$linkParams);
         $html = $this->snoopy->results;
-
         $crawler = new Crawler($html);
         $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(1);
         //return empty array if there are no data: this matchDay is not yet played
         if (!$domNode) {
             return null;
         }
-
         $cellCatcher = new CellCatcher($season, $league, $matchDay);
 
         $data = [];
@@ -67,10 +65,9 @@ class TableCatcher
         /** @var DOMNode $rowNode */
         $iterator = $trCrawler->getIterator();
         foreach ($iterator as $key => $rowNode) {
-            if ($key < 3) {
+            if ($key < 3 || !$rowNode->hasChildNodes()) {
                 continue;
             }
-
             $model = $cellCatcher->extract($rowNode->childNodes);
 
             if ($model && $this->isNew($model)) {
@@ -101,7 +98,6 @@ class TableCatcher
         if (false === preg_match(self::SEASON_PATTERN, $season, $matches)) {
             throw new \LogicException('Unexpected season format "%s"!', $season);
         }
-
         $seasonParam = $matches[1].$matches[2];
 
         $leagueParam = sprintf('%s_bl%s', $seasonParam, $league);

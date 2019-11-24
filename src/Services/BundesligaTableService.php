@@ -52,9 +52,14 @@ class BundesligaTableService extends AbstractTableService
             $matchDay = $lastMatchDay;
         }
 
-        //offset
+        //offset for last match played
         if ($matchDay > $lastMatchDay) {
             $matchDay = $lastMatchDay;
+        }
+
+        //problem league 5! more than 10 teams
+        if ($matchDay > $season->getNoMatchDays()) {
+            $matchDay = $season->getNoMatchDays();
         }
 
         $model = new TableModel($season, $matchDay, (string) $lastMatchDay);

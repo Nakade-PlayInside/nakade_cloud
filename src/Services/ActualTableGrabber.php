@@ -25,6 +25,7 @@ namespace App\Services;
 use App\Entity\Bundesliga\BundesligaTable;
 use App\Tools\Bundesliga\TableCatcher;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Retrieve the actual result table from the DGoB site. Return an empty array if no new table is found.
@@ -37,11 +38,13 @@ use Doctrine\ORM\EntityManagerInterface;
 class ActualTableGrabber extends AbstractTableService
 {
     private $tableCatcher;
+    private $logger;
 
-    public function __construct(EntityManagerInterface $manager, TableCatcher $tableCatcher)
+    public function __construct(EntityManagerInterface $manager, TableCatcher $tableCatcher, LoggerInterface $logger)
     {
         parent::__construct($manager);
         $this->tableCatcher = $tableCatcher;
+        $this->logger = $logger;
     }
 
     public function retrieveTable(): ?array

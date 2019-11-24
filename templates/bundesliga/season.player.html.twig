@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Spielerstatistik{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('dgob') }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h2>Spielerstatistik</h2>
+        <h5>{{ model.player.name }}</h5>
+        <ul>
+            <li>Spiele: {{ model.games }}</li>
+            <li>Siege: {{ model.wins }}</li>
+            <li>Unentschieden: {{ model.draws }}</li>
+            <li>Niederlagen: {{ model.losses }}</li>
+            <li>Schwarz: {{ model.black }}</li>
+            <li>Weiß: {{ model.white }}</li>
+            <li>Brett 1: {{ model.firstBoard }}</li>
+            <li>Brett 2: {{ model.secondBoard }}</li>
+            <li>Brett 3: {{ model.thirdBoard }}</li>
+            <li>Brett 4: {{ model.fourthBoard }}</li>
+        </ul>
+
+{#        <div>#}
+{#            <select style="margin-bottom: 20px;" id="season-select" class="js-season-select form-control ml-1" data-url="{{ path('bundesliga_season_select') }}">#}
+{#                {% for season in allSeasons %}#}
+{#                    <option{% if season == model.season %} selected="selected"{% endif %} value="{{ season.id }}">#}
+{#                        {{ season.title }}#}
+{#                    </option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+{#        </div>#}
+{#        <center>#}
+{#            <div class="js-season-table">#}
+{#            {{ include('bundesliga/_seasonTable.html.twig') }}#}
+{#            </div>#}
+{#        </center>#}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('bundesliga') }}
+{% endblock %}

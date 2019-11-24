@@ -8,11 +8,10 @@
 {% endblock %}
 
 {% block body %}
-
     <div class="container">
         <h2>Saisonarchiv</h2>
         <div>
-            <select style="margin-bottom: 20px;" id="season-select" class="js-season-select form-control ml-1" data-url="{{ path('bundesliga_season_select') }}">
+            <select id="season-select" class="js-season-select form-control season-select" data-url="{{ path('bundesliga_season_select') }}">
                 {% for season in allSeasons %}
                     <option{% if season == model.season %} selected="selected"{% endif %} value="{{ season.id }}">
                         {{ season.title }}
@@ -26,10 +25,9 @@
             </div>
         </center>
     </div>
-
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('bundesliga') }}
+    {{ encore_entry_script_tags('dgob') }}
 {% endblock %}
