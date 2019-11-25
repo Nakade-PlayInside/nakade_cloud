@@ -25,6 +25,7 @@ use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
+use App\Services\ActualResultsGrabber;
 use App\Services\ActualTableService;
 use App\Services\BundesligaTableService;
 use App\Services\Model\TableModel;
@@ -38,12 +39,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class BundesligaController extends AbstractController
 {
     /**
-     * @Route("/bundesliga/{matchDay}/matchDay", name="bundesliga_table_matchDay", requirements={"matchDay"="\d+"}), defaults={"matchDay": 1})
+     * @Route("/bundesliga/test", name="bundesliga_test")
      */
-    public function actualSeason(ActualTableService $tableService, string $matchDay)
+    public function actualSeason(ActualResultsGrabber $service)
     {
         /** @var TableModel $model */
-        $model = $tableService->retrieveTable($matchDay);
+        $model = $service->retrieveTable();
 
         return $this->render('bundesliga/index.html.twig', [
             'model' => $model,

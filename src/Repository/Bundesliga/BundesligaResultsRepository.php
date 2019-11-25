@@ -23,6 +23,7 @@ namespace App\Repository\Bundesliga;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
+use App\Services\Model\ResultsModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr;
@@ -135,5 +136,47 @@ class BundesligaResultsRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult()
                 ;
+    }
+
+    //used in ResultsCatcher
+    public function findPairingUnplayed(BundesligaSeason $season, ResultsModel $model): ?BundesligaResults
+    {
+        try {
+            return $this->createQueryBuilder('r')
+                    ->innerJoin('r.season', 's')
+                    ->innerJoin(BundesligaTeam::class, 'h', expr\Join::WITH, 'h.id=r.home')
+                    ->innerJoin(BundesligaTeam::class, 'a', expr\Join::WITH, 'a.id=r.away')
+                    ->andWhere('s.id=:id')
+                    ->andWhere('h.name LIKE :homeTeam OR a.name LIKE :awayTeam')
+                    ->andWhere('r.matchDay=:matchDay')
+                    ->andWhere('r.boardPointsHome=0 AND r.boardPointsAway=0')
+                    ->setParameter('id', $season)
+                    ->setParameter('homeTeam', '%'.$model->homeTeam.'%')
+                    ->setParameter('awayTeam', '%'.$model->awayTeam.'%')
+                    ->setParameter('matchDay', $model->getMatchDay())
+                    ->getQuery()
+                    ->getOneOrNullResult()
+                    ;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    //used in ResultsCatcher
+    public function findMatchDayUnplayed(BundesligaSeason $season): ?string
+    {
+        try {
+            return $this->createQueryBuilder('r')
+                    ->select('MAX(r.matchDay) as lastMatchDay')
+                    ->innerJoin('r.season', 's')
+                    ->andWhere('s.id=:id')
+                    ->andWhere('r.boardPointsHome=0 AND r.boardPointsAway=0')
+                    ->setParameter('id', $season)
+                    ->getQuery()
+                    ->getSingleScalarResult()
+                    ;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

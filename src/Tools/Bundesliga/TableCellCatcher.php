@@ -26,7 +26,7 @@ use App\Entity\Bundesliga\BundesligaTable;
 use App\Tools\Bundesliga\Model\RowModel;
 use Symfony\Component\DomCrawler\Crawler;
 
-class CellCatcher
+class TableCellCatcher
 {
     const TABLE_CELL = 'td';
     const IMG_SRC = 'src';
@@ -43,7 +43,10 @@ class CellCatcher
         $this->matchDay = $matchDay;
     }
 
-    public function extract(\DOMNodeList $childNodes)
+    /**
+     * @return BundesligaTable|null
+     */
+    public function extract(\DOMNodeList $childNodes): ?BundesligaTable
     {
         if ($childNodes->count() < 16) {
             return null;

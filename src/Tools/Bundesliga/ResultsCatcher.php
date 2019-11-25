@@ -22,22 +22,31 @@ declare(strict_types=1);
 
 namespace App\Tools\Bundesliga;
 
+use App\Entity\Bundesliga\BundesligaResults;
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Services\Model\ResultsModel;
 use App\Services\Snoopy;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
-class TableCatcher
+/**
+ * Crawls the dom nodes of the DGoB sites for the table of the actual results.
+ *
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
+class ResultsCatcher
 {
     const DGOB_URI = 'http://www.dgob.de/lmo/lmo.php';
     const SEASON_PATTERN = '#^20(\d{2})_20(\d{2})#';
     const DEFAULT_PARAM = '?action=results&tabtype=0';
     const CSS_SELECTOR = 'table.lmoInner';
+    const NODE_ROW = 'tr';
+    const NODE_CELL = 'td';
 
     private $snoopy;
-    /**
-     * @var EntityManagerInterface
-     */
     private $manager;
 
     public function __construct(EntityManagerInterface $manager)
@@ -49,34 +58,45 @@ class TableCatcher
     /**
      * @return BundesligaTable[]|null
      */
-    public function extract(string $season, string $league, string $matchDay, $actualSeason = true): ?array
+    public function extract(BundesligaSeason $actualSeason, string $matchDay): ?array
     {
+        $season = $actualSeason->getDGoBIndex();
+        $league = $actualSeason->getLeague();
+
         //http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=Saison_2013_2014/1314_bl2.l98&st=3
-        $linkParams = $this->createLinkParams($season, $league, $matchDay, $actualSeason);
+        $linkParams = $this->createLinkParams($season, $league, $matchDay);
         $this->snoopy->fetch(self::DGOB_URI.$linkParams);
+
         $html = $this->snoopy->results;
         $crawler = new Crawler($html);
-        //second lmoInner table!
-        $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(1);
+
+        //first lmoInner table!
+        $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(0);
         //return empty array if there are no data: this matchDay is not yet played
         if (!$domNode) {
             return null;
         }
-        $cellCatcher = new TableCellCatcher($season, $league, $matchDay);
-
+        $cellCatcher = new ResultCellCatcher($season, $league, $matchDay);
         $data = [];
+
+        //all rows
         $trCrawler = new Crawler($domNode->childNodes);
         /** @var DOMNode $rowNode */
         $iterator = $trCrawler->getIterator();
-        foreach ($iterator as $key => $rowNode) {
-            if ($key < 3 || !$rowNode->hasChildNodes()) {
+        foreach ($iterator as $rowNode) {
+            if (self::NODE_ROW !== $rowNode->nodeName || !$rowNode->hasChildNodes() || self::NODE_CELL !== $rowNode->firstChild->nodeName) {
                 continue;
             }
             $model = $cellCatcher->extract($rowNode->childNodes);
 
-            if ($model && $this->isNew($model)) {
-                $this->manager->persist($model);
-                $data[] = $model;
+            if ($model) {
+                $results = $this->findResults($actualSeason, $model);
+
+                if ($results) {
+                    $results->setBoardPointsHome((int) $model->homePoints);
+                    $results->setBoardPointsAway((int) $model->awayPoints);
+                    $data[] = $results;
+                }
             }
         }
         $this->manager->flush();
@@ -85,20 +105,12 @@ class TableCatcher
     }
 
     //prevents unique constraint exception
-    private function isNew(BundesligaTable $table): bool
+    private function findResults(BundesligaSeason $actualSeason, ResultsModel $model)
     {
-        return null === $this->manager->getRepository(BundesligaTable::class)->findOneBy(
-            [
-                'season' => $table->getSeason(),
-                'league' => $table->getLeague(),
-                'position' => $table->getPosition(),
-                'games' => $table->getGames(),
-                'matchDay' => $table->getMatchDay(),
-            ]
-        );
+        return $this->manager->getRepository(BundesligaResults::class)->findPairingUnplayed($actualSeason, $model);
     }
 
-    private function createLinkParams(string $season, string $league, string $matchDay, bool $actualSeason)
+    private function createLinkParams(string $season, string $league, string $matchDay)
     {
         if (false === preg_match(self::SEASON_PATTERN, $season, $matches)) {
             throw new \LogicException('Unexpected season format "%s"!', $season);
@@ -106,12 +118,7 @@ class TableCatcher
         $seasonParam = $matches[1].$matches[2];
 
         $leagueParam = sprintf('%s_bl%s', $seasonParam, $league);
-        $fileParam = sprintf('Saison_%s', $season);
-
-        $linkParam = sprintf('&file=%s/%s.l98&st=%s', $fileParam, $leagueParam, $matchDay);
-        if ($actualSeason) {
-            $linkParam = sprintf('&file=%s.l98&st=%s', $leagueParam, $matchDay);
-        }
+        $linkParam = sprintf('&file=%s.l98&st=%s', $leagueParam, $matchDay);
 
         return self::DEFAULT_PARAM.$linkParam;
     }

@@ -20,7 +20,7 @@ class BundesligaTableRepository extends ServiceEntityRepository
     }
 
     /**
-     * used for actual season service.
+     * used for actual results grabber.
      */
     public function findLastMatchDay(string $season, string $league): ?string
     {
