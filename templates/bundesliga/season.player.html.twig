@@ -56,7 +56,8 @@
 
             <table class="player-stats">
                 {% for match in model.matches %}
-                    <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}">
+                    {% set _route = path('bundesliga_season_archive', {'seasonId': match.season.id, 'matchDay': match.results.matchDay})  %}
+                    <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}" onclick="window.location.href='{{ _route }}';">
                         {% if match.color == 'w' %}
                             {% set homeColor = 'fa-circle-o' %}
                             {% set awayColor = 'fa-circle' %}
