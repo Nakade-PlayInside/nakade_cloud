@@ -170,10 +170,10 @@ abstract class AbstractMatch implements MatchInterface
 
     public function getOpponentTeam(): ?BundesligaTeam
     {
-        if (self::HOME_TEAM !== $this->getResults()->getHome()->getName() &&
-                self::HOME_TEAM !== $this->getResults()->getAway()->getName()) {
+        if (false !== stripos($this->getResults()->getHome()->getName(), self::HOME_TEAM) &&
+            false !== stripos($this->getResults()->getAway()->getName(), self::HOME_TEAM)) {
             return null;
-        } elseif (self::HOME_TEAM === $this->getResults()->getHome()->getName()) {
+        } elseif (false !== stripos($this->getResults()->getHome()->getName(), self::HOME_TEAM)) {
             return $this->getResults()->getAway();
         }
 

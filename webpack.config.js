@@ -50,6 +50,7 @@ Encore
     .addEntry('bundesliga', './assets/js/bundesliga.js')
     .addEntry('autocomplete', './assets/js/nakade-autocomplete.js')
     .addEntry('dgob', './assets/js/dgob.js')
+    .addEntry('player-stats', './assets/js/player-stats.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

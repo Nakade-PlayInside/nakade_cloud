@@ -51,4 +51,9 @@ class BundesligaMatch extends AbstractMatch
 
         return $this;
     }
+
+    public function isHomeMatch(): bool
+    {
+        return false !== stripos($this->getResults()->getHome()->getName(), 'Nakade');
+    }
 }

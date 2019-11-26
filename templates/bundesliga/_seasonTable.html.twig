@@ -4,12 +4,30 @@
     <table class="matches">
         {% for match in matches %}
             <tr>
-                <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
-                    <a href="{{ path('bundesliga_season_player', { 'seasonId': model.season.id, 'playerId': match.player.id}) }}">{{ match.player }}</a>
-                </td>
-                <td class="versus">-</td>
-                <td>{{ match.opponent }}</td>
-                <td class="match-result">{{ match.result }}</td>
+                {% if match.color == 'w' %}
+                    {% set homeColor = 'fa-circle-o' %}
+                    {% set awayColor = 'fa-circle' %}
+                {% else %}
+                    {% set awayColor = 'fa-circle-o' %}
+                    {% set homeColor = 'fa-circle' %}
+                {% endif %}
+                {% if match.homeMatch %}
+                    <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
+                        <i class="fa fa-fw {{ homeColor }}"></i>
+                        <a href="{{ path('bundesliga_season_player', { 'seasonId': model.season.id, 'playerId': match.player.id, 'matchDay': model.result.matchDay }) }}">{{ match.player }}</a>
+                    </td>
+                    <td class="versus">-</td>
+                    <td>{{ match.opponent }}</td>
+                    <td class="match-result">{{ match.result }}</td>
+                {% else %}
+                    <td>{{ match.opponent }}</td>
+                    <td class="versus">-</td>
+                    <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
+                        <i class="fa fa-fw {{ homeColor }}"></i>
+                        <a href="{{ path('bundesliga_season_player', { 'seasonId': model.season.id, 'playerId': match.player.id, 'matchDay': model.result.matchDay }) }}">{{ match.player }}</a>
+                    </td>
+                    <td class="match-result">{{ match.result|reverse }}</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>

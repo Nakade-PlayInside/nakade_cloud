@@ -21,6 +21,7 @@
 namespace App\Controller;
 
 use App\Entity\Bundesliga\BundesligaMatch;
+use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Form\CaptainResultInputType;
@@ -122,7 +123,6 @@ class BundesligaController extends AbstractController
             $matches = $model->getResult()->getMatches();
         }
 
-
         return $this->render('bundesliga/season.matchDay.html.twig', [
                 'allSeasons' => $allSeasons,
                 'matches' => $matches,
@@ -137,28 +137,50 @@ class BundesligaController extends AbstractController
      */
     public function showSeasonPlayer(BundesligaTableService $tableService, Request $request)
     {
-        $seasonId = $playerId = null;
+        $seasonId = $playerId = $matchDay = null;
         if ($request->query->has('seasonId')) {
             $seasonId = $request->query->get('seasonId');
         }
         if ($request->query->has('playerId')) {
             $playerId = $request->query->get('playerId');
         }
+        if ($request->query->has('matchDay')) {
+            $matchDay = $request->query->get('matchDay');
+        }
 
         /** @var BundesligaMatch[] $matches */
         $matches = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findPlayerMatches($seasonId, $playerId);
+        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
+        $player = $this->getDoctrine()->getRepository(BundesligaPlayer::class)->find($playerId);
 
-        $model = new PlayerStats($matches[0]->getPlayer());
+        $model = new PlayerStats($season, $player, $matches);
         foreach ($matches as $match) {
             'w' === $match->getColor() ? $model->white++ : $model->black++;
+            if ('w' === $match->getColor()) {
+                if ($match->getResult() === '2:0') {
+                    $model->whitePoints += 2;
+                }
+                if ($match->getResult() === '1:1') {
+                    $model->whitePoints++;
+                }
+            } else {
+                if ($match->getResult() === '2:0') {
+                    $model->blackPoints += 2;
+                }
+                if ($match->getResult() === '1:1') {
+                    $model->blackPoints++;
+                }
+            }
 
             switch ($match->getResult()) {
                 case '2:0':
                     $model->wins++;
+                    $model->points += 2;
                     ++$model->games;
                     break;
                 case '1:1':
                     $model->draws++;
+                    $model->points++;
                     ++$model->games;
                     break;
                 case '0:2':
@@ -170,15 +192,39 @@ class BundesligaController extends AbstractController
             switch ($match->getBoard()) {
                 case 1:
                     $model->firstBoard++;
+                    if ($match->getResult() === '2:0') {
+                        $model->firstBoardPoints += 2;
+                    }
+                    if ($match->getResult() === '1:1') {
+                        $model->firstBoardPoints++;
+                    }
                     break;
                 case 2:
                     $model->secondBoard++;
+                    if ($match->getResult() === '2:0') {
+                        $model->secondBoardPoints += 2;
+                    }
+                    if ($match->getResult() === '1:1') {
+                        $model->secondBoardPoints++;
+                    }
                     break;
                 case 3:
                     $model->thirdBoard++;
+                    if ($match->getResult() === '2:0') {
+                        $model->thirdBoardPoints += 2;
+                    }
+                    if ($match->getResult() === '1:1') {
+                        $model->thirdBoardPoints++;
+                    }
                     break;
                 case 4:
                     $model->fourthBoard++;
+                    if ($match->getResult() === '2:0') {
+                        $model->fourthBoardPoints += 2;
+                    }
+                    if ($match->getResult() === '1:1') {
+                        $model->fourthBoardPoints++;
+                    }
                     break;
             }
         }

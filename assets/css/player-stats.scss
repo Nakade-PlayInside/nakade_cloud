@@ -1,0 +1,94 @@
+//Player stats
+
+.stats {
+    h5 {
+        color: #4c5367;
+    }
+
+    button {
+        margin-top: 2rem;
+        width: 10rem;
+    }
+
+}
+
+.player-stats {
+    text-align: left;
+    border: #4c5367 1px solid !important;
+    margin-top: 20px;
+
+    .defaultColor {
+        background-color: #FDF5E6;
+    }
+
+    .alternateColor {
+        background-color: #FFDAB9;
+    }
+
+    i {
+        color: #4c5367;
+    }
+
+    tr:hover {
+        background-color: #9F9;
+        cursor: pointer;
+    }
+
+    td {
+        line-height: 2rem;
+    }
+
+    td:first-of-type {
+        color: #6c757d;
+    }
+
+    td:first-of-type, td:last-of-type {
+        padding: 0 10px;
+    }
+
+    .team {
+        padding-left: 10px;
+    }
+
+    .versus {
+        text-align: center !important;
+        padding:0 15px !important;
+    }
+
+    .match-result {
+        padding-left: 15px;
+    }
+}
+
+.match-stats {
+    border: #4c5367 1px solid !important;
+    width: 50%;
+
+    i {
+        color: #4c5367;
+    }
+
+    tr {
+        line-height: 2rem;
+    }
+
+    th {
+        padding: 0 5px;
+        background-color: #FFDAB9;
+        text-align: center;
+    }
+    td {
+        background-color: #FDF5E6;
+        text-align: center;
+    }
+}
+
+ul.board-stats {
+    list-style: none;
+    margin: 1rem 0;
+    padding: unset;
+
+    span {
+        color: #6c757d;
+    }
+}

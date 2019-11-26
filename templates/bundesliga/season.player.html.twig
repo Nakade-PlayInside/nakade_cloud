@@ -4,41 +4,83 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('dgob') }}
+    {{ encore_entry_link_tags('player-stats') }}
 {% endblock %}
 
 {% block body %}
 
-    <div class="container">
-        <h2>Spielerstatistik</h2>
-        <h5>{{ model.player.name }}</h5>
-        <ul>
-            <li>Spiele: {{ model.games }}</li>
-            <li>Siege: {{ model.wins }}</li>
-            <li>Unentschieden: {{ model.draws }}</li>
-            <li>Niederlagen: {{ model.losses }}</li>
-            <li>Schwarz: {{ model.black }}</li>
-            <li>Weiß: {{ model.white }}</li>
-            <li>Brett 1: {{ model.firstBoard }}</li>
-            <li>Brett 2: {{ model.secondBoard }}</li>
-            <li>Brett 3: {{ model.thirdBoard }}</li>
-            <li>Brett 4: {{ model.fourthBoard }}</li>
-        </ul>
+    <div class="container stats">
+        <h3>{{ model.player.name }}</h3>
+        <h5>{{ model.season.title }} - {{ model.season.league }}. Liga</h5>
 
-{#        <div>#}
-{#            <select style="margin-bottom: 20px;" id="season-select" class="js-season-select form-control ml-1" data-url="{{ path('bundesliga_season_select') }}">#}
-{#                {% for season in allSeasons %}#}
-{#                    <option{% if season == model.season %} selected="selected"{% endif %} value="{{ season.id }}">#}
-{#                        {{ season.title }}#}
-{#                    </option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </div>#}
-{#        <center>#}
-{#            <div class="js-season-table">#}
-{#            {{ include('bundesliga/_seasonTable.html.twig') }}#}
-{#            </div>#}
-{#        </center>#}
+        {% if model.matches %}
+            <center>
+            <table class="match-stats">
+                <tr>
+                    <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Spiele">Sp</th>
+                    <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Siege">s</th>
+                    <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Unentschieden">u</th>
+                    <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Niederlagen">n</th>
+                    <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Schwarz | Siege"><i class="fa fa-fw fa-circle"></i></th>
+                    <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Weiß | Siege"><i class="fa fa-fw fa-circle-o"></i></th>
+                    <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Punkte" >P</th>
+                    <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Gewinnquote" >%</th>
+                </tr>
+                <tr>
+                    <td>{{ model.games }}</td>
+                    <td>{{ model.wins }}</td>
+                    <td>{{ model.draws }}</td>
+                    <td>{{ model.losses }}</td>
+                    <td>{{ model.black }} | {{ model.blackPoints }}</td>
+                    <td>{{ model.white }} | {{ model.whitePoints }}</td>
+                    <td>{{ model.points }}</td>
+                    <td>{{ model.winPercentage }}</td>
+                </tr>
+            </table>
+            </center>
+
+            <ul class="board-stats">
+                {% if model.firstBoard > 0 %}
+                    <li><span>Brett 1:</span> {{ model.firstBoard }} Spiele | {{ model.firstBoardPoints }} Punkte</li>
+                {% endif %}
+                {% if model.secondBoard > 0 %}
+                    <li><span>Brett 2:</span> {{ model.secondBoard }} Spiele | {{ model.secondBoardPoints }} Punkte</li>
+                {% endif %}
+                {% if model.thirdBoard > 0 %}
+                    <li><span>Brett 3:</span> {{ model.thirdBoard }} Spiele | {{ model.thirdBoardPoints }} Punkte</li>
+                {% endif %}
+                {% if model.fourthBoard > 0 %}
+                    <li><span>Brett 4:</span> {{ model.fourthBoard }} Spiele | {{ model.fourthBoardPoints }} Punkte</li>
+                {% endif %}
+            </ul>
+
+            <table class="player-stats">
+                {% for match in model.matches %}
+                    <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}">
+                        {% if match.color == 'w' %}
+                            {% set homeColor = 'fa-circle-o' %}
+                            {% set awayColor = 'fa-circle' %}
+                        {% else %}
+                            {% set awayColor = 'fa-circle-o' %}
+                            {% set homeColor = 'fa-circle' %}
+                        {% endif %}
+                        <td>Brett {{ match.board }}: </td>
+                        <td><i class="fa fa-fw {{ homeColor }}"></i></td>
+                        <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
+                            {{ match.player }}
+                        </td>
+                        <td class="versus">-</td>
+                        <td>{{ match.opponent }}</td>
+                        <td class="team">[{{ match.opponentTeam.name }}]</td>
+                        <td class="match-result">{{ match.result }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            Keine Partien gefunden!
+        {% endif %}
+        {% set list_parameter = app.request.query.all %}
+        <a href="{{ path('bundesliga_season_archive', list_parameter ) }}"><button type="button" class="btn btn-success">Zurück</button></a>
     </div>
 
 {% endblock %}

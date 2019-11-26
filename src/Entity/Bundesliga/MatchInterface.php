@@ -30,4 +30,8 @@ interface MatchInterface
     public function getResults(): ?ResultsInterface;
 
     public function setResults(?ResultsInterface $bundesligaResults);
+
+    public function isHomeMatch(): bool;
+
+    public function getColor(): ?string;
 }
