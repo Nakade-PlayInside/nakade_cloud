@@ -65,7 +65,7 @@ class TableModel
         if (1 === preg_match($pattern, $title, $matches)) {
             $title = $matches[1];
         }
-        return sprintf("%s. Bundesliga %s", $this->season->getLeague(), $title);
+        return sprintf("%s. Bundesliga %s", intval($this->season->getLeague()), $title);
     }
 
     public function getMatchDayRange(): array

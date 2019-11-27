@@ -11,7 +11,7 @@
 
     <div class="container stats">
         <h3>{{ model.player.name }}</h3>
-        <h5>{{ model.season.title }} - {{ model.season.league }}. Liga</h5>
+        <h5>{{ model.season.title }} - {{ model.season.league | number_format }}. Liga</h5>
 
         {% if model.matches %}
             <center>

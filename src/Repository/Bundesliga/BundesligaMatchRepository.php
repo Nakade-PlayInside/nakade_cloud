@@ -20,7 +20,8 @@
 namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaMatch;
-use App\Entity\Bundesliga\BundesligaTeam;
+use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Entity\Bundesliga\BundesligaSeason;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -37,16 +38,19 @@ class BundesligaMatchRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaMatch::class);
     }
 
-    public function findPlayerMatches(int $seasonId, int $playerId)
+    /**
+     * @return BundesligaMatch[]
+     */
+    public function findPlayerMatches(BundesligaSeason $season, BundesligaPlayer $player): array
     {
         return $this->createQueryBuilder('m')
                 ->leftJoin('m.results', 'r')
                 ->leftJoin('r.season', 's')
                 ->leftJoin('m.player', 'p')
-                ->andWhere('s.id=:seasonId')
-                ->andWhere('p.id=:playerId')
-                ->setParameter('seasonId', $seasonId)
-                ->setParameter('playerId', $playerId)
+                ->andWhere('s.id=:season')
+                ->andWhere('p.id=:player')
+                ->setParameter('season', $season)
+                ->setParameter('player', $player)
                 ->getQuery()
                 ->getResult()
                 ;

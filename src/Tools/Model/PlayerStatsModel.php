@@ -20,13 +20,13 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Tools\Bundesliga\Model;
+namespace App\Tools\Model;
 
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaSeason;
 
-class PlayerStats
+class PlayerStatsModel
 {
     public $wins = 0;
     public $draws = 0;

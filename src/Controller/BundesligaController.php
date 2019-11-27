@@ -30,7 +30,8 @@ use App\Services\ActualResultsGrabber;
 use App\Services\ActualTableService;
 use App\Services\BundesligaTableService;
 use App\Services\Model\TableModel;
-use App\Tools\Bundesliga\Model\PlayerStats;
+use App\Tools\Model\PlayerStatsModel;
+use App\Tools\PlayerStats;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -135,102 +136,58 @@ class BundesligaController extends AbstractController
      *
      * @IsGranted("ROLE_USER")
      */
-    public function showSeasonPlayer(BundesligaTableService $tableService, Request $request)
+    public function showSeasonPlayer(PlayerStats $service, Request $request)
     {
-        $seasonId = $playerId = $matchDay = null;
+        $seasonId = $playerId = null;
         if ($request->query->has('seasonId')) {
             $seasonId = $request->query->get('seasonId');
         }
         if ($request->query->has('playerId')) {
             $playerId = $request->query->get('playerId');
         }
-        if ($request->query->has('matchDay')) {
-            $matchDay = $request->query->get('matchDay');
-        }
 
-        /** @var BundesligaMatch[] $matches */
-        $matches = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findPlayerMatches($seasonId, $playerId);
         $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
         $player = $this->getDoctrine()->getRepository(BundesligaPlayer::class)->find($playerId);
 
-        $model = new PlayerStats($season, $player, $matches);
-        foreach ($matches as $match) {
-            'w' === $match->getColor() ? $model->white++ : $model->black++;
-            if ('w' === $match->getColor()) {
-                if ($match->getResult() === '2:0') {
-                    $model->whitePoints += 2;
-                }
-                if ($match->getResult() === '1:1') {
-                    $model->whitePoints++;
-                }
-            } else {
-                if ($match->getResult() === '2:0') {
-                    $model->blackPoints += 2;
-                }
-                if ($match->getResult() === '1:1') {
-                    $model->blackPoints++;
-                }
-            }
-
-            switch ($match->getResult()) {
-                case '2:0':
-                    $model->wins++;
-                    $model->points += 2;
-                    ++$model->games;
-                    break;
-                case '1:1':
-                    $model->draws++;
-                    $model->points++;
-                    ++$model->games;
-                    break;
-                case '0:2':
-                    $model->losses++;
-                    ++$model->games;
-                    break;
-            }
-
-            switch ($match->getBoard()) {
-                case 1:
-                    $model->firstBoard++;
-                    if ($match->getResult() === '2:0') {
-                        $model->firstBoardPoints += 2;
-                    }
-                    if ($match->getResult() === '1:1') {
-                        $model->firstBoardPoints++;
-                    }
-                    break;
-                case 2:
-                    $model->secondBoard++;
-                    if ($match->getResult() === '2:0') {
-                        $model->secondBoardPoints += 2;
-                    }
-                    if ($match->getResult() === '1:1') {
-                        $model->secondBoardPoints++;
-                    }
-                    break;
-                case 3:
-                    $model->thirdBoard++;
-                    if ($match->getResult() === '2:0') {
-                        $model->thirdBoardPoints += 2;
-                    }
-                    if ($match->getResult() === '1:1') {
-                        $model->thirdBoardPoints++;
-                    }
-                    break;
-                case 4:
-                    $model->fourthBoard++;
-                    if ($match->getResult() === '2:0') {
-                        $model->fourthBoardPoints += 2;
-                    }
-                    if ($match->getResult() === '1:1') {
-                        $model->fourthBoardPoints++;
-                    }
-                    break;
-            }
-        }
+        $model = $service->getStats($season, $player);
 
         return $this->render('bundesliga/season.player.html.twig', [
                 'model' => $model,
+        ]);
+    }
+
+    /**
+     * @Route("/bundesliga/season/stats/team", name="bundesliga_season_stats_team")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function showSeasonTeamStats(PlayerStats $service, Request $request)
+    {
+        $seasonId = null;
+        if ($request->query->has('seasonId')) {
+            $seasonId = $request->query->get('seasonId');
+        }
+        if ($seasonId) {
+            $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
+        } else {
+            $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
+        }
+        $teamPlayers = $season->getLineup()->getPlayers();
+
+        /** @var PlayerStatsModel $data */
+        $data = [];
+        foreach ($teamPlayers as $player) {
+            $model = $service->getStats($season, $player);
+            if ($model) {
+                $data[] = $model;
+            }
+        }
+        $allSeasons = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findAll();
+
+        return $this->render('bundesliga/season.team_stats.html.twig', [
+                'allSeasons' => $allSeasons,
+                'season' => $season,
+                'data' => $data,
         ]);
     }
 }
