@@ -124,7 +124,7 @@ class BundesligaController extends AbstractController
             $matches = $model->getResult()->getMatches();
         }
 
-        return $this->render('bundesliga/season.matchDay.html.twig', [
+        return $this->render('bundesliga/archive.season.html.twig', [
                 'allSeasons' => $allSeasons,
                 'matches' => $matches,
                 'model' => $model,
@@ -132,11 +132,11 @@ class BundesligaController extends AbstractController
     }
 
     /**
-     * @Route("/bundesliga/season/player", name="bundesliga_season_player")
+     * @Route("/bundesliga/archive/player", name="bundesliga_archive_player")
      *
      * @IsGranted("ROLE_USER")
      */
-    public function showSeasonPlayer(PlayerStats $service, Request $request)
+    public function showArchivePlayer(PlayerStats $service, Request $request)
     {
         $seasonId = $playerId = null;
         if ($request->query->has('seasonId')) {
@@ -151,7 +151,7 @@ class BundesligaController extends AbstractController
 
         $model = $service->getStats($season, $player);
 
-        return $this->render('bundesliga/season.player.html.twig', [
+        return $this->render('bundesliga/archive.player.html.twig', [
                 'model' => $model,
         ]);
     }
@@ -161,7 +161,7 @@ class BundesligaController extends AbstractController
      *
      * @IsGranted("ROLE_USER")
      */
-    public function showSeasonTeamStats(PlayerStats $service, Request $request)
+    public function showTeamStats(PlayerStats $service, Request $request)
     {
         $seasonId = null;
         if ($request->query->has('seasonId')) {
@@ -189,6 +189,31 @@ class BundesligaController extends AbstractController
                 'allSeasons' => $allSeasons,
                 'season' => $season,
                 'data' => $data,
+        ]);
+    }
+
+    /**
+     * @Route("/bundesliga/season/stats/player", name="bundesliga_season_stats_player")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function showPlayerStats(PlayerStats $service, Request $request)
+    {
+        $seasonId = $playerId = null;
+        if ($request->query->has('seasonId')) {
+            $seasonId = $request->query->get('seasonId');
+        }
+        if ($request->query->has('playerId')) {
+            $playerId = $request->query->get('playerId');
+        }
+
+        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
+        $player = $this->getDoctrine()->getRepository(BundesligaPlayer::class)->find($playerId);
+
+        $model = $service->getStats($season, $player);
+
+        return $this->render('bundesliga/season.player_stats.html.twig', [
+                'model' => $model,
         ]);
     }
 }

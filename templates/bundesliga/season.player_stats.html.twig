@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Spielerstatistik{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('player-stats') }}
+{% endblock %}
+
+{% block body %}
+    <div class="container stats">
+       {% include 'bundesliga/_player_stats.html.twig' %}
+
+        {% if model.matches  %}
+            <table class="player-stats">
+                <tr>
+                    <th>Brett</th><th colspan="3"><th colspan="2">Gegner</th><th>Ergebnis</th>
+                </tr>
+                {% for match in model.matches %}
+                    <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}">
+                        {% if match.color == 'w' %}
+                            {% set homeColor = 'fa-circle-o' %}
+                            {% set awayColor = 'fa-circle' %}
+                        {% else %}
+                            {% set awayColor = 'fa-circle-o' %}
+                            {% set homeColor = 'fa-circle' %}
+                        {% endif %}
+                        <td>{{ match.board }}</td>
+                        <td><i class="fa fa-fw {{ homeColor }}"></i></td>
+                        <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
+                            {{ match.player }}
+                        </td>
+                        <td class="versus">-</td>
+                        <td>{{ match.opponent }}</td>
+                        <td class="team">[{{ match.opponentTeam.name }}]</td>
+                        <td class="match-result">{{ match.result }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            Keine Partien gefunden!
+        {% endif %}
+        {% set list_parameter = app.request.query.all %}
+        <div>
+            <a href="{{ path('bundesliga_season_stats_team', list_parameter ) }}"><button type="button" class="btn btn-success">Zurück</button></a>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('bundesliga') }}
+{% endblock %}

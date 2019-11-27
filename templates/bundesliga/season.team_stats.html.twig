@@ -25,8 +25,9 @@
                 <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Gewinnquote" >%</th>
             </tr>
         {% for model in data %}
-            {% set _route = path('bundesliga_season_player', {'seasonId': model.season.id, 'playerId': model.player.id})  %}
-            <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}" onclick="window.location.href='{{ _route }}';">
+            {% set _linkparams = {'seasonId': model.season.id, 'playerId': model.player.id } %}
+            {% set _location = path('bundesliga_season_stats_player', _linkparams)  %}
+            <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}" onclick="window.location.href='{{ _location }}';">
                 <td class="name">{{ model.player.name }}</td>
                 <td class="space">{{ model.games }}</td>
                 <td>{{ model.wins }}</td>

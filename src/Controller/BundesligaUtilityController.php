@@ -48,7 +48,7 @@ class BundesligaUtilityController extends AbstractController
         $allSeasons = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findAll();
         $matches = $model->getResult()->getMatches();
 
-        return $this->render('bundesliga/_seasonTable.html.twig', [
+        return $this->render('bundesliga/_archive.season.table.html.twig', [
                 'allSeasons' => $allSeasons,
                 'matches' => $matches,
                 'model' => $model,

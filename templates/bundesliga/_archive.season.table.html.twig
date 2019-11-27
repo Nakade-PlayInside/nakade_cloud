@@ -14,7 +14,7 @@
                 {% if match.homeMatch %}
                     <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
                         <i class="fa fa-fw {{ homeColor }}"></i>
-                        <a href="{{ path('bundesliga_season_player', { 'seasonId': model.season.id, 'playerId': match.player.id, 'matchDay': model.result.matchDay }) }}">{{ match.player }}</a>
+                        <a href="{{ path('bundesliga_archive_player', { 'seasonId': model.season.id, 'playerId': match.player.id, 'matchDay': model.result.matchDay }) }}">{{ match.player }}</a>
                     </td>
                     <td class="versus">-</td>
                     <td>{{ match.opponent }}</td>
@@ -24,7 +24,7 @@
                     <td class="versus">-</td>
                     <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
                         <i class="fa fa-fw {{ homeColor }}"></i>
-                        <a href="{{ path('bundesliga_season_player', { 'seasonId': model.season.id, 'playerId': match.player.id, 'matchDay': model.result.matchDay }) }}">{{ match.player }}</a>
+                        <a href="{{ path('bundesliga_archive_player', { 'seasonId': model.season.id, 'playerId': match.player.id, 'matchDay': model.result.matchDay }) }}">{{ match.player }}</a>
                     </td>
                     <td class="match-result">{{ match.result|reverse }}</td>
                 {% endif %}

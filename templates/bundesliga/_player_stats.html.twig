@@ -1,0 +1,44 @@
+<h3>{{ model.player.name }}</h3>
+<h5>{{ model.season.title }} - {{ model.season.league | number_format }}. Liga</h5>
+
+{% if model.matches %}
+    <center>
+    <table class="match-stats">
+        <tr>
+            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Spiele">Sp</th>
+            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Siege">s</th>
+            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Unentschieden">u</th>
+            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Niederlagen">n</th>
+            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Schwarz | Siege"><i class="fa fa-fw fa-circle"></i></th>
+            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Weiß | Siege"><i class="fa fa-fw fa-circle-o"></i></th>
+            <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Punkte" >P</th>
+            <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Gewinnquote" >%</th>
+        </tr>
+        <tr class="defaultColor">
+            <td>{{ model.games }}</td>
+            <td>{{ model.wins }}</td>
+            <td>{{ model.draws }}</td>
+            <td>{{ model.losses }}</td>
+            <td>{{ model.black }} | {{ model.blackPoints }}</td>
+            <td>{{ model.white }} | {{ model.whitePoints }}</td>
+            <td>{{ model.points }}</td>
+            <td>{{ model.winPercentage }}</td>
+        </tr>
+    </table>
+    </center>
+
+    <ul class="board-stats">
+        {% if model.firstBoard > 0 %}
+            <li><span>Brett 1:</span> {{ model.firstBoard }} Spiele | {{ model.firstBoardPoints }} Punkte</li>
+        {% endif %}
+        {% if model.secondBoard > 0 %}
+            <li><span>Brett 2:</span> {{ model.secondBoard }} Spiele | {{ model.secondBoardPoints }} Punkte</li>
+        {% endif %}
+        {% if model.thirdBoard > 0 %}
+            <li><span>Brett 3:</span> {{ model.thirdBoard }} Spiele | {{ model.thirdBoardPoints }} Punkte</li>
+        {% endif %}
+        {% if model.fourthBoard > 0 %}
+            <li><span>Brett 4:</span> {{ model.fourthBoard }} Spiele | {{ model.fourthBoardPoints }} Punkte</li>
+        {% endif %}
+    </ul>
+{% endif %}
