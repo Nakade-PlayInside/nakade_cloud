@@ -182,6 +182,7 @@ class BundesligaController extends AbstractController
                 $data[] = $model;
             }
         }
+
         $allSeasons = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findAll();
 
         return $this->render('bundesliga/season.team_stats.html.twig', [

@@ -26,7 +26,7 @@
                     <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Punkte" >P</th>
                     <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Gewinnquote" >%</th>
                 </tr>
-                <tr>
+                <tr class="defaultColor">
                     <td>{{ model.games }}</td>
                     <td>{{ model.wins }}</td>
                     <td>{{ model.draws }}</td>
@@ -54,7 +54,10 @@
                 {% endif %}
             </ul>
 
-            <table class="player-stats">
+            <table class="player-stats selectRow">
+                <tr>
+                    <th>Brett</th><th colspan="3"><th colspan="2">Gegner</th><th>Ergebnis</th>
+                </tr>
                 {% for match in model.matches %}
                     {% set _route = path('bundesliga_season_archive', {'seasonId': match.season.id, 'matchDay': match.results.matchDay})  %}
                     <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}" onclick="window.location.href='{{ _route }}';">
@@ -65,7 +68,7 @@
                             {% set awayColor = 'fa-circle-o' %}
                             {% set homeColor = 'fa-circle' %}
                         {% endif %}
-                        <td>Brett {{ match.board }}: </td>
+                        <td>{{ match.board }}</td>
                         <td><i class="fa fa-fw {{ homeColor }}"></i></td>
                         <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
                             {{ match.player }}

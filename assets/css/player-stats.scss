@@ -1,8 +1,15 @@
 //Player stats
 
+$defaultBgColor: #fdf5e6;
+$alternateBgColor: #FFDAB9;
+$contrastBgColor: #bdffb9;
+$headerBgColor: #b9c1ff;
+$colorLight: #6c757d;
+$colorLight2: #4c5367;
+
 .stats {
     h5 {
-        color: #4c5367;
+        color: $colorLight2;
     }
 
     button {
@@ -10,40 +17,41 @@
         width: 10rem;
     }
 
+    table {
+        border: $colorLight2 1px solid !important;
+
+        tr {
+            line-height: 2rem;
+        }
+
+        th {
+            padding: 0 5px;
+            background-color: $headerBgColor;
+            text-align: center;
+            cursor: default;
+        }
+
+        td {
+            white-space: nowrap;
+        }
+    }
+
+    i {
+        color: $colorLight2;
+    }
+
 }
 
 .player-stats {
     text-align: left;
-    border: #4c5367 1px solid !important;
     margin-top: 20px;
 
     .point-maker {
         font-weight: bolder;
     }
 
-    .defaultColor {
-        background-color: #FDF5E6;
-    }
-
-    .alternateColor {
-        background-color: #FFDAB9;
-    }
-
-    i {
-        color: #4c5367;
-    }
-
-    tr:hover {
-        background-color: #9F9;
-        cursor: pointer;
-    }
-
-    td {
-        line-height: 2rem;
-    }
-
-    td:first-of-type {
-        color: #6c757d;
+    td:first-of-type, td:last-of-type {
+        text-align: center;
     }
 
     td:first-of-type, td:last-of-type {
@@ -65,26 +73,40 @@
 }
 
 .match-stats {
-    border: #4c5367 1px solid !important;
-    width: 50%;
+    min-width: 50%;
+    width: available;
 
-    i {
-        color: #4c5367;
-    }
-
-    tr {
-        line-height: 2rem;
-    }
-
-    th {
-        padding: 0 5px;
-        background-color: #FFDAB9;
-        text-align: center;
-    }
     td {
-        background-color: #FDF5E6;
         text-align: center;
+        padding: 0 5px;
     }
+
+    .name {
+        text-align: left;
+    }
+
+    .space {
+        padding: 0 15px;
+    }
+}
+
+.selectRow {
+
+    tr:hover {
+        background-color: $contrastBgColor;
+        cursor: pointer;
+    }
+    th {
+        cursor: default;
+    }
+}
+
+.defaultColor {
+  background-color: $defaultBgColor;
+}
+
+.alternateColor {
+  background-color: $alternateBgColor;
 }
 
 ul.board-stats {
@@ -93,6 +115,6 @@ ul.board-stats {
     padding: unset;
 
     span {
-        color: #6c757d;
+        color: $colorLight;
     }
 }

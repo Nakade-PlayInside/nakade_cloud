@@ -10,11 +10,11 @@
 {% block body %}
 
     <div class="container stats">
-{#        <h3>{{ model.player.name }}</h3>#}
+        <h3>Teambilanz</h3>
         <h5>{{ season.title }} - {{ season.league | number_format }}. Liga</h5>
 
     <center>
-        <table class="match-stats" style="width: 100%">
+        <table class="match-stats selectRow">
             <tr>
                 <th>Spieler</th>
                 <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Spiele">Sp</th>
@@ -24,22 +24,20 @@
                 <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Punkte" >P</th>
                 <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Gewinnquote" >%</th>
             </tr>
-    {% for model in data %}
-                <tr>
-                    <td style="text-align: left">{{ model.player.name }}</td>
-                    <td>{{ model.games }}</td>
-                    <td>{{ model.wins }}</td>
-                    <td>{{ model.draws }}</td>
-                    <td>{{ model.losses }}</td>
-                    <td>{{ model.points }}</td>
-                    <td>{{ model.winPercentage }}</td>
-                </tr>
-    {% endfor %}
+        {% for model in data %}
+            {% set _route = path('bundesliga_season_player', {'seasonId': model.season.id, 'playerId': model.player.id})  %}
+            <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}" onclick="window.location.href='{{ _route }}';">
+                <td class="name">{{ model.player.name }}</td>
+                <td class="space">{{ model.games }}</td>
+                <td>{{ model.wins }}</td>
+                <td>{{ model.draws }}</td>
+                <td>{{ model.losses }}</td>
+                <td class="space">{{ model.points }}</td>
+                <td>{{ model.winPercentage }}</td>
+            </tr>
+        {% endfor %}
         </table>
     </center>
-
-{#        {% set list_parameter = app.request.query.all %}#}
-{#        <a href="{{ path('bundesliga_season_archive', list_parameter ) }}"><button type="button" class="btn btn-success">Zurück</button></a>#}
     </div>
 
 {% endblock %}
