@@ -84,6 +84,16 @@ abstract class AbstractResults implements ResultsInterface
      */
     protected $season;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $createdAt = false;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -159,6 +169,11 @@ abstract class AbstractResults implements ResultsInterface
         $this->season = $season;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
     }
 
     public function getPairing(): string

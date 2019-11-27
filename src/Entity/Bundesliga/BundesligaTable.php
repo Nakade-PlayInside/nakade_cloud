@@ -20,6 +20,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class BundesligaTable
 {
+
     const TENDENCY_CHAMPION = 10;
     const TENDENCY_AUFSTEIGER = 20;
     const TENDENCY_RELEGATION = 30;
@@ -96,6 +97,16 @@ class BundesligaTable
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $tendency;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $createdAt = false;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -256,6 +267,11 @@ class BundesligaTable
         $this->tendency = $tendency;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
     }
 
     public function getTitle()

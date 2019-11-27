@@ -27,8 +27,9 @@ class BundesligaTableRepository extends ServiceEntityRepository
         try {
             return $this->createQueryBuilder('t')
                     ->select('MAX(t.matchDay) as lastMatchDay')
-                    ->where('t.season LIKE :season')
+                    ->andWhere('t.season LIKE :season')
                     ->andWhere('t.league LIKE :league')
+                    ->andWhere('t.matchDay = t.games')
                     ->setParameter('season', '%'.$season.'%')
                     ->setParameter('league', '%'.$league.'%')
                     ->getQuery()
