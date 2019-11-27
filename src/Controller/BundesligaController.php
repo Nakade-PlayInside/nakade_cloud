@@ -30,7 +30,7 @@ use App\Services\ActualResultsGrabber;
 use App\Services\ActualTableService;
 use App\Services\BundesligaTableService;
 use App\Services\Model\TableModel;
-use App\Tools\Model\PlayerStatsModel;
+use App\Services\TeamStatsService;
 use App\Tools\PlayerStats;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -161,28 +161,21 @@ class BundesligaController extends AbstractController
      *
      * @IsGranted("ROLE_USER")
      */
-    public function showTeamStats(PlayerStats $service, Request $request)
+    public function showTeamStats(TeamStatsService $service, Request $request)
     {
         $seasonId = null;
         if ($request->query->has('seasonId')) {
             $seasonId = $request->query->get('seasonId');
         }
+
         if ($seasonId) {
             $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
         } else {
             $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
         }
-        $teamPlayers = $season->getLineup()->getPlayers();
+        //todo: spieltag!
 
-        /** @var PlayerStatsModel $data */
-        $data = [];
-        foreach ($teamPlayers as $player) {
-            $model = $service->getStats($season, $player);
-            if ($model) {
-                $data[] = $model;
-            }
-        }
-
+        $data = $service->getStats($season);
         $allSeasons = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findAll();
 
         return $this->render('bundesliga/season.team_stats.html.twig', [
