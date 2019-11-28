@@ -8,7 +8,7 @@
 
 {% block body %}
 
-    <h5 class="matchDay-info">{{ model.season.title }} - Liga {{ model.season.league }}: <span>{{ model.results.matchDay }}. Spieltag</span></h5>
+    <h5 class="matchDay-info">{{ model.results.season.title }} - Liga {{ model.results.season.league }}: <span>{{ model.results.matchDay }}. Spieltag</span></h5>
      {{ form_start(form) }}
         <h3>{{ model.results.pairing }}<span class="bundesliga-result js-calculate-result">{{ model.results.boardPointsHome }}:{{ model.results.boardPointsAway }}</span></h3>
         <div>
@@ -21,6 +21,12 @@
             {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.thirdBoardMatch, 'legend': 'Drittes Brett', 'pair': true} %}
             {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.fourthBoardMatch, 'legend': 'Viertes Brett', 'pair': false} %}
         </div>
+
+    <div class="">
+        <button style="margin-top: 20px; width: 10rem" type="submit" class="btn btn-primary action-save">
+            <span class="btn-label"> Update</span>
+        </button>
+    </div>
     {{ form_end(form) }}
 {% endblock %}
 

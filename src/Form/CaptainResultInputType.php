@@ -44,14 +44,10 @@ class CaptainResultInputType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var ResultModel|null $results */
-        $results = $options['data'] ?? null;
-        $choices = $results->season->getLineup()->getPlayers();
-
-        $builder->add('firstBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
-                ->add('secondBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
-                ->add('thirdBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
-                ->add('fourthBoardMatch', CaptainMatchInputType::class, ['data' => $choices])
+        $builder->add('firstBoardMatch', CaptainMatchInputType::class)
+                ->add('secondBoardMatch', CaptainMatchInputType::class)
+                ->add('thirdBoardMatch', CaptainMatchInputType::class)
+                ->add('fourthBoardMatch', CaptainMatchInputType::class)
         ;
     }
 

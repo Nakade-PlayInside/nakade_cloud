@@ -11,8 +11,10 @@
 
     <div class="container stats">
         <h3>Teambilanz</h3>
-        <h5>{{ season.title }} - {{ season.league | number_format }}. Liga</h5>
-
+        <h5>{{ data.season.title }} - {{ data.season.league | number_format }}. Liga</h5>
+        {% if data.lastMatchDay %}
+            <h6>aktuelle Saison nach {{ data.lastMatchDay }} Spieltagen</h6>
+        {% endif %}
     <center>
         <table class="match-stats selectRow">
             <tr>
@@ -24,7 +26,7 @@
                 <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Punkte" >P</th>
                 <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Gewinnquote" >%</th>
             </tr>
-        {% for model in data %}
+        {% for model in data.players %}
             {% set _linkparams = {'seasonId': model.season.id, 'playerId': model.player.id } %}
             {% set _location = path('bundesliga_season_stats_player', _linkparams)  %}
             <tr class="{{ cycle(['defaultColor', 'alternateColor'], loop.index0) }}" onclick="window.location.href='{{ _location }}';">

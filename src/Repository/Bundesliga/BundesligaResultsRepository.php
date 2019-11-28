@@ -167,7 +167,7 @@ class BundesligaResultsRepository extends ServiceEntityRepository
     {
         try {
             return $this->createQueryBuilder('r')
-                    ->select('MAX(r.matchDay) as lastMatchDay')
+                    ->select('MIN(r.matchDay) as lastMatchDay')
                     ->innerJoin('r.season', 's')
                     ->andWhere('s.id=:id')
                     ->andWhere('r.boardPointsHome=0 AND r.boardPointsAway=0')

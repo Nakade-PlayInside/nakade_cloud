@@ -24,12 +24,12 @@ namespace App\Services;
 
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Services\Model\TableModel;
-use App\Tools\Model\PlayerStatsModel;
+use App\Tools\Model\TeamStatsModel;
 use App\Tools\PlayerStats;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Create season stats of team players
+ * Create season stats of team players.
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
@@ -38,44 +38,50 @@ use App\Tools\PlayerStats;
 class TeamStatsService
 {
     private $service;
+    private $manager;
 
-    public function __construct(PlayerStats $service)
+    public function __construct(EntityManagerInterface $manager, PlayerStats $service)
     {
         $this->service = $service;
+        $this->manager = $manager;
     }
 
-    public function getStats(BundesligaSeason $season): ?array
+    public function getStats(int $seasonId = null): ?TeamStatsModel
     {
+        $season = $this->findSeason($seasonId);
+        if (!$season) {
+            return null;
+        }
         $teamPlayers = $season->getLineup()->getPlayers();
 
-        /** @var PlayerStatsModel[] $stats */
-        $stats = [];
+        $teamStats = new TeamStatsModel($season);
         foreach ($teamPlayers as $player) {
             $model = $this->service->getStats($season, $player);
             if ($model) {
-                $stats[] = $model;
+                $teamStats->addPlayer($model);
             }
         }
-        usort($stats, [$this, 'sortBYGames']);
+        $lastMatchDay = $this->findLastMatchDay($season);
+        $teamStats->setLastMatchDay($lastMatchDay);
 
-        return $stats;
+        return $teamStats;
     }
 
-    public function sortByGames(PlayerStatsModel $alice, PlayerStatsModel $bob)
+    private function findSeason(int $seasonId = null): ?BundesligaSeason
     {
-        if ($alice->games === $bob->games) {
-            return $this->sortByPoints($alice, $bob);
+        if ($seasonId) {
+            return $this->manager->getRepository(BundesligaSeason::class)->find($seasonId);
         }
 
-        return $alice->games < $bob->games;
+        return $this->manager->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
     }
 
-    public function sortByPoints(PlayerStatsModel $alice, PlayerStatsModel $bob)
+    private function findLastMatchDay(BundesligaSeason $season): ?string
     {
-        if ($alice->points === $bob->points) {
-            return false;
+        if ($season->isActualSeason()) {
+            return $this->manager->getRepository(BundesligaResults::class)->findMatchDayUnplayed($season);
         }
 
-        return $alice->points < $bob->points;
+        return null;
     }
 }

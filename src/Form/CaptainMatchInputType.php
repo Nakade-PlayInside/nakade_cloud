@@ -22,12 +22,15 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -49,18 +52,33 @@ class CaptainMatchInputType extends AbstractType
         $builder->add('player', EntityType::class, [
             'class' => BundesligaPlayer::class,
             'placeholder' => 'bundesliga.nakade.player.choose',
-            'choices' => $options['data'],
         ])
                 ->add('opponent', BundesligaOpponentSelectType::class)
                 ->add('result', CaptainSelectResultType::class)
-                ->add('winByDefault', CheckboxType::class)
+                ->add('winByDefault', CheckboxType::class, ['required' => false])
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var BundesligaMatch $match */
+            $match = $event->getData();
+            $form = $event->getForm();
+            if ($match->getSeason()->getLineup()->getPlayers()) {
+                $choices = $match->getSeason()->getLineup()->getPlayers();
+
+                $form->remove('player');
+                $form->add('player', EntityType::class, [
+                        'class' => BundesligaPlayer::class,
+                        'placeholder' => 'bundesliga.nakade.player.choose',
+                         'choices' => $choices,
+                ]);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-          //  'inherit_data' => true,
+             'data_class' => BundesligaMatch::class,
         ]);
     }
 }

@@ -22,25 +22,80 @@ declare(strict_types=1);
 
 namespace App\Form\Model;
 
+use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
-use App\Entity\Bundesliga\BundesligaSeason;
 
 class ResultModel
 {
-    /** @var BundesligaSeason $season */
-    public $season;
-    /** @var BundesligaResults
-     */
     public $results;
-
-    public $matchDay;
     public $firstBoardMatch;
     public $secondBoardMatch;
     public $thirdBoardMatch;
     public $fourthBoardMatch;
 
+    public function __construct(BundesligaResults $results)
+    {
+        $this->results = $results;
+        $this->initMatches($results);
+    }
+
     public function isNakadeHome(): bool
     {
         return false !== stripos($this->results->getHome()->getName(), 'Nakade');
+    }
+
+    private function initMatches(BundesligaResults $results)
+    {
+        foreach ($results->getMatches() as $match) {
+            switch ($match->getBoard()) {
+                case 1:
+                    $this->firstBoardMatch = $match;
+                    break;
+                case 2:
+                    $this->secondBoardMatch = $match;
+                    break;
+                case 3:
+                    $this->thirdBoardMatch = $match;
+                    break;
+                case 4:
+                    $this->fourthBoardMatch = $match;
+                    break;
+            }
+        }
+
+        if (!$this->firstBoardMatch) {
+            $this->firstBoardMatch = $this->createMatch($results, 1);
+        }
+        if (!$this->secondBoardMatch) {
+            $this->secondBoardMatch = $this->createMatch($results, 2);
+        }
+        if (!$this->thirdBoardMatch) {
+            $this->thirdBoardMatch = $this->createMatch($results, 3);
+        }
+        if (!$this->fourthBoardMatch) {
+            $this->fourthBoardMatch = $this->createMatch($results, 4);
+        }
+    }
+
+    private function createMatch(BundesligaResults $results, int $board)
+    {
+        $match = new BundesligaMatch();
+        $match->setSeason($results->getSeason())
+                ->setBoard($board)
+                ->setResults($results)
+                ->setWinByDefault(true)
+                ->setResult('2:0')
+        ;
+        ;
+
+        //default is black
+        if ($match->isHomeMatch() && 0 === $board % 2) {
+            $match->setColor('w');
+        }
+        if (!$match->isHomeMatch() && 1 === $board % 2) {
+            $match->setColor('w');
+        }
+
+        return $match;
     }
 }

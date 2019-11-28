@@ -55,6 +55,8 @@ class BundesligaController extends AbstractController
 
     /**
      * @Route("/bundesliga/actualMatchDay", name="bundesliga_actual_matchDay")
+     *
+     * @IsGranted("ROLE_NAKADE_TEAM")
      */
     public function actualMatch(ActualTableService $tableService, Request $request)
     {
@@ -64,23 +66,22 @@ class BundesligaController extends AbstractController
         }
 
         $matchDay = $this->getDoctrine()->getRepository(BundesligaResults::class)->findActualMatchDay($actualSeason);
-        $result = $this->getDoctrine()
+        $results = $this->getDoctrine()
                 ->getRepository(BundesligaResults::class)
                 ->findNakadeResult($actualSeason->getId(), $matchDay);
 
-        $model = new ResultModel();
-        $model->season = $actualSeason;
-        $model->results = $result;
-
+        $model = new ResultModel($results);
         $form = $this->createForm(CaptainResultInputType::class, $model);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $match = $form->getData();
-
-            if (!assert($match instanceof BundesligaMatch)) {
-                throw new UnexpectedTypeException($match, BundesligaMatch::class);
+            $data = $form->getData();
+            if (!assert($data instanceof ResultModel)) {
+                throw new UnexpectedTypeException($data, ResultModel::class);
             }
+
+            dd($data);
+
 
             $this->getDoctrine()->getManager()->persist($match);
             $this->getDoctrine()->getManager()->flush();
@@ -168,20 +169,12 @@ class BundesligaController extends AbstractController
             $seasonId = $request->query->get('seasonId');
         }
 
-        if ($seasonId) {
-            $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->find($seasonId);
-        } else {
-            $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
-        }
-        //todo: spieltag!
-
-        $data = $service->getStats($season);
+        $model = $service->getStats($seasonId);
         $allSeasons = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findAll();
 
         return $this->render('bundesliga/season.team_stats.html.twig', [
                 'allSeasons' => $allSeasons,
-                'season' => $season,
-                'data' => $data,
+                'data' => $model,
         ]);
     }
 
