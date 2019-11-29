@@ -58,7 +58,10 @@ class BundesligaOpponentSelectType extends AbstractType
     {
         $resolver->setDefaults([
             'invalid_message' => 'Opponent not found!',
-            'finder_callback' => function (BundesligaOpponentRepository $repository, string $fullName) {
+            'finder_callback' => function (BundesligaOpponentRepository $repository, ?string $fullName) {
+                if (!$fullName) {
+                    return null;
+                }
                 $names = explode(' ', $fullName);
                 $firstName = array_shift($names);
                 $lastName = implode(' ', $names);

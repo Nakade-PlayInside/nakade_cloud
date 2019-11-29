@@ -139,9 +139,11 @@ abstract class AbstractMatch implements MatchInterface
         return $this;
     }
 
-    public function setResult(string $result): self
+    public function setResult(?string $result): self
     {
-        $this->result = $result;
+        if ($result) {
+            $this->result = $result;
+        }
 
         return $this;
     }

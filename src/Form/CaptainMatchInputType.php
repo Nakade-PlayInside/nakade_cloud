@@ -53,8 +53,8 @@ class CaptainMatchInputType extends AbstractType
             'class' => BundesligaPlayer::class,
             'placeholder' => 'bundesliga.nakade.player.choose',
         ])
-                ->add('opponent', BundesligaOpponentSelectType::class)
-                ->add('result', CaptainSelectResultType::class)
+                ->add('opponent', BundesligaOpponentSelectType::class, ['required' => false])
+                ->add('result', CaptainSelectResultType::class, ['required' => false])
                 ->add('winByDefault', CheckboxType::class, ['required' => false])
         ;
 

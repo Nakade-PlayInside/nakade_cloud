@@ -21,6 +21,8 @@
 "relegation.pairing.unique": "Die Relegation dieser Mannschaften ist schon registriert!"
 "match.pairing.unique": "Diese Paarung ist schon registriert!"
 "match.board.unique": "Das Brett <{{ board }}> für das Spiel <{{ pairing }}> ist schon registriert!"
+"match.duplicate.opponent": "Der Gegner <{{ value }}> ist mehrfach zugewiesen!"
+"match.duplicate.player": "Der Spieler <{{ value }}> ist mehrfach zugewiesen!"
 "password.msg": "Das Passwort muss mind. einen Buchstaben und eine Zahl enthalten."
 "This season is already registered!": "Diese Saison ist schon registriert!"
 "This person is already registered!": "Diese Person ist schon registriert!"

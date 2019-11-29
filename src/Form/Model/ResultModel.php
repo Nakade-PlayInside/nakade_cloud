@@ -22,16 +22,26 @@ declare(strict_types=1);
 
 namespace App\Form\Model;
 
+use App\Validator\OpponentMatch;
+use App\Validator\PlayerMatch;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @OpponentMatch()
+ * @PlayerMatch()
+ */
 class ResultModel
 {
-    public $results;
-    public $firstBoardMatch;
-    public $secondBoardMatch;
-    public $thirdBoardMatch;
-    public $fourthBoardMatch;
+    private $results;
+    private $firstBoardMatch;
+    private $secondBoardMatch;
+    private $thirdBoardMatch;
+    private $fourthBoardMatch;
 
     public function __construct(BundesligaResults $results)
     {
@@ -39,10 +49,79 @@ class ResultModel
         $this->initMatches($results);
     }
 
+    public function getResults(): BundesligaResults
+    {
+        return $this->results;
+    }
+
+    public function getFirstBoardMatch(): ?BundesligaMatch
+    {
+        return $this->firstBoardMatch;
+    }
+
+    public function setFirstBoardMatch(BundesligaMatch $firstBoardMatch): self
+    {
+        $this->firstBoardMatch = $firstBoardMatch;
+
+        return $this;
+    }
+
+    public function getSecondBoardMatch(): ?BundesligaMatch
+    {
+        return $this->secondBoardMatch;
+    }
+
+    public function setSecondBoardMatch(BundesligaMatch $secondBoardMatch): self
+    {
+        $this->secondBoardMatch = $secondBoardMatch;
+
+        return $this;
+    }
+
+    public function getThirdBoardMatch(): ?BundesligaMatch
+    {
+        return $this->thirdBoardMatch;
+    }
+
+    public function setThirdBoardMatch(BundesligaMatch $thirdBoardMatch): self
+    {
+        $this->thirdBoardMatch = $thirdBoardMatch;
+
+        return $this;
+    }
+
+    public function getFourthBoardMatch(): ?BundesligaMatch
+    {
+        return $this->fourthBoardMatch;
+    }
+
+    public function setFourthBoardMatch(BundesligaMatch $fourthBoardMatch): self
+    {
+        $this->fourthBoardMatch = $fourthBoardMatch;
+
+        return $this;
+    }
+
     public function isNakadeHome(): bool
     {
         return false !== stripos($this->results->getHome()->getName(), 'Nakade');
     }
+
+    /**
+     * @return BundesligaMatch[]
+     */
+    public function getAllMatches(): array
+    {
+        $data = [];
+        $data[] = $this->firstBoardMatch;
+        $data[] = $this->secondBoardMatch;
+        $data[] = $this->thirdBoardMatch;
+        $data[] = $this->fourthBoardMatch;
+
+        return $data;
+    }
+
+
 
     private function initMatches(BundesligaResults $results)
     {
@@ -83,9 +162,6 @@ class ResultModel
         $match->setSeason($results->getSeason())
                 ->setBoard($board)
                 ->setResults($results)
-                ->setWinByDefault(true)
-                ->setResult('2:0')
-        ;
         ;
 
         //default is black

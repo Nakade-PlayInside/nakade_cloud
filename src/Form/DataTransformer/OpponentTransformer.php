@@ -52,6 +52,9 @@ class OpponentTransformer implements DataTransformerInterface
 
     public function reverseTransform($value)
     {
+        if (!$value) {
+            return null;
+        }
         $repository = $this->entityManager->getRepository(BundesligaOpponent::class);
         $callback = $this->finderCallback;
         $opponent = $callback($repository, $value);

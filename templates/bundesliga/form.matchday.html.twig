@@ -22,11 +22,13 @@
             {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.fourthBoardMatch, 'legend': 'Viertes Brett', 'pair': false} %}
         </div>
 
+    {% if is_granted('ROLE_NAKADE_TEAM_MANAGER') %}
     <div class="">
         <button style="margin-top: 20px; width: 10rem" type="submit" class="btn btn-primary action-save">
             <span class="btn-label"> Update</span>
         </button>
     </div>
+    {% endif %}
     {{ form_end(form) }}
 {% endblock %}
 

@@ -20,7 +20,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
@@ -58,7 +57,7 @@ class BundesligaController extends AbstractController
      *
      * @IsGranted("ROLE_NAKADE_TEAM")
      */
-    public function actualMatch(ActualTableService $tableService, Request $request)
+    public function actualMatch(Request $request)
     {
         $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
         if (!$actualSeason) {
@@ -66,9 +65,7 @@ class BundesligaController extends AbstractController
         }
 
         $matchDay = $this->getDoctrine()->getRepository(BundesligaResults::class)->findActualMatchDay($actualSeason);
-        $results = $this->getDoctrine()
-                ->getRepository(BundesligaResults::class)
-                ->findNakadeResult($actualSeason->getId(), $matchDay);
+        $results = $this->getDoctrine()->getRepository(BundesligaResults::class)->findNakadeResult($actualSeason->getId(), $matchDay);
 
         $model = new ResultModel($results);
         $form = $this->createForm(CaptainResultInputType::class, $model);
@@ -80,16 +77,12 @@ class BundesligaController extends AbstractController
                 throw new UnexpectedTypeException($data, ResultModel::class);
             }
 
-            dd($data);
-
-
-            $this->getDoctrine()->getManager()->persist($match);
+            foreach ($data->getAllMatches() as $match) {
+                $this->getDoctrine()->getManager()->persist($match);
+            }
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'easyAdmin.bundesliga.match.success');
-            $params['action'] = 'list';
-
-            return $this->redirectToRoute('easyadmin', $params);
+            $this->addFlash('success', 'bundesliga.actual.matchDay.update.success');
         }
         $params['form'] = $form->createView();
 

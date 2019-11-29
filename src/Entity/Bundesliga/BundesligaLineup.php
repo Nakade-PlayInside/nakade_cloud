@@ -20,7 +20,6 @@
 namespace App\Entity\Bundesliga;
 
 use App\Validator\UniquePosition;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 

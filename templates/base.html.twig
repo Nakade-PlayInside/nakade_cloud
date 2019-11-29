@@ -36,12 +36,12 @@
                 <div style="min-height: 894px" class="container">
                     {% for msg in app.session.flashBag.get('success') %}
                         <div class="alert alert-success">
-                            {{ msg }}
+                            {{ msg | trans({}, 'messages')  }}
                         </div>
                     {% endfor %}
                     {% for msg in app.session.flashBag.get('error') %}
                         <div class="alert alert-danger">
-                            {{ msg }}
+                            {{ msg | trans({}, 'messages') }}
                         </div>
                     {% endfor %}
 
