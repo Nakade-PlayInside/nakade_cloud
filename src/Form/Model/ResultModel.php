@@ -22,10 +22,10 @@ declare(strict_types=1);
 
 namespace App\Form\Model;
 
-use App\Validator\OpponentMatch;
-use App\Validator\PlayerMatch;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
+use App\Validator\OpponentMatch;
+use App\Validator\PlayerMatch;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -121,7 +121,16 @@ class ResultModel
         return $data;
     }
 
+    public function isCompleted(): bool
+    {
+        foreach ($this->getAllMatches() as $match) {
+            if (!$match->getResult() || '0:0' === $match->getResult()) {
+                return false;
+            }
+        }
 
+        return true;
+    }
 
     private function initMatches(BundesligaResults $results)
     {

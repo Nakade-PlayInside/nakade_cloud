@@ -31,7 +31,9 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class CaptainSelectResultType extends AbstractType
@@ -51,7 +53,12 @@ class CaptainSelectResultType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'choices' => ['bundesliga.nakade.win' => '2:0', 'bundesliga.draw' => '1:1', 'bundesliga.nakade.loss' => '0:2'],
+            'choices' => [
+                'bundesliga.nakade.win' => '2:0',
+                'bundesliga.draw' => '1:1',
+                'bundesliga.nakade.loss' => '0:2',
+                'bundesliga.unplayed' => '0:0',
+            ],
         ]);
     }
 

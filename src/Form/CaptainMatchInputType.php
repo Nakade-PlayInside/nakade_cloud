@@ -32,6 +32,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -41,10 +42,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class CaptainMatchInputType extends AbstractType
 {
     private $entityManager;
+    private $authorizationChecker;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->entityManager = $entityManager;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -52,10 +55,11 @@ class CaptainMatchInputType extends AbstractType
         $builder->add('player', EntityType::class, [
             'class' => BundesligaPlayer::class,
             'placeholder' => 'bundesliga.nakade.player.choose',
+            'disabled' => $this->getDisabled(),
         ])
-                ->add('opponent', BundesligaOpponentSelectType::class, ['required' => false])
-                ->add('result', CaptainSelectResultType::class, ['required' => false])
-                ->add('winByDefault', CheckboxType::class, ['required' => false])
+                ->add('opponent', BundesligaOpponentSelectType::class, ['required' => false, 'disabled' => $this->getDisabled()])
+                ->add('result', CaptainSelectResultType::class, ['required' => false, 'disabled' => $this->getDisabled()])
+                ->add('winByDefault', CheckboxType::class, ['required' => false, 'disabled' => $this->getDisabled()])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
@@ -69,7 +73,8 @@ class CaptainMatchInputType extends AbstractType
                 $form->add('player', EntityType::class, [
                         'class' => BundesligaPlayer::class,
                         'placeholder' => 'bundesliga.nakade.player.choose',
-                         'choices' => $choices,
+                        'disabled' => $this->getDisabled(),
+                        'choices' => $choices,
                 ]);
             }
         });
@@ -80,5 +85,10 @@ class CaptainMatchInputType extends AbstractType
         $resolver->setDefaults([
              'data_class' => BundesligaMatch::class,
         ]);
+    }
+
+    private function getDisabled(): string
+    {
+        return $this->authorizationChecker->isGranted('ROLE_NAKADE_TEAM_MANAGER') ? '' : 'disabled';
     }
 }

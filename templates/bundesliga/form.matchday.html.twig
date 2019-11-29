@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('autocomplete') }}
     {{ encore_entry_link_tags('bundesliga') }}
 {% endblock %}
 {% block title %}Ergebnisse eintragen{% endblock %}
@@ -23,10 +22,15 @@
         </div>
 
     {% if is_granted('ROLE_NAKADE_TEAM_MANAGER') %}
-    <div class="">
-        <button style="margin-top: 20px; width: 10rem" type="submit" class="btn btn-primary action-save">
+    <div class="matchDay-buttons">
+        <button type="submit" class="btn btn-primary">
             <span class="btn-label"> Update</span>
         </button>
+        {%  if model.completed and model.results.season.executive %}
+            <button type="submit" class="btn btn-success" data-toggle="tooltip" title="Ergebnisse an den Ligaleiter schicken">
+                <i class="fa fa-fw fa-envelope"></i><span class="btn-label"> Ligaleiter</span>
+            </button>
+        {% endif %}
     </div>
     {% endif %}
     {{ form_end(form) }}

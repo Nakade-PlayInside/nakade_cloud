@@ -123,6 +123,22 @@
     }
 }
 
+.matchDay-buttons {
+
+    button {
+        margin-top: 20px;
+        width: 10rem;
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    button:first-of-type {
+        margin-right: 20px;
+    }
+}
+
 .bundesliga-result {
     padding-left: 20px;
 }
