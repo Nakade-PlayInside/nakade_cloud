@@ -182,6 +182,30 @@ abstract class AbstractMatch implements MatchInterface
         return $this->getResults()->getHome();
     }
 
+    public function getNakadePoints(): int
+    {
+        switch ($this->getResult()) {
+            case '2:0':
+                return 2;
+            case '1:1':
+                return 1;
+        }
+
+        return 0;
+    }
+
+    public function getOpponentPoints(): int
+    {
+        switch ($this->getResult()) {
+            case '0:2':
+                return 2;
+            case '1:1':
+                return 1;
+        }
+
+        return 0;
+    }
+
     public function __toString()
     {
         return $this->getPlayer()->getName().' - '.$this->getOpponent()->getName();

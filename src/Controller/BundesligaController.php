@@ -23,6 +23,7 @@ namespace App\Controller;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Entity\Bundesliga\ResultMail;
 use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
 use App\Services\ActualResultsGrabber;
@@ -79,6 +80,11 @@ class BundesligaController extends AbstractController
 
             foreach ($data->getAllMatches() as $match) {
                 $this->getDoctrine()->getManager()->persist($match);
+            }
+            //create mail if not existing
+            if (!$data->getResults()->getResultMail()) {
+                $mail = new ResultMail($results);
+                $this->getDoctrine()->getManager()->persist($mail);
             }
             $this->getDoctrine()->getManager()->flush();
 

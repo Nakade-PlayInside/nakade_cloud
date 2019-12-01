@@ -48,6 +48,11 @@ class BundesligaResults extends AbstractResults
      */
     private $matches;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\ResultMail", mappedBy="results", cascade={"persist", "remove"})
+     */
+    private $resultMail;
+
     public function __construct()
     {
         parent::__construct();
@@ -67,7 +72,7 @@ class BundesligaResults extends AbstractResults
     }
 
     /**
-     * @return Collection|MatchInterface[]
+     * @return Collection|BundesligaMatch[]
      */
     public function getMatches(): Collection
     {
@@ -100,5 +105,22 @@ class BundesligaResults extends AbstractResults
     public function __toString(): string
     {
         return $this->getPairing().sprintf(' (%d. Spieltag)', $this->getMatchDay());
+    }
+
+    public function getResultMail(): ?ResultMail
+    {
+        return $this->resultMail;
+    }
+
+    public function setResultMail(ResultMail $resultMail): self
+    {
+        $this->resultMail = $resultMail;
+
+        // set the owning side of the relation if necessary
+        if ($resultMail->getResults() !== $this) {
+            $resultMail->setResults($this);
+        }
+
+        return $this;
     }
 }

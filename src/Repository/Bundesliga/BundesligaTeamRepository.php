@@ -20,8 +20,6 @@
 
 namespace App\Repository\Bundesliga;
 
-use App\Entity\Bundesliga\BundesligaResults;
-use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -80,6 +78,20 @@ class BundesligaTeamRepository extends ServiceEntityRepository
                     ->getOneOrNullResult();
         } catch (\Exception $e) {
             $msg = sprintf('%s[value: %s]', $e->getMessage(), $value);
+            throw new \LogicException($msg);
+        }
+    }
+
+    public function findTeamNakade(): ?BundesligaTeam
+    {
+        try {
+            return $this->createQueryBuilder('t')
+                    ->andWhere('t.name LIKE :value')
+                    ->setParameter('value', '%Nakade%')
+                    ->getQuery()
+                    ->getOneOrNullResult();
+        } catch (\Exception $e) {
+            $msg = sprintf('There are other Nakade Teams! Error: %s', $e->getMessage());
             throw new \LogicException($msg);
         }
     }

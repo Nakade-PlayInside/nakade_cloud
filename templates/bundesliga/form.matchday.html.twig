@@ -27,9 +27,10 @@
             <span class="btn-label"> Update</span>
         </button>
         {%  if model.completed and model.results.season.executive %}
-            <button type="submit" class="btn btn-success" data-toggle="tooltip" title="Ergebnisse an den Ligaleiter schicken">
+            <a class="btn btn-success" data-toggle="tooltip" title="Ergebnisse an den Ligaleiter schicken"
+               href="{{ path('mail_result', { 'resultMail': model.results.resultMail.id }) }}">
                 <i class="fa fa-fw fa-envelope"></i><span class="btn-label"> Ligaleiter</span>
-            </button>
+            </a>
         {% endif %}
     </div>
     {% endif %}

@@ -26,6 +26,7 @@ use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Validator\OpponentMatch;
 use App\Validator\PlayerMatch;
+use App\Validator\ResultMatch;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -34,6 +35,7 @@ use App\Validator\PlayerMatch;
  *
  * @OpponentMatch()
  * @PlayerMatch()
+ * @ResultMatch()
  */
 class ResultModel
 {

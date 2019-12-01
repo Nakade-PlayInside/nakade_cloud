@@ -30,7 +30,7 @@ use Doctrine\Common\Collections\Collection;
 interface ResultsInterface
 {
     /**
-     * @return Collection|MatchInterface[]
+     * @return Collection|BundesligaMatch[]
      */
     public function getMatches(): Collection;
 

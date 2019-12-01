@@ -20,10 +20,10 @@
 
 namespace App\Entity\Bundesliga;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Pairing;
 use App\Validator\SeasonDate;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\MappedSuperclass()
@@ -34,6 +34,8 @@ use App\Validator\SeasonDate;
  */
 abstract class AbstractResults implements ResultsInterface
 {
+    const HOME_TEAM = 'Nakade';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -184,5 +186,28 @@ abstract class AbstractResults implements ResultsInterface
     public function getResult(): string
     {
         return $this->getBoardPointsHome().' : '.$this->getBoardPointsAway();
+    }
+
+    public function calcResult(): string
+    {
+        $points['nakade'] = $points['opp'] = 0;
+        foreach ($this->getMatches() as $match) {
+            $points['nakade'] += $match->getNakadePoints();
+            $points['opp'] += $match->getOpponentPoints();
+        }
+
+        $result = sprintf('%s:%s', $points['nakade'], $points['opp']);
+        if (!$match->isHomeMatch()) {
+            $result = strrev($result);
+        }
+
+        return $result;
+    }
+
+    public function getTeamManager()
+    {
+        if (false !== stripos($this->getHome(), self::HOME_TEAM)) {
+            $name = $this->getHome()->getCaptain();
+        }
     }
 }

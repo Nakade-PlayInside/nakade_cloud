@@ -22,21 +22,22 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Form\Model\UserPasswordFormModel;
-use App\Form\Model\UserResetFormModel;
-use App\Form\UserResetType;
-use App\Message\ResetPassword;
-use App\Tools\TokenGenerator;
 use App\Entity\NewsReader;
 use App\Entity\User;
+use App\Form\Model\UserPasswordFormModel;
 use App\Form\Model\UserRegistrationFormModel;
+use App\Form\Model\UserResetFormModel;
 use App\Form\ProfileType;
 use App\Form\RegisterType;
 use App\Form\UserEmailType;
 use App\Form\UserPasswordType;
+use App\Form\UserResetType;
 use App\Message\ConfirmRegistration;
+use App\Message\ResetPassword;
 use App\Security\LoginFormAuthenticator;
 use App\Security\LoginUtils;
+use App\Tools\TokenGenerator;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -47,11 +48,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class SecurityController!
- *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
@@ -446,7 +445,7 @@ class SecurityController extends AbstractController
             throw new NotFoundHttpException('Data not found!');
         }
 
-        if (!$user->getResetAt() || $user->getResetAt()->format('+3 day') >  new \DateTime()) {
+        if (!$user->getResetAt() || $user->getResetAt()->format('+3 day') > new \DateTime()) {
             throw new NotFoundHttpException('Token expired!');
         }
 

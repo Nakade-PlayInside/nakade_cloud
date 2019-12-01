@@ -17,12 +17,14 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
 /**
  * @Annotation
+ *
  * @Target({"CLASS", "ANNOTATION"})
  */
 class PlayerMatch extends Constraint
@@ -34,7 +36,7 @@ class PlayerMatch extends Constraint
     public $message = 'match.duplicate.player';
 
     /**
-     * allows to use an instance of that entity
+     * allows to use an instance of that entity.
      */
     public function getTargets()
     {
