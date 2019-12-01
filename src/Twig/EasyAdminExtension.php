@@ -46,7 +46,7 @@ class EasyAdminExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-                new TwigFunction('bundesliga_get_match_result', [$this, 'getMatchResult']),
+              //  new TwigFunction('bundesliga_get_match_result', [$this, 'getMatchResult']),
                 new TwigFunction('has_value', [$this, 'hasEntityValue']),
         ];
     }

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ergebnis Email!{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('bundesliga') }}
+{% endblock %}
+
+{% block body %}
+    <div>
+        {% include 'emails/resultMail.html.twig' %}
+    </div>
+    {{ form_start(form) }}
+    <div class="matchDay-buttons">
+        {% if mail.sendAt is empty %}
+        <button type="submit" class="btn btn-primary"><i class="fa fa-fw fa-envelope"></i>Abschicken</button>
+        {% else %}
+            <p>Die Mail wurde schon am {{ mail.sendAt | date('d.m.Y H:i') }} verschickt!</p>
+            <button type="submit" class="btn btn-warning" data-toggle="tooltip" title="Ergebnisse nochmal an den Ligaleiter schicken"><i class="fa fa-fw fa-envelope"></i>Abschicken</button>
+        {% endif %}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,34 @@
+{# templates/emails/confirmRegistration.txt.twig #}
+{% extends "mailTemplate.txt.twig" %}
+
+{% block mail_body %}
+Hallo {{ mail.results.season.executive.firstName }},
+
+das Ergebnis zwischen
+
+{{ mail.results.pairing }} {{ mail.results.calcResult }}.
+
+{% if mail.results.home.kgsId and mail.results.away.kgsId %}
+  KgsId: {{ mail.results.home.kgsId }}1..4 -  {{ mail.results.away.kgsId }}1..4
+{% endif %}
+
+{% for match in mail.results.matches %}
+    {{ match | pairing }}
+{% endfor %}
+
+Die Spieler der Heimmannschaft stehen links...
+
+
+
+Mit 361 Grüßen
+
+{{ manager }}
+Team Manager
+{% endblock %}
+
+{% block mail_footer %}
+Dieses Formular ist an den Ligaleiter der Go-Bundesliga des DGoB gerichtet.
+Dies ist eine automatisch generierte E-Mail. Bitte beachte, dass du auf diese E-Mail nicht direkt antworten kannst.
+Antworten an diese Adresse werden nicht gelesen.
+{% endblock %}
+

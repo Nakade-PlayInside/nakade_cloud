@@ -7,13 +7,20 @@
     <div style="padding-top: 20px; text-align: left">
         <h4 style="font-weight: normal; font-size: medium">Hallo {{ mail.results.season.executive.firstName }},</h4>
 
-    das Ergebnis zwischen {{ mail.results.pairing }} {{ mail.results.calcResult }}.
+        <p style="white-space: nowrap">das Ergebnis zwischen {{ mail.results.pairing }} {{ mail.results.calcResult }}.</p>
+
+        {% if mail.results.home.kgsId and mail.results.away.kgsId %}
+        <ul style="text-align: left; list-style: none; line-height: 1.5em">
+            <li>KgsId: {{ mail.results.home.kgsId }}1..4 -  {{ mail.results.away.kgsId }}1..4</li>
+        </ul>
+        {% endif %}
 
         <ul style="text-align: left; list-style: none; line-height: 1.5em">
             {% for match in mail.results.matches %}
-                <li>{{ match.board }}: {{ match.pairing}} {{ match.result }}</li>
+                <li>{{ match | pairing }}</li>
             {% endfor %}
         </ul>
+        <p style="margin-top: 1rem; filter: opacity(70%)">Die Spieler der Heimmannschaft stehen links...</p>
 
     <p style="margin-top: 2rem; margin-bottom:  1.5rem;">Mit 361 Grüßen</p>
     {{ manager }}
