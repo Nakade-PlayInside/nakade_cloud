@@ -1,0 +1,24 @@
+{# templates/emails/confirmRegistration.html.twig #}
+{% extends 'mailTemplate.html.twig' %}
+
+{% block mail_body %}
+    Hallo {{ mail.firstNameOppManager }},
+
+    Die Aufstellung für unser Team {{ mail.results.teamNakade }} für unsere Begegnung sieht voraussichtlich wie folgt aus:
+
+    {% for match in mail.results.matches %}
+        {{ match | lineup }} {% if match.targetDate %} ({{ match.targetDate | date('d.m.Y H:i') }}){% endif %}
+    {% endfor %}
+
+
+    Mit 361 Grüßen
+
+    {{ manager }}
+    Team Manager
+{% endblock %}
+
+{% block mail_footer %}
+    Dieses Formular ist an den Manager der Mannschaft "{{ mail.opponentTeam.name }}" der Go-Bundesliga des DGoB gerichtet.
+    Dies ist eine automatisch generierte E-Mail. Bitte beachte, dass du auf diese E-Mail nicht direkt antworten kannst.
+    Antworten an diese Adresse werden nicht gelesen.
+{% endblock %}

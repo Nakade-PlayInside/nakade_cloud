@@ -59,8 +59,10 @@ class MailController extends AbstractController
             //mail handling
             $message = new MatchResult($resultMail, $manager, $managerEmail);
             $messageBus->dispatch($message);
-
+            $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'result.mail.success');
+
+            return $this->redirectToRoute('bundesliga_actual_matchDay');
         }
 
         return $this->render(
@@ -102,7 +104,10 @@ class MailController extends AbstractController
             $message = new MatchLineup($lineupMail, $manager, $managerEmail);
             $messageBus->dispatch($message);
 
+            $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'result.mail.success');
+
+            return $this->redirectToRoute('bundesliga_actual_matchDay');
         }
 
         return $this->render(

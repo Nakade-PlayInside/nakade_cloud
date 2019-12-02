@@ -37,7 +37,7 @@ $(document).ready(function () {
 });
 
 
-//showing and updating result on resultSelect
+//showing and updating team result after selecting a result of a match
 $(document).ready(function () {
     var $resultSelect = $('.js-result-select');
     var $resultTarget = $('.js-calculate-result');
@@ -56,24 +56,29 @@ $(document).ready(function () {
             }
         });
         $resultTarget.text($nakade+':'+$opponent)
-        console.log($nakade+':'+$opponent);
-        // $.ajax({
-        //     url: $seasonSelect.data('teams-result-url'),
-        //     data: {
-        //         seasonId: $seasonSelect.val()
-        //     },
-        //     success: function (html) {
-        //         if (!html) {
-        //             $teamsResultTarget.find('select').remove();
-        //             $teamsResultTarget.addClass('d-none');
-        //             return;
-        //         }
-        //         // Replace the current field and show
-        //         $teamsResultTarget
-        //             .html(html)
-        //             .removeClass('d-none')
-        //     }
-        // });
     });
 });
 
+//show and hide dateTimeField
+window.addEventListener('load', function() {
+    createNullableControls();
+});
+
+function createNullableControls() {
+    var fnNullDates = function() {
+        var checkbox = $(this);
+
+        checkbox.closest('.form-group').find('select, input[type="date"], input[type="time"], input[type="datetime-local"]').each(function() {
+            var formFieldIsDisabled = checkbox.is(':checked');
+            $(this).prop('disabled', formFieldIsDisabled);
+
+            if (formFieldIsDisabled) {
+                $(this).closest('.datetime-widget').slideUp({ duration: 200 });
+            } else {
+                $(this).closest('.datetime-widget').slideDown({ duration: 200 });
+            }
+        });
+    };
+
+    $('.nullable-control :checkbox').bind('change', fnNullDates).each(fnNullDates);
+}

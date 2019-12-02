@@ -61,6 +61,11 @@ class LineupMail
         return $this;
     }
 
+    public function getOpponentTeam(): BundesligaTeam
+    {
+        return $this->results->getOpponentTeam();
+    }
+
     public function getFirstNameOppManager(): ?string
     {
         $nameOppCaptain = $this->results->getOpponentTeam()->getCaptain();

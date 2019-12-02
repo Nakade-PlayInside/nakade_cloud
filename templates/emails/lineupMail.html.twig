@@ -11,7 +11,7 @@
 
         <ul style="text-align: left; list-style: none; line-height: 1.5em">
             {% for match in mail.results.matches %}
-                <li>{{ match | lineup }}</li>
+                <li>{{ match | lineup }} {% if match.targetDate %} ({{ match.targetDate | date('d.m.Y H:i') }}){% endif %}</li>
             {% endfor %}
         </ul>
 
@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block mail_footer %}
-    Dieses Formular ist an den Ligaleiter der Go-Bundesliga des DGoB gerichtet.<br>
+    Dieses Formular ist an den Manager der Mannschaft "{{ mail.opponentTeam.name }}" der Go-Bundesliga des DGoB gerichtet.<br>
     Dies ist eine automatisch generierte E-Mail. Bitte beachte, dass du auf diese E-Mail nicht direkt antworten kannst.
     Antworten an diese Adresse werden nicht gelesen.<br><br>
 {% endblock %}

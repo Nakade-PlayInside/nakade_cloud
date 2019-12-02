@@ -17,13 +17,18 @@
    <div>
        <i class="fa fa-fw {{ homeColor }}"></i>{{ form_widget(home) }} - {{ form_widget(away) }}<i class="fa fa-fw {{ awayColor }}"></i>
    </div>
-   <div>
-       {{ form_widget(match.result,
-            {
-              placeholder: 'bundesliga.result.choose',
-            }
-
-          )
-       }}{{ form_widget(match.winByDefault, { 'label': 'bundesliga.result.winByDefault' }) }}
+   <div style="margin-left: 20px;">
+       {{ form_widget(match.result, { placeholder: 'bundesliga.result.choose', }) }} {{ form_widget(match.winByDefault, { 'label': 'bundesliga.result.winByDefault' }) }}
    </div>
+    <div class="form-group  field-date">
+        <div class="datetime-widget datetime-widget-date" style="{% if match.targetDate.vars.value is empty %}display: none;{% endif %}">
+            {{ form_widget(match.targetDate) }}
+        </div>
+        <div class="nullable-control">
+            <label>
+                <input type="checkbox" {% if match.targetDate.vars.value is empty %}checked="checked{% endif %}" autocomplete="disabled">
+                keine Vorverlegung der Partie
+            </label>
+        </div>
+    </div>
 </fieldset>

@@ -28,6 +28,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -60,6 +62,7 @@ class CaptainMatchInputType extends AbstractType
                 ->add('opponent', BundesligaOpponentSelectType::class, ['required' => false, 'disabled' => $this->getDisabled()])
                 ->add('result', CaptainSelectResultType::class, ['required' => false, 'disabled' => $this->getDisabled()])
                 ->add('winByDefault', CheckboxType::class, ['required' => false, 'disabled' => $this->getDisabled()])
+                ->add('targetDate', DateTimeType::class, ['widget' => 'single_text', 'required' => false])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {

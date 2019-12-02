@@ -74,6 +74,11 @@ abstract class AbstractMatch implements MatchInterface
      */
     protected $winByDefault = false;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $targetDate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -161,6 +166,18 @@ abstract class AbstractMatch implements MatchInterface
     public function setWinByDefault(bool $winByDefault): self
     {
         $this->winByDefault = $winByDefault;
+
+        return $this;
+    }
+
+    public function getTargetDate(): ?\DateTimeInterface
+    {
+        return $this->targetDate;
+    }
+
+    public function setTargetDate(?\DateTimeInterface $targetDate): self
+    {
+        $this->targetDate = $targetDate;
 
         return $this;
     }
