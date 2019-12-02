@@ -204,10 +204,19 @@ abstract class AbstractResults implements ResultsInterface
         return $result;
     }
 
-    public function getTeamManager()
+    public function getTeamNakade(): BundesligaTeam
     {
         if (false !== stripos($this->getHome(), self::HOME_TEAM)) {
-            $name = $this->getHome()->getCaptain();
+            return $this->getHome();
         }
+        return $this->getAway();
+    }
+
+    public function getOpponentTeam(): BundesligaTeam
+    {
+        if (false === stripos($this->getHome(), self::HOME_TEAM)) {
+            return $this->getHome();
+        }
+        return $this->getAway();
     }
 }

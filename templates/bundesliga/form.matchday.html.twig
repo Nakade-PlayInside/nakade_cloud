@@ -15,6 +15,30 @@
         </div>
 
         <div class="matchDay">
+            {% if form.executive is defined %}
+                <fieldset><legend>Ligaleiter</legend>
+                    <div class="no-margin-top">
+                    {{ form_help(form.executive) }}
+                    {{ form_widget(form.executive) }}
+                    </div>
+                </fieldset>
+            {% endif %}
+            {% if form.nakadeCaptainName is defined and form.nakadeCaptainEmail is defined%}
+                <fieldset><legend>Teammanager von Nakade</legend>
+                  <div class="manager no-margin-top">
+                      <div>{{ form_errors(form.nakadeCaptainName) }}{{ form_widget(form.nakadeCaptainName) }}</div>
+                      <div>{{ form_errors(form.nakadeCaptainEmail) }}{{ form_widget(form.nakadeCaptainEmail) }}</div>
+                  </div>
+                </fieldset>
+            {% endif %}
+            {% if form.oppCaptainName is defined and form.oppCaptainEmail is defined%}
+                <fieldset><legend>Teammanager von {{ model.results.opponentTeam.name}}</legend>
+                    <div class="manager no-margin-top">
+                        <div>{{ form_errors(form.oppCaptainName) }}{{ form_widget(form.oppCaptainName) }}</div>
+                        <div>{{ form_errors(form.oppCaptainName) }}{{ form_widget(form.oppCaptainEmail) }}</div>
+                    </div>
+                </fieldset>
+            {% endif %}
             {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.firstBoardMatch, 'legend': 'Erstes Brett', 'pair': true} %}
             {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.secondBoardMatch, 'legend': 'Zweites Brett', 'pair': false} %}
             {% include 'bundesliga/_match.html.twig' with {'model': model, 'match': form.thirdBoardMatch, 'legend': 'Drittes Brett', 'pair': true} %}
@@ -26,10 +50,16 @@
         <button type="submit" class="btn btn-primary">
             <span class="btn-label"> Update</span>
         </button>
-        {%  if model.completed and model.results.season.executive %}
+        {%  if model.readyForLineupMail %}
+            <a class="btn btn-info" data-toggle="tooltip" title="Aufstellung verschicken"
+               href="{{ path('mail_lineup', { 'lineupMail': model.results.lineupMail.id }) }}">
+                <i class="fa fa-fw fa-envelope"></i><span class="btn-label"> Aufstellung</span>
+            </a>
+        {% endif %}
+        {%  if model.readyForResultMail %}
             <a class="btn btn-success" data-toggle="tooltip" title="Ergebnisse an den Ligaleiter schicken"
                href="{{ path('mail_result', { 'resultMail': model.results.resultMail.id }) }}">
-                <i class="fa fa-fw fa-envelope"></i><span class="btn-label"> Ligaleiter</span>
+                <i class="fa fa-fw fa-envelope"></i><span class="btn-label"> Ergebnisse</span>
             </a>
         {% endif %}
     </div>

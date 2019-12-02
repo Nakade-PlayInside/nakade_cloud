@@ -22,10 +22,16 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Bundesliga\BundesligaExecutive;
 use App\Form\Model\ResultModel;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -49,12 +55,45 @@ class CaptainResultInputType extends AbstractType
                 ->add('thirdBoardMatch', CaptainMatchInputType::class)
                 ->add('fourthBoardMatch', CaptainMatchInputType::class)
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var ResultModel $model */
+            $model = $event->getData();
+            $form = $event->getForm();
+            if (!$model->getExecutive()) {
+                $form->add('executive', EntityType::class, [
+                    'class' => BundesligaExecutive::class,
+                    'placeholder' => 'bundesliga.executive.choose',
+                    'help' => 'bundesliga.executive.help',
+                ]);
+            }
+
+            if (!$model->getNakadeCaptainName() || !$model->getNakadeCaptainEmail()) {
+                $form->add('nakadeCaptainName', TextType::class, [
+                    'attr' => ['placeholder' => 'bundesliga.team.manager.placeholder'],
+                ]);
+                $form->add('nakadeCaptainEmail', EmailType::class, [
+                        'attr' => ['placeholder' => 'bundesliga.team.manager.email.placeholder'],
+                ]);
+            }
+
+            if (!$model->getOppCaptainName() || !$model->getOppCaptainEmail()) {
+                $form->add('oppCaptainName', TextType::class, [
+                        'attr' => ['placeholder' => 'bundesliga.team.manager.placeholder'],
+                ]);
+                $form->add('oppCaptainEmail', EmailType::class, [
+                        'attr' => ['placeholder' => 'bundesliga.team.manager.email.placeholder'],
+                ]);
+            }
+        });
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => ResultModel::class,
+            'allow_extra_fields' => true,
         ]);
     }
 }

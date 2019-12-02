@@ -53,6 +53,11 @@ class BundesligaResults extends AbstractResults
      */
     private $resultMail;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\LineupMail", mappedBy="results", cascade={"persist", "remove"})
+     */
+    private $lineupMail;
+
     public function __construct()
     {
         parent::__construct();
@@ -119,6 +124,23 @@ class BundesligaResults extends AbstractResults
         // set the owning side of the relation if necessary
         if ($resultMail->getResults() !== $this) {
             $resultMail->setResults($this);
+        }
+
+        return $this;
+    }
+
+    public function getLineupMail(): ?LineupMail
+    {
+        return $this->lineupMail;
+    }
+
+    public function setLineupMail(?LineupMail $lineupMail): self
+    {
+        $this->lineupMail = $lineupMail;
+
+        // set the owning side of the relation if necessary
+        if ($lineupMail->getResults() !== $this) {
+            $lineupMail->setResults($this);
         }
 
         return $this;

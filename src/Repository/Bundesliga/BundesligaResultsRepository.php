@@ -163,6 +163,7 @@ class BundesligaResultsRepository extends ServiceEntityRepository
     }
 
     //used in ResultsCatcher
+    //here you must use MIN
     public function findMatchDayUnplayed(BundesligaSeason $season): ?string
     {
         try {

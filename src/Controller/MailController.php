@@ -21,6 +21,7 @@
 namespace App\Controller;
 
 use App\Entity\Bundesliga\BundesligaTeam;
+use App\Entity\Bundesliga\LineupMail;
 use App\Entity\Bundesliga\ResultMail;
 use App\Message\MatchResult;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -42,9 +43,6 @@ class MailController extends AbstractController
         if (!$resultMail) {
             return $this->redirect('bundesliga_actual_matchDay');
         }
-        //todo: no captain
-        //todo: no email
-        //todo: no executive
 
         $team = $this->getDoctrine()->getRepository(BundesligaTeam::class)->findTeamNakade();
         $names = explode(' ', $team->getCaptain());
@@ -72,6 +70,47 @@ class MailController extends AbstractController
                 'manager' => $manager,
                 'form' => $form->createView(),
             ]
+        );
+    }
+
+    /**
+     * @Route("/mail/{lineupMail}/lineup", name="mail_lineup", requirements={"lineupMail"="\d+"})
+     *
+     * @IsGranted("ROLE_NAKADE_TEAM_MANAGER")
+     */
+    public function sendLineupMail(Request $request, LineupMail $lineupMail, MessageBusInterface $messageBus)
+    {
+        $lineupMail = $this->getDoctrine()->getRepository(LineupMail::class)->find(LineupMail);
+        if (!$lineupMail) {
+            return $this->redirect('bundesliga_actual_matchDay');
+        }
+
+        $team = $this->getDoctrine()->getRepository(BundesligaTeam::class)->findTeamNakade();
+        $names = explode(' ', $team->getCaptain());
+        $manager = $names[0];
+        $managerEmail = $team->getEmail();
+
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $lineupMail->setSendAt(new \DateTimeImmutable());
+//todo: cc is oppCaptain email
+            //mail handling
+           // $message = new MatchResult($resultMail, $manager, $managerEmail);
+           // $messageBus->dispatch($message);
+
+            $this->addFlash('success', 'result.mail.success');
+        }
+
+        return $this->render(
+                'mail/result.html.twig',
+                [
+                        'mail' => $lineupMail,
+                        'email' => $lineupMail->getResults()->getSeason()->getExecutive()->getEmail(),
+                        'manager' => $manager,
+                        'form' => $form->createView(),
+                ]
         );
     }
 }

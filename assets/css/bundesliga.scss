@@ -95,6 +95,18 @@
         }
     }
 
+    .no-margin-top {
+        margin-top: unset !important;
+    }
+
+    .manager {
+
+        div {
+            margin-top: unset;
+            display: inline-block;
+        }
+    }
+
     .algolia-autocomplete {
         width: unset !important;
         display: unset !important;

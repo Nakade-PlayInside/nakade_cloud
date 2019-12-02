@@ -22,11 +22,13 @@ declare(strict_types=1);
 
 namespace App\Form\Model;
 
+use App\Entity\Bundesliga\BundesligaExecutive;
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Validator\OpponentMatch;
 use App\Validator\PlayerMatch;
 use App\Validator\ResultMatch;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -45,9 +47,40 @@ class ResultModel
     private $thirdBoardMatch;
     private $fourthBoardMatch;
 
+    /**
+     * @Assert\NotNull()
+     */
+    private $executive;
+
+    /**
+     * @Assert\NotBlank()
+     */
+    private $nakadeCaptainName;
+
+    /**
+     * @Assert\Email()
+     */
+    private $nakadeCaptainEmail;
+
+    /**
+     * @Assert\NotBlank()
+     */
+    private $oppCaptainName;
+
+    /**
+     * @Assert\Email()
+     */
+    private $oppCaptainEmail;
+
+
     public function __construct(BundesligaResults $results)
     {
         $this->results = $results;
+        $this->executive = $results->getSeason()->getExecutive();
+        $this->nakadeCaptainName = $results->getTeamNakade()->getCaptain();
+        $this->nakadeCaptainEmail = $results->getTeamNakade()->getEmail();
+        $this->oppCaptainName = $results->getOpponentTeam()->getCaptain();
+        $this->oppCaptainEmail = $results->getOpponentTeam()->getEmail();
         $this->initMatches($results);
     }
 
@@ -104,6 +137,71 @@ class ResultModel
         return $this;
     }
 
+    public function getExecutive(): ?BundesligaExecutive
+    {
+        return $this->executive;
+    }
+
+    public function setExecutive(BundesligaExecutive $executive): self
+    {
+        $this->executive = $executive;
+        $this->results->getSeason()->setExecutive($executive);
+
+        return $this;
+    }
+
+    public function getNakadeCaptainName(): ?string
+    {
+        return $this->nakadeCaptainName;
+    }
+
+    public function setNakadeCaptainName(string $nakadeCaptainName): self
+    {
+        $this->nakadeCaptainName = $nakadeCaptainName;
+        $this->getResults()->getTeamNakade()->setCaptain($nakadeCaptainName);
+
+        return $this;
+    }
+
+    public function getNakadeCaptainEmail(): ?string
+    {
+        return $this->nakadeCaptainEmail;
+    }
+
+    public function setNakadeCaptainEmail(string $nakadeCaptainEmail): self
+    {
+        $this->nakadeCaptainEmail = $nakadeCaptainEmail;
+        $this->getResults()->getTeamNakade()->setEmail($nakadeCaptainEmail);
+
+        return $this;
+    }
+
+    public function getOppCaptainName(): ?string
+    {
+        return $this->oppCaptainName;
+    }
+
+    public function setOppCaptainName(string $oppCaptainName): self
+    {
+        $this->oppCaptainName = $oppCaptainName;
+        $this->getResults()->getOpponentTeam()->setCaptain($oppCaptainName);
+
+        return $this;
+    }
+
+    public function getOppCaptainEmail(): ?string
+    {
+        return $this->oppCaptainEmail;
+    }
+
+    public function setOppCaptainEmail(string $oppCaptainEmail): self
+    {
+        $this->oppCaptainEmail = $oppCaptainEmail;
+        $this->getResults()->getOpponentTeam()->setEmail($oppCaptainEmail);
+
+        return $this;
+    }
+
     public function isNakadeHome(): bool
     {
         return false !== stripos($this->results->getHome()->getName(), 'Nakade');
@@ -132,6 +230,27 @@ class ResultModel
         }
 
         return true;
+    }
+
+    public function hasLineup(): bool
+    {
+        foreach ($this->getAllMatches() as $match) {
+            if (!$match->getPlayer()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function isReadyForResultMail(): bool
+    {
+        return $this->executive && $this->nakadeCaptainName && $this->nakadeCaptainEmail && $this->isCompleted();
+    }
+
+    public function isReadyForLineupMail(): bool
+    {
+        return $this->hasLineup() && !$this->isCompleted() && $this->executive && $this->nakadeCaptainName && $this->nakadeCaptainEmail && $this->oppCaptainEmail;
     }
 
     private function initMatches(BundesligaResults $results)
