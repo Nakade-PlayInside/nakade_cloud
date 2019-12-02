@@ -61,9 +61,15 @@ class LineupMail
         return $this;
     }
 
-    public function getSendTo(): ?BundesligaExecutive
+    public function getFirstNameOppManager(): ?string
     {
-        return $this->results->getSeason()->getExecutive();
+        $nameOppCaptain = $this->results->getOpponentTeam()->getCaptain();
+        if (!$nameOppCaptain) {
+            return '';
+        }
+        $names = explode(' ', $nameOppCaptain);
+
+        return array_shift($names);
     }
 
     public function getLeagueNumber(): int

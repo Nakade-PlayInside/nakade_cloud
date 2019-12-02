@@ -23,6 +23,7 @@ namespace App\Controller;
 use App\Entity\Bundesliga\BundesligaTeam;
 use App\Entity\Bundesliga\LineupMail;
 use App\Entity\Bundesliga\ResultMail;
+use App\Message\MatchLineup;
 use App\Message\MatchResult;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -80,7 +81,8 @@ class MailController extends AbstractController
      */
     public function sendLineupMail(Request $request, LineupMail $lineupMail, MessageBusInterface $messageBus)
     {
-        $lineupMail = $this->getDoctrine()->getRepository(LineupMail::class)->find(LineupMail);
+        /** @var LineupMail $lineupMail */
+        $lineupMail = $this->getDoctrine()->getRepository(LineupMail::class)->find($lineupMail);
         if (!$lineupMail) {
             return $this->redirect('bundesliga_actual_matchDay');
         }
@@ -95,22 +97,22 @@ class MailController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $lineupMail->setSendAt(new \DateTimeImmutable());
-//todo: cc is oppCaptain email
+
             //mail handling
-           // $message = new MatchResult($resultMail, $manager, $managerEmail);
-           // $messageBus->dispatch($message);
+            $message = new MatchLineup($lineupMail, $manager, $managerEmail);
+            $messageBus->dispatch($message);
 
             $this->addFlash('success', 'result.mail.success');
         }
 
         return $this->render(
-                'mail/result.html.twig',
-                [
-                        'mail' => $lineupMail,
-                        'email' => $lineupMail->getResults()->getSeason()->getExecutive()->getEmail(),
-                        'manager' => $manager,
-                        'form' => $form->createView(),
-                ]
+            'mail/lineup.html.twig',
+            [
+                'mail' => $lineupMail,
+                'email' => $lineupMail->getResults()->getOpponentTeam()->getEmail(),
+                'manager' => $manager,
+                'form' => $form->createView(),
+            ]
         );
     }
 }

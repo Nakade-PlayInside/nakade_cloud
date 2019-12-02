@@ -1,0 +1,29 @@
+{# templates/emails/confirmRegistration.html.twig #}
+{% extends 'mailTemplate.html.twig' %}
+
+{% block mail_body %}
+    <h5 style="filter: opacity(70%)">{{ mail.results.season.title }} - {{ mail.leagueNumber }}. Bundesliga{% if mail.leagueGroup %} ({{ mail.leagueGroup|upper }}){%  endif %}, {{ mail.results.matchDay }}. Spieltag</h5>
+    <h3 style="display: flex; align-items: center;"><img style="margin-right: 10px; filter: opacity(60%);" alt="logo" width="32px" height="32px" src="{{ absolute_url(asset('build/images/go-32.png')) }}">Mannschaftsaufstellung!</h3>
+    <div style="padding-top: 20px; text-align: left">
+        <h4 style="font-weight: normal; font-size: medium">Hallo {{ mail.firstNameOppManager }},</h4>
+
+        <p>Die Aufstellung für unser Team <b>{{ mail.results.teamNakade }}</b> für unsere Begegnung sieht voraussichtlich wie folgt aus:</p>
+
+        <ul style="text-align: left; list-style: none; line-height: 1.5em">
+            {% for match in mail.results.matches %}
+                <li>{{ match | lineup }}</li>
+            {% endfor %}
+        </ul>
+
+    <p style="margin-top: 2rem; margin-bottom:  1.5rem;">Mit 361 Grüßen</p>
+    {{ manager }}
+    <p style="margin-top: 0.3rem; margin-bottom: 1rem; font-size: smaller">Team Manager</p>
+    </div>
+
+{% endblock %}
+
+{% block mail_footer %}
+    Dieses Formular ist an den Ligaleiter der Go-Bundesliga des DGoB gerichtet.<br>
+    Dies ist eine automatisch generierte E-Mail. Bitte beachte, dass du auf diese E-Mail nicht direkt antworten kannst.
+    Antworten an diese Adresse werden nicht gelesen.<br><br>
+{% endblock %}
