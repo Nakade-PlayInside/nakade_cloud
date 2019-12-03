@@ -21,7 +21,6 @@
 namespace App\Entity\Bundesliga;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
@@ -29,8 +28,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 abstract class AbstractMail
 {
-    const HOME_TEAM = 'Nakade';
-
+    use TimestampableEntity;
 
     /**
      * @ORM\Id()
@@ -40,35 +38,20 @@ abstract class AbstractMail
     protected $id;
 
     /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"})
-     */
-    protected $createdAt = false;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"}))
-     */
-    protected $updatedAt = false;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaResults", inversedBy="resultMail", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $results;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $sendAt;
 
     public function __construct(BundesligaResults $results)
     {
         $this->results = $results;
     }
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $sendAt;
 
     public function getId(): ?int
     {
