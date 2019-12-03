@@ -27,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Extract the actual results by the DGoB site. Lokking up for the actual matchDay and unplayed matches.
+ * Extract the actual results by the DGoB site. Looking up for the actual matchDay and unplayed matches.
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz

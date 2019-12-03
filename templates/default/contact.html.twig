@@ -29,14 +29,15 @@
 
     {{ form_start(contactForm) }}
 
+
     <div class="row">
-        <div class="col">
+        <div style="padding-left: unset" class="col">
             {{ form_row(contactForm.firstName,  {
                 label: 'contact.first.name',
                 attr: { placeholder: 'contact.first.name.required' }
             }) }}
         </div>
-        <div class="col" id="some-custom-id">
+        <div style="padding-right: unset" class="col" id="some-custom-id">
             {{ form_row(contactForm.lastName,  {
                 label: 'contact.last.name',
                 attr: { placeholder: 'contact.last.name.required' }
@@ -58,13 +59,13 @@
     }) }}
 
     <div class="row">
-        <div class="col-3">
+        <div style="padding-left: unset" class="col-3">
             {{ form_row(contactForm.zipCode,  {
                 label: 'contact.zip',
                 attr: { placeholder: 'contact.zip' }
             }) }}
         </div>
-        <div class="col">
+        <div style="padding-right: unset" class="col">
             {{ form_row(contactForm.city,  {
                 label: 'contact.city',
                 attr: { placeholder: 'contact.city' }
