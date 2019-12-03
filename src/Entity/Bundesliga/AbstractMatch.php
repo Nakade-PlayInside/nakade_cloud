@@ -21,29 +21,16 @@
 namespace App\Entity\Bundesliga;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\MappedSuperclass()
  */
 abstract class AbstractMatch implements MatchInterface
 {
+    use TimestampableEntity;
+
     const HOME_TEAM = 'Nakade';
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"})
-     */
-    protected $createdAt = false;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"}))
-     */
-    protected $updatedAt = false;
-
 
     /**
      * @ORM\Id()

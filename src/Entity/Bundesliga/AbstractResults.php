@@ -23,8 +23,8 @@ namespace App\Entity\Bundesliga;
 use App\Validator\Pairing;
 use App\Validator\SeasonDate;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass()
@@ -35,21 +35,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 abstract class AbstractResults implements ResultsInterface
 {
+    use TimestampableEntity;
+
     const HOME_TEAM = 'Nakade';
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"}))
-     */
-    protected $updatedAt = false;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"})
-     */
-    protected $createdAt = false;
 
     /**
      * @ORM\Id()
@@ -176,11 +164,6 @@ abstract class AbstractResults implements ResultsInterface
         $this->season = $season;
 
         return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
     }
 
     public function getPairing(): string
