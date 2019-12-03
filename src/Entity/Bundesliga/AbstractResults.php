@@ -45,6 +45,13 @@ abstract class AbstractResults implements ResultsInterface
     protected $updatedAt = false;
 
     /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"})
+     */
+    protected $createdAt = false;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
