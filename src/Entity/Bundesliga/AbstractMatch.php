@@ -21,6 +21,7 @@
 namespace App\Entity\Bundesliga;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass()
@@ -28,6 +29,21 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class AbstractMatch implements MatchInterface
 {
     const HOME_TEAM = 'Nakade';
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"})
+     */
+    protected $createdAt = false;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"}))
+     */
+    protected $updatedAt = false;
+
 
     /**
      * @ORM\Id()

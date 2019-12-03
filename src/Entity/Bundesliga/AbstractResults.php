@@ -24,6 +24,7 @@ use App\Validator\Pairing;
 use App\Validator\SeasonDate;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass()
@@ -35,6 +36,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class AbstractResults implements ResultsInterface
 {
     const HOME_TEAM = 'Nakade';
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime", options={"default" = "CURRENT_TIMESTAMP"}))
+     */
+    protected $updatedAt = false;
 
     /**
      * @ORM\Id()
@@ -85,16 +93,6 @@ abstract class AbstractResults implements ResultsInterface
      * @Assert\NotNull()
      */
     protected $season;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $createdAt = false;
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTimeImmutable();
-    }
 
     public function getId(): ?int
     {
