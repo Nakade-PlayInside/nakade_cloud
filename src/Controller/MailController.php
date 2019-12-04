@@ -39,7 +39,7 @@ class MailController extends AbstractController
      *
      * @IsGranted("ROLE_NAKADE_TEAM_MANAGER")
      */
-    public function sendResultMail(Request $request, ResultMail $resultMail, MessageBusInterface $messageBus)
+    public function sendResultMail(Request $request, ResultMail $resultMail, MessageBusInterface $messageBus, LoggerInterface $mailsLogger)
     {
         $resultMail = $this->getDoctrine()->getRepository(ResultMail::class)->find($resultMail);
         if (!$resultMail) {
@@ -62,6 +62,7 @@ class MailController extends AbstractController
             $messageBus->dispatch($message);
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'result.mail.success');
+            $mailsLogger->notice('ResultMail sent by {user}', ['user' => $this->getUser()]);
 
             return $this->redirectToRoute('bundesliga_actual_matchDay');
         }
@@ -103,7 +104,7 @@ class MailController extends AbstractController
 
             //mail handling
             $message = new MatchLineup($lineupMail, $manager, $managerEmail);
-           // $messageBus->dispatch($message);
+            $messageBus->dispatch($message);
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'result.mail.success');

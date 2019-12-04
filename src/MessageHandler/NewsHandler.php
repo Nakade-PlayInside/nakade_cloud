@@ -20,9 +20,8 @@
 
 namespace App\MessageHandler;
 
+use App\Logger\MailLoggerTrait;
 use App\Message\News;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
@@ -31,12 +30,14 @@ use Twig\Environment;
  * Class ClubInvitationHandler!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class NewsHandler implements MessageHandlerInterface, LoggerAwareInterface
+class NewsHandler implements MessageHandlerInterface
 {
-    use LoggerAwareTrait;
+    use MailLoggerTrait;
 
     private $mailer;
     private $twig;
@@ -52,6 +53,11 @@ class NewsHandler implements MessageHandlerInterface, LoggerAwareInterface
     public function __invoke(News $news)
     {
         $subject = sprintf('Nakade Spieltreff | Einladung zum Go im Mommsen-Eck [%s]', $news->getDate());
+        $this->logger->notice(
+            'News {news}, sentTo: <{sentTo}>',
+            ['news' => $news, 'sentTo' => $news->getReader()->getEmail()]
+        );
+
         $message = (new \Swift_Message($subject))
                     ->setFrom($this->emailNoReply)
                     ->setTo($news->getReader()->getEmail())
@@ -86,7 +92,10 @@ class NewsHandler implements MessageHandlerInterface, LoggerAwareInterface
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent news to email:%d', $news->getReader()->getEmail()));
+                $this->logger->error(
+                    'Could not sent news {news} to email <{email}>!',
+                    ['news' => $news, 'email' => $news->getReader()->getEmail()]
+                );
             }
         }
     }

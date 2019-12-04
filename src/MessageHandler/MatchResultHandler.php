@@ -20,10 +20,8 @@
 
 namespace App\MessageHandler;
 
-use App\Message\ConfirmRegistration;
+use App\Logger\MailLoggerTrait;
 use App\Message\MatchResult;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
@@ -35,9 +33,9 @@ use Twig\Environment;
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class MatchResultHandler implements MessageHandlerInterface, LoggerAwareInterface
+class MatchResultHandler implements MessageHandlerInterface
 {
-    use LoggerAwareTrait;
+    use MailLoggerTrait;
 
     private $mailer;
     private $twig;
@@ -54,8 +52,11 @@ class MatchResultHandler implements MessageHandlerInterface, LoggerAwareInterfac
     {
         $resultMail = $matchResult->getResultMail();
         $sendTo = $resultMail->getResults()->getSeason()->getExecutive()->getEmail();
-        $sendTo = 'holger@nakade.de';
         $subject = sprintf('DGoB Bundesliga Ergebnisse, %s. Spieltag', $resultMail->getResults()->getMatchDay());
+        $this->logger->notice(
+            'ResultMail {mail}, sentTo: <{sentTo}>, bcc:<{sentBbc}>',
+            ['mail' => $resultMail->getId(), 'sentTo' => $sendTo, 'sentBbc' => $matchResult->getBbcMail()]
+        );
 
         $message = (new \Swift_Message($subject))
                     ->setFrom($this->emailNoReply)
@@ -80,7 +81,10 @@ class MatchResultHandler implements MessageHandlerInterface, LoggerAwareInterfac
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent result mail id:%d', $resultMail->getId()));
+                $this->logger->error(
+                    'Could not sent result mail {mail}',
+                    ['mail' => $resultMail]
+                );
             }
         }
     }

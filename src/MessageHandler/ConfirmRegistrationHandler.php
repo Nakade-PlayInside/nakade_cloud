@@ -20,9 +20,8 @@
 
 namespace App\MessageHandler;
 
+use App\Logger\MailLoggerTrait;
 use App\Message\ConfirmRegistration;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
@@ -36,9 +35,9 @@ use Twig\Environment;
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ConfirmRegistrationHandler implements MessageHandlerInterface, LoggerAwareInterface
+class ConfirmRegistrationHandler implements MessageHandlerInterface
 {
-    use LoggerAwareTrait;
+    use MailLoggerTrait;
 
     private $mailer;
     private $twig;
@@ -54,6 +53,10 @@ class ConfirmRegistrationHandler implements MessageHandlerInterface, LoggerAware
     public function __invoke(ConfirmRegistration $confirmRegistration)
     {
         $user = $confirmRegistration->getUser();
+        $this->logger->notice(
+            'confirmation mail to user {user}, sentTo <{email}>',
+            ['user' => $user, 'email' => $user->getEmail()]
+        );
 
         $message = (new \Swift_Message('Bestätige deine email Adresse'))
                     ->setFrom($this->emailNoReply)
@@ -77,7 +80,10 @@ class ConfirmRegistrationHandler implements MessageHandlerInterface, LoggerAware
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent confirmation mail id:%d', $user->getId()));
+                $this->logger->error(
+                    'Could not sent confirmation mail to user {user} <{email}>',
+                    ['user' => $user, 'email' => $user->getEmail()]
+                );
             }
         }
     }

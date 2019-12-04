@@ -20,10 +20,8 @@
 
 namespace App\MessageHandler;
 
-use App\Message\ConfirmContact;
+use App\Logger\MailLoggerTrait;
 use App\Message\ReplyContact;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
@@ -32,12 +30,14 @@ use Twig\Environment;
  * Class ReplyContactHandler!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ReplyContactHandler implements MessageHandlerInterface, LoggerAwareInterface
+class ReplyContactHandler implements MessageHandlerInterface
 {
-    use LoggerAwareTrait;
+    use MailLoggerTrait;
 
     private $mailer;
     private $twig;
@@ -54,6 +54,10 @@ class ReplyContactHandler implements MessageHandlerInterface, LoggerAwareInterfa
     {
         $contactReply = $replyContact->getContactReply();
         $email = $contactReply->getRecipient()->getEmail();
+        $this->logger->notice(
+            'Contact reply {reply}, sentTo: <{sentTo}>',
+            ['reply' => $replyContact, 'sentTo' => $email]
+        );
 
         $message = (new \Swift_Message('Antwort auf Ihre Kontaktanfrage bei [nakade.de]'))
                     ->setFrom($this->emailService)
@@ -81,7 +85,10 @@ class ReplyContactHandler implements MessageHandlerInterface, LoggerAwareInterfa
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent confirmation mail id:%d', $contactMail->getId()));
+                $this->logger->error(
+                    'Could not sent reply contact {reply} to email <{sentTo}>!',
+                    ['reply' => $replyContact, 'sentTo' => $email]
+                );
             }
         }
     }

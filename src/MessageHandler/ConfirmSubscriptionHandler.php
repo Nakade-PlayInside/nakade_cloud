@@ -20,10 +20,8 @@
 
 namespace App\MessageHandler;
 
-use App\Message\ConfirmRegistration;
+use App\Logger\MailLoggerTrait;
 use App\Message\ConfirmSubscription;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
@@ -37,9 +35,9 @@ use Twig\Environment;
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ConfirmSubscriptionHandler implements MessageHandlerInterface, LoggerAwareInterface
+class ConfirmSubscriptionHandler implements MessageHandlerInterface
 {
-    use LoggerAwareTrait;
+    use MailLoggerTrait;
 
     private $mailer;
     private $twig;
@@ -56,6 +54,10 @@ class ConfirmSubscriptionHandler implements MessageHandlerInterface, LoggerAware
     {
         /** @var ConfirmSubscription $confirmSubscription */
         $reader = $confirmSubscription->getNewsReader();
+        $this->logger->notice(
+            'Confirm subscription for reader {reader}, sentTo: <{sentTo}>',
+            ['reader' => $reader, 'sentTo' => $reader->getEmail()]
+        );
 
         $message = (new \Swift_Message('Bestätige deine email Adresse'))
                     ->setFrom($this->emailNoReply)
@@ -77,7 +79,10 @@ class ConfirmSubscriptionHandler implements MessageHandlerInterface, LoggerAware
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent confirm subscription mail id:%d', $reader->getId()));
+                $this->logger->error(
+                    'Could not sent confirm subscription to {reader} <{email}>',
+                    ['reader' => $reader, 'email' => $reader->getEmail()]
+                );
             }
         }
     }

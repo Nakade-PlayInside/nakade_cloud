@@ -20,11 +20,8 @@
 
 namespace App\MessageHandler;
 
-use App\Message\ConfirmContact;
-use App\Message\ReplyContact;
+use App\Logger\MailLoggerTrait;
 use App\Message\ResetPassword;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
@@ -33,12 +30,14 @@ use Twig\Environment;
  * Class ReplyContactHandler!
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class ResetPasswordHandler implements MessageHandlerInterface, LoggerAwareInterface
+class ResetPasswordHandler implements MessageHandlerInterface
 {
-    use LoggerAwareTrait;
+    use MailLoggerTrait;
 
     private $mailer;
     private $twig;
@@ -55,6 +54,10 @@ class ResetPasswordHandler implements MessageHandlerInterface, LoggerAwareInterf
     {
         $user = $resetPassword->getUser();
         $email = $user->getEmail();
+        $this->logger->notice(
+            'Reset password for user {user}, sentTo: <{sentTo}>',
+            ['user' => $user, 'sentTo' => $email]
+        );
 
         $message = (new \Swift_Message('Zurücksetzen deines Passworts bei [nakade.de]'))
                     ->setFrom($this->emailNoReply)
@@ -82,7 +85,10 @@ class ResetPasswordHandler implements MessageHandlerInterface, LoggerAwareInterf
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent reset password for user id:%d', $user->getId()));
+                $this->logger->error(
+                    'Could not sent reset password for user {user} to email <{sentTo}>!',
+                    ['user' => $user, 'sentTo' => $email]
+                );
             }
         }
     }
