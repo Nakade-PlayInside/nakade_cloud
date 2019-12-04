@@ -38,20 +38,9 @@ abstract class AbstractMail
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaResults", inversedBy="resultMail", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    protected $results;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $sendAt;
-
-    public function __construct(BundesligaResults $results)
-    {
-        $this->results = $results;
-    }
 
     public function getId(): ?int
     {
@@ -66,18 +55,6 @@ abstract class AbstractMail
     public function setSendAt(?\DateTimeInterface $sendAt): self
     {
         $this->sendAt = $sendAt;
-
-        return $this;
-    }
-
-    public function getResults(): ?BundesligaResults
-    {
-        return $this->results;
-    }
-
-    public function setResults(BundesligaResults $results)
-    {
-        $this->results = $results;
 
         return $this;
     }

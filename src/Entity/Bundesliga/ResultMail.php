@@ -27,6 +27,29 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ResultMail extends AbstractMail
 {
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaResults", inversedBy="resultMail", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $results;
+
+    public function __construct(BundesligaResults $results)
+    {
+        $this->results = $results;
+    }
+
+    public function getResults(): ?BundesligaResults
+    {
+        return $this->results;
+    }
+
+    public function setResults(BundesligaResults $results): self
+    {
+        $this->results = $results;
+
+        return $this;
+    }
+
     public function getSendTo(): ?BundesligaExecutive
     {
         return $this->results->getSeason()->getExecutive();
