@@ -4,7 +4,7 @@ monolog:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
-            channels: ["!event"]
+            channels: ["!event", "!doctrine", "!security", "!mails"]
         # uncomment to get logging in your browser
         # you may have to allow bigger header sizes in your Web server configuration
         #firephp:
@@ -29,4 +29,10 @@ monolog:
             type:     stream
             path:     '%kernel.logs_dir%/doctrine.log'
             channels: [doctrine]
+        mail_logging:
+            # log all messages (since debug is the lowest level)
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/mails.log'
+            channels: ["mails"]
 

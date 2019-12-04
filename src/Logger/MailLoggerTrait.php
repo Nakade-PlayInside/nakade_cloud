@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -18,44 +20,20 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Entity\Bundesliga;
+namespace App\Logger;
 
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Psr\Log\LoggerInterface;
 
-/**
- * @ORM\MappedSuperclass()
- */
-abstract class AbstractMail
+trait MailLoggerTrait
 {
-    use TimestampableEntity;
+    /** @var LoggerInterface*/
+    protected $logger;
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @required
      */
-    protected $id;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $sendAt;
-
-    public function getId(): ?int
+    public function setLogger(LoggerInterface $mailsLogger)
     {
-        return $this->id;
-    }
-
-    public function getSendAt(): ?\DateTimeInterface
-    {
-        return $this->sendAt;
-    }
-
-    public function setSendAt(?\DateTimeInterface $sendAt): self
-    {
-        $this->sendAt = $sendAt;
-
-        return $this;
+        $this->logger = $mailsLogger;
     }
 }

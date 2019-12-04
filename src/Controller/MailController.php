@@ -25,6 +25,7 @@ use App\Entity\Bundesliga\LineupMail;
 use App\Entity\Bundesliga\ResultMail;
 use App\Message\MatchLineup;
 use App\Message\MatchResult;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +82,7 @@ class MailController extends AbstractController
      *
      * @IsGranted("ROLE_NAKADE_TEAM_MANAGER")
      */
-    public function sendLineupMail(Request $request, LineupMail $lineupMail, MessageBusInterface $messageBus)
+    public function sendLineupMail(Request $request, LineupMail $lineupMail, MessageBusInterface $messageBus, LoggerInterface $mailsLogger)
     {
         /** @var LineupMail $lineupMail */
         $lineupMail = $this->getDoctrine()->getRepository(LineupMail::class)->find($lineupMail);
@@ -102,10 +103,11 @@ class MailController extends AbstractController
 
             //mail handling
             $message = new MatchLineup($lineupMail, $manager, $managerEmail);
-            $messageBus->dispatch($message);
+           // $messageBus->dispatch($message);
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'result.mail.success');
+            $mailsLogger->notice('LineUpMail sent by {user}', ['user' => $this->getUser()]);
 
             return $this->redirectToRoute('bundesliga_actual_matchDay');
         }

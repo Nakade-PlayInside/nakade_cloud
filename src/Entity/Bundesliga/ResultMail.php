@@ -50,6 +50,16 @@ class ResultMail extends AbstractMail
         return $this;
     }
 
+    public function getLeagueNumber(): int
+    {
+        return intval($this->results->getSeason()->getLeague());
+    }
+
+    public function getLeagueGroup(): string
+    {
+        return preg_replace('/[0-9]+/', '', $this->results->getSeason()->getLeague());
+    }
+
     public function getSendTo(): ?BundesligaExecutive
     {
         return $this->results->getSeason()->getExecutive();

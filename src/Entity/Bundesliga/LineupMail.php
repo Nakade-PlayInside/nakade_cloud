@@ -65,4 +65,14 @@ class LineupMail extends AbstractMail
 
         return array_shift($names);
     }
+
+    public function getLeagueNumber(): int
+    {
+        return intval($this->results->getSeason()->getLeague());
+    }
+
+    public function getLeagueGroup(): string
+    {
+        return preg_replace('/[0-9]+/', '', $this->results->getSeason()->getLeague());
+    }
 }

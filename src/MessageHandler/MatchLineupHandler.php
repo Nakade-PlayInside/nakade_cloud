@@ -20,23 +20,20 @@
 
 namespace App\MessageHandler;
 
+use App\Logger\MailLoggerTrait;
 use App\Message\MatchLineup;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Twig\Environment;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
- *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class MatchLineupHandler implements MessageHandlerInterface, LoggerAwareInterface
+class MatchLineupHandler implements MessageHandlerInterface
 {
-    use LoggerAwareTrait;
+    use MailLoggerTrait;
 
     private $mailer;
     private $twig;
@@ -54,12 +51,18 @@ class MatchLineupHandler implements MessageHandlerInterface, LoggerAwareInterfac
         $mail = $matchLineup->getLineupMail();
         $sendTo = $mail->getOpponentTeam()->getEmail();
         $subject = sprintf('DGoB Bundesliga Aufstellung, %s. Spieltag', $mail->getResults()->getMatchDay());
+        $sentCc = $mail->getResults()->getSeason()->getExecutive()->getEmail();
+        $sentBcc = $matchLineup->getBbcMail();
+        $this->logger->notice(
+            'LineUpMail {mail}, sentTo: <{sentTo}>, cc:<{sentCc}>, bcc:<{sentBbc}>',
+            ['mail' => $mail->getId(), 'sentTo' => $sendTo, 'sentCc' => $sentCc, 'sentBbc' => $sentBcc]
+        );
 
         $message = (new \Swift_Message($subject))
                     ->setFrom($this->emailNoReply)
                     ->setTo($sendTo)
-                    ->setCc($mail->getResults()->getSeason()->getExecutive()->getEmail())
-                    ->setBcc($matchLineup->getBbcMail())
+                    ->setCc($sentCc)
+                    ->setBcc($sentBcc)
                     ->setBody(
                         $this->twig->render('emails/lineupMail.html.twig', [
                                 'mail' => $mail,
@@ -79,7 +82,7 @@ class MatchLineupHandler implements MessageHandlerInterface, LoggerAwareInterfac
 
         if (0 === $sent) {
             if ($this->logger) {
-                $this->logger->alert(sprintf('Could not sent lineup mail id:%d', $mail->getId()));
+                $this->logger->error('Could not sent lineup mail {mail}', ['mail' => $mail]);
             }
         }
     }
