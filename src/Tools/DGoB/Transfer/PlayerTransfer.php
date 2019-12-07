@@ -41,10 +41,13 @@ class PlayerTransfer extends AbstractTransfer
             $player->setFirstName($model->firstName)
                 ->setLastName($model->lastName);
 
+            $this->logger->notice(
+                'New player {player} found.',
+                ['player' => $player]
+            );
+
             $this->manager->persist($player);
         }
-
-        $this->manager->flush();
 
         return $player;
     }

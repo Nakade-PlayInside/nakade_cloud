@@ -22,16 +22,27 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB;
 
+use App\Logger\GrabberLoggerTrait;
 use App\Tools\DGoB\Model\MatchModel;
 
 class MatchCatcher
 {
+    use GrabberLoggerTrait;
+
     const PATTERN = '#^([012]:[012])\s\((.)\)\s(.*)\s-\s(.*)#';
+
+    private $nameCatcher;
+
+    public function __construct()
+    {
+        $this->nameCatcher = new NameCatcher();
+    }
 
     public function extract(string $field): ?MatchModel
     {
         //correction
         $field = str_replace('!', '', $field);
+        $field = str_replace('_', '0', $field);
 
         $result = preg_match(self::PATTERN, $field, $matches);
         if (false === $result) {
@@ -39,6 +50,8 @@ class MatchCatcher
         }
 
         if (0 === $result) {
+            $this->logger->error('No result found: {field}!', ['field' => $field]);
+
             return null;
         }
 
@@ -49,20 +62,28 @@ class MatchCatcher
         $homePlayer = trim($matches[3]);
         $awayPlayer = trim($matches[4]);
 
-        $nameCatcher = new NameCatcher();
-        $playerHome = $nameCatcher->extract($homePlayer);
+        $playerHome = $this->nameCatcher->extract($homePlayer);
         if ($playerHome) {
             $playerHome->color = $color;
             $model->homePlayer = $playerHome;
+
+            $this->logger->info('Home player found: {data}.', ['data' => $playerHome]);
         }
 
-        $playerAway = $nameCatcher->extract($awayPlayer);
+        $playerAway = $this->nameCatcher->extract($awayPlayer);
         if ($playerAway) {
             $playerAway->color = ('w' === $color ? 'b' : 'w');
             $model->awayPlayer = $playerAway;
+
+            $this->logger->info('Away player found: {data}.', ['data' => $playerAway]);
         }
 
         if (!$playerHome || !$playerAway) {
+            $this->logger->notice(
+                'No players but result found: {field}. Set to win by default!',
+                ['field' => $field]
+            );
+
             $model->winByDefault = true;
         }
 

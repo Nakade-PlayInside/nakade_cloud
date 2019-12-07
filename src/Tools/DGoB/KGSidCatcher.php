@@ -22,10 +22,13 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB;
 
+use App\Logger\GrabberLoggerTrait;
 use App\Tools\DGoB\Model\KGSIdModel;
 
 class KGSidCatcher
 {
+    use GrabberLoggerTrait;
+
     const KGS_PATTERN = 'kgsid:';
 
     public function extract(string $field): ?KGSIdModel
@@ -34,6 +37,8 @@ class KGSidCatcher
 
         $pos = stripos($field, self::KGS_PATTERN);
         if (false === $pos) {
+            $this->logger->notice('No KGS Id found. {field}', ['field' => $field]);
+
             return null;
         }
 
@@ -61,6 +66,8 @@ class KGSidCatcher
         $matches = explode('/', $kgsIds);
 
         if (2 !== count($matches)) {
+            $this->logger->warning('Wrong delimiter in KGS Id found. {field}', ['field' => $kgsIds]);
+
             return $model;
         }
 

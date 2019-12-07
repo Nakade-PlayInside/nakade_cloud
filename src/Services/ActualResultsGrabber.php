@@ -24,34 +24,40 @@ namespace App\Services;
 
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Logger\GrabberLoggerTrait;
 use App\Tools\Bundesliga\ResultsCatcher;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Retrieve the actual result table from the DGoB site. Return an empty array if no new table is found.
  * If a table is found it is persisted in the database.
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ActualResultsGrabber extends AbstractTableService
 {
-    private $resultsCatcher;
-    private $logger;
+    use GrabberLoggerTrait;
 
-    public function __construct(EntityManagerInterface $manager, ResultsCatcher $resultsCatcher, LoggerInterface $logger)
+    private $resultsCatcher;
+
+    public function __construct(EntityManagerInterface $manager, ResultsCatcher $resultsCatcher)
     {
         parent::__construct($manager);
         $this->resultsCatcher = $resultsCatcher;
-        $this->logger = $logger;
     }
 
     public function retrieveTable(): ?array
     {
+        $this->logger->notice('Actual results grabber started for searching new results');
+
         $actualSeason = $this->findActualSeason();
         if (!$actualSeason) {
+            $this->logger->error('No actual season found');
+
             return null;
         }
 
@@ -59,8 +65,16 @@ class ActualResultsGrabber extends AbstractTableService
         if (!$matchDay) {
             $matchDay = '1';
         }
+        $this->logger->info('Actual season {season}, match day {matchday}', ['season' => $actualSeason, 'matchday' => $matchDay]);
+
         /** @var BundesligaTable[] $table */
         $table = $this->resultsCatcher->extract($actualSeason, $matchDay);
+        if ($table) {
+            $this->logger->info(
+                'Number of result rows {rows} found.',
+                ['rows' => count($table)]
+            );
+        }
 
         return $table;
     }

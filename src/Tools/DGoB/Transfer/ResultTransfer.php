@@ -29,7 +29,7 @@ use App\Tools\DGoB\Model\ResultModel;
 
 class ResultTransfer extends AbstractTransfer
 {
-    public function transfer(BundesligaSeason $season, ResultModel $model, BundesligaTeam $home, BundesligaTeam $away): BundesligaResults
+    public function transfer(BundesligaSeason $season, BundesligaTeam $home, BundesligaTeam $away, ResultModel $model): BundesligaResults
     {
         $result = $this->manager->getRepository(BundesligaResults::class)->findOneBy(
             [
@@ -46,14 +46,20 @@ class ResultTransfer extends AbstractTransfer
                 ->setSeason($season);
             $result->setMatchDay($model->getMatchDay());
 
-            $this->manager->persist($result);
+            $this->logger->notice(
+                'New result <{result}> on match day {day} found.',
+                ['result' => $result, 'day' => $model->getMatchDay()]
+            );
         }
 
+        //overwriting actual results (0:0)
         $result->setBoardPointsHome($model->getBoardPointsHome())
                 ->setBoardPointsAway($model->getBoardPointsAway())
                 ->setPlayedAt($model->getDate());
-
-        $this->manager->flush();
+        $this->logger->notice(
+            'Match result set to <{home}:{away}>.',
+            ['home' => $model->getBoardPointsHome(), 'away' => $model->getBoardPointsAway()]
+        );
 
         return $result;
     }

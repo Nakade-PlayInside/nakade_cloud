@@ -23,15 +23,23 @@ declare(strict_types=1);
 namespace App\Tools\DGoB\Transfer;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractTransfer
 {
     const HOME_TEAM = 'Nakade';
 
     protected $manager;
+    /** @var LoggerInterface */
+    protected $logger;
 
     public function __construct(EntityManagerInterface $manager)
     {
         $this->manager = $manager;
+    }
+
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 }

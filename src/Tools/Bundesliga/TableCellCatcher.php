@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace App\Tools\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaTable;
-use App\Tools\Bundesliga\Model\RowModel;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 class TableCellCatcher
@@ -35,20 +35,24 @@ class TableCellCatcher
     private $season;
     private $league;
     private $matchDay;
+    private $logger;
 
-    public function __construct(string $season, string $league, string $matchDay)
+    public function __construct(string $season, string $league, string $matchDay, LoggerInterface $logger)
     {
         $this->season = $season;
         $this->league = $league;
         $this->matchDay = $matchDay;
+        $this->logger = $logger;
     }
 
-    /**
-     * @return BundesligaTable|null
-     */
     public function extract(\DOMNodeList $childNodes): ?BundesligaTable
     {
         if ($childNodes->count() < 16) {
+            $this->logger->error(
+                'Less child nodes {nodes} found as expected.',
+                ['nodes' => $childNodes->count()]
+            );
+
             return null;
         }
         $rowCrawler = new Crawler($childNodes);
@@ -60,42 +64,71 @@ class TableCellCatcher
 
         $node = $rowCrawler->filter(self::TABLE_CELL)->getNode(0);
         if (!$node) {
+            $this->logger->error('No table cells TD found.');
+
             return null;
         }
         $model->setPosition((int) $node->textContent);
+        $this->logger->notice('Found data for position {position}.', ['position' => $model->getPosition()]);
 
         /** @var $node \DOMElement */
         if ($node->hasAttribute(self::TD_CLASS)) {
             $class = $node->getAttribute(self::TD_CLASS);
             $tendency = $this->getTendency($class);
             $model->setTendency($tendency);
+        } else {
+            $this->logger->error('No tendency found.');
         }
 
         $imgNode = $rowCrawler->filter(self::TABLE_CELL)->getNode(1);
         $imgSrc = $this->getImgSource($imgNode);
         $model->setImgSrc($imgSrc);
+        if (!$imgNode) {
+            $this->logger->error('No tendency image found.');
+        }
 
         $name = $rowCrawler->filter(self::TABLE_CELL)->getNode(3)->textContent;
         $team = $this->cleanTeamName($name);
         $model->setTeam($team);
+        if (!isset($name)) {
+            $this->logger->error('No team name found.');
+        }
 
         $games = $rowCrawler->filter(self::TABLE_CELL)->getNode(7)->textContent;
         $model->setGames($games);
+        if (!isset($games)) {
+            $this->logger->error('No number of games found.');
+        }
 
         $wins = $rowCrawler->filter(self::TABLE_CELL)->getNode(9)->textContent;
         $model->setWins($wins);
+        if (!isset($wins)) {
+            $this->logger->error('No number of wins found.');
+        }
 
         $draws = $rowCrawler->filter(self::TABLE_CELL)->getNode(10)->textContent;
         $model->setDraws($draws);
+        if (!isset($draws)) {
+            $this->logger->error('No number of draws found.');
+        }
 
         $losses = $rowCrawler->filter(self::TABLE_CELL)->getNode(11)->textContent;
         $model->setLosses($losses);
+        if (!isset($losses)) {
+            $this->logger->error('No number of losses found.');
+        }
 
         $boardPoints = $rowCrawler->filter(self::TABLE_CELL)->getNode(13)->textContent;
         $model->setBoardPoints($boardPoints);
+        if (!isset($boardPoints)) {
+            $this->logger->error('No number of board points found.');
+        }
 
         $points = $rowCrawler->filter(self::TABLE_CELL)->getNode(15)->textContent;
         $model->setPoints($points);
+        if (!isset($points)) {
+            $this->logger->error('No number of points found.');
+        }
 
         return $model;
     }
@@ -128,6 +161,8 @@ class TableCellCatcher
     private function getImgSource(\DOMNode $node): ?string
     {
         if (!$node->hasChildNodes()) {
+            $this->logger->error('Node of img source has no child nodes.');
+
             return null;
         }
         /** @var \DOMElement $imgNode */
@@ -136,6 +171,7 @@ class TableCellCatcher
         if ($imgNode->hasAttribute(self::IMG_SRC)) {
             return $imgNode->getAttribute(self::IMG_SRC);
         }
+        $this->logger->error('No img source found.');
 
         return null;
     }

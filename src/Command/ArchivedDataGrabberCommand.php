@@ -21,7 +21,7 @@
 namespace App\Command;
 
 use App\Repository\Bundesliga\BundesligaSeasonRepository;
-use App\Tools\DGoB\Transfer\BundesligaTransfer;
+use App\Tools\DGoB\Transfer\ArchiveTransfer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +34,7 @@ class ArchivedDataGrabberCommand extends Command
     private $grabber;
     private $repository;
 
-    public function __construct(BundesligaSeasonRepository $repository, BundesligaTransfer $grabber)
+    public function __construct(BundesligaSeasonRepository $repository, ArchiveTransfer $grabber)
     {
         parent::__construct();
         $this->grabber = $grabber;

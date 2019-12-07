@@ -22,34 +22,55 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB;
 
+use App\Logger\GrabberLoggerTrait;
 use App\Tools\DGoB\Model\ResultModel;
 use App\Tools\DGoB\Model\TeamModel;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ResultCatcher
 {
+    use GrabberLoggerTrait;
+
     const SELECTOR = 'td';
 
-    private $rowCrawler;
+    private $catcher;
 
-    public function __construct(\DOMNode $node)
+    public function __construct(PairingsCatcher $catcher)
     {
-        $this->rowCrawler = new Crawler($node);
+        $this->catcher = $catcher;
     }
 
-    public function extract(): ?ResultModel
+    public function extract(Crawler $rowCrawler): ?ResultModel
     {
         //content rows have 10 cells
-        if ($this->rowCrawler->filter(self::SELECTOR)->count() < 10) {
+        if ($rowCrawler->filter(self::SELECTOR)->count() < 10) {
             return null;
         }
 
-        $date = $this->getTextContent(0);
-        $home = $this->getTextContent(2);
-        $away = $this->getTextContent(4);
-        $homePoints = $this->getTextContent(6);
-        $awayPoints = $this->getTextContent(8);
-        $details = $this->getTextContent(10);
+        $date = $this->getTextContent($rowCrawler, 0);
+        if (!isset($date)) {
+            $this->logger->error('No date found.');
+        }
+        $home = $this->getTextContent($rowCrawler, 2);
+        if (!isset($home)) {
+            $this->logger->error('No home team found.');
+        }
+        $away = $this->getTextContent($rowCrawler, 4);
+        if (!isset($away)) {
+            $this->logger->error('No away team found.');
+        }
+        $homePoints = $this->getTextContent($rowCrawler, 6);
+        if (!isset($homePoints)) {
+            $this->logger->error('No home points found.');
+        }
+        $awayPoints = $this->getTextContent($rowCrawler, 8);
+        if (!isset($awayPoints)) {
+            $this->logger->error('No away points found.');
+        }
+        $details = $this->getTextContent($rowCrawler, 10);
+        if (!isset($details)) {
+            $this->logger->error('No details found.');
+        }
 
         $resultModel = $this->createResultModel($home, $away, $date, $homePoints, $awayPoints);
         $this->extractDetails($details, $resultModel);
@@ -57,9 +78,9 @@ class ResultCatcher
         return $resultModel;
     }
 
-    private function getTextContent(int $position): string
+    private function getTextContent(Crawler $rowCrawler, int $position): string
     {
-        return $this->rowCrawler->filter(self::SELECTOR)->getNode($position)->textContent;
+        return $rowCrawler->filter(self::SELECTOR)->getNode($position)->textContent;
     }
 
     private function createResultModel(string $home, string $away, string $date, string $homePoints, string $awayPoints): ResultModel
@@ -78,6 +99,8 @@ class ResultCatcher
     {
         $pos = strpos($details, 'Notiz:');
         if (false === $pos) {
+            $this->logger->notice('No match details found.');
+
             return;
         }
         $details = substr($details, $pos);
@@ -87,7 +110,7 @@ class ResultCatcher
         //first match is Notiz:
         unset($matchData[0]);
 
-        $pairingModel = (new PairingsCatcher())->extract($matchData);
+        $pairingModel = $this->catcher->extract($matchData);
 
         if ($pairingModel) {
             $result->matches = $pairingModel->getMatches();

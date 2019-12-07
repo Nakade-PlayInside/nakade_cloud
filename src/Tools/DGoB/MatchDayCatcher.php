@@ -22,34 +22,47 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB;
 
+use App\Logger\GrabberLoggerTrait;
 use Symfony\Component\DomCrawler\Crawler;
 
 class MatchDayCatcher
 {
+    use GrabberLoggerTrait;
+
     const CSS_SELECTOR = 'table.lmoInner';
 
-    private $domCrawler;
+    private $resultCatcher;
 
-    public function __construct(string $html)
+    public function __construct(ResultCatcher $resultCatcher)
     {
-        $this->domCrawler = new Crawler($html);
+        $this->resultCatcher = $resultCatcher;
     }
 
-    public function extract(string $matchDay): array
+    public function extract(Crawler $domCrawler, string $matchDay): array
     {
         $results = [];
         //find the result table node
-        $tableNodes = $this->domCrawler->filter(self::CSS_SELECTOR)->getNode(0);
+        $tableNodes = $domCrawler->filter(self::CSS_SELECTOR)->getNode(0);
+        if (!$tableNodes || !$tableNodes->hasChildNodes()) {
+            $this->logger->error('No node or child nodes found by class selector.');
+
+            return $results;
+        }
 
         /** @var \DOMNode $childNode */
         foreach ($tableNodes->childNodes as $childNode) {
-            $resultModel = (new ResultCatcher($childNode))->extract();
+            $rowCrawler = new Crawler($childNode);
+            $resultModel = $this->resultCatcher->extract($rowCrawler);
             if (!$resultModel) {
                 continue;
             }
             $resultModel->matchDay = $matchDay;
             $results[] = $resultModel;
         }
+        $this->logger->info(
+            'Number of results {results} found on match day {day}.',
+            ['results' => count($results), 'day' => $matchDay]
+        );
 
         return $results;
     }

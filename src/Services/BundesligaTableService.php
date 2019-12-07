@@ -27,7 +27,7 @@ use App\Entity\Bundesliga\BundesligaSeason;
 use App\Services\Model\TableModel;
 
 /**
- * Find table by season.
+ * Find table by season in internal database.
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz

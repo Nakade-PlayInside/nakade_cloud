@@ -22,8 +22,13 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB\Transfer;
 
-class TransferFactory extends AbstractTransfer
+use App\Logger\GrabberLoggerTrait;
+use Doctrine\ORM\EntityManagerInterface;
+
+class TransferFactory
 {
+    use GrabberLoggerTrait;
+
     const MATCH_TRANSFER = 10;
     const OPPONENT_TRANSFER = 20;
     const PLAYER_TRANSFER = 30;
@@ -32,6 +37,12 @@ class TransferFactory extends AbstractTransfer
     const TEAM_TRANSFER = 60;
 
     private $transferCollection = [];
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
 
     public function getTransfer(int $type)
     {
@@ -69,6 +80,7 @@ class TransferFactory extends AbstractTransfer
                 $msg = sprintf('Type not found: "%s"', $type);
                 throw new \InvalidArgumentException($msg);
         }
+        $transfer->setLogger($this->logger);
 
         return $transfer;
     }

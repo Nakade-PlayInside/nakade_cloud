@@ -25,6 +25,7 @@ namespace App\Tools\Bundesliga;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Logger\GrabberLoggerTrait;
 use App\Services\Model\ResultsModel;
 use App\Services\Snoopy;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +40,8 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class ResultsCatcher
 {
+    use GrabberLoggerTrait;
+
     const DGOB_URI = 'http://www.dgob.de/lmo/lmo.php';
     const SEASON_PATTERN = '#^20(\d{2})_20(\d{2})#';
     const DEFAULT_PARAM = '?action=results&tabtype=0';
@@ -74,9 +77,11 @@ class ResultsCatcher
         $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(0);
         //return empty array if there are no data: this matchDay is not yet played
         if (!$domNode) {
+            $this->logger->error('No dom node found on css {css}', ['css' => self::CSS_SELECTOR]);
+
             return null;
         }
-        $cellCatcher = new ResultCellCatcher($season, $league, $matchDay);
+        $cellCatcher = new ResultCellCatcher($season, $league, $matchDay, $this->logger);
         $data = [];
 
         //all rows
@@ -85,6 +90,9 @@ class ResultsCatcher
         $iterator = $trCrawler->getIterator();
         foreach ($iterator as $rowNode) {
             if (self::NODE_ROW !== $rowNode->nodeName || !$rowNode->hasChildNodes() || self::NODE_CELL !== $rowNode->firstChild->nodeName) {
+                continue;
+            }
+            if ($rowNode->childNodes->count() < 8) {
                 continue;
             }
             $model = $cellCatcher->extract($rowNode->childNodes);

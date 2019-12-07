@@ -23,12 +23,15 @@ declare(strict_types=1);
 namespace App\Tools\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Logger\GrabberLoggerTrait;
 use App\Services\Snoopy;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 class TableCatcher
 {
+    use GrabberLoggerTrait;
+
     const DGOB_URI = 'http://www.dgob.de/lmo/lmo.php';
     const SEASON_PATTERN = '#^20(\d{2})_20(\d{2})#';
     const DEFAULT_PARAM = '?action=results&tabtype=0';
@@ -60,9 +63,11 @@ class TableCatcher
         $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(1);
         //return empty array if there are no data: this matchDay is not yet played
         if (!$domNode) {
+            $this->logger->error('No dom node found on css {css}', ['css' => self::CSS_SELECTOR]);
+
             return null;
         }
-        $cellCatcher = new TableCellCatcher($season, $league, $matchDay);
+        $cellCatcher = new TableCellCatcher($season, $league, $matchDay, $this->logger);
 
         $data = [];
         $trCrawler = new Crawler($domNode->childNodes);
@@ -70,6 +75,9 @@ class TableCatcher
         $iterator = $trCrawler->getIterator();
         foreach ($iterator as $key => $rowNode) {
             if ($key < 3 || !$rowNode->hasChildNodes()) {
+                continue;
+            }
+            if ($rowNode->childNodes->count() < 16) {
                 continue;
             }
             $model = $cellCatcher->extract($rowNode->childNodes);

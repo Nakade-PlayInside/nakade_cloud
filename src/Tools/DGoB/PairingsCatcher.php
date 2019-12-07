@@ -22,10 +22,22 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB;
 
+use App\Logger\GrabberLoggerTrait;
 use App\Tools\DGoB\Model\PairingModel;
 
 class PairingsCatcher
 {
+    use GrabberLoggerTrait;
+
+    private $kgsIdCatcher;
+    private $matchCatcher;
+
+    public function __construct(MatchCatcher $matchCatcher, KGSidCatcher $kgsIdCatcher)
+    {
+        $this->kgsIdCatcher = $kgsIdCatcher;
+        $this->matchCatcher = $matchCatcher;
+    }
+
     public function extract(array $matchData): PairingModel
     {
         $model = new PairingModel();
@@ -36,20 +48,30 @@ class PairingsCatcher
                 continue;
             }
 
-            $kgsIdModel = (new KGSidCatcher())->extract($data);
-            if ($kgsIdModel) {
-                $model->kgsIdModel = $kgsIdModel;
+            //KGSid: bsl1..4/hhcon1..4
+            if (false !== stripos($data, 'KGSid')) {
+                $this->extractKgsId($model, $data);
+                continue;
             }
-
             //"2:0 (s) Darius Dobranis 2d - Malte Kracht 2d "
-            $match = (new MatchCatcher())->extract($data);
+            $match = $this->matchCatcher->extract($data);
             if ($match) {
                 $match->board = $board;
                 $model->addMatch($match);
                 ++$board;
+                $this->logger->info('Match data found on board {board}', [$board]);
             }
         }
 
         return $model;
+    }
+
+    private function extractKgsId(PairingModel $model, string $data)
+    {
+        $kgsIdModel = $this->kgsIdCatcher->extract($data);
+        if ($kgsIdModel) {
+            $model->kgsIdModel = $kgsIdModel;
+            $this->logger->info('KGS data found.');
+        }
     }
 }

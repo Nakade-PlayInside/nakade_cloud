@@ -44,7 +44,7 @@ class BundesligaResults extends AbstractResults
     private $matchDay;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="results")
+     * @ORM\OneToMany(targetEntity="App\Entity\Bundesliga\BundesligaMatch", mappedBy="results", cascade={"persist", "remove"})
      */
     private $matches;
 
@@ -60,7 +60,6 @@ class BundesligaResults extends AbstractResults
 
     public function __construct()
     {
-        parent::__construct();
         $this->matches = new ArrayCollection();
     }
 

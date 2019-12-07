@@ -40,11 +40,13 @@ class OpponentTransfer extends AbstractTransfer
             $opponent = new BundesligaOpponent();
             $opponent->setFirstName($model->firstName)
                 ->setLastName($model->lastName);
+            $this->logger->notice(
+                'New Opponent {opponent} found.',
+                ['opponent' => $opponent]
+            );
 
             $this->manager->persist($opponent);
         }
-
-        $this->manager->flush();
 
         return $opponent;
     }

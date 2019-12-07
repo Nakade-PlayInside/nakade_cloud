@@ -20,26 +20,20 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Tools\DGoB\Transfer;
+namespace App\Logger;
 
-use App\Entity\Bundesliga\BundesligaTeam;
-use App\Tools\DGoB\Model\TeamModel;
+use Psr\Log\LoggerInterface;
 
-class TeamTransfer extends AbstractTransfer
+trait GrabberLoggerTrait
 {
-    public function transfer(TeamModel $model): BundesligaTeam
+    /** @var LoggerInterface*/
+    protected $logger;
+
+    /**
+     * @required
+     */
+    public function setLogger(LoggerInterface $grabberLogger)
     {
-        $team = $this->manager->getRepository(BundesligaTeam::class)->findSimilarTeam($model->name);
-        if (!$team) {
-            $team = new BundesligaTeam();
-            $team->setName($model->name);
-            $this->logger->notice('New team <{team}> found.', ['team' => $model->name]);
-        }
-
-        if ($model->kgsId) {
-            $team->setKgsId($model->kgsId);
-        }
-
-        return $team;
+        $this->logger = $grabberLogger;
     }
 }

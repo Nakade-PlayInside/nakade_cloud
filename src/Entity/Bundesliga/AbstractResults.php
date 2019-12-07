@@ -192,6 +192,18 @@ abstract class AbstractResults implements ResultsInterface
         return $result;
     }
 
+    public function isNakadeResult(): bool
+    {
+        if (false !== stripos($this->getHome(), self::HOME_TEAM)) {
+            return true;
+        }
+        if (false !== stripos($this->getAway(), self::HOME_TEAM)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getTeamNakade(): BundesligaTeam
     {
         if (false !== stripos($this->getHome(), self::HOME_TEAM)) {

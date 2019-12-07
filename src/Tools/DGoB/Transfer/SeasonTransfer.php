@@ -39,9 +39,10 @@ class SeasonTransfer extends AbstractTransfer
             $season = new BundesligaSeason();
             $season->setTitle($model->title)
                 ->setLeague($model->league);
-
-            $this->manager->persist($season);
-            $this->manager->flush();
+            $this->logger->notice(
+                'New season <{title}>, league {league}  found. ',
+                ['title' => $model->title, 'league' => $model->league]
+            );
         }
 
         return $season;

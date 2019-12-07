@@ -22,30 +22,33 @@ declare(strict_types=1);
 
 namespace App\Tools\Bundesliga;
 
-use App\Entity\Bundesliga\BundesligaTable;
 use App\Services\Model\ResultsModel;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ResultCellCatcher
 {
     const TABLE_CELL = 'td';
     const TABLE_LINK = 'a';
-    const TD_CLASS = 'class';
 
     private $season;
     private $league;
     private $matchDay;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    public function __construct(string $season, string $league, string $matchDay)
+    public function __construct(string $season, string $league, string $matchDay, LoggerInterface $logger)
     {
         $this->season = $season;
         $this->league = $league;
         $this->matchDay = $matchDay;
+        $this->logger = $logger;
     }
 
     /**
      * Find pairing results of the DGoB site if found AND match is played!
-     *
      */
     public function extract(\DOMNodeList $childNodes): ?ResultsModel
     {
@@ -53,23 +56,32 @@ class ResultCellCatcher
 
         $node = $rowCrawler->filter(self::TABLE_CELL)->getNode(0);
         if (!$node) {
+            $this->logger->error('No table cells TD found.');
+
             return null;
         }
         $model = new ResultsModel($this->season, $this->matchDay);
 
         $model->setPlayedAt($node->textContent);
+        $this->logger->notice(
+            'Found data for match played at {date}.',
+            ['date' => $node->textContent]
+        );
 
         //homeTeam
         $node = $rowCrawler->filter(self::TABLE_CELL)->getNode(2);
         if (!$node || !$node->hasChildNodes()) {
+            $this->logger->error('No node found for home team data.');
+
             return null;
         }
         $model->homeTeam = $this->findTeamName($node->childNodes);
 
-
         //awayTeam
         $node = $rowCrawler->filter(self::TABLE_CELL)->getNode(4);
         if (!$node || !$node->hasChildNodes()) {
+            $this->logger->error('No node found for away team data.');
+
             return null;
         }
         $model->awayTeam = $this->findTeamName($node->childNodes);
@@ -79,6 +91,8 @@ class ResultCellCatcher
         $homePoints = $node->textContent;
 
         if (!is_numeric($homePoints)) {
+            $this->logger->notice('No numeric value for home points found {points}.', ['points' => $homePoints]);
+
             return null;
         }
         $model->homePoints = $homePoints;
@@ -87,6 +101,8 @@ class ResultCellCatcher
         $node = $rowCrawler->filter(self::TABLE_CELL)->getNode(8);
         $awayPoints = $node->textContent;
         if (!is_numeric($awayPoints)) {
+            $this->logger->notice('No numeric value for away points found {points}.', ['points' => $awayPoints]);
+
             return null;
         }
         $model->awayPoints = $awayPoints;
@@ -99,6 +115,8 @@ class ResultCellCatcher
         $cellCrawler = new Crawler($childNodes);
         $cellNode = $cellCrawler->filter(self::TABLE_LINK)->getNode(0);
         if (!$cellNode || !$cellNode->hasChildNodes()) {
+            $this->logger->error('No team link found.');
+
             return null;
         }
         $teamName = $cellNode->textContent;

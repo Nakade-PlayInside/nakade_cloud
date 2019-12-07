@@ -46,15 +46,20 @@ class MatchTransfer extends AbstractTransfer
         $this->opponentTransfer = $opponentTransfer;
     }
 
-    public function transfer(BundesligaSeason $season, ResultModel $model, BundesligaResults $results)
+    public function transfer(BundesligaSeason $season, BundesligaResults $results, ResultModel $model)
     {
         foreach ($model->matches as $matchModel) {
             if (!$matchModel->getHomePlayer() || !$matchModel->getAwayPlayer()) {
+                $this->logger->alert(
+                    'No player in {model} found.',
+                    ['model' => $matchModel]
+                );
                 continue;
             }
             $player = $this->getPlayer($model, $matchModel);
             $opponent = $this->getOpponent($model, $matchModel);
 
+            //find pairing only once a season
             $match = $this->manager->getRepository(BundesligaMatch::class)->findOneBy(
                 [
                     'season' => $season,
@@ -76,12 +81,19 @@ class MatchTransfer extends AbstractTransfer
                         ->setResult($result)
                 ;
 
-                $this->manager->persist($match);
+                $this->logger->notice(
+                    'New Match {match} found.',
+                    ['match' => $match]
+                );
             }
-
-            $match->setResults($results);
-            $this->manager->flush();
+            $results->addMatch($match);
+            $this->logger->notice(
+                    'New Match added to result {result}.',
+                    ['result' => $results]
+            );
         }
+
+        return $results;
     }
 
     private function getOpponent(ResultModel $resultModel, MatchModel $matchModel): BundesligaOpponent

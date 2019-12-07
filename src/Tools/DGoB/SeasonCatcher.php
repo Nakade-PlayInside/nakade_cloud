@@ -22,83 +22,86 @@ declare(strict_types=1);
 
 namespace App\Tools\DGoB;
 
+use App\Logger\GrabberLoggerTrait;
 use App\Services\Snoopy;
 use App\Tools\DGoB\Model\SeasonModel;
+use Symfony\Component\DomCrawler\Crawler;
 
 class SeasonCatcher
 {
+    use GrabberLoggerTrait;
+
     const DGOB_URI = 'http://www.dgob.de/lmo/lmo.php';
     const SEASON_PATTERN = '#^20(\d{2})_20(\d{2})#';
     const DEFAULT_PARAM = '?action=results&tabtype=0';
 
     private $snoopy;
-    private $league;
-    private $season;
-    private $actualSeason;
+    private $catcher;
 
-    public function __construct(string $season, string $league, $actualSEason = false)
+    public function __construct(MatchDayCatcher $catcher)
     {
         //2015_2016
         $this->snoopy = new Snoopy();
-        $this->league = $league;
-        $this->season = $season;
-        $this->actualSeason = $actualSEason;
+        $this->catcher = $catcher;
     }
 
-    public function extract(): SeasonModel
+    public function extract(string $season, string $league, $isActualSeason = false): SeasonModel
     {
+        $this->logger->notice('SeasonCatcher started.');
+
         //underscoring points means NOT YET PLAYED
         $seasonResults = [];
-        $model = new SeasonModel($this->league);
-        $model->title = $this->createTitle();
+        $model = new SeasonModel($league);
+        $model->title = $this->createTitle($season);
+        $this->logger->info('Created season title {title}.', ['title' => $model->title]);
 
-        $count = 1;
+        $matchDay = 1;
         while (true) {
-            $matchDay = "$count";
-
             //http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=Saison_2013_2014/1314_bl2.l98&st=3
-            $linkParams = $this->createLinkParams($matchDay);
+            $linkParams = $this->createLinkParams($season, $league, "$matchDay", $isActualSeason);
             $this->snoopy->fetch(self::DGOB_URI.$linkParams);
             $html = $this->snoopy->results;
 
-            $results = (new MatchDayCatcher($html))->extract($matchDay);
+            $domCrawler = new Crawler($html);
+            $results = $this->catcher->extract($domCrawler, "$matchDay");
             if (!$results) {
+                $this->logger->info('Left loop on match day {day}.', ['day' => $matchDay]);
                 break;
             }
             $seasonResults = array_merge($seasonResults, $results);
-            ++$count;
+            ++$matchDay;
         }
         $model->results = $seasonResults;
 
         return $model;
     }
 
-    private function createLinkParams(string $matchDay)
+    private function createLinkParams(string $season, string $league, string $matchDay, bool $isActualSeason)
     {
-        if (false === preg_match(self::SEASON_PATTERN, $this->season, $matches)) {
-            throw new \LogicException('Unexpected season format "%s"!', $this->season);
+        if (false === preg_match(self::SEASON_PATTERN, $season, $matches)) {
+            throw new \LogicException('Unexpected season format "%s"!', $season);
         }
 
         $seasonParam = $matches[1].$matches[2];
 
-        $leagueParam = sprintf('%s_bl%s', $seasonParam, $this->league);
-        $fileParam = sprintf('Saison_%s', $this->season);
+        $leagueParam = sprintf('%s_bl%s', $seasonParam, $league);
+        $fileParam = sprintf('Saison_%s', $season);
 
         $linkParam = sprintf('&file=%s/%s.l98&st=%s', $fileParam, $leagueParam, $matchDay);
-        if ($this->actualSeason) {
+        if ($isActualSeason) {
             $linkParam = sprintf('&file=%s.l98&st=%s', $leagueParam, $matchDay);
         }
+        $this->logger->info('links parameter for request {param}', ['param' => self::DEFAULT_PARAM.$linkParam]);
 
         return self::DEFAULT_PARAM.$linkParam;
     }
 
-    private function createTitle()
+    private function createTitle(string $season)
     {
         //2018_2019 -> Saison 2018/19
-        $parts = explode('_', $this->season);
+        $parts = explode('_', $season);
         $endYear = substr($parts[1], 2);
 
         return sprintf('Saison %s/%s', $parts[0], $endYear);
-
     }
 }

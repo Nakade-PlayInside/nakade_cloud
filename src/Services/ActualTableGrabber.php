@@ -23,34 +23,40 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Logger\GrabberLoggerTrait;
 use App\Tools\Bundesliga\TableCatcher;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Retrieve the actual result table from the DGoB site. Return an empty array if no new table is found.
  * If a table is found it is persisted in the database.
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class ActualTableGrabber extends AbstractTableService
 {
-    private $tableCatcher;
-    private $logger;
+    use GrabberLoggerTrait;
 
-    public function __construct(EntityManagerInterface $manager, TableCatcher $tableCatcher, LoggerInterface $logger)
+    private $tableCatcher;
+
+    public function __construct(EntityManagerInterface $manager, TableCatcher $tableCatcher)
     {
         parent::__construct($manager);
         $this->tableCatcher = $tableCatcher;
-        $this->logger = $logger;
     }
 
     public function retrieveTable(): ?array
     {
+        $this->logger->notice('Actual table grabber started for searching new BundesligaTables');
+
         $actualSeason = $this->findActualSeason();
         if (!$actualSeason) {
+            $this->logger->error('No actual season found');
+
             return null;
         }
 
@@ -60,9 +66,19 @@ class ActualTableGrabber extends AbstractTableService
         } else {
             $nextMatchDay = 1;
         }
+        $this->logger->info(
+            'Actual season {season}, league {league}, last match day {last}, next match day {next}',
+            ['season' => $actualSeason, 'league' => $actualSeason->getLeague(), 'last' => $lastMatchDay, 'next' => $nextMatchDay]
+        );
 
         /** @var BundesligaTable[] $table */
         $table = $this->tableCatcher->extract($actualSeason->getDGoBIndex(), $actualSeason->getLeague(), (string) $nextMatchDay);
+        if ($table) {
+            $this->logger->info(
+                'Number of BundesligaTable rows {rows} found.',
+                ['rows' => count($table)]
+            );
+        }
 
         return $table;
     }
