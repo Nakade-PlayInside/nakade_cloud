@@ -47,7 +47,6 @@ class BundesligaRelegation extends AbstractResults
 
     public function __construct()
     {
-        parent::__construct();
         $this->matches = new ArrayCollection();
     }
 

@@ -8,9 +8,10 @@ monolog:
                 # regex: exclude all 404 errors from the logs
                 - ^/
         nested:
-            type: stream
+            type: rotating_file
             path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
+            level: info
+            max_files: 10
         console:
             type: console
             process_psr_3_messages: false
@@ -23,3 +24,24 @@ monolog:
             handler: deprecation
             max_level: info
             channels: ["php"]
+        mail_logging:
+            # log all messages (since debug is the lowest level)
+            level:    error
+            type:     rotating_file
+            path:     '%kernel.logs_dir%/mails.log'
+            channels: ["mails"]
+            max_files: 10
+        grabber_logging:
+            # log all messages (since debug is the lowest level)
+            level:    error
+            type:     rotating_file
+            path:     '%kernel.logs_dir%/grabber.log'
+            channels: ["grabber"]
+            max_files: 10
+        profile_logging:
+            # log all messages (since debug is the lowest level)
+            level:    error
+            type:     rotating_file
+            path:     '%kernel.logs_dir%/profile.log'
+            channels: ["profile"]
+            max_files: 10

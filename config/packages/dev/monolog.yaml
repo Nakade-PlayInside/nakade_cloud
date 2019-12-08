@@ -41,4 +41,10 @@ monolog:
             type:     stream
             path:     '%kernel.logs_dir%/grabber.log'
             channels: ["grabber"]
+        profile_logging:
+            # log all messages (since debug is the lowest level)
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/profile.log'
+            channels: ["profile"]
 
