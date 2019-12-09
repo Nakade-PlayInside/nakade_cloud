@@ -28,7 +28,6 @@ use App\Entity\Bundesliga\ResultMail;
 use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
 use App\Services\ActualResultsGrabber;
-use App\Services\ActualTableService;
 use App\Services\BundesligaTableService;
 use App\Services\Model\TableModel;
 use App\Services\TeamStatsService;
@@ -59,7 +58,7 @@ class BundesligaController extends AbstractController
      *
      * @IsGranted("ROLE_NAKADE_TEAM")
      */
-    public function actualMatch(Request $request)
+    public function actualMatchDay(Request $request)
     {
         $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
         if (!$actualSeason) {
@@ -74,29 +73,29 @@ class BundesligaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            if (!assert($data instanceof ResultModel)) {
-                throw new UnexpectedTypeException($data, ResultModel::class);
+            $model = $form->getData();
+            if (!assert($model instanceof ResultModel)) {
+                throw new UnexpectedTypeException($model, ResultModel::class);
             }
 
-            foreach ($data->getAllMatches() as $match) {
+            foreach ($model->getAllMatches() as $match) {
                 $this->getDoctrine()->getManager()->persist($match);
             }
             //create mail if not existing
-            if (!$data->getResults()->getResultMail()) {
+            if (!$model->getResults()->getResultMail()) {
                 $mail = new ResultMail($results);
                 $this->getDoctrine()->getManager()->persist($mail);
             }
             //create mail if not existing
-            if (!$data->getResults()->getLineupMail()) {
+            if (!$model->getResults()->getLineupMail()) {
                 $lineupMail = new LineupMail($results);
                 $this->getDoctrine()->getManager()->persist($lineupMail);
             }
             $this->getDoctrine()->getManager()->flush();
-
             $this->addFlash('success', 'bundesliga.actual.matchDay.update.success');
+
+            return $this->redirect($request->getUri());
         }
-        $params['form'] = $form->createView();
 
         return $this->render(
             'bundesliga/form.matchday.html.twig',

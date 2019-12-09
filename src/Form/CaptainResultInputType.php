@@ -36,7 +36,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ *
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
 class CaptainResultInputType extends AbstractType
@@ -86,7 +88,6 @@ class CaptainResultInputType extends AbstractType
                 ]);
             }
         });
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

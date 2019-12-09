@@ -72,7 +72,6 @@ class ResultModel
      */
     private $oppCaptainEmail;
 
-
     public function __construct(BundesligaResults $results)
     {
         $this->results = $results;
@@ -219,6 +218,21 @@ class ResultModel
         $data[] = $this->fourthBoardMatch;
 
         return $data;
+    }
+
+    public function getCurrentResult(): string
+    {
+        $homePoints = $awayPoints = 0;
+        foreach ($this->getAllMatches() as $match) {
+            if ('0:0' === $match->getResult()) {
+                continue;
+            }
+            $points = explode(':', $match->getResult());
+            $homePoints += (int) $points[0];
+            $awayPoints += (int) $points[1];
+        }
+
+        return sprintf('%s:%s', $homePoints, $awayPoints);
     }
 
     public function isCompleted(): bool
