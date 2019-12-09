@@ -46,7 +46,7 @@
         "symfony/web-link": "4.4.*",
         "symfony/web-server-bundle": "4.4.*",
         "symfony/webpack-encore-bundle": "^1.6",
-        "symfony/yaml": "4.3.*",
+        "symfony/yaml": "4.4.*",
         "twig/extensions": "^1.5"
     },
     "require-dev": {

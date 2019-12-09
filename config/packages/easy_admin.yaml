@@ -209,15 +209,9 @@ easy_admin:
                       permission: 'ROLE_SUPER_ADMIN',
                       type: 'choice',
                       type_options: {
-                        choices: {
-                          'open': 'open',
-                          'ongoing': 'ongoing',
-                          'finished': 'finished',
-                          'reopened': 'reopened',
-                          'closed': 'closed',
-                          'rejected': 'rejected'
-                        }}
-                    }
+                          choices: { 'open': 'open', 'ongoing': 'ongoing', 'finished': 'finished', 'reopened': 'reopened', 'closed': 'closed', 'rejected': 'rejected', }
+                          },
+                      }
             show:
                 actions: [-delete, -edit]
                 fields:
@@ -250,32 +244,10 @@ easy_admin:
                   - { property: 'createdAt', label: 'easyAdmin.bug.createdAt' }
             form:
                 fields:
-                  - { property: 'title', label: 'easyAdmin.bug.title' }
-                  - { property: 'message', label: 'easyAdmin.bug.message', type: 'text_editor' }
-                  - { property: 'priority',
-                      label: 'easyAdmin.bug.priority',
-                      type: 'choice',
-                      type_options: {
-                        choices: {
-                          'low': 1,
-                          'normal': 2,
-                          'high': 3,
-                        }}
-                    }
-                  - { property: 'status',
-                      label: 'easyAdmin.bug.state',
-                      permission: 'ROLE_SUPER_ADMIN',
-                      type: 'choice',
-                      type_options: {
-                        choices: {
-                          'open': 'open',
-                          'ongoing': 'ongoing',
-                          'finished': 'finished',
-                          'reopened': 'reopened',
-                          'closed': 'closed',
-                          'rejected': 'rejected'
-                        }}
-                      }
+                    - { property: 'title', label: 'easyAdmin.bug.title' }
+                    - { property: 'message', label: 'easyAdmin.bug.message', type: 'text_editor' }
+                    - { property: 'priority', label: 'easyAdmin.bug.priority', type: 'choice', type_options: { choices: { 'low': 1, 'normal': 2, 'high': 3, }}, }
+                    - { property: 'status', label: 'easyAdmin.bug.state', permission: 'ROLE_SUPER_ADMIN', type: 'choice', type_options: { choices: { 'open': 'open', 'ongoing': 'ongoing', 'finished': 'finished', 'reopened': 'reopened', 'closed': 'closed', 'rejected': 'rejected', }}, }
             show:
                 actions: [-delete, -edit]
                 fields:
