@@ -23,7 +23,7 @@
 
     <!-- ANALYSIS -->
     <target name="analysis"
-            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, phpunit, phpdox, -check-failure"
+            depends="prepare, lint,phploc,pdepend, phpmd, phpcs, phpcpd, phpdox"
             description="Performs static analysis" />
     <!-- END -->
 
