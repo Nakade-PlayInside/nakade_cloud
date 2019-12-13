@@ -169,7 +169,13 @@ class TableCellCatcher
         $imgNode = $node->firstChild;
 
         if ($imgNode->hasAttribute(self::IMG_SRC)) {
-            return $imgNode->getAttribute(self::IMG_SRC);
+            $imgSrc = $imgNode->getAttribute(self::IMG_SRC);
+            if (empty($imgSrc)) {
+                return null;
+            }
+            $parts = pathinfo($imgSrc);
+
+            return $parts['basename'];
         }
         $this->logger->error('No img source found.');
 
