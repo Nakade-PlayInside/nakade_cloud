@@ -26,8 +26,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaSgfRepository")
- *
+ * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaSgfRepository") *
  * @Gedmo\Loggable
  */
 class BundesligaSgf
@@ -54,7 +53,7 @@ class BundesligaSgf
     private $playedAt;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Gedmo\Versioned
      */
     private $kgsArchivesPath;
