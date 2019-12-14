@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>

@@ -22,12 +22,15 @@ declare(strict_types=1);
 namespace App\Entity\Bundesliga;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\MappedSuperclass()
+ * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaSgfRepository")
+ *
+ * @Gedmo\Loggable
  */
-abstract class AbstractMail
+class BundesligaSgf
 {
     use TimestampableEntity;
 
@@ -36,26 +39,79 @@ abstract class AbstractMail
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    protected $id;
+    private $id;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Versioned
      */
-    protected $sendAt;
+    private $playedAt;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $kgsArchivesPath;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $path;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isCommented;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getSendAt(): ?\DateTimeInterface
+    public function getPlayedAt(): ?\DateTimeInterface
     {
-        return $this->sendAt;
+        return $this->playedAt;
     }
 
-    public function setSendAt(?\DateTimeInterface $sendAt): self
+    public function setPlayedAt(?\DateTimeInterface $playedAt): self
     {
-        $this->sendAt = $sendAt;
+        $this->playedAt = $playedAt;
+
+        return $this;
+    }
+
+    public function getKgsArchivesPath(): ?string
+    {
+        return $this->kgsArchivesPath;
+    }
+
+    public function setKgsArchivesPath(?string $kgsArchivesPath): self
+    {
+        $this->kgsArchivesPath = $kgsArchivesPath;
+
+        return $this;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path): self
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    public function isCommented(): ?bool
+    {
+        return $this->isCommented;
+    }
+
+    public function setIsCommented(bool $isCommented): self
+    {
+        $this->isCommented = $isCommented;
 
         return $this;
     }

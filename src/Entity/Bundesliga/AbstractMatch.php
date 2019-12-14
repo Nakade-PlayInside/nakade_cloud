@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -80,7 +81,12 @@ abstract class AbstractMatch implements MatchInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $targetDate;
+    protected $targetDate;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Bundesliga\BundesligaSgf", cascade={"persist", "remove"})
+     */
+    protected $sgf;
 
     public function getId(): ?int
     {
@@ -181,6 +187,18 @@ abstract class AbstractMatch implements MatchInterface
     public function setTargetDate(?\DateTimeInterface $targetDate): self
     {
         $this->targetDate = $targetDate;
+
+        return $this;
+    }
+
+    public function getSgf(): ?BundesligaSgf
+    {
+        return $this->sgf;
+    }
+
+    public function setSgf(?BundesligaSgf $sgf): self
+    {
+        $this->sgf = $sgf;
 
         return $this;
     }
