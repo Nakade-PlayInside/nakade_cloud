@@ -33,12 +33,6 @@ class BundesligaSgf
 {
     use TimestampableEntity;
 
-    public function __construct(string $kgsArchivesPath, string $path)
-    {
-        $this->kgsArchivesPath = $kgsArchivesPath;
-        $this->path = $path;
-    }
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -68,6 +62,11 @@ class BundesligaSgf
      */
     private $isCommented = false;
 
+    public function __construct(string $kgsArchivesPath)
+    {
+        $this->kgsArchivesPath = $kgsArchivesPath;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,13 +87,6 @@ class BundesligaSgf
     public function getKgsArchivesPath(): ?string
     {
         return $this->kgsArchivesPath;
-    }
-
-    public function setKgsArchivesPath(?string $kgsArchivesPath): self
-    {
-        $this->kgsArchivesPath = $kgsArchivesPath;
-
-        return $this;
     }
 
     public function getPath(): ?string

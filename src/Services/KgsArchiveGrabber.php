@@ -48,8 +48,12 @@ class KgsArchiveGrabber
         $file = $this->archiveDownload->download($uri, $season);
 
         if ($file) {
-            $sgf = new BundesligaSgf($uri, $file);
-            $this->manager->persist($sgf);
+            $sgf = $this->manager->getRepository(BundesligaSgf::class)->findOneBy(['kgsArchivesPath' => $uri]);
+            if (!$sgf) {
+                $sgf = new BundesligaSgf($uri);
+                $this->manager->persist($sgf);
+            }
+            $sgf->setPath($file);
         }
         $this->manager->flush();
     }
