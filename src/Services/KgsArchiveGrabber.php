@@ -21,6 +21,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Entity\Bundesliga\BundesligaSgf;
+use Doctrine\ORM\EntityManagerInterface;
+
 class KgsArchiveGrabber
 {
     //https://www.gokgs.com/gameArchives.jsp?user=nakade01&year=2012&month=9
@@ -28,27 +31,27 @@ class KgsArchiveGrabber
     //erste spalte = http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf
     //spalte Typ != Besprechung   type==frei || gewertet?
 
+    private $archiveDownload;
+    private $manager;
+
+    public function __construct(EntityManagerInterface $manager, KgsArchivesDownload $download)
+    {
+        $this->archiveDownload = $download;
+        $this->manager = $manager;
+    }
+
     public function download()
     {
         $uri = 'http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf';
-        $parts = pathinfo($uri);
-        $baseName = $parts['basename'];
         $season = '2012_13';
-        $dir = 'sgf/' . $season;
-        if (!file_exists($dir)) {
-            mkdir($dir, 0755, true);
+
+        $file = $this->archiveDownload->download($uri, $season);
+
+        if ($file) {
+            $sgf = new BundesligaSgf($uri, $file);
+            $this->manager->persist($sgf);
         }
-
-        $file = $dir . '/' . $baseName;
-
-        $contents = file_get_contents(
-            $uri
-        );
-
-        file_put_contents(
-            $file,
-            $contents
-        );
+        $this->manager->flush();
     }
 //
 //    const BUFFER = 1024;

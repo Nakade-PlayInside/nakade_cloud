@@ -34,6 +34,12 @@ class BundesligaSgf
 {
     use TimestampableEntity;
 
+    public function __construct(string $kgsArchivesPath, string $path)
+    {
+        $this->kgsArchivesPath = $kgsArchivesPath;
+        $this->path = $path;
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -61,7 +67,7 @@ class BundesligaSgf
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isCommented;
+    private $isCommented = false;
 
     public function getId(): ?int
     {
