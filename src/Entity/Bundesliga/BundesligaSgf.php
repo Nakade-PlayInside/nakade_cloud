@@ -62,6 +62,16 @@ class BundesligaSgf
      */
     private $isCommented = false;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $result;
+
     public function __construct(string $kgsArchivesPath)
     {
         $this->kgsArchivesPath = $kgsArchivesPath;
@@ -109,6 +119,30 @@ class BundesligaSgf
     public function setIsCommented(bool $isCommented): self
     {
         $this->isCommented = $isCommented;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getResult(): ?string
+    {
+        return $this->result;
+    }
+
+    public function setResult(?string $result): self
+    {
+        $this->result = $result;
 
         return $this;
     }

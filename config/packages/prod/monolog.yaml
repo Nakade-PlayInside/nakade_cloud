@@ -45,3 +45,9 @@ monolog:
             path:     '%kernel.logs_dir%/profile.log'
             channels: ["profile"]
             max_files: 10
+        kgs_logging:
+            # log all messages (since debug is the lowest level)
+            level:    error
+            type:     stream
+            path:     '%kernel.logs_dir%/kgsArchives.log'
+            channels: ["kgsArchives"]

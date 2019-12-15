@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Entity\Bundesliga\BundesligaSgf;
+use App\Services\Model\KgsArchivesModel;
 use App\Tools\KgsArchives\KgsCellReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -33,6 +34,9 @@ class KgsArchivesGrabber
     //erste tabelle class grid
     //erste spalte = http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf
     //spalte Typ != Besprechung   type==frei || gewertet?
+
+    private const TABLE_HEAD = 'th';
+    private const CSS_SELECTOR = 'table.grid';
 
     private $archiveDownload;
     private $manager;
@@ -49,13 +53,14 @@ class KgsArchivesGrabber
 
     public function extract()
     {
-        $uri = 'http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf';
+        //'http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf';
         $season = '2012_13';
-
         $html = $this->contentRetriever->grab('https://www.gokgs.com/gameArchives.jsp?user=nakade01&year=2012&month=9');
+
         $crawler = new Crawler($html);
+
         //first table!
-        $domNode = $crawler->filter('table.grid')->getNode(0);
+        $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(0);
         // seven cells expected
         if (!$domNode || 7 !== $domNode->firstChild->childNodes->length) {
             return;
@@ -63,28 +68,33 @@ class KgsArchivesGrabber
 
         /** @var \DOMNode $row */
         foreach ($domNode->childNodes as $row) {
-            if ('th' === $row->firstChild->nodeName) {
+            if (self::TABLE_HEAD === $row->firstChild->nodeName) {
                 continue;
             }
             $model = $this->kgsCellReader->extract($row);
-
-            //downloadLink is uri
-            dd($model);
-        }
-
-        $nextCrawler = new Crawler($domNode);
-        // $nextCrawler->filter('()')
-
-        $file = $this->archiveDownload->download($uri, $season);
-        if ($file) {
-            $sgf = $this->manager->getRepository(BundesligaSgf::class)->findOneBy(['kgsArchivesPath' => $uri]);
-            if (!$sgf) {
-                $sgf = new BundesligaSgf($uri);
-                $this->manager->persist($sgf);
+            if ($model && $model->downloadLink) {
+                $file = $this->archiveDownload->download($model->downloadLink, $season);
+                if ($file) {
+                    $this->makeEntity($model, $file);
+                    //todo: relation
+                }
             }
-            $sgf->setPath($file)
-                ->setPlayedAt($model->playedAt);
         }
         $this->manager->flush();
+    }
+
+    private function makeEntity(KgsArchivesModel $model, string $localPath)
+    {
+        $sgf = $this->manager->getRepository(BundesligaSgf::class)->findOneBy(['kgsArchivesPath' => $model->downloadLink]);
+        if (!$sgf) {
+            $sgf = new BundesligaSgf($model->downloadLink);
+            $this->manager->persist($sgf);
+        }
+        //todo: prevent commented games ; just one game allowed
+        $sgf->setPath($localPath)
+                ->setPlayedAt($model->playedAt)
+                ->setType($model->type)
+                ->setResult($model->result)
+        ;
     }
 }
