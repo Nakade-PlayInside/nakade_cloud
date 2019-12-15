@@ -24,21 +24,22 @@ namespace App\Services;
 
 class ContentRetriever
 {
-    public function grab(string $url)
+    public function grab(string $url): string
     {
 
         //Snoopy https://github.com/r23/Snoopy
-        $ch = curl_init();
+        $handler = curl_init();
         $timeout = 5;
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        curl_setopt($handler, CURLOPT_URL, $url);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($handler, CURLOPT_CONNECTTIMEOUT, $timeout);
 
         // Get URL content
-        $lines = curl_exec($ch);
+        $lines = curl_exec($handler);
+
         // close handle to release resources
-        curl_close($ch);
+        curl_close($handler);
 
         //output, you can also save it locally on the server
         return $lines;

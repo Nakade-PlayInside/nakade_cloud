@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -23,6 +24,8 @@ namespace App\Services;
 
 use App\Entity\Bundesliga\BundesligaSgf;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Validator\Constraints\Timezone;
 
 class KgsArchiveGrabber
 {
@@ -33,11 +36,16 @@ class KgsArchiveGrabber
 
     private $archiveDownload;
     private $manager;
+    /**
+     * @var ContentRetriever
+     */
+    private $contentRetriever;
 
-    public function __construct(EntityManagerInterface $manager, KgsArchivesDownload $download)
+    public function __construct(EntityManagerInterface $manager, KgsArchivesDownload $download, ContentRetriever $contentRetriever)
     {
         $this->archiveDownload = $download;
         $this->manager = $manager;
+        $this->contentRetriever = $contentRetriever;
     }
 
     public function download()
@@ -45,8 +53,35 @@ class KgsArchiveGrabber
         $uri = 'http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf';
         $season = '2012_13';
 
-        $file = $this->archiveDownload->download($uri, $season);
+        $html = $this->contentRetriever->grab('https://www.gokgs.com/gameArchives.jsp?user=nakade01&year=2012&month=9');
+        $crawler = new Crawler($html);
+        //second lmoInner table!
+        $domNode = $crawler->filter('table.grid')->getNode(0);
+        // seven cells expected
+        $domNode->firstChild->childNodes->length;
 
+        /** @var \DOMNode $row */
+        foreach ($domNode->childNodes as $row) {
+            if ('th' === $row->firstChild->nodeName) {
+                continue;
+            }
+            $rowCrawler = new Crawler($row);
+            $link = $rowCrawler->filter('td')->getNode(0);
+            $playedAtGMT = $rowCrawler->filter('td')->getNode(4)->textContent;
+            $gmt = new \DateTimeZone('Europe/London');
+            $playedAt = new \DateTime($playedAtGMT, $gmt);
+            $cet = new \DateTimeZone('Europe/Berlin');
+            $playedAt->setTimezone($cet);
+            $type = $rowCrawler->filter('td')->getNode(5)->textContent;
+            $result = $rowCrawler->filter('td')->getNode(6)->textContent;
+
+            dd($playedAt, $type, $result);
+        }
+
+        $nextCrawler = new Crawler($domNode);
+        // $nextCrawler->filter('()')
+
+        $file = $this->archiveDownload->download($uri, $season);
         if ($file) {
             $sgf = $this->manager->getRepository(BundesligaSgf::class)->findOneBy(['kgsArchivesPath' => $uri]);
             if (!$sgf) {
@@ -57,6 +92,7 @@ class KgsArchiveGrabber
         }
         $this->manager->flush();
     }
+
 //
 //    const BUFFER = 1024;
 //
