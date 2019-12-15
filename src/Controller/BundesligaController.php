@@ -29,7 +29,7 @@ use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
 use App\Services\ActualResultsGrabber;
 use App\Services\BundesligaTableService;
-use App\Services\KgsArchiveGrabber;
+use App\Services\KgsArchivesGrabber;
 use App\Services\Model\TableModel;
 use App\Services\TeamStatsService;
 use App\Tools\PlayerStats;
@@ -44,9 +44,9 @@ class BundesligaController extends AbstractController
     /**
      * @Route("/bundesliga/test", name="bundesliga_test")
      */
-    public function actualSeason(KgsArchiveGrabber $service)
+    public function actualSeason(KgsArchivesGrabber $service)
     {
-        $service->download();
+        $service->extract();
 
         return $this->render('bundesliga/index.html.twig', [
         ]);

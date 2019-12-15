@@ -22,44 +22,10 @@ declare(strict_types=1);
 
 namespace App\Services\Model;
 
-class ResultsModel
+class KgsArchivesModel
 {
-    public $homeTeam;
-    public $awayTeam;
-    public $homePoints;
-    public $awayPoints;
-
-    private $season;
-    private $matchDay;
-    private $playedAt;
-
-    public function __construct(string $season, string $matchDay)
-    {
-        $this->season = $season;
-        $this->matchDay = $matchDay;
-    }
-
-    public function getSeason(): string
-    {
-        return $this->season;
-    }
-
-    public function getMatchDay(): string
-    {
-        return $this->matchDay;
-    }
-
-    public function getPlayedAt(): ?\DateTimeInterface
-    {
-        return $this->playedAt;
-    }
-
-    public function setPlayedAt(?string $playedAt): self
-    {
-        if ($playedAt) {
-            $this->playedAt = \DateTime::createFromFormat('d.m.Y H:i', $playedAt);
-        }
-
-        return $this;
-    }
+    public $downloadLink;
+    public $playedAt;
+    public $type;
+    public $result;
 }

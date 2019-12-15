@@ -23,11 +23,11 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Entity\Bundesliga\BundesligaSgf;
+use App\Tools\KgsArchives\KgsCellReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\Validator\Constraints\Timezone;
 
-class KgsArchiveGrabber
+class KgsArchivesGrabber
 {
     //https://www.gokgs.com/gameArchives.jsp?user=nakade01&year=2012&month=9
     //erste tabelle class grid
@@ -36,46 +36,40 @@ class KgsArchiveGrabber
 
     private $archiveDownload;
     private $manager;
-    /**
-     * @var ContentRetriever
-     */
     private $contentRetriever;
+    private $kgsCellReader;
 
-    public function __construct(EntityManagerInterface $manager, KgsArchivesDownload $download, ContentRetriever $contentRetriever)
+    public function __construct(EntityManagerInterface $manager, KgsArchivesDownload $download, KgsCellReader $kgsCellReader)
     {
         $this->archiveDownload = $download;
         $this->manager = $manager;
-        $this->contentRetriever = $contentRetriever;
+        $this->contentRetriever = new ContentRetriever();
+        $this->kgsCellReader = $kgsCellReader;
     }
 
-    public function download()
+    public function extract()
     {
         $uri = 'http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf';
         $season = '2012_13';
 
         $html = $this->contentRetriever->grab('https://www.gokgs.com/gameArchives.jsp?user=nakade01&year=2012&month=9');
         $crawler = new Crawler($html);
-        //second lmoInner table!
+        //first table!
         $domNode = $crawler->filter('table.grid')->getNode(0);
         // seven cells expected
-        $domNode->firstChild->childNodes->length;
+        if (!$domNode || 7 !== $domNode->firstChild->childNodes->length) {
+            return;
+        }
 
         /** @var \DOMNode $row */
         foreach ($domNode->childNodes as $row) {
             if ('th' === $row->firstChild->nodeName) {
                 continue;
             }
-            $rowCrawler = new Crawler($row);
-            $link = $rowCrawler->filter('td')->getNode(0);
-            $playedAtGMT = $rowCrawler->filter('td')->getNode(4)->textContent;
-            $gmt = new \DateTimeZone('Europe/London');
-            $playedAt = new \DateTime($playedAtGMT, $gmt);
-            $cet = new \DateTimeZone('Europe/Berlin');
-            $playedAt->setTimezone($cet);
-            $type = $rowCrawler->filter('td')->getNode(5)->textContent;
-            $result = $rowCrawler->filter('td')->getNode(6)->textContent;
+            $model = $this->kgsCellReader->extract($row);
 
-            dd($playedAt, $type, $result);
+            //downloadLink is uri
+            dd($model);
         }
 
         $nextCrawler = new Crawler($domNode);
@@ -88,38 +82,9 @@ class KgsArchiveGrabber
                 $sgf = new BundesligaSgf($uri);
                 $this->manager->persist($sgf);
             }
-            $sgf->setPath($file);
+            $sgf->setPath($file)
+                ->setPlayedAt($model->playedAt);
         }
         $this->manager->flush();
     }
-
-//
-//    const BUFFER = 1024;
-//
-//    function download($remoteFile, $localFile) {
-//        $fremote = fopen($remoteFile, 'rb');
-//        if (!$fremote) {
-//            return false;
-//        }
-//
-//        $flocal = fopen($localFile, 'wb');
-//        if (!$flocal) {
-//            fclose($fremote);
-//            return false;
-//        }
-//
-//        while ($buffer = fread($fremote, BUFFER)) {
-//            fwrite($flocal, $buffer);
-//        }
-//
-//        fclose($flocal);
-//        fclose($fremote);
-//
-//        return true;
-//    }
-//
-//download(
-//'https://raw.githubusercontent.com/petehouston/php-tips/master/README.md',
-//'README.md'
-//);
 }
