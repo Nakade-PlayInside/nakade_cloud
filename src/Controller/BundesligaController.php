@@ -20,6 +20,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
@@ -27,7 +28,6 @@ use App\Entity\Bundesliga\LineupMail;
 use App\Entity\Bundesliga\ResultMail;
 use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
-use App\Services\ActualResultsGrabber;
 use App\Services\BundesligaTableService;
 use App\Services\KgsArchivesGrabber;
 use App\Services\Model\TableModel;
@@ -46,7 +46,11 @@ class BundesligaController extends AbstractController
      */
     public function actualSeason(KgsArchivesGrabber $service)
     {
-        $service->extract();
+        $matches = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
+
+        foreach ($matches as $match) {
+            $service->extract($match);
+        }
 
         return $this->render('bundesliga/index.html.twig', [
         ]);

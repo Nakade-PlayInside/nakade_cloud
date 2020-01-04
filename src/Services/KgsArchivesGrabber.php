@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaSgf;
 use App\Services\Model\KgsArchivesModel;
 use App\Tools\KgsArchives\KgsCellReader;
@@ -35,8 +36,9 @@ class KgsArchivesGrabber
     //erste spalte = http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf
     //spalte Typ != Besprechung   type==frei || gewertet?
 
-    private const TABLE_HEAD = 'th';
+    private const TABLE_HEAD   = 'th';
     private const CSS_SELECTOR = 'table.grid';
+    private const ARCHIVE_URI  = 'https://www.gokgs.com/gameArchives.jsp';
 
     private $archiveDownload;
     private $manager;
@@ -51,11 +53,12 @@ class KgsArchivesGrabber
         $this->kgsCellReader = $kgsCellReader;
     }
 
-    public function extract()
+    public function extract(BundesligaMatch $match)
     {
         //'http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf';
-        $season = '2012_13';
-        $html = $this->contentRetriever->grab('https://www.gokgs.com/gameArchives.jsp?user=nakade01&year=2012&month=9');
+        $link = $this->createLink($match);
+        dd($link);
+        $html = $this->contentRetriever->grab($link);
 
         $crawler = new Crawler($html);
 
@@ -66,6 +69,8 @@ class KgsArchivesGrabber
             return;
         }
 
+        //SEASON DIR
+        $season = $match->getSeason()->getSgfDir();
         /** @var \DOMNode $row */
         foreach ($domNode->childNodes as $row) {
             if (self::TABLE_HEAD === $row->firstChild->nodeName) {
@@ -81,6 +86,19 @@ class KgsArchivesGrabber
             }
         }
         $this->manager->flush();
+    }
+
+    private function createLink(BundesligaMatch $match): string
+    {
+        /** @var \DateTimeInterface $date */
+        $date = $match->getResults()->getPlayedAt();
+
+        return self::ARCHIVE_URI . sprintf(
+            '?user=nakade0%s&year=%s&month=%s',
+            $match->getBoard(),
+            $date->format('Y'),
+            $date->format('n')
+        );
     }
 
     private function makeEntity(KgsArchivesModel $model, string $localPath)

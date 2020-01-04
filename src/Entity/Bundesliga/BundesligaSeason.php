@@ -260,6 +260,14 @@ class BundesligaSeason
         return sprintf("%s_20%s", $matches[1], $matches[2]);
     }
 
+    public function getSgfDir()
+    {
+        $pattern = '#.*(\d{4})\/(\d{2})#';
+        preg_match($pattern, $this->getTitle(), $matches);
+
+        return sprintf("%s_%s", $matches[1], $matches[2]);
+    }
+
     public function __toString()
     {
         return $this->title;

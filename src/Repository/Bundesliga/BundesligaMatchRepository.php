@@ -56,4 +56,18 @@ class BundesligaMatchRepository extends ServiceEntityRepository
                 ->getResult()
                 ;
     }
+
+    /**
+     * @return BundesligaMatch[]
+     */
+    public function findAllMatches(): array
+    {
+        return $this->createQueryBuilder('m')
+                ->leftJoin('m.results', 'r')
+                ->leftJoin('r.season', 's')
+                ->leftJoin('m.player', 'p')
+                ->getQuery()
+                ->getResult()
+                ;
+    }
 }
