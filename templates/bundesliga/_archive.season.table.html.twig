@@ -12,7 +12,7 @@
                     {% set homeColor = 'fa-circle' %}
                 {% endif %}
                 {% if match.homeMatch %}
-                    <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
+                    <td style="text-align: left" class="{% if match.result != '0:2' %}point-maker{% endif %}">
                         <i class="fa fa-fw {{ homeColor }}"></i>
                         <a href="{{ path('bundesliga_archive_player', { 'seasonId': model.season.id, 'playerId': match.player.id, 'matchDay': model.result.matchDay }) }}">{{ match.player }}</a>
                     </td>
@@ -20,7 +20,7 @@
                     <td>{{ match.opponent }}</td>
                     <td class="match-result">{{ match.result }}</td>
                 {% else %}
-                    <td>{{ match.opponent }}</td>
+                    <td style="text-align: left">{{ match.opponent }}</td>
                     <td class="versus">-</td>
                     <td class="{% if match.result != '0:2' %}point-maker{% endif %}">
                         <i class="fa fa-fw {{ homeColor }}"></i>

@@ -1,5 +1,5 @@
 {% if model and model.actualTable %}
-    <center>
+    <div style="text-align: center">
     <div class="js-season-table">
         {% include 'bundesliga/_result.html.twig' %}
         {% include 'bundesliga/_table.html.twig' with { 'uri': 'bundesliga_matchDay_select' } %}
@@ -13,5 +13,5 @@
             </div>
         {% endif %}
     </div>
-    </center>
+    </div>
 {% endif %}

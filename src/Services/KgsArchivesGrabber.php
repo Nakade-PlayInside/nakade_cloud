@@ -80,8 +80,9 @@ class KgsArchivesGrabber
             if ($model && $model->downloadLink) {
                 $file = $this->archiveDownload->download($model->downloadLink, $season);
                 if ($file) {
-                    $this->makeEntity($model, $file);
-                    //todo: relation
+                    $sgf = $this->makeEntity($model, $file);
+                    $match->setSgf($sgf);
+                    //todo: targetDate
                 }
             }
         }
@@ -101,7 +102,7 @@ class KgsArchivesGrabber
         );
     }
 
-    private function makeEntity(KgsArchivesModel $model, string $localPath)
+    private function makeEntity(KgsArchivesModel $model, string $localPath): BundesligaSgf
     {
         $sgf = $this->manager->getRepository(BundesligaSgf::class)->findOneBy(['kgsArchivesPath' => $model->downloadLink]);
         if (!$sgf) {
@@ -114,5 +115,7 @@ class KgsArchivesGrabber
                 ->setType($model->type)
                 ->setResult($model->result)
         ;
+
+        return $sgf;
     }
 }

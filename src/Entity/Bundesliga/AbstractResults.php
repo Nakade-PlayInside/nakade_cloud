@@ -195,10 +195,10 @@ abstract class AbstractResults implements ResultsInterface
 
     public function isNakadeResult(): bool
     {
-        if (false !== stripos($this->getHome(), self::HOME_TEAM)) {
+        if (false !== stripos($this->getHome()->getName(), self::HOME_TEAM)) {
             return true;
         }
-        if (false !== stripos($this->getAway(), self::HOME_TEAM)) {
+        if (false !== stripos($this->getAway()->getName(), self::HOME_TEAM)) {
             return true;
         }
 
@@ -207,17 +207,19 @@ abstract class AbstractResults implements ResultsInterface
 
     public function getTeamNakade(): BundesligaTeam
     {
-        if (false !== stripos($this->getHome(), self::HOME_TEAM)) {
+        if (false !== stripos($this->getHome()->getName(), self::HOME_TEAM)) {
             return $this->getHome();
         }
+
         return $this->getAway();
     }
 
     public function getOpponentTeam(): BundesligaTeam
     {
-        if (false === stripos($this->getHome(), self::HOME_TEAM)) {
+        if (false === stripos($this->getHome()->getName(), self::HOME_TEAM)) {
             return $this->getHome();
         }
+
         return $this->getAway();
     }
 }

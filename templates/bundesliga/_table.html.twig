@@ -15,7 +15,7 @@
 {% for  data in model.actualTable %}
     <tr class="{{ data.cSS }}">
         <td>{{ data.position }}</td>
-        <td data-toggle="tooltip" data-placement="right" title='Tendenz'><img alt='Tendenz' src="images/{{ data.imgSrc }}"></td>
+        <td data-toggle="tooltip" data-placement="right" title='Tendenz'><img alt='Tendenz' src="/images/{{ data.imgSrc }}"></td>
         <td class="team">{{ data.team }}</td>
         <td class="hide d-sm-table-cell games">{{ data.games }}</td>
         <td class="hide d-sm-table-cell">{{ data.wins }}</td>

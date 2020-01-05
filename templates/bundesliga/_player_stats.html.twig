@@ -2,30 +2,28 @@
 <h5>{{ model.season.title }} - {{ model.season.league | number_format }}. Liga</h5>
 
 {% if model.matches %}
-    <center>
-    <table class="match-stats">
-        <tr>
-            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Spiele">Sp</th>
-            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Siege">s</th>
-            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Unentschieden">u</th>
-            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Niederlagen">n</th>
-            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Schwarz | Siege"><i class="fa fa-fw fa-circle"></i></th>
-            <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Weiß | Siege"><i class="fa fa-fw fa-circle-o"></i></th>
-            <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Punkte" >P</th>
-            <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Gewinnquote" >%</th>
-        </tr>
-        <tr class="defaultColor">
-            <td>{{ model.games }}</td>
-            <td>{{ model.wins }}</td>
-            <td>{{ model.draws }}</td>
-            <td>{{ model.losses }}</td>
-            <td>{{ model.black }} | {{ model.blackPoints }}</td>
-            <td>{{ model.white }} | {{ model.whitePoints }}</td>
-            <td>{{ model.points }}</td>
-            <td>{{ model.winPercentage }}</td>
-        </tr>
-    </table>
-    </center>
+        <table class="match-stats">
+            <tr>
+                <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Spiele">Sp</th>
+                <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Siege">s</th>
+                <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Unentschieden">u</th>
+                <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Niederlagen">n</th>
+                <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Schwarz | Siege"><i class="fa fa-fw fa-circle"></i></th>
+                <th class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Weiß | Siege"><i class="fa fa-fw fa-circle-o"></i></th>
+                <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Punkte" >P</th>
+                <th  class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Gewinnquote" >%</th>
+            </tr>
+            <tr class="defaultColor">
+                <td>{{ model.games }}</td>
+                <td>{{ model.wins }}</td>
+                <td>{{ model.draws }}</td>
+                <td>{{ model.losses }}</td>
+                <td>{{ model.black }} | {{ model.blackPoints }}</td>
+                <td>{{ model.white }} | {{ model.whitePoints }}</td>
+                <td>{{ model.points }}</td>
+                <td>{{ model.winPercentage }}</td>
+            </tr>
+        </table>
 
     <ul class="board-stats">
         {% if model.firstBoard > 0 %}
