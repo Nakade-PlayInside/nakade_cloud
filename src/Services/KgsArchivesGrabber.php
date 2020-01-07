@@ -22,8 +22,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaSgf;
+use App\Entity\Bundesliga\MatchInterface;
 use App\Services\Model\KgsArchivesModel;
 use App\Tools\KgsArchives\KgsCellReader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,9 +36,9 @@ class KgsArchivesGrabber
     //erste spalte = http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf
     //spalte Typ != Besprechung   type==frei || gewertet?
 
-    private const TABLE_HEAD   = 'th';
+    private const TABLE_HEAD = 'th';
     private const CSS_SELECTOR = 'table.grid';
-    private const ARCHIVE_URI  = 'https://www.gokgs.com/gameArchives.jsp';
+    private const ARCHIVE_URI = 'https://www.gokgs.com/gameArchives.jsp';
 
     private $archiveDownload;
     private $manager;
@@ -53,48 +53,71 @@ class KgsArchivesGrabber
         $this->kgsCellReader = $kgsCellReader;
     }
 
-    public function extract(BundesligaMatch $match)
+    public function extract(MatchInterface $match)
     {
         //'http://files.gokgs.com/games/2012/9/13/AGruKi1-Nakade01.sgf';
         $link = $this->createLink($match);
-        dd($link);
         $html = $this->contentRetriever->grab($link);
 
         $crawler = new Crawler($html);
 
         //first table!
         $domNode = $crawler->filter(self::CSS_SELECTOR)->getNode(0);
-        // seven cells expected
+        //excluding review
         if (!$domNode || 7 !== $domNode->firstChild->childNodes->length) {
             return;
         }
 
-        //SEASON DIR
-        $season = $match->getSeason()->getSgfDir();
+        $entities = [];
         /** @var \DOMNode $row */
         foreach ($domNode->childNodes as $row) {
             if (self::TABLE_HEAD === $row->firstChild->nodeName) {
                 continue;
             }
+            //commented and unfinished games are excluded
             $model = $this->kgsCellReader->extract($row);
             if ($model && $model->downloadLink) {
+                //SEASON DIR
+                $season = $match->getSeason()->getSgfDir();
                 $file = $this->archiveDownload->download($model->downloadLink, $season);
                 if ($file) {
-                    $sgf = $this->makeEntity($model, $file);
-                    $match->setSgf($sgf);
-                    //todo: targetDate
+                    $entities[] = $this->makeEntity($model, $file);
+                    //we have to assign the sgf files to a match solving a problem
+                    //occasionally, there are more than one match per month which will break the one to one relation
+                    //unfortunately, we cannot always assign by date since some matches are played prior than common play date.
                 }
             }
         }
+        //only one sgf found in month ; easy to assign
+        if (1 === count($entities)) {
+            $sgf = array_shift($entities);
+            $match->setSgf($sgf);
+        }
+        //more than one match per month
+        if (count($entities) > 1) {
+            /** @var BundesligaSgf $sgf */
+            foreach ($entities as $sgf) {
+                //match played at usual league play date
+                if ($match->getResults()->getPlayedAt()->format('d.m.Y') === $sgf->getPlayedAt()->format('d.m.Y')) {
+                    $match->setSgf($sgf);
+                    continue;
+                }
+                //match was played prior but this works for matches since Dec 2019 only
+                if ($match->getTargetDate() && $match->getTargetDate()->format('d.m.Y') === $sgf->getPlayedAt()->format('d.m.Y')) {
+                    $match->setSgf($sgf);
+                }
+            }
+        }
+
         $this->manager->flush();
     }
 
-    private function createLink(BundesligaMatch $match): string
+    private function createLink(MatchInterface $match): string
     {
         /** @var \DateTimeInterface $date */
         $date = $match->getResults()->getPlayedAt();
 
-        return self::ARCHIVE_URI . sprintf(
+        return self::ARCHIVE_URI.sprintf(
             '?user=nakade0%s&year=%s&month=%s',
             $match->getBoard(),
             $date->format('Y'),
@@ -102,19 +125,20 @@ class KgsArchivesGrabber
         );
     }
 
-    private function makeEntity(KgsArchivesModel $model, string $localPath): BundesligaSgf
+    private function makeEntity(KgsArchivesModel $model, string $localPath): ?BundesligaSgf
     {
         $sgf = $this->manager->getRepository(BundesligaSgf::class)->findOneBy(['kgsArchivesPath' => $model->downloadLink]);
         if (!$sgf) {
             $sgf = new BundesligaSgf($model->downloadLink);
+
+            $sgf->setPath($localPath)
+                    ->setPlayedAt($model->playedAt)
+                    ->setType($model->type)
+                    ->setResult($model->result)
+            ;
+
             $this->manager->persist($sgf);
         }
-        //todo: prevent commented games ; just one game allowed
-        $sgf->setPath($localPath)
-                ->setPlayedAt($model->playedAt)
-                ->setType($model->type)
-                ->setResult($model->result)
-        ;
 
         return $sgf;
     }

@@ -38,32 +38,32 @@ class BundesligaRelegationMatchRepository extends ServiceEntityRepository
         parent::__construct($registry, BundesligaRelegationMatch::class);
     }
 
-    // /**
-    //  * @return BundesligaRelegationMatch[] Returns an array of BundesligaRelegationMatch objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return BundesligaRelegationMatch[]
+     */
+    public function findAllMatches(): array
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->createQueryBuilder('m')
+                ->leftJoin('m.results', 'r')
+                ->leftJoin('r.season', 's')
+                ->leftJoin('m.player', 'p')
+                ->getQuery()
+                ->getResult()
+                ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?BundesligaRelegationMatch
+    /**
+     * @return BundesligaRelegationMatch[]
+     */
+    public function findMatchesWithoutSgf(): array
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->createQueryBuilder('m')
+                ->leftJoin('m.results', 'r')
+                ->leftJoin('r.season', 's')
+                ->leftJoin('m.player', 'p')
+                ->andWhere('m.sgf is NULL')
+                ->getQuery()
+                ->getResult()
+                ;
     }
-    */
 }

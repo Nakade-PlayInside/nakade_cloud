@@ -44,4 +44,6 @@ interface ResultsInterface
     public function getAway(): ?BundesligaTeam;
 
     public function getPairing(): string;
+
+    public function getPlayedAt(): ?\DateTimeInterface;
 }

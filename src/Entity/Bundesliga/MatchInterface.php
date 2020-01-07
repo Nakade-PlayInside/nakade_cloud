@@ -35,4 +35,14 @@ interface MatchInterface
     public function isHomeMatch(): bool;
 
     public function getColor(): ?string;
+
+    public function getBoard(): ?int;
+
+    public function getSeason(): ?BundesligaSeason;
+
+    public function getSgf(): ?BundesligaSgf;
+
+    public function setSgf(?BundesligaSgf $sgf);
+
+    public function getTargetDate(): ?\DateTimeInterface;
 }

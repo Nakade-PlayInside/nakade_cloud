@@ -79,6 +79,7 @@ abstract class AbstractMatch implements MatchInterface
     protected $winByDefault = false;
 
     /**
+     * Termin vorverlegt
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $targetDate;

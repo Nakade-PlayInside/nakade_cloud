@@ -44,6 +44,11 @@ class KgsCellReader
             return null;
         }
 
+        //review has colspan ; just 6 cells
+        if ($tableRow->childNodes->length !== 7) {
+            return null;
+        }
+
         $linkNode = $crawler->filter(self::TABLE_CELL)->getNode(0);
         //no download
         if (!$linkNode) {
@@ -78,6 +83,11 @@ class KgsCellReader
         if ($resultNode) {
             $result = $resultNode->textContent;
             $this->logger->notice(sprintf('Result found: %s', $result));
+            if (0 === strcasecmp($result, 'unfinished')) {
+                $this->logger->alert(sprintf('Result skipped.'));
+
+                return null;
+            }
 
             $model->result = $result;
         }
