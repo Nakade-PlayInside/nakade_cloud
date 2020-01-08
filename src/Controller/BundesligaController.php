@@ -22,6 +22,7 @@ namespace App\Controller;
 
 use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaPlayer;
+use App\Entity\Bundesliga\BundesligaRelegationMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\LineupMail;
@@ -46,7 +47,10 @@ class BundesligaController extends AbstractController
      */
     public function actualSeason(KgsArchivesGrabber $service)
     {
-        $matches = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
+        $league = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
+        $relegation = $this->getDoctrine()->getRepository(BundesligaRelegationMatch::class)->findAllMatches();
+
+        $matches = array_merge($league, $relegation);
 
         foreach ($matches as $match) {
             $service->extract($match);

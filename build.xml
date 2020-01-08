@@ -356,6 +356,7 @@
         <echo message="Move previous version to ${saveDir} ..." />
         <move todir="${saveDir}" includeemptydirs="true" overwrite="true">
             <fileset dir="${deployDir}" >
+                <exclude name="**/sgf/**"/>
                 <exclude name="**/var/log/**"/>
                 <exclude name=".env.local"/>
             </fileset>
