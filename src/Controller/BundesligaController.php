@@ -53,7 +53,7 @@ class BundesligaController extends AbstractController
         $matches = array_merge($league, $relegation);
 
         foreach ($matches as $match) {
-            $service->extract($match);
+           // $service->extract($match);
         }
 
         return $this->render('bundesliga/index.html.twig', [
