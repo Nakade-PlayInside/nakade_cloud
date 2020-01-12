@@ -47,7 +47,7 @@ class BundesligaSgf
     private $playedAt;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Gedmo\Versioned
      */
     private $kgsArchivesPath;
@@ -71,6 +71,11 @@ class BundesligaSgf
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $result;
+
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    private $hash;
 
     public function __construct(string $kgsArchivesPath)
     {
@@ -143,6 +148,18 @@ class BundesligaSgf
     public function setResult(?string $result): self
     {
         $this->result = $result;
+
+        return $this;
+    }
+
+    public function getHash(): ?string
+    {
+        return $this->hash;
+    }
+
+    public function setHash(?string $hash): self
+    {
+        $this->hash = $hash;
 
         return $this;
     }

@@ -9,11 +9,9 @@
 </style>
 
 <div class="example-wrapper">
-    <form method="POST" action="{{ path('upload_sgf') }}" enctype="multipart/form-data">
-        <input type="file" name="sgf" accept="application/x-go-sgf">
-        <button type="submit" class="btn btn-primary">Upload!</button>
-    </form>
-    <hr>
-
+    {{ form_start(sgfForm) }}
+    {{ form_row(sgfForm.file) }}
+    <button type="submit" class="btn btn-primary">Upload</button>
+    {{ form_end(sgfForm) }}
 </div>
 {% endblock %}

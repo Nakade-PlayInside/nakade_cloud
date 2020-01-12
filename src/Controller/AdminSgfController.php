@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Bundesliga\BundesligaSgf;
+use App\Form\SgfType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,21 +16,34 @@ class AdminSgfController extends AbstractController
      */
     public function temporaryUploadAction(Request $request)
     {
-        /** @var UploadedFile $uploadedFile */
-        $uploadedFile = $request->files->get('sgf');
-        $destination = $this->getParameter('kernel.project_dir').'/public/uploads';
+        $sgf = new BundesligaSgf('test');
+        $form = $this->createForm(SgfType::class);
+        $form->handleRequest($request);
 
-        if ($uploadedFile) {
-            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $newFilename = $originalFilename.'.'.$uploadedFile->guessExtension();
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form['file']->getData();
+            $destination = $this->getParameter('kernel.project_dir').'/public/uploads';
 
-            $uploadedFile->move(
-                $destination,
-                $newFilename
-            );
+            if ($uploadedFile) {
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename.'.'.$uploadedFile->guessExtension();
+
+                $uploadedFile->move(
+                    $destination,
+                    $newFilename
+                );
+                $sgf->setPath($newFilename);
+
+                $this->getDoctrine()->getManager()->persist($sgf);
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', 'Article Updated! Inaccuracies squashed!');
+            }
         }
 
         return $this->render('admin_sgf/edit.html.twig', [
+                'sgfForm' => $form->createView(),
+                'sgf' => $sgf,
         ]);
     }
 }
