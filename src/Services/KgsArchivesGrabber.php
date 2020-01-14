@@ -28,6 +28,7 @@ use App\Services\Model\KgsArchivesModel;
 use App\Tools\KgsArchives\KgsCellReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class KgsArchivesGrabber
 {
@@ -44,13 +45,15 @@ class KgsArchivesGrabber
     private $manager;
     private $contentRetriever;
     private $kgsCellReader;
+    private $uploadDir;
 
-    public function __construct(EntityManagerInterface $manager, KgsArchivesDownload $download, KgsCellReader $kgsCellReader)
+    public function __construct(EntityManagerInterface $manager, KgsArchivesDownload $download, KgsCellReader $kgsCellReader, KernelInterface $appKernel)
     {
         $this->archiveDownload = $download;
         $this->manager = $manager;
         $this->contentRetriever = new ContentRetriever();
         $this->kgsCellReader = $kgsCellReader;
+        $this->uploadDir = $appKernel->getProjectDir().'/public';
     }
 
     public function extract(MatchInterface $match)
@@ -78,10 +81,10 @@ class KgsArchivesGrabber
             $model = $this->kgsCellReader->extract($row);
             if ($model && $model->downloadLink) {
                 //SEASON DIR
-                $season = $match->getSeason()->getSgfDir();
-                $file = $this->archiveDownload->download($model->downloadLink, $season);
-                if ($file) {
-                    $entities[] = $this->makeEntity($model, $file);
+                $saveDir = $match->getSeason()->getSgfDir();
+                $localPath = $this->archiveDownload->download($model->downloadLink, $saveDir);
+                if ($localPath) {
+                    $entities[] = $this->makeEntity($model, $localPath);
                     //we have to assign the sgf files to a match solving a problem
                     //occasionally, there are more than one match per month which will break the one to one relation
                     //unfortunately, we cannot always assign by date since some matches are played prior than common play date.
@@ -127,7 +130,10 @@ class KgsArchivesGrabber
 
     private function makeEntity(KgsArchivesModel $model, string $localPath): ?BundesligaSgf
     {
-        $sgf = $this->manager->getRepository(BundesligaSgf::class)->findOneBy(['kgsArchivesPath' => $model->downloadLink]);
+        $path = $this->uploadDir.'/'.$localPath;
+        $hash = md5_file($path);
+        $sgf = $this->manager->getRepository(BundesligaSgf::class)->findOneBy(['hash' => $hash]);
+
         if (!$sgf) {
             $sgf = new BundesligaSgf($model->downloadLink);
 
@@ -135,6 +141,7 @@ class KgsArchivesGrabber
                     ->setPlayedAt($model->playedAt)
                     ->setType($model->type)
                     ->setResult($model->result)
+                    ->setHash($hash)
             ;
 
             $this->manager->persist($sgf);

@@ -23,38 +23,34 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Logger\KgsArchivesLoggerTrait;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class KgsArchivesDownload
 {
     use KgsArchivesLoggerTrait;
 
     private const SGF_DIR = 'sgf';
+    private $uploadDir;
 
-    public function download(string $uri, string $saveDir): ?string
+    public function __construct(KernelInterface $appKernel)
     {
-        $saveFile = $this->getFilePath($uri, $saveDir);
-
-        $contents = $this->getContents($uri);
-        if ($contents) {
-            $saveFile = $this->putContents($saveFile, $contents);
-        }
-
-        return $saveFile;
+        $this->uploadDir = $appKernel->getProjectDir().'/public';
     }
 
-    private function putContents(string $file, string $contents): ?string
+    /**
+     * Creates save directory if not existing. Downloads the file and saves the file to the upload directory.
+     * Returns the local path on success.
+     */
+    public function download(string $uri, string $subDir): ?string
     {
-        if (false === file_put_contents($file, $contents)) {
-            $this->logger->critical(sprintf('Failed to save file: "%s" !', $file));
-
-            return null;
+        //var/www/nakade/public/sgf/2016_17
+        $dir = $this->uploadDir.'/'.self::SGF_DIR.'/'.$subDir;
+        if (!$this->createDir($dir)) {
+            $msg = sprintf('Failed to create directory <%s>!', $dir);
+            $this->logger->critical($msg);
+            throw new \LogicException($msg);
         }
 
-        return $file;
-    }
-
-    private function getContents(string $uri): ?string
-    {
         $contents = file_get_contents($uri);
         if (false === $contents) {
             $this->logger->alert(sprintf('Failed to download file: "%s" !', $uri));
@@ -62,29 +58,24 @@ class KgsArchivesDownload
             return null;
         }
 
-        return $contents;
-    }
-
-    private function getFilePath(string $uri, string $saveDir): string
-    {
-        $savePath = $this->createDir($saveDir);
         $parts = pathinfo($uri);
-        $baseName = $parts['basename'];
+        $basename = $parts['basename'];
+        $file = $dir.'/'.$basename;
+        if (false === file_put_contents($file, $contents)) {
+            $this->logger->critical(sprintf('Failed to save file: "%s" !', $file));
 
-        return $savePath.'/'.$baseName;
+            return null;
+        }
+        //local save path for entity
+        return self::SGF_DIR.'/'.$subDir.'/'.$basename;
     }
 
-    private function createDir(string $saveDir): string
+    private function createDir(string $dir): bool
     {
-        $dir = self::SGF_DIR.'/'.$saveDir;
-        if (!file_exists($dir)) {
-            if (!mkdir($dir, 0755, true)) {
-                $msg = sprintf('Failed to create directory <%s>!', $dir);
-                $this->logger->critical($msg);
-                throw new \LogicException($msg);
-            }
+        if (file_exists($dir)) {
+            return true;
         }
 
-        return $dir;
+        return mkdir($dir, 0755, true);
     }
 }

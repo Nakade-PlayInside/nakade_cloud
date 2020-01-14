@@ -73,7 +73,7 @@ class BundesligaSgf
     private $result;
 
     /**
-     * @ORM\Column(type="string", length=40, nullable=true)
+     * @ORM\Column(type="string", length=40, unique=true)
      */
     private $hash;
 

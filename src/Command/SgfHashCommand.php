@@ -26,16 +26,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class SgfHashCommand extends Command
 {
     protected static $defaultName = 'app:sgf:hash';
     private $entityManager;
+    private $appKernel;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, KernelInterface $appKernel)
     {
         parent::__construct();
         $this->entityManager = $entityManager;
+        $this->appKernel = $appKernel;
     }
 
     protected function configure()
@@ -49,10 +52,10 @@ class SgfHashCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-
+        $appDir = $this->appKernel->getProjectDir();
         $files = $this->entityManager->getRepository(BundesligaSgf::class)->findBy(['hash' => null]);
         foreach ($files as $sgf) {
-            $path = realpath('public/'.$sgf->getPath());
+            $path = $appDir.'/public/'.$sgf->getPath();
             if (!is_file($path)) {
                 continue;
             }
