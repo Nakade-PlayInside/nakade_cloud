@@ -47,14 +47,14 @@ class BundesligaController extends AbstractController
      */
     public function actualSeason(KgsArchivesGrabber $service)
     {
-        $league = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
-        $relegation = $this->getDoctrine()->getRepository(BundesligaRelegationMatch::class)->findAllMatches();
-
-        $matches = array_merge($league, $relegation);
-
-        foreach ($matches as $match) {
-           // $service->extract($match);
-        }
+//        $league = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
+//        $relegation = $this->getDoctrine()->getRepository(BundesligaRelegationMatch::class)->findAllMatches();
+//
+//        $matches = array_merge($league, $relegation);
+//
+//        foreach ($matches as $match) {
+//            $service->extract($match);
+//        }
 
         return $this->render('bundesliga/index.html.twig', [
         ]);
