@@ -118,6 +118,16 @@ class BundesligaTable
      */
     private $tendency;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason")
+     */
+    private $BundesligaSeason;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
+     */
+    private $BundesligaTeam;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -311,5 +321,29 @@ class BundesligaTable
         }
 
         return $css;
+    }
+
+    public function getBundesligaSeason(): ?BundesligaSeason
+    {
+        return $this->BundesligaSeason;
+    }
+
+    public function setBundesligaSeason(?BundesligaSeason $BundesligaSeason): self
+    {
+        $this->BundesligaSeason = $BundesligaSeason;
+
+        return $this;
+    }
+
+    public function getBundesligaTeam(): ?BundesligaTeam
+    {
+        return $this->BundesligaTeam;
+    }
+
+    public function setBundesligaTeam(?BundesligaTeam $BundesligaTeam): self
+    {
+        $this->BundesligaTeam = $BundesligaTeam;
+
+        return $this;
     }
 }

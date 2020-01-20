@@ -25,12 +25,13 @@ use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaRelegationMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Entity\Bundesliga\BundesligaTable;
+use App\Entity\Bundesliga\BundesligaTeam;
 use App\Entity\Bundesliga\LineupMail;
 use App\Entity\Bundesliga\ResultMail;
 use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
 use App\Services\BundesligaTableService;
-use App\Services\KgsArchivesGrabber;
 use App\Services\Model\TableModel;
 use App\Services\TeamStatsService;
 use App\Tools\Bundesliga\Model\TeamModel;
@@ -49,6 +50,39 @@ class BundesligaController extends AbstractController
      */
     public function actualSeason(TableCalculator $service)
     {
+        $allTables = $this->getDoctrine()->getManager()->getRepository(BundesligaTable::class)->findAll();
+        foreach ($allTables as $table) {
+            //season
+            $season = $table->getSeason();
+            $matches = explode('_', $season);
+            $title = 'Saison '.array_shift($matches).'/'.substr(array_pop($matches), 2);
+            $blSeason = $this->getDoctrine()->getManager()->getRepository(BundesligaSeason::class)->findOneBy(['title' => $title]);
+            if ($blSeason) {
+                $table->setBundesligaSeason($blSeason);
+            }
+
+            //team
+            $teamName = $table->getTeam();
+            $blTeam = $this->getDoctrine()->getManager()->getRepository(BundesligaTeam::class)->findOneBy(['name' => $teamName]);
+            if (!$blTeam) {
+                $modified = str_replace('ue', 'ü', $teamName);
+                $modified = str_replace('ae', 'ä', $modified);
+                if (false !== strpos($modified, 'MoinMoin Hamburg')) {
+                    $modified = 'MoinMoin HH';
+                }
+                if (false !== strpos($modified, 'HanseGO Bremen')) {
+                    $modified = 'HanseGo Bremen 1';
+                }
+                if (false !== strpos($modified, 'Leipzig Glück Auf')) {
+                    $modified = 'Leipzig Glück Auf!';
+                }
+                $blTeam = $this->getDoctrine()->getManager()->getRepository(BundesligaTeam::class)->findOneBy(['name' => $modified]);
+            }
+            if (!$blTeam) {
+                $blTeam = $this->getDoctrine()->getManager()->getRepository(BundesligaTeam::class)->findSimilarTeam($teamName);
+            }
+            $table->setBundesligaTeam($blTeam);
+        }
 //        $league = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
 //        $relegation = $this->getDoctrine()->getRepository(BundesligaRelegationMatch::class)->findAllMatches();
 //
@@ -65,8 +99,8 @@ class BundesligaController extends AbstractController
             $team = new TeamModel($result->getHome());
             $team = $table->getTeam($team);
             $team->boardPoints += $result->getBoardPointsHome();
-            if ($result->getBoardPointsHome() === 4) {
-                $team->points += 1;
+            if (4 === $result->getBoardPointsHome()) {
+                ++$team->points;
             }
             if ($result->getBoardPointsHome() > 4) {
                 $team->points += 2;
@@ -75,8 +109,8 @@ class BundesligaController extends AbstractController
             $team = new TeamModel($result->getAway());
             $team = $table->getTeam($team);
             $team->boardPoints += $result->getBoardPointsAway();
-            if ($result->getBoardPointsAway() === 4) {
-                $team->points += 1;
+            if (4 === $result->getBoardPointsAway()) {
+                ++$team->points;
             }
             if ($result->getBoardPointsAway() > 4) {
                 $team->points += 2;
@@ -84,6 +118,7 @@ class BundesligaController extends AbstractController
         }
 
         dd($table);
+
         return $this->render('bundesliga/index.html.twig', [
         ]);
     }
