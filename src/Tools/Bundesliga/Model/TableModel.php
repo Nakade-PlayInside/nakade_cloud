@@ -22,8 +22,6 @@ declare(strict_types=1);
 
 namespace App\Tools\Bundesliga\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class TableModel
 {
     public $teams = [];
@@ -54,9 +52,18 @@ class TableModel
     public function sortByBoardPoints(TeamModel $alice, TeamModel $bob)
     {
         if ($alice->boardPoints === $bob->boardPoints) {
-            return false;
+            return $this->sortByFirstBoardPoints($alice, $bob);
         }
 
         return $alice->boardPoints < $bob->boardPoints;
+    }
+
+    public function sortByFirstBoardPoints(TeamModel $alice, TeamModel $bob)
+    {
+        if ($alice->firstBoardPoints === $bob->firstBoardPoints) {
+            return false;
+        }
+
+        return $alice->firstBoardPoints < $bob->firstBoardPoints;
     }
 }

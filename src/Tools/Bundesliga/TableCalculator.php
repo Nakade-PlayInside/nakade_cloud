@@ -25,7 +25,6 @@ namespace App\Tools\Bundesliga;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
-use App\Repository\Bundesliga\BundesligaResultsRepository;
 use App\Tools\Bundesliga\Model\TableModel;
 use App\Tools\Bundesliga\Model\TeamModel;
 use Doctrine\ORM\EntityManagerInterface;
@@ -54,25 +53,38 @@ class TableCalculator
             $this->addPoints($team, $result->getBoardPointsAway());
         }
 
-        if ($matchDay === 1) {
+        if (1 === $matchDay) {
             //todo
         }
 
-        $prevMatchDay = $matchDay-1;
+        $prevMatchDay = $matchDay - 1;
         $prevTable = $this->manager
                 ->getRepository(BundesligaTable::class)
                 ->findTableByMatchDay($season, $prevMatchDay);
 
+        $actualTable = $this->getActualTable($season, $matchDay);
+
         foreach ($prevTable as $table) {
-            $teamName = $table->getTeam();
-            $teamName = str_replace('luec', 'lüc', $teamName);
+            $teamName = $table->getBundesligaTeam()->getName();
+
+            /** @var TeamModel $teamModel */
             $teamModel = $tableModel->teams[$teamName];
             $teamModel->boardPoints += $table->getBoardPoints();
-            $teamModel->points += (int) $table->getPoints();
+            $teamModel->points += (int) $table->getPoints() - $table->getPenalty();
             $teamModel->wins += (int) $table->getWins();
             $teamModel->draws += (int) $table->getDraws();
             $teamModel->losses += (int) $table->getLosses();
             $teamModel->games = (int) $table->getGames() + 1;
+            //todo: $actualTable
+            // $teamModel->firstBoardPoints = $actualTable->getFirstBoardPoints();
+            if (array_key_exists($table->getBundesligaTeam()->getName(), $actualTable)) {
+                $actualTeamTable = $actualTable[$table->getBundesligaTeam()->getName()];
+                $teamModel->firstBoardPoints = $actualTeamTable->getFirstBoardPoints();
+                if ($actualTeamTable->getFirstBoardPoints()) {
+                    echo $actualTeamTable->getFirstBoardPoints();
+                }
+                $teamModel->boardPoints -= $actualTeamTable->getPenalty();
+            }
             $tableModel->teams[$teamName] = $teamModel;
         }
 
@@ -83,10 +95,25 @@ class TableCalculator
         //calc Score by recalculation
         //sort for position
         //tendency by league
-        //lookup for 
+        //lookup for
     }
 
+    /**
+     * @return BundesligaTable[] array
+     */
+    private function getActualTable(BundesligaSeason $season, int $matchDay): array
+    {
+        $tables = $this->manager
+                ->getRepository(BundesligaTable::class)
+                ->findTableByMatchDay($season, $matchDay);
 
+        $actualTable = [];
+        foreach ($tables as $table) {
+            $actualTable[$table->getBundesligaTeam()->getName()] = $table;
+        }
+
+        return $actualTable;
+    }
 
     private function addPoints(TeamModel $team, int $boardPoints)
     {

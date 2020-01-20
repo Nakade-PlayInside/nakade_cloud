@@ -121,12 +121,22 @@ class BundesligaTable
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaSeason")
      */
-    private $BundesligaSeason;
+    private $bundesligaSeason;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Bundesliga\BundesligaTeam")
      */
-    private $BundesligaTeam;
+    private $bundesligaTeam;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $penalty;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $firstBoardPoints;
 
     public function getId(): ?int
     {
@@ -325,24 +335,48 @@ class BundesligaTable
 
     public function getBundesligaSeason(): ?BundesligaSeason
     {
-        return $this->BundesligaSeason;
+        return $this->bundesligaSeason;
     }
 
-    public function setBundesligaSeason(?BundesligaSeason $BundesligaSeason): self
+    public function setBundesligaSeason(?BundesligaSeason $bundesligaSeason): self
     {
-        $this->BundesligaSeason = $BundesligaSeason;
+        $this->bundesligaSeason = $bundesligaSeason;
 
         return $this;
     }
 
     public function getBundesligaTeam(): ?BundesligaTeam
     {
-        return $this->BundesligaTeam;
+        return $this->bundesligaTeam;
     }
 
-    public function setBundesligaTeam(?BundesligaTeam $BundesligaTeam): self
+    public function setBundesligaTeam(?BundesligaTeam $bundesligaTeam): self
     {
-        $this->BundesligaTeam = $BundesligaTeam;
+        $this->bundesligaTeam = $bundesligaTeam;
+
+        return $this;
+    }
+
+    public function getPenalty(): ?int
+    {
+        return $this->penalty;
+    }
+
+    public function setPenalty(?int $penalty): self
+    {
+        $this->penalty = $penalty;
+
+        return $this;
+    }
+
+    public function getFirstBoardPoints(): ?int
+    {
+        return $this->firstBoardPoints;
+    }
+
+    public function setFirstBoardPoints(?int $firstBoardPoints): self
+    {
+        $this->firstBoardPoints = $firstBoardPoints;
 
         return $this;
     }

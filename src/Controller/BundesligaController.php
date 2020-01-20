@@ -37,6 +37,7 @@ use App\Services\TeamStatsService;
 use App\Tools\Bundesliga\Model\TeamModel;
 use App\Tools\Bundesliga\TableCalculator;
 use App\Tools\PlayerStats;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -50,39 +51,6 @@ class BundesligaController extends AbstractController
      */
     public function actualSeason(TableCalculator $service)
     {
-        $allTables = $this->getDoctrine()->getManager()->getRepository(BundesligaTable::class)->findAll();
-        foreach ($allTables as $table) {
-            //season
-            $season = $table->getSeason();
-            $matches = explode('_', $season);
-            $title = 'Saison '.array_shift($matches).'/'.substr(array_pop($matches), 2);
-            $blSeason = $this->getDoctrine()->getManager()->getRepository(BundesligaSeason::class)->findOneBy(['title' => $title]);
-            if ($blSeason) {
-                $table->setBundesligaSeason($blSeason);
-            }
-
-            //team
-            $teamName = $table->getTeam();
-            $blTeam = $this->getDoctrine()->getManager()->getRepository(BundesligaTeam::class)->findOneBy(['name' => $teamName]);
-            if (!$blTeam) {
-                $modified = str_replace('ue', 'ü', $teamName);
-                $modified = str_replace('ae', 'ä', $modified);
-                if (false !== strpos($modified, 'MoinMoin Hamburg')) {
-                    $modified = 'MoinMoin HH';
-                }
-                if (false !== strpos($modified, 'HanseGO Bremen')) {
-                    $modified = 'HanseGo Bremen 1';
-                }
-                if (false !== strpos($modified, 'Leipzig Glück Auf')) {
-                    $modified = 'Leipzig Glück Auf!';
-                }
-                $blTeam = $this->getDoctrine()->getManager()->getRepository(BundesligaTeam::class)->findOneBy(['name' => $modified]);
-            }
-            if (!$blTeam) {
-                $blTeam = $this->getDoctrine()->getManager()->getRepository(BundesligaTeam::class)->findSimilarTeam($teamName);
-            }
-            $table->setBundesligaTeam($blTeam);
-        }
 //        $league = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
 //        $relegation = $this->getDoctrine()->getRepository(BundesligaRelegationMatch::class)->findAllMatches();
 //

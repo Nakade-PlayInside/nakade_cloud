@@ -33,6 +33,7 @@ class TeamModel
     public $wins = 0;
     public $draws = 0;
     public $losses = 0;
+    public $firstBoardPoints = 0;
 
     public function __construct(BundesligaTeam $team)
     {
