@@ -87,7 +87,7 @@ class TableCatcher
                 $data[] = $model;
             }
         }
-        $this->manager->flush();
+      //  $this->manager->flush();
 
         return $data;
     }

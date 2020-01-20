@@ -26,6 +26,7 @@ use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTeam;
 use App\Services\Model\ResultsModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr;
 
@@ -79,7 +80,7 @@ class BundesligaResultsRepository extends ServiceEntityRepository
         }
     }
 
-    //used in BUndesligaController
+    //used in BundesligaController
     public function findActualMatchDay(BundesligaSeason $season): ?string
     {
         try {
@@ -180,5 +181,21 @@ class BundesligaResultsRepository extends ServiceEntityRepository
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * @return BundesligaResults[] array
+     */
+    public function findResultsByMatchDay(BundesligaSeason $season, int $matchDay): array
+    {
+        return $this->createQueryBuilder('r')
+                ->innerJoin('r.season', 's')
+                ->andWhere('s.id=:season')
+                ->andWhere('r.matchDay=:matchDay')
+                ->setParameter('season', $season)
+                ->setParameter('matchDay', $matchDay)
+                ->getQuery()
+                ->getResult()
+                ;
     }
 }

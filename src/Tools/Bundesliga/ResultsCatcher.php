@@ -42,7 +42,7 @@ class ResultsCatcher
 {
     use GrabberLoggerTrait;
 
-    const DGOB_URI = 'http://www.dgob.de/lmo/lmo.php';
+    const DGOB_URI = 'http://www.dgob-neu.de/lmo/lmo.php';
     const SEASON_PATTERN = '#^20(\d{2})_20(\d{2})#';
     const DEFAULT_PARAM = '?action=results&tabtype=0';
     const CSS_SELECTOR = 'table.lmoInner';
@@ -68,9 +68,10 @@ class ResultsCatcher
 
         //http://www.dgob.de/lmo/lmo.php?action=results&tabtype=0&file=Saison_2013_2014/1314_bl2.l98&st=3
         $linkParams = $this->createLinkParams($season, $league, $matchDay);
-        $this->snoopy->fetch(self::DGOB_URI.$linkParams);
 
+        $this->snoopy->fetch(self::DGOB_URI.$linkParams);
         $html = $this->snoopy->results;
+
         $crawler = new Crawler($html);
 
         //first lmoInner table!
@@ -107,7 +108,8 @@ class ResultsCatcher
                 }
             }
         }
-        $this->manager->flush();
+
+    //    $this->manager->flush();
 
         return $data;
     }

@@ -33,6 +33,8 @@ use App\Services\BundesligaTableService;
 use App\Services\KgsArchivesGrabber;
 use App\Services\Model\TableModel;
 use App\Services\TeamStatsService;
+use App\Tools\Bundesliga\Model\TeamModel;
+use App\Tools\Bundesliga\TableCalculator;
 use App\Tools\PlayerStats;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,7 +47,7 @@ class BundesligaController extends AbstractController
     /**
      * @Route("/bundesliga/test", name="bundesliga_test")
      */
-    public function actualSeason(KgsArchivesGrabber $service)
+    public function actualSeason(TableCalculator $service)
     {
 //        $league = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
 //        $relegation = $this->getDoctrine()->getRepository(BundesligaRelegationMatch::class)->findAllMatches();
@@ -55,7 +57,33 @@ class BundesligaController extends AbstractController
 //        foreach ($matches as $match) {
 //            $service->extract($match);
 //        }
+        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
+        $results = $service->find($season, 5);
 
+        $table = new \App\Tools\Bundesliga\Model\TableModel();
+        foreach ($results as $result) {
+            $team = new TeamModel($result->getHome());
+            $team = $table->getTeam($team);
+            $team->boardPoints += $result->getBoardPointsHome();
+            if ($result->getBoardPointsHome() === 4) {
+                $team->points += 1;
+            }
+            if ($result->getBoardPointsHome() > 4) {
+                $team->points += 2;
+            }
+
+            $team = new TeamModel($result->getAway());
+            $team = $table->getTeam($team);
+            $team->boardPoints += $result->getBoardPointsAway();
+            if ($result->getBoardPointsAway() === 4) {
+                $team->points += 1;
+            }
+            if ($result->getBoardPointsAway() > 4) {
+                $team->points += 2;
+            }
+        }
+
+        dd($table);
         return $this->render('bundesliga/index.html.twig', [
         ]);
     }

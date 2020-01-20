@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace App\Repository\Bundesliga;
 
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -57,5 +58,20 @@ class BundesligaTableRepository extends ServiceEntityRepository
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * @return BundesligaTable[] array
+     */
+    public function findTableByMatchDay(BundesligaSeason $season, int $matchDay): array
+    {
+        return $this->createQueryBuilder('t')
+                ->andWhere('t.season LIKE :season')
+                ->andWhere('t.matchDay=:matchDay')
+                ->setParameter('season', '%'.$season->getDGoBIndex().'%')
+                ->setParameter('matchDay', $matchDay)
+                ->getQuery()
+                ->getResult()
+                ;
     }
 }

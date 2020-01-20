@@ -48,6 +48,8 @@ class ActualTableGrabberCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+        $io->warning('Disabled due to changes on the target website.');
+        return;
 
         $table = $this->grabber->retrieveTable();
         if (!$table) {
