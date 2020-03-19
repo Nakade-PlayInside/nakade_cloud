@@ -1,0 +1,44 @@
+{# templates/emails/confirmRegistration.html.twig #}
+{% extends 'mailTemplate.html.twig' %}
+
+{% block mail_body %}
+    <h1 style="display: flex; align-items: center"><img style="margin-right: 10px; filter: opacity(60%);" alt="logo" width="32px" height="32px" src="{{ absolute_url(asset('build/images/go-32.png')) }}">Go im Mommsen-Eck (Corona)!</h1>
+
+    <p style="text-align: left">Während der Corona-Krise verlagern wir unseren Spieltreff auf KGS.
+    JEDEN <u>Montag wird ab 18 Uhr</u> auf KGS der Raum "Mommsen-Eck" erstellt und öffentlich gemacht.<br>
+    Die Spieltreffleiter helfen bei den Einstellungen und bei Bedarf auch den passenden Gegner zu finden.<br>
+
+    Da diese Umstände und KGS erwartunsggemäß für viele sehr ungewohnt sein werden, empfehlen wir <u>großzügige
+    Zeiteinstellungen (60 - 90 min incl. Byoyomi) und freie Partien</u>.
+    </p>
+
+    <p>am <span style="font-size: larger; font-weight: bolder">Montag</span>, den
+        <span style="font-size: larger; font-weight: bolder">{{ date }}</span> ab
+        <span style="font-size: larger; font-weight: bolder">18h</span>
+    </p>
+
+    <ul style="text-align: left; list-style: none; line-height: 1.5em">
+        <li>KGS</li>
+        <li style="text-decoration: underline; padding-top: 5px;">RAUM: Mommsen-Eck (zu finden unter <i>Neue Räume</i></li>
+        <li>Spieltreffleiter geben Hilfestellung</li>
+        <li>freies Spiel</li>
+        <li>großzügige Zeiteinstellung (optional)</li>
+    </ul>
+
+    <ul style="text-align: left; list-style: none;">
+        <li style="margin-top: 20px"><p style="color: #C82829; font-weight: bolder; margin-bottom: 3px; ">ACHTUNG!</p>
+            Für das Go-Spiel auf KGS benötigst du einen Client, den du kostenlos unter <a target="_blank" title="externe Seite!" href="https://www.gokgs.com/">KGS</a> herunterladen kannst.
+            Außerdem musst du auf deinem Rechner eine aktuelle Java-Version installiert haben. Hilfestellungen dazu findest du unter
+            <a target="_blank" title="externe Seite!" href="https://senseis.xmp.net/?KGS">Sensei's Library</a>
+            Das Spielen auf KGS ist kostenlos!!!
+        </li>
+    </ul>
+{% endblock %}
+
+{% block mail_footer %}
+    Unser Newsletter informiert dich über unseren online Spieltreff  während der Corona-Krise. Üblicherweise wirst du einen Newsletter pro Woche erhalten.<br>
+    Du kannst diesen Newsletter jederzeit über diesen <a style="text-decoration:none; color: rgb(136, 137, 140); font-weight: bolder" href="{{ absolute_url(path('news_unsubscribe', { token: token }, true)) }}">Link</a> stornieren.<br><br>
+    Dies ist eine automatisch generierte E-Mail. Bitte beachte, dass du auf diese E-Mail nicht direkt antworten kannst.
+    Antworten an diese Adresse werden nicht gelesen.<br><br>
+
+{% endblock %}

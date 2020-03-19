@@ -1,0 +1,46 @@
+{# templates/emails/contact.html.twig #}
+{% extends "mailTemplate.txt.twig" %}
+
+{% block mail_body %}
+
+Liebe Go Freunde,
+
+während der Corona-Krise verlagern wir unseren Spieltreff auf KGS.
+JEDEN Montag wird ab 18 Uhr auf KGS der Raum "Mommsen-Eck" erstellt und öffentlich gemacht.
+Die Spieltreffleiter helfen bei den Einstellungen und bei Bedarf auch den passenden Gegner zu finden.
+
+Da diese Umstände und KGS erwartunsggemäß für viele sehr ungewohnt sein werden, empfehlen wir großzügige
+Zeiteinstellungen (60 - 90 min incl. Byoyomi) und freie Partien.
+
+
+Der nächste Spielabend ist am Montag, den {{ date }} ab 18 Uhr.
+
+
+Wann?
+
+Montag, den {{ date}} ab 18 Uhr
+
+
+Wo?
+
+KGS (https://www.gokgs.com/)
+Raum: Mommsen-Eck
+
+
+ACHTUNG!
+Für das Go-Spiel auf KGS benötigst du einen Client, den du kostenlos unter https://www.gokgs.com/ herunterladen kannst.
+Außerdem musst du auf deinem Rechner eine aktuelle Java-Version installiert haben. Hilfestellungen dazu findest du unter
+https://senseis.xmp.net/?KGS
+Das Spielen auf KGS ist kostenlos!!!
+
+Mit 361 Grüßen
+
+Maurice
+{% endblock %}
+
+{% block mail_footer %}
+Unser Newsletter informiert dich über unseren online Spieltreff während der Corona-Krise.
+Üblicherweise wirst du einen Newsletter pro Woche erhalten.
+
+Du kannst unseren Newsletter jederzeit über diesen Link {{ absolute_url(path('news_unsubscribe', { token: token }, true)) }} stornieren.
+{% endblock %}
