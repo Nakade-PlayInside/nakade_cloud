@@ -58,11 +58,8 @@ class TableCalculator
         }
 
         $prevMatchDay = $matchDay - 1;
-        $prevTable = $this->manager
-                ->getRepository(BundesligaTable::class)
-                ->findTableByMatchDay($season, $prevMatchDay);
-
-        $actualTable = $this->getActualTable($season, $matchDay);
+        $prevTable = $this->getTable($season, $prevMatchDay);
+        $actualTable = $this->getTable($season, $matchDay);
 
         foreach ($prevTable as $table) {
             $teamName = $table->getBundesligaTeam()->getName();
@@ -70,38 +67,66 @@ class TableCalculator
             /** @var TeamModel $teamModel */
             $teamModel = $tableModel->teams[$teamName];
             $teamModel->boardPoints += $table->getBoardPoints();
-            $teamModel->points += (int) $table->getPoints() - $table->getPenalty();
+            $teamModel->points += (int) $table->getPoints();
             $teamModel->wins += (int) $table->getWins();
             $teamModel->draws += (int) $table->getDraws();
             $teamModel->losses += (int) $table->getLosses();
             $teamModel->games = (int) $table->getGames() + 1;
-            //todo: $actualTable
-            // $teamModel->firstBoardPoints = $actualTable->getFirstBoardPoints();
+
             if (array_key_exists($table->getBundesligaTeam()->getName(), $actualTable)) {
                 $actualTeamTable = $actualTable[$table->getBundesligaTeam()->getName()];
                 $teamModel->firstBoardPoints = $actualTeamTable->getFirstBoardPoints();
-                if ($actualTeamTable->getFirstBoardPoints()) {
-                    echo $actualTeamTable->getFirstBoardPoints();
-                }
                 $teamModel->boardPoints -= $actualTeamTable->getPenalty();
             }
             $tableModel->teams[$teamName] = $teamModel;
         }
 
         $tableModel->sortTeams();
-        dd($tableModel);
-        //find TableByMatchDay UPDATE/CREATE
-        //find Penalty
-        //calc Score by recalculation
-        //sort for position
+        $teamTable = $tableModel->teams;
+        $position = 0;
+        $league = (int) $season->getLeague();
+
+        foreach ($teamTable as $teamModel) {
+            $teamModel->position = ++$position;
+            $prev = $prevTable[$teamModel->team->getName()];
+
+            if ($prev->getPosition() > $position) {
+                $teamModel->imgSrc = 'lmo-tab1.gif';
+            }
+            if ($prev->getPosition() < $position) {
+                $teamModel->imgSrc = 'lmo-tab2.gif';
+            }
+            $teamModel->tendency = $this->getTendency($position, $league);
+        }
+
+        dd($teamTable);
+
         //tendency by league
         //lookup for
+    }
+
+    private function getTendency(int $position, int $league): ?int
+    {
+        if (1 === $position) {
+            return 10;
+        }
+        if (2 === $position && $league > 1) {
+            return 20;
+        }
+        if ($position > 8) {
+            return 40;
+        }
+        if (8 === $position && 2 === $league) {
+            return 30;
+        }
+
+        return null;
     }
 
     /**
      * @return BundesligaTable[] array
      */
-    private function getActualTable(BundesligaSeason $season, int $matchDay): array
+    private function getTable(BundesligaSeason $season, int $matchDay): array
     {
         $tables = $this->manager
                 ->getRepository(BundesligaTable::class)

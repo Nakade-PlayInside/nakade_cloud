@@ -34,6 +34,9 @@ class TeamModel
     public $draws = 0;
     public $losses = 0;
     public $firstBoardPoints = 0;
+    public $position;
+    public $imgSrc = 'lmo-tab0.gif';
+    public $tendency;
 
     public function __construct(BundesligaTeam $team)
     {
