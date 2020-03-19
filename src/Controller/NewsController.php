@@ -22,6 +22,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Services\CoronaNewsDeliverer;
 use App\Services\NewsDeliverer;
 use App\Tools\NextClubMeeting;
 use App\Entity\NewsReader;
@@ -29,6 +30,7 @@ use App\Entity\User;
 use App\Form\Model\SubscribeFormModel;
 use App\Form\SubscribeType;
 use App\Message\ConfirmSubscription;
+use App\Tools\NextWeeklyMeeting;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -81,6 +83,24 @@ class NewsController extends AbstractController
                         'page' => '1',
             ]);
         }
+
+        return $this->render('news/send_news.html.twig', [
+                'dueDate' => $dueDate->format('d.m.Y'),
+                'subscribers' => $allReaders,
+        ]);
+    }
+
+    /**
+     * @Route("/corona", name="corona")
+     */
+    public function corona(CoronaNewsDeliverer $newsDeliverer, NextWeeklyMeeting $nextMeeting)
+    {
+        $strDate = $nextMeeting->calcNextMeetingDate();
+        $dueDate = \DateTime::createFromFormat(NextWeeklyMeeting::DATE_FORMAT, $strDate);
+        $allReaders = $this->getDoctrine()->getRepository(NewsReader::class)->findBy(['email' => 'holger@nakade.de']);
+        $newsDeliverer->deliver($dueDate, $allReaders);
+
+        $this->addFlash('success', 'Nachrichten verschickt!');
 
         return $this->render('news/send_news.html.twig', [
                 'dueDate' => $dueDate->format('d.m.Y'),

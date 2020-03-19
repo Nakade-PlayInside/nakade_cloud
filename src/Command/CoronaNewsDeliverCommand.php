@@ -79,7 +79,7 @@ class CoronaNewsDeliverCommand extends Command
         }
 
         $allReaders = $this->entityManager->getRepository(NewsReader::class)->findAll();
-        $newsletter = new NewsLetter();
+        $newsletter = new CoronaNews();
         $newsletter->setDueAt($dueDate)
                 ->setNoRecipients(count($allReaders));
 

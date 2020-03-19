@@ -24,7 +24,6 @@ namespace App\Services;
 
 use App\Entity\NewsReader;
 use App\Message\CoronaNews;
-use App\Message\News;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
