@@ -20,7 +20,6 @@
 namespace App\Command;
 
 use App\Entity\CoronaNews;
-use App\Entity\NewsLetter;
 use App\Entity\NewsReader;
 use App\Services\CoronaNewsDeliverer;
 use App\Tools\NextWeeklyMeeting;
