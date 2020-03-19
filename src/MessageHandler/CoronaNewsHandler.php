@@ -21,6 +21,7 @@
 namespace App\MessageHandler;
 
 use App\Logger\MailLoggerTrait;
+use App\Message\CoronaNews;
 use App\Message\News;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -50,7 +51,7 @@ class CoronaNewsHandler implements MessageHandlerInterface
         $this->emailNoReply = $emailNoReply;
     }
 
-    public function __invoke(News $news)
+    public function __invoke(CoronaNews $news)
     {
         $subject = sprintf('Nakade Spieltreff | Einladung zum KGS-Go [%s]', $news->getDate());
         $this->logger->notice(

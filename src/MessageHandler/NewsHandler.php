@@ -21,6 +21,7 @@
 namespace App\MessageHandler;
 
 use App\Logger\MailLoggerTrait;
+use App\Message\CoronaNews;
 use App\Message\News;
 use Swift_Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
