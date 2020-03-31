@@ -9,6 +9,8 @@
         "ext-json": "*",
         "beelab/recaptcha2-bundle": "^2.1",
         "easycorp/easyadmin-bundle": "^2.3",
+        "laminas/laminas-code": "^3.4",
+        "laminas/laminas-eventmanager": "^3.2",
         "sensio/framework-extra-bundle": "^5.4",
         "sensiolabs/security-checker": "^6.0",
         "stof/doctrine-extensions-bundle": "^1.3",
