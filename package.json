@@ -24,5 +24,7 @@
   "browserslist": [
     "> 1%"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "minimist": "^1.2.2"
+  }
 }
