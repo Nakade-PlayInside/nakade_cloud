@@ -203,6 +203,14 @@ class BundesligaTable
         return $this;
     }
 
+    public function addGame(): self
+    {
+        $value = intval($this->games) + 1;
+        $this->games = strval($value);
+
+        return $this;
+    }
+
     public function getGames(): ?string
     {
         return $this->games;
@@ -211,6 +219,14 @@ class BundesligaTable
     public function setGames(string $games): self
     {
         $this->games = $games;
+
+        return $this;
+    }
+
+    public function addWin(): self
+    {
+        $value = intval($this->wins) + 1;
+        $this->wins = strval($value);
 
         return $this;
     }
@@ -227,6 +243,14 @@ class BundesligaTable
         return $this;
     }
 
+    public function addDraw(): self
+    {
+        $value = intval($this->draws) + 1;
+        $this->draws = strval($value);
+
+        return $this;
+    }
+
     public function getDraws(): ?string
     {
         return $this->draws;
@@ -235,6 +259,14 @@ class BundesligaTable
     public function setDraws(string $draws): self
     {
         $this->draws = $draws;
+
+        return $this;
+    }
+
+    public function addLoss(): self
+    {
+        $value = intval($this->losses) + 1;
+        $this->losses = strval($value);
 
         return $this;
     }
@@ -251,6 +283,14 @@ class BundesligaTable
         return $this;
     }
 
+    public function addBoardPoints(int $boardPoints): self
+    {
+        $value = intval($this->boardPoints) + $boardPoints;
+        $this->boardPoints = strval($value);
+
+        return $this;
+    }
+
     public function getBoardPoints(): ?string
     {
         return $this->boardPoints;
@@ -259,6 +299,14 @@ class BundesligaTable
     public function setBoardPoints(string $boardPoints): self
     {
         $this->boardPoints = $boardPoints;
+
+        return $this;
+    }
+
+    public function addPoints(int $points): self
+    {
+        $value = intval($this->points) + $points;
+        $this->points = strval($value);
 
         return $this;
     }

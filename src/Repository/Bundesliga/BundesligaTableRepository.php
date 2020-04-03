@@ -23,6 +23,7 @@ namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -55,6 +56,27 @@ class BundesligaTableRepository extends ServiceEntityRepository
                     ->setParameter('league', '%'.$league.'%')
                     ->getQuery()
                     ->getSingleScalarResult();
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * used for updating
+     */
+    public function findTableByTeamAndMatchDay(BundesligaSeason $season, BundesligaTeam $team, int $matchDay): ?BundesligaTable
+    {
+        try {
+            return $this->createQueryBuilder('t')
+                    ->andWhere('t.bundesligaSeason=:season')
+                    ->andWhere('t.bundesligaTeam=:team')
+                    ->andWhere('t.matchDay=:matchDay')
+                    ->setParameter('season', $season)
+                    ->setParameter('team', $team)
+                    ->setParameter('matchDay', $matchDay)
+                    ->getQuery()
+                    ->getOneOrNullResult()
+                    ;
         } catch (\Exception $e) {
             return null;
         }
