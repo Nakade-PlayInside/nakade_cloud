@@ -43,16 +43,36 @@ class UpdateBundesligaTable
 
     private function processResult(BundesligaResults $result)
     {
-
         //gibt es previous => Saisonbeginn
         //gibt es schon actuelles ergebnis? dann ist es ein update
         $homeTeamTable = $this->manager
                 ->getRepository(BundesligaTable::class)
-                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getHome(), $result->getMatchDay()-1);
+                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getHome(), $result->getMatchDay() - 1);
+
+        if (!$homeTeamTable) {
+            $homeTeamTable = new BundesligaTable();
+            $homeTeamTable->setBundesligaSeason($result->getSeason())
+                    ->setSeason($result->getSeason()->getDGoBIndex())
+                    ->setBundesligaTeam($result->getHome())
+                    ->setTeam($result->getHome()->getName())
+                    ->setLeague($result->getSeason()->getLeague())
+                    ->setMatchDay(strval($result->getMatchDay()))
+                    ->setGames("1")
+                    ->setPoints("0")
+                    ->setBoardPoints("0")
+                    ->setWins("0")
+                    ->setDraws("0")
+                    ->setLosses("0")
+            ;
+        } else {
+            $teamTable = new BundesligaTable();
+            //$teamTable->
+            //previous
+        }
 
         $awayTeamTable = $this->manager
                 ->getRepository(BundesligaTable::class)
-                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getAway(), $result->getMatchDay()-1);
+                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getAway(), $result->getMatchDay() - 1);
 
         $home = new BundesligaTable();
         $home->
@@ -74,7 +94,7 @@ class UpdateBundesligaTable
         //draws
         if ($result->getBoardPointsHome() === $result->getBoardPointsAway()) {
             $homeTeamTable->addDraw();
-            $awayTeamTable->addDraw();;
+            $awayTeamTable->addDraw();
             $homeTeamTable->addPoints(1);
             $awayTeamTable->addPoints(1);
         }
@@ -87,21 +107,15 @@ class UpdateBundesligaTable
 
         $teamTable = $this->manager
                 ->getRepository(BundesligaTable::class)
-                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getHome(), $result->getMatchDay()-1);
-
-
-
+                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getHome(), $result->getMatchDay() - 1);
 
         //muss die teams einzeln updaten -> ermöglicht temporäre tabelle
     }
 
-
-
     private function handleResult(BundesligaSeason $season, BundesligaTeam $team, int $matchDay)
     {
-        $previousMatchDay = $matchDay-1;
-        $teamTable = $this->manager->getRepository(BundesligaTable::class)->findTableByTeamAndMatchDay($season, $team, $matchDay-1);
-
+        $previousMatchDay = $matchDay - 1;
+        $teamTable = $this->manager->getRepository(BundesligaTable::class)->findTableByTeamAndMatchDay($season, $team, $matchDay - 1);
     }
 
     private function getPreviousTeamTable(BundesligaSeason $season, BundesligaTeam $team, int $matchDay): array
