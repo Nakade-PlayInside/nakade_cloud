@@ -48,7 +48,7 @@ abstract class AbstractTableService
     protected function findLastMatchDay(BundesligaSeason $actualSeason): ?string
     {
         return $this->manager->getRepository(BundesligaTable::class)
-                ->findLastMatchDay($actualSeason->getDGoBIndex(), $actualSeason->getLeague());
+                ->findLastMatchDay($actualSeason);
     }
 
 
@@ -56,8 +56,7 @@ abstract class AbstractTableService
     {
         return $this->manager->getRepository(BundesligaTable::class)->findBy(
             [
-                'season' => $actualSeason->getDGoBIndex(),
-                'league' => $actualSeason->getLeague(),
+                'bundesligaSeason' => $actualSeason,
                 'matchDay' => $matchDay,
             ],
             ['position' => 'ASC']

@@ -564,16 +564,15 @@ easy_admin:
           label: 'easyAdmin.bundesliga.table'
           list:
             filters:
-              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'bundesligaSeason', label: 'easyAdmin.bundesliga.season' }
               - { property: 'matchDay', label: 'easyAdmin.bundesliga.table.matchDay' }
-              - { property: 'team', label: 'easyAdmin.bundesliga.table.team' }
+              - { property: 'bundesligaTeam', label: 'easyAdmin.bundesliga.table.team' }
             fields:
               - { property: 'id', label: 'easyAdmin.user.id' }
-              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
-              - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
+              - { property: 'bundesligaSeason', label: 'easyAdmin.bundesliga.season' }
               - { property: 'matchDay', label: 'easyAdmin.bundesliga.table.matchDay.abbr' }
               - { property: 'position', label: 'easyAdmin.bundesliga.table.position.abbr' }
-              - { property: 'team', label: 'easyAdmin.bundesliga.table.team' }
+              - { property: 'bundesligaTeam', label: 'easyAdmin.bundesliga.table.team' }
               - { property: 'games', label: 'easyAdmin.bundesliga.table.games.abbr' }
               - { property: 'wins', label: 'easyAdmin.bundesliga.table.wins.abbr'}
               - { property: 'draws', label: 'easyAdmin.bundesliga.table.draws.abbr'}
@@ -582,8 +581,8 @@ easy_admin:
               - { property: 'points', label: 'easyAdmin.bundesliga.table.points.abbr'}
           show:
             fields:
-              - { property: 'team', label: 'easyAdmin.bundesliga.table.team' }
-              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
+              - { property: 'bundesligaTeam', label: 'easyAdmin.bundesliga.table.team' }
+              - { property: 'bundesligaSeason', label: 'easyAdmin.bundesliga.season' }
               - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
               - { property: 'matchDay', label: 'easyAdmin.bundesliga.table.matchDay' }
               - { property: 'position', label: 'easyAdmin.bundesliga.table.position'}
@@ -598,9 +597,8 @@ easy_admin:
           form:
             fields:
               - { type: group, label: 'easyAdmin.bundesliga.season', icon: 'calendar', columns: 6 }
-              - { property: 'team', label: 'easyAdmin.bundesliga.table.team' }
-              - { property: 'season', label: 'easyAdmin.bundesliga.season' }
-              - { property: 'league', label: 'easyAdmin.bundesliga.season.league' }
+              - { property: 'bundesligaTeam', label: 'easyAdmin.bundesliga.table.team' }
+              - { property: 'bundesligaSeason', label: 'easyAdmin.bundesliga.season' }
               - { type: group, label: 'easyAdmin.bundesliga.table.matchDay', icon: area-chart, columns: 6 }
               - { property: 'matchDay', label: 'easyAdmin.bundesliga.table.matchDay' }
               - { property: 'position', label: 'easyAdmin.bundesliga.table.position' }

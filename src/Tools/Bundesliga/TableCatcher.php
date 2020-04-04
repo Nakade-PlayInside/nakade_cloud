@@ -28,6 +28,13 @@ use App\Services\Snoopy;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @deprecated
+ */
 class TableCatcher
 {
     use GrabberLoggerTrait;

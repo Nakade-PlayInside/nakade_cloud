@@ -74,10 +74,9 @@ class BundesligaTableFixtures extends BaseFixture implements DependentFixtureInt
                 ->setLosses((string) $model->losses)
                 ->setGames((string) $model->games)
                 ->setBoardPoints((string) $model->boardPoints)
-                ->setTeam($model->team->getName())
+                ->setBundesligaTeam($model->team)
                 ->setMatchDay($matchDay)
-                ->setSeason($season->getDGoBIndex())
-                ->setLeague($season->getLeague())
+                ->setBundesligaSeason($season)
                 ->setImgSrc('http://www.dgob.de/lmo/img/lmo-tab0.gif')
                 ;
 

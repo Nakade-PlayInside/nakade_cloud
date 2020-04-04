@@ -29,6 +29,13 @@ use App\Tools\Bundesliga\Model\TableModel;
 use App\Tools\Bundesliga\Model\TeamModel;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @deprecated
+ */
 class TableCalculator
 {
     private $manager;

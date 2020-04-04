@@ -2,7 +2,7 @@
 
 <div class="table-responsive-sm d-inline-flex p-2">
 <table class="bundesliga table">
-    <caption>{{ model.title }} - {{ model.matchDay }}. Spieltag</caption>
+    <caption style="white-space: nowrap;">{{ model.title }} - {{ model.matchDay }}. Spieltag</caption>
     <tr class="head">
         <td colspan ="3"></td>
         <td class="hide d-sm-table-cell" data-toggle="tooltip" data-placement="top" title="Spiele">Sp</td>
@@ -16,7 +16,7 @@
     <tr class="{{ data.cSS }}">
         <td>{{ data.position }}</td>
         <td data-toggle="tooltip" data-placement="right" title='Tendenz'><img alt='Tendenz' src="/images/{{ data.imgSrc }}"></td>
-        <td class="team">{{ data.team }}</td>
+        <td class="team">{{ data.bundesligaTeam.name }}</td>
         <td class="hide d-sm-table-cell games">{{ data.games }}</td>
         <td class="hide d-sm-table-cell">{{ data.wins }}</td>
         <td class="hide d-sm-table-cell">{{ data.draws }}</td>

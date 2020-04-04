@@ -28,12 +28,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="App\Repository\Bundesliga\BundesligaTableRepository")
  * @ORM\Table(
  *      name="bundesliga_table",
- *      uniqueConstraints={@ORM\UniqueConstraint(columns={"season", "league", "games", "position", "match_day"}
+ *      uniqueConstraints={@ORM\UniqueConstraint(columns={"bundesliga_season_id", "bundesliga_team_id", "match_day"}
  *      )}
  * )
  *
  * @UniqueEntity(
- *     fields={"season", "league", "games", "position", "matchDay"},
+ *     fields={"bundesligaSeason", "bundesligaTeam", "matchDay"},
  *     message="table.unique"
  * )
  */
@@ -54,16 +54,6 @@ class BundesligaTable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $season;
-
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $league;
-
-    /**
      * @ORM\Column(type="string", length=5)
      */
     private $matchDay;
@@ -72,11 +62,6 @@ class BundesligaTable
      * @ORM\Column(type="smallint")
      */
     private $position;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $team;
 
     /**
      * @ORM\Column(type="string", length=5)
@@ -143,30 +128,6 @@ class BundesligaTable
         return $this->id;
     }
 
-    public function getSeason(): ?string
-    {
-        return $this->season;
-    }
-
-    public function setSeason(string $season): self
-    {
-        $this->season = $season;
-
-        return $this;
-    }
-
-    public function getLeague(): ?string
-    {
-        return $this->league;
-    }
-
-    public function setLeague(string $league): self
-    {
-        $this->league = $league;
-
-        return $this;
-    }
-
     public function getMatchDay(): ?string
     {
         return $this->matchDay;
@@ -187,18 +148,6 @@ class BundesligaTable
     public function setPosition(int $position): self
     {
         $this->position = $position;
-
-        return $this;
-    }
-
-    public function getTeam(): ?string
-    {
-        return $this->team;
-    }
-
-    public function setTeam(string $team): self
-    {
-        $this->team = $team;
 
         return $this;
     }
@@ -347,12 +296,17 @@ class BundesligaTable
         return $this;
     }
 
+    public function getLeague(): ?string
+    {
+        return $this->getBundesligaSeason()->getLeague();
+    }
+
     public function getTitle()
     {
-        $season = $this->getSeason();
-        $season = str_replace('_', '-', $season);
+        $title = $this->getBundesligaSeason()->getDGoBIndex();
+        $title = str_replace('_', '-', $title);
 
-        return sprintf('%s. Bundesliga %s', $this->getLeague(), $season);
+        return sprintf('%s. Bundesliga %s', $this->getBundesligaSeason()->getLeague(), $title);
     }
 
     public function getCSS()
@@ -374,7 +328,7 @@ class BundesligaTable
                 break;
         }
 
-        if (false !== stripos($this->getTeam(), 'Nakade')) {
+        if (false !== stripos($this->getBundesligaTeam()->getName(), 'Nakade')) {
             $css .= ' nakade';
         }
 

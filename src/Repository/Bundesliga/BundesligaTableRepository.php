@@ -41,19 +41,16 @@ class BundesligaTableRepository extends ServiceEntityRepository
     }
 
     /**
-     * used for actual results grabber.
+     * used for actual results.
      * here you must use max
      */
-    public function findLastMatchDay(string $season, string $league): ?string
+    public function findLastMatchDay(BundesligaSeason $season): ?string
     {
         try {
             return $this->createQueryBuilder('t')
                     ->select('MAX(t.matchDay) as lastMatchDay')
-                    ->andWhere('t.season LIKE :season')
-                    ->andWhere('t.league LIKE :league')
-                    ->andWhere('t.matchDay = t.games')
-                    ->setParameter('season', '%'.$season.'%')
-                    ->setParameter('league', '%'.$league.'%')
+                    ->andWhere('t.bundesligaSeason=:season')
+                    ->setParameter('season', $season)
                     ->getQuery()
                     ->getSingleScalarResult();
         } catch (\Exception $e) {
@@ -84,6 +81,8 @@ class BundesligaTableRepository extends ServiceEntityRepository
 
     /**
      * @return BundesligaTable[] array
+     *
+     * @deprecated
      */
     public function findTableByMatchDay(BundesligaSeason $season, int $matchDay): array
     {

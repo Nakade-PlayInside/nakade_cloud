@@ -36,6 +36,8 @@ use Doctrine\ORM\EntityManagerInterface;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  *
  * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @deprecated
  */
 class ActualTableGrabber extends AbstractTableService
 {

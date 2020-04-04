@@ -26,6 +26,13 @@ use App\Entity\Bundesliga\BundesligaTable;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @deprecated
+ */
 class TableCellCatcher
 {
     const TABLE_CELL = 'td';
