@@ -54,9 +54,9 @@ class BundesligaTable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=5)
+     * @ORM\Column(type="smallint")
      */
-    private $matchDay;
+    private $matchDay = 1;
 
     /**
      * @ORM\Column(type="smallint")
@@ -64,34 +64,34 @@ class BundesligaTable
     private $position;
 
     /**
-     * @ORM\Column(type="string", length=5)
+     * @ORM\Column(type="smallint")
      */
-    private $games;
+    private $games = 0;
 
     /**
-     * @ORM\Column(type="string", length=5)
+     * @ORM\Column(type="smallint")
      */
-    private $wins;
+    private $wins = 0;
 
     /**
-     * @ORM\Column(type="string", length=5)
+     * @ORM\Column(type="smallint")
      */
-    private $draws;
+    private $draws = 0;
 
     /**
-     * @ORM\Column(type="string", length=5)
+     * @ORM\Column(type="smallint")
      */
-    private $losses;
+    private $losses = 0;
 
     /**
-     * @ORM\Column(type="string", length=5)
+     * @ORM\Column(type="smallint")
      */
-    private $boardPoints;
+    private $boardPoints = 0;
 
     /**
-     * @ORM\Column(type="string", length=5)
+     * @ORM\Column(type="smallint")
      */
-    private $points;
+    private $points = 0;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -128,12 +128,12 @@ class BundesligaTable
         return $this->id;
     }
 
-    public function getMatchDay(): ?string
+    public function getMatchDay(): ?int
     {
         return $this->matchDay;
     }
 
-    public function setMatchDay(string $matchDay): self
+    public function setMatchDay(int $matchDay): self
     {
         $this->matchDay = $matchDay;
 
@@ -154,18 +154,17 @@ class BundesligaTable
 
     public function addGame(): self
     {
-        $value = intval($this->games) + 1;
-        $this->games = strval($value);
+        $this->games++;
 
         return $this;
     }
 
-    public function getGames(): ?string
+    public function getGames(): int
     {
         return $this->games;
     }
 
-    public function setGames(string $games): self
+    public function setGames(int $games): self
     {
         $this->games = $games;
 
@@ -174,18 +173,17 @@ class BundesligaTable
 
     public function addWin(): self
     {
-        $value = intval($this->wins) + 1;
-        $this->wins = strval($value);
+        $this->wins++;
 
         return $this;
     }
 
-    public function getWins(): ?string
+    public function getWins(): int
     {
         return $this->wins;
     }
 
-    public function setWins(string $wins): self
+    public function setWins(int $wins): self
     {
         $this->wins = $wins;
 
@@ -194,18 +192,17 @@ class BundesligaTable
 
     public function addDraw(): self
     {
-        $value = intval($this->draws) + 1;
-        $this->draws = strval($value);
+        $this->draws++;
 
         return $this;
     }
 
-    public function getDraws(): ?string
+    public function getDraws(): int
     {
         return $this->draws;
     }
 
-    public function setDraws(string $draws): self
+    public function setDraws(int $draws): self
     {
         $this->draws = $draws;
 
@@ -214,18 +211,17 @@ class BundesligaTable
 
     public function addLoss(): self
     {
-        $value = intval($this->losses) + 1;
-        $this->losses = strval($value);
+        $this->losses++;
 
         return $this;
     }
 
-    public function getLosses(): ?string
+    public function getLosses(): int
     {
         return $this->losses;
     }
 
-    public function setLosses(string $losses): self
+    public function setLosses(int $losses): self
     {
         $this->losses = $losses;
 
@@ -234,18 +230,17 @@ class BundesligaTable
 
     public function addBoardPoints(int $boardPoints): self
     {
-        $value = intval($this->boardPoints) + $boardPoints;
-        $this->boardPoints = strval($value);
+        $this->boardPoints =+ $boardPoints;
 
         return $this;
     }
 
-    public function getBoardPoints(): ?string
+    public function getBoardPoints(): int
     {
         return $this->boardPoints;
     }
 
-    public function setBoardPoints(string $boardPoints): self
+    public function setBoardPoints(int $boardPoints): self
     {
         $this->boardPoints = $boardPoints;
 
@@ -254,18 +249,17 @@ class BundesligaTable
 
     public function addPoints(int $points): self
     {
-        $value = intval($this->points) + $points;
-        $this->points = strval($value);
+        $this->points =+ $points;
 
         return $this;
     }
 
-    public function getPoints(): ?string
+    public function getPoints(): int
     {
         return $this->points;
     }
 
-    public function setPoints(string $points): self
+    public function setPoints(int $points): self
     {
         $this->points = $points;
 
