@@ -35,8 +35,8 @@ final class Version20200404113100 extends AbstractMigration implements Container
     {
         /** @var EntityManager $manager */
         $manager = $this->container->get('doctrine.orm.entity_manager');
-        $allTables = $manager->getRepository(BundesligaTable::class)->findBy(['bundesliga_season' => null]);
-        $season = $manager->getRepository(BundesligaSeason::class)->findOneBy(['actual_season' => 1]);
+        $allTables = $manager->getRepository(BundesligaTable::class)->findBy(['bundesligaSeason' => null]);
+        $season = $manager->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => 1]);
 
         foreach ($allTables as $table) {
             //season
