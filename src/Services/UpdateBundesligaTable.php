@@ -24,120 +24,34 @@ namespace App\Services;
 
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
-use App\Entity\Bundesliga\BundesligaTable;
-use App\Entity\Bundesliga\BundesligaTeam;
+use App\Services\UpdateTableLogic\TableGenerator;
+use App\Services\UpdateTableLogic\TablePositioner;
+use App\Services\UpdateTableLogic\TableSorter;
+use App\Services\UpdateTableLogic\TableStatsGenerator;
+use App\Services\UpdateTableLogic\TableTendency;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateBundesligaTable
 {
     private $manager;
+    private $tableGenerator;
+    private $statsGenerator;
+    private $sorter;
+    private $positioner;
+    private $tendency;
 
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager, TableGenerator $tableGenerator)
     {
         $this->manager = $manager;
+        $this->tableGenerator = $tableGenerator;
+
+        $this->statsGenerator = new TableStatsGenerator();
+        $this->sorter = new TableSorter();
+        $this->positioner = new TablePositioner();
+        $this->tendency = new TableTendency();
     }
 
-    //update
-    //calculate position by points, board points and previous position
-    //compare to previous position for background and tendency
-
-    private function processResult(BundesligaResults $result)
-    {
-        //gibt es previous => Saisonbeginn
-        //gibt es schon actuelles ergebnis? dann ist es ein update
-        $homeTeamTable = $this->manager
-                ->getRepository(BundesligaTable::class)
-                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getHome(), $result->getMatchDay() - 1);
-
-        if (!$homeTeamTable) {
-            $homeTeamTable = new BundesligaTable();
-            $homeTeamTable->setBundesligaSeason($result->getSeason())
-                    ->setSeason($result->getSeason()->getDGoBIndex())
-                    ->setBundesligaTeam($result->getHome())
-                    ->setTeam($result->getHome()->getName())
-                    ->setLeague($result->getSeason()->getLeague())
-                    ->setMatchDay(strval($result->getMatchDay()))
-                    ->setGames("1")
-                    ->setPoints("0")
-                    ->setBoardPoints("0")
-                    ->setWins("0")
-                    ->setDraws("0")
-                    ->setLosses("0")
-            ;
-        } else {
-            $teamTable = new BundesligaTable();
-            //$teamTable->
-            //previous
-        }
-
-        $awayTeamTable = $this->manager
-                ->getRepository(BundesligaTable::class)
-                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getAway(), $result->getMatchDay() - 1);
-
-        $home = new BundesligaTable();
-        $home->
-
-        //add Games
-        $homeTeamTable->addGame();
-        $awayTeamTable->addGame();
-
-        //board points
-        $homeTeamTable->addBoardPoints($result->getBoardPointsHome());
-        $awayTeamTable->addBoardPoints($result->getBoardPointsAway());
-
-        //wins
-        if ($result->getBoardPointsHome() > $result->getBoardPointsAway()) {
-            $homeTeamTable->addWin();
-            $awayTeamTable->addLoss();
-            $homeTeamTable->addPoints(2);
-        }
-        //draws
-        if ($result->getBoardPointsHome() === $result->getBoardPointsAway()) {
-            $homeTeamTable->addDraw();
-            $awayTeamTable->addDraw();
-            $homeTeamTable->addPoints(1);
-            $awayTeamTable->addPoints(1);
-        }
-        //loss
-        if ($result->getBoardPointsHome() < $result->getBoardPointsAway()) {
-            $homeTeamTable->addLoss();
-            $awayTeamTable->addWin();
-            $awayTeamTable->addPoints(2);
-        }
-
-        $teamTable = $this->manager
-                ->getRepository(BundesligaTable::class)
-                ->findTableByTeamAndMatchDay($result->getSeason(), $result->getHome(), $result->getMatchDay() - 1);
-
-        //muss die teams einzeln updaten -> ermöglicht temporäre tabelle
-    }
-
-    private function handleResult(BundesligaSeason $season, BundesligaTeam $team, int $matchDay)
-    {
-        $previousMatchDay = $matchDay - 1;
-        $teamTable = $this->manager->getRepository(BundesligaTable::class)->findTableByTeamAndMatchDay($season, $team, $matchDay - 1);
-    }
-
-    private function getPreviousTeamTable(BundesligaSeason $season, BundesligaTeam $team, int $matchDay): array
-    {
-        $previousMatchDay = $matchDay - 1;
-
-        return $this->manager->getRepository(BundesligaTable::class)->findTableByTeamAndMatchDay($season, $team, $matchDay);
-    }
-
-    private function hasPreviousTable(BundesligaSeason $season, int $matchDay): bool
-    {
-        $previousMatchDay = $matchDay - 1;
-
-        return !empty($this->manager->getRepository(BundesligaTable::class)->findTableByMatchDay($season, $previousMatchDay));
-    }
-
-    private function hasUpdatedTable(BundesligaSeason $season, int $matchDay): bool
-    {
-        return !empty($this->manager->getRepository(BundesligaTable::class)->findTableByMatchDay($season, $matchDay));
-    }
-
-    private function getResults(BundesligaSeason $season, int $matchDay): array
+    public function handle(BundesligaSeason $season, int $matchDay): void
     {
         $results = $this->manager->getRepository(BundesligaResults::class)->findResultsByMatchDay($season, $matchDay);
         if (empty($results)) {
@@ -145,6 +59,36 @@ class UpdateBundesligaTable
             throw new \LogicException($msg);
         }
 
-        return $results;
+        $tables = [];
+        foreach ($results as $result) {
+            $pairing = $this->processResult($result);
+            $tables = array_merge($tables, $pairing);
+        }
+
+        $this->sorter->sortTable($tables);
+        $this->positioner->create($tables);
+        $this->tendency->create($season, $tables);
+
+        $this->manager->flush();
+    }
+
+    //update
+    //calculate position by points, board points and previous position
+    //compare to previous position for background and tendency
+
+    private function processResult(BundesligaResults $result): array
+    {
+        //generate new table
+        $home = $this->tableGenerator->createTable($result, $result->getHome());
+        $away = $this->tableGenerator->createTable($result, $result->getAway());
+
+        //create stats
+        $this->statsGenerator->create($home, $away, $result);
+
+        $this->manager->persist($home);
+        $this->manager->persist($away);
+
+        return [$home, $away];
+
     }
 }

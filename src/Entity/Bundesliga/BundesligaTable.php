@@ -41,10 +41,13 @@ class BundesligaTable
 {
     use TimestampableEntity;
 
-    const TENDENCY_CHAMPION = 10;
+    const TENDENCY_CHAMPION   = 10;
     const TENDENCY_AUFSTEIGER = 20;
     const TENDENCY_RELEGATION = 30;
-    const TENDENCY_ABSTEIGER = 40;
+    const TENDENCY_ABSTEIGER  = 40;
+    const IMG_POS_SAME = "lmo-tab0.gif";
+    const IMG_POS_UP   = "lmo-tab1.gif";
+    const IMG_POS_DOWN = "lmo-tab2.gif";
 
     /**
      * @ORM\Id()
@@ -96,7 +99,7 @@ class BundesligaTable
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $imgSrc;
+    private $imgSrc = self::IMG_POS_SAME;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
@@ -121,7 +124,7 @@ class BundesligaTable
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $firstBoardPoints;
+    private $firstBoardPoints = 0;
 
     public function getId(): ?int
     {
