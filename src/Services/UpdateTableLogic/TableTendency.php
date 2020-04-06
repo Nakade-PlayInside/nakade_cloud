@@ -37,10 +37,10 @@ class TableTendency
             if (2 === $table->getPosition()) {
                 $table->setTendency(BundesligaTable::TENDENCY_AUFSTEIGER);
             }
-            if ('5' === $season->getLeague() && 3 === $table->getPosition() || 4 === $table->getPosition()) {
+            if ('5' === $season->getLeague() && (3 === $table->getPosition() || 4 === $table->getPosition())) {
                 $table->setTendency(BundesligaTable::TENDENCY_AUFSTEIGER);
             }
-            if ('5' !== $season->getLeague() && 10 === $table->getPosition() || 9 === $table->getPosition()) {
+            if ('5' !== $season->getLeague() && (10 === $table->getPosition() || 9 === $table->getPosition())) {
                 $table->setTendency(BundesligaTable::TENDENCY_ABSTEIGER);
             }
             if ('2' === $season->getLeague() && 8 === $table->getPosition()) {

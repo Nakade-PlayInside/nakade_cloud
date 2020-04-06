@@ -31,6 +31,11 @@ use App\Services\UpdateTableLogic\TableStatsGenerator;
 use App\Services\UpdateTableLogic\TableTendency;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
 class UpdateBundesligaTable
 {
     private $manager;

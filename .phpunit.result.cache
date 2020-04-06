@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":199:{a:2:{s:7:"defects";a:0:{}s:5:"times";a:2:{s:60:"App\Tests\Controller\DefaultControllerTest::testSecuredHello";d:2.187;s:67:"App\Tests\Services\UpdateTableLogic\TablePositionerTest::testCreate";d:0;}}}

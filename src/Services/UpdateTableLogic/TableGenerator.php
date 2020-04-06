@@ -52,6 +52,7 @@ class TableGenerator
                 ->setMatchDay($result->getMatchDay())
         ;
 
+        $previousTable = null;
         if ($result->getMatchDay() > 1) {
             $prevMatchDay = $result->getMatchDay() - 1;
             $previousTable = $this->repository->findTableByTeamAndMatchDay($result->getSeason(), $team, $prevMatchDay);

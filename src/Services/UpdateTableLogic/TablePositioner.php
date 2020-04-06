@@ -42,6 +42,7 @@ class TablePositioner
                 $table->setImgSrc($img);
             }
             $table->setPosition($position);
+            ++$position;
         }
     }
 

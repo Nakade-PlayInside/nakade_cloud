@@ -24,16 +24,24 @@ namespace App\Services\UpdateTableLogic;
 
 use App\Entity\Bundesliga\BundesligaTable;
 
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
 class TableSorter
 {
     /**
-     * just sorting
+     * just sorting.
      */
     public function sortTable(array &$table): void
     {
         usort($table, [$this, 'sortByPoints']);
     }
 
+    /**
+     * Callback sorting function. Use sortTable!
+     */
     public function sortByPoints(BundesligaTable $alice, BundesligaTable $bob)
     {
         if ($alice->getPoints() === $bob->getPoints()) {
@@ -43,6 +51,9 @@ class TableSorter
         return $alice->getPoints() < $bob->getPoints();
     }
 
+    /**
+     * Callback sorting function. Use sortTable!
+     */
     public function sortByBoardPoints(BundesligaTable $alice, BundesligaTable $bob)
     {
         if ($alice->getBoardPoints() === $bob->getBoardPoints()) {
@@ -52,12 +63,15 @@ class TableSorter
         return $alice->getBoardPoints() < $bob->getBoardPoints();
     }
 
+    /**
+     * Callback sorting function. Use sortTable!
+     */
     public function sortByFirstBoard(BundesligaTable $alice, BundesligaTable $bob)
     {
-        if ($alice->getBoardPoints() === $bob->getBoardPoints()) {
+        if ($alice->getFirstBoardPoints() === $bob->getFirstBoardPoints()) {
             return false;
         }
 
-        return $alice->getBoardPoints() < $bob->getBoardPoints();
+        return $alice->getFirstBoardPoints() < $bob->getFirstBoardPoints();
     }
 }
