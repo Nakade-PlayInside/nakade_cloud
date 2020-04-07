@@ -29,6 +29,7 @@
                         <a class="dropdown-item" href="{{ path('bundesliga_season_archive') }}"><i class="fa fa-fw fa-calendar"></i> {{'navigation.bundesliga.tables'|trans({}, 'messages') }}</a>
                         <a class="dropdown-item" href="{{ path('bundesliga_season_stats_team') }}"><i class="fa fa-fw fa-bar-chart"></i> {{'navigation.bundesliga.team.stats'|trans({}, 'messages') }}</a>
                         {% if is_granted('ROLE_NAKADE_TEAM') %}
+                            <a class="dropdown-item" href="{{ path('bundesliga_actual_results') }}"><i class="fa fa-fw fa-calendar-o"></i> Aktuelle Ergebnisse</a>
                             <a class="dropdown-item" href="{{ path('bundesliga_actual_matchDay') }}"><i class="fa fa-fw fa-calendar-o"></i> Aktueller Spieltag</a>
                         {% endif %}
                     </div>

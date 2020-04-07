@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('bundesliga') }}
+{% endblock %}
+{% block title %}Ergebnisse eintragen{% endblock %}
+
+{% block body %}
+
+    <h5 class="matchDay-info">{{ model.season.title }} - Liga {{ model.season.league }}: <span>{{ model.matchDay }}. Spieltag</span></h5>
+     {{ form_start(form) }}
+        <div>
+            {{ form_errors(form) }}
+        </div>
+
+        <div class="matchDay">
+
+        </div>
+
+    {% if is_granted('ROLE_NAKADE_TEAM_MANAGER') %}
+    <div class="matchDay-buttons">
+        <button type="submit" class="btn btn-primary">
+            <span class="btn-label"> Update</span>
+        </button>
+    </div>
+    {% endif %}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('bundesliga') }}
+    {{ encore_entry_script_tags('autocomplete') }}
+{% endblock %}

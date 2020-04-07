@@ -86,13 +86,9 @@ class BundesligaResultsRepository extends ServiceEntityRepository
         try {
             return $this->createQueryBuilder('r')
                     ->innerJoin('r.season', 's')
-                    ->innerJoin(BundesligaTeam::class, 'h', expr\Join::WITH, 'h.id=r.home')
-                    ->innerJoin(BundesligaTeam::class, 'a', expr\Join::WITH, 'a.id=r.away')
                     ->andWhere('s.id=:id')
-                    ->andWhere('h.name LIKE :team OR a.name LIKE :team')
                     ->andWhere('r.boardPointsHome=0 AND r.boardPointsAway=0')
                     ->setParameter('id', $season)
-                    ->setParameter('team', '%Nakade%')
                     ->select('MIN(r.matchDay) as actualMatchDay')
                     ->getQuery()
                     ->getSingleScalarResult()
