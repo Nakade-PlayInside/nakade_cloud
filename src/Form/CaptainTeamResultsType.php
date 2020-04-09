@@ -22,16 +22,10 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Bundesliga\BundesligaMatch;
-use App\Entity\Bundesliga\BundesligaPlayer;
-use App\Form\Model\ResultModel;
+use App\Entity\Bundesliga\BundesligaResults;
 use App\Form\Model\TeamResultsModel;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -44,7 +38,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class CaptainMatchDayResultsInputType extends AbstractType
+class CaptainTeamResultsType extends AbstractType
 {
     private $entityManager;
     private $authorizationChecker;
@@ -60,6 +54,24 @@ class CaptainMatchDayResultsInputType extends AbstractType
 //        $builder->add('bordPointsHome', TextType::class, ['required' => false])
 //                ->add('bordPointsAway', TextType::class, ['required' => false])
 //        ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var TeamResultsModel $model */
+            $model = $event->getData();
+            $form = $event->getForm();
+
+            // checks if the Product object is "new"
+            // If no data is passed to the form, the data is "null".
+            // This should be considered a new "Product"
+            if ($model) {
+                $i = 1;
+                /** @var BundesligaResults $result */
+                foreach ($model->getResults() as $result) {
+                    $result->setBoardPointsHome(5);
+                    $form->add('match'.$i++, CaptainSingleResultType::class, ['mapped' => false, 'empty_data' => $result]);
+                }
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)

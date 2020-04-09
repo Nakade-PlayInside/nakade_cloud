@@ -29,7 +29,7 @@ use App\Entity\Bundesliga\BundesligaTable;
 use App\Entity\Bundesliga\BundesligaTeam;
 use App\Entity\Bundesliga\LineupMail;
 use App\Entity\Bundesliga\ResultMail;
-use App\Form\CaptainMatchDayResultsInputType;
+use App\Form\CaptainTeamResultsType;
 use App\Form\CaptainResultInputType;
 use App\Form\Model\ResultModel;
 use App\Form\Model\TeamResultsModel;
@@ -163,7 +163,7 @@ class BundesligaController extends AbstractController
         $results = $this->getDoctrine()->getRepository(BundesligaResults::class)->findResultsByMatchDay($actualSeason, $matchDay);
 
         $model = new TeamResultsModel($results);
-        $form = $this->createForm(CaptainMatchDayResultsInputType::class, $model);
+        $form = $this->createForm(CaptainTeamResultsType::class, $model);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

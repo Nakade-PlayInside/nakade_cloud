@@ -108,7 +108,7 @@ class BundesligaResultsType extends AbstractType
             $form->remove('home');
             $form->remove('away');
             $form->remove('boardPointsHome');
-            $form->remove('boardPointsHome');
+            $form->remove('boardPointsAway');
 
             return;
         }
@@ -119,7 +119,7 @@ class BundesligaResultsType extends AbstractType
             $form->remove('home');
             $form->remove('away');
             $form->remove('boardPointsHome');
-            $form->remove('boardPointsHome');
+            $form->remove('boardPointsAway');
 
             return;
         }
