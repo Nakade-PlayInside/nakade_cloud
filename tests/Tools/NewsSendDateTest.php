@@ -1,8 +1,10 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
- * Copyright (c) 2019 Dr. Holger Maerz
+ * Copyright (c) 2020 Dr. Holger Maerz
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -17,38 +19,38 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace App\Command;
 
-use App\Services\CoronaNewsMail;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+namespace App\Tests\Tools;
 
-class CoronaNewsDeliverCommand extends Command
+use App\Tools\NewsSendDate;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ */
+class NewsSendDateTest extends TestCase
 {
-    protected static $defaultName = 'app:corona-news-deliver';
-    private $mail;
+    private $object = null;
 
-    public function __construct(CoronaNewsMail $mail)
+    public function setUp(): void
     {
-        $this->mail = $mail;
-        parent::__construct();
+        $this->object = new NewsSendDate();
     }
 
-    protected function configure()
+    /**
+     * @dataProvider actualProvider
+     */
+    public function testCreate(\DateTime $dueDate, int $daySpan, \DateTime $expected)
     {
-        $this
-            ->setDescription('Delivers next corona news.')
-            ->setHelp('Delivers next corona news if not already send. Due date is next kgs meeting.')
-        ;
+        $this->assertEquals($expected, $this->object->create($dueDate, $daySpan));
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function actualProvider(): array
     {
-        $io = new SymfonyStyle($input, $output);
-        $this->mail->handle();
-
-        $io->success('News delivered.');
+        return [
+            [new \DateTime('2020-04-13'), 2, new \DateTime('2020-04-11')],
+        ];
     }
 }

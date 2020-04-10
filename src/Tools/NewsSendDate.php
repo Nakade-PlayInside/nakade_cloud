@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -17,38 +19,28 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace App\Command;
 
-use App\Services\CoronaNewsMail;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+namespace App\Tools;
 
-class CoronaNewsDeliverCommand extends Command
+/**
+ * Gives you the next meeting date for the club. Club meeting is always on the second monday of a month. If meeting date
+ * is over, the next date (next month) is given.
+ *
+ *
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
+ * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * //todo: make logic for all kind of cycles
+ */
+class NewsSendDate
 {
-    protected static $defaultName = 'app:corona-news-deliver';
-    private $mail;
-
-    public function __construct(CoronaNewsMail $mail)
+    public function create(\DateTime $dueDate, int $daySpan ): \DateTime
     {
-        $this->mail = $mail;
-        parent::__construct();
-    }
+        $modify = sprintf('-%s day', $daySpan);
+        $sendDate = clone $dueDate;
+        $sendDate->modify($modify);
 
-    protected function configure()
-    {
-        $this
-            ->setDescription('Delivers next corona news.')
-            ->setHelp('Delivers next corona news if not already send. Due date is next kgs meeting.')
-        ;
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $io = new SymfonyStyle($input, $output);
-        $this->mail->handle();
-
-        $io->success('News delivered.');
+        return $sendDate;
     }
 }

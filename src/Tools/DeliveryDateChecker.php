@@ -1,8 +1,10 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
- * Copyright (c) 2019 Dr. Holger Maerz
+ * Copyright (c) 2020 Dr. Holger Maerz
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -17,38 +19,17 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace App\Command;
 
-use App\Services\CoronaNewsMail;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+namespace App\Tools;
 
-class CoronaNewsDeliverCommand extends Command
+class DeliveryDateChecker
 {
-    protected static $defaultName = 'app:corona-news-deliver';
-    private $mail;
-
-    public function __construct(CoronaNewsMail $mail)
+    public function isDelayed(\DateTime $sendDate, \DateTime $today = null): bool
     {
-        $this->mail = $mail;
-        parent::__construct();
-    }
+        if (!$today) {
+            $today = new \DateTime();
+        }
 
-    protected function configure()
-    {
-        $this
-            ->setDescription('Delivers next corona news.')
-            ->setHelp('Delivers next corona news if not already send. Due date is next kgs meeting.')
-        ;
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $io = new SymfonyStyle($input, $output);
-        $this->mail->handle();
-
-        $io->success('News delivered.');
+        return $today > $sendDate;
     }
 }

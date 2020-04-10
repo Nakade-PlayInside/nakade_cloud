@@ -49,9 +49,11 @@ class CoronaNews
      */
     private $noRecipients;
 
-    public function __construct()
+    public function __construct(\DateTime $dueAt, int $noRecipients)
     {
         $this->sendAt = new \DateTime();
+        $this->dueAt = $dueAt;
+        $this->noRecipients = $noRecipients;
     }
 
     public function getId(): ?int

@@ -20,39 +20,57 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Tools;
+namespace App\Services;
+
+use App\Entity\CoronaNews;
+use App\Entity\NewsReader;
+use App\Tools\DeliveryDateChecker;
+use App\Tools\NewsSendDate;
+use App\Tools\NextWeeklyMeeting;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Gives you the next meeting date for the club. Club meeting is always on the second monday of a month. If meeting date
- * is over, the next date (next month) is given.
- *
- *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
- *
- * //todo: make logic for all kind of cycles
  */
-class NextWeeklyMeeting
+class CoronaNewsMail
 {
-    const DATE_FORMAT = 'Y-m-d';
+    const TIME_SPAN = 2;
 
-    /**
-     * @return string a date string in format Y-m-d eg. 2019-09-17
-     */
-    public function calcNextMeetingDate(\DateTime $actual = null): \DateTime
+    private $deliverer;
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager, CoronaNewsDeliverer $deliverer)
     {
-        // Create a new DateTime object
-        if (!$actual) {
-            $actual = new \DateTime();
+        $this->deliverer = $deliverer;
+        $this->entityManager = $entityManager;
+    }
+
+    public function handle()
+    {
+        $dueDate = (new NextWeeklyMeeting())->calcNextMeetingDate();
+
+        //news was already sent
+        $newsletter = $this->entityManager->getRepository(CoronaNews::class)->findOneBy(['dueAt' => $dueDate]);
+        if ($newsletter) {
+            return;
         }
 
-        //todo: meeting is today
+        $sendDate = (new NewsSendDate())->create($dueDate, self::TIME_SPAN);
+        if ((new DeliveryDateChecker())->isDelayed($sendDate)) {
+            $allReaders = $this->entityManager->getRepository(NewsReader::class)->findAll();
+            if (0 === count($allReaders)) {
+                return;
+            }
 
-        // Modify the date it contains
-        $actual->modify('next monday');
+            //entity
+            $newsletter = new CoronaNews($dueDate, count($allReaders));
+            $this->entityManager->persist($newsletter);
+            $this->entityManager->flush();
 
-        // Output
-        return $actual;
+            //send news
+            $this->deliverer->deliver($dueDate, $allReaders);
+        }
     }
 }
