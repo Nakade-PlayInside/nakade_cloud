@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -84,6 +85,15 @@ class BundesligaResults extends AbstractResults
         return $this->matches;
     }
 
+    public function hasMatches(): bool
+    {
+        if ($this->matches && count($this->matches) > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function addMatch(MatchInterface $match): self
     {
         if (!$this->matches->contains($match)) {
@@ -110,6 +120,27 @@ class BundesligaResults extends AbstractResults
     public function __toString(): string
     {
         return $this->getPairing().sprintf(' (%d. Spieltag)', $this->getMatchDay());
+    }
+
+    public function updateCalcResult(): void
+    {
+        if ($this->hasMatches()) {
+            $homePoints = $awayPoints = 0;
+            foreach ($this->getMatches() as $match) {
+                if ('0:0' === $match->getResult()) {
+                    continue;
+                }
+                if ($match->isHomeMatch()) {
+                    $homePoints += $match->getNakadePoints();
+                    $awayPoints += $match->getOpponentPoints();
+                } else {
+                    $homePoints += $match->getOpponentPoints();
+                    $awayPoints += $match->getNakadePoints();
+                }
+            }
+            $this->setBoardPointsHome($homePoints);
+            $this->setBoardPointsAway($awayPoints);
+        }
     }
 
     public function getResultMail(): ?ResultMail

@@ -232,7 +232,13 @@ class ResultModel
             $awayPoints += (int) $points[1];
         }
 
-        return sprintf('%s:%s', $homePoints, $awayPoints);
+        //be aware of home and away
+        $currentResult = sprintf('%s:%s', $homePoints, $awayPoints);
+        if (!$this->isNakadeHome()) {
+            $currentResult = sprintf('%s:%s', $awayPoints, $homePoints);
+        }
+
+        return $currentResult;
     }
 
     public function isCompleted(): bool

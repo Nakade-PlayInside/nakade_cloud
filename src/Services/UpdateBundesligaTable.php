@@ -24,6 +24,9 @@ namespace App\Services;
 
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Entity\Bundesliga\BundesligaTable;
+use App\Form\Model\ResultModel;
+use App\Form\Model\TeamResultsModel;
 use App\Services\UpdateTableLogic\TableGenerator;
 use App\Services\UpdateTableLogic\TablePositioner;
 use App\Services\UpdateTableLogic\TableSorter;
@@ -56,25 +59,22 @@ class UpdateBundesligaTable
         $this->tendency = new TableTendency();
     }
 
-    public function handle(BundesligaSeason $season, int $matchDay): void
+    /**
+     * @return array | BundesligaTable[]
+     */
+    public function create(TeamResultsModel $model): array
     {
-        $results = $this->manager->getRepository(BundesligaResults::class)->findResultsByMatchDay($season, $matchDay);
-        if (empty($results)) {
-            $msg = sprintf('No results in season <%s> for match day <%s> in league <%s> found!', $season->getTitle(), $season->getLeague(), $matchDay);
-            throw new \LogicException($msg);
-        }
-
         $tables = [];
-        foreach ($results as $result) {
+        foreach ($model->getResults() as $result) {
             $pairing = $this->processResult($result);
             $tables = array_merge($tables, $pairing);
         }
 
         $this->sorter->sortTable($tables);
         $this->positioner->create($tables);
-        $this->tendency->create($season, $tables);
+        $this->tendency->create($model->getSeason(), $tables);
 
-        $this->manager->flush();
+        return $tables;
     }
 
     //update
@@ -90,10 +90,6 @@ class UpdateBundesligaTable
         //create stats
         $this->statsGenerator->create($home, $away, $result);
 
-        $this->manager->persist($home);
-        $this->manager->persist($away);
-
         return [$home, $away];
-
     }
 }

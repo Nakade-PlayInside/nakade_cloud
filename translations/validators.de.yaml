@@ -6,6 +6,7 @@
 "captcha.required": "Löse das Captcha!"
 "results.pairing": "Die Paarung <{{ string }}> ist nicht erlaubt!"
 "results.season.date": "Das Datum <{{ playDate }}> liegt außerhalb der Saison <{{ season }}>!"
+"team.results.incomplete": "Die Ergebnisse sind unvollständig!"
 "email.unique": "Die email <{{ email }}> ist schon registriert!"
 "email.exist": "Die email <{{ email }}> ist nicht registriert, unbestätigt oder gesperrt!"
 "position.unique": "Aufstellungsfehler an Position {{ position }}. Der Spieler <{{ player }}> ist mehrfach aufgestellt!"

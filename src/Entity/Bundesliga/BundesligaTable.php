@@ -233,7 +233,7 @@ class BundesligaTable
 
     public function addBoardPoints(int $boardPoints): self
     {
-        $this->boardPoints =+ $boardPoints;
+        $this->boardPoints += $boardPoints;
 
         return $this;
     }
@@ -252,7 +252,7 @@ class BundesligaTable
 
     public function addPoints(int $points): self
     {
-        $this->points =+ $points;
+        $this->points += $points;
 
         return $this;
     }

@@ -22,11 +22,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Bundesliga\BundesligaResults;
 use App\Form\Model\TeamResultsModel;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -40,21 +37,15 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class CaptainTeamResultsType extends AbstractType
 {
-    private $entityManager;
     private $authorizationChecker;
 
-//    public function __construct(EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker)
-//    {
-//        $this->entityManager = $entityManager;
-//        $this->authorizationChecker = $authorizationChecker;
-//    }
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
+    {
+        $this->authorizationChecker = $authorizationChecker;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        $builder->add('bordPointsHome', TextType::class, ['required' => false])
-//                ->add('bordPointsAway', TextType::class, ['required' => false])
-//        ;
-
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             /** @var TeamResultsModel $model */
             $model = $event->getData();
@@ -64,11 +55,8 @@ class CaptainTeamResultsType extends AbstractType
             // If no data is passed to the form, the data is "null".
             // This should be considered a new "Product"
             if ($model) {
-                $i = 1;
-                /** @var BundesligaResults $result */
-                foreach ($model->getResults() as $result) {
-                    $result->setBoardPointsHome(5);
-                    $form->add('match'.$i++, CaptainSingleResultType::class, ['mapped' => false, 'empty_data' => $result]);
+                for ($i = 1; $i <= $model->getNoResults(); ++$i) {
+                    $form->add('match'.$i, CaptainSingleResultType::class, ['disabled' => $this->getDisabled()]);
                 }
             }
         });
@@ -77,13 +65,12 @@ class CaptainTeamResultsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'data_class' => TeamResultsModel::class,
-                'allow_extra_fields' => true,
+            'data_class' => TeamResultsModel::class,
         ]);
     }
 
-//    private function getDisabled(): string
-//    {
-//        return $this->authorizationChecker->isGranted('ROLE_NAKADE_TEAM_MANAGER') ? '' : 'disabled';
-//    }
+    private function getDisabled(): string
+    {
+        return $this->authorizationChecker->isGranted('ROLE_NAKADE_TEAM_MANAGER') ? '' : 'disabled';
+    }
 }

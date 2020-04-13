@@ -22,23 +22,13 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Bundesliga\BundesligaMatch;
-use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaResults;
-use App\Form\Model\ResultModel;
-use App\Form\Model\TeamResultsModel;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -47,34 +37,22 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class CaptainSingleResultType extends AbstractType
 {
-    private $entityManager;
-    private $authorizationChecker;
-
-//    public function __construct(EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker)
-//    {
-//        $this->entityManager = $entityManager;
-//        $this->authorizationChecker = $authorizationChecker;
-//    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var BundesligaResults $result */
-        $result = $options['empty_data'];
-        $builder->add('bordPointsHome', TextType::class, ['data' => $result->getBoardPointsHome()])
-                ->add('bordPointsAway', TextType::class, ['data' => $result->getBoardPointsAway()])
-        ;
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var BundesligaResults $result */
+            $result = $event->getData();
+            $result->updateCalcResult();
+            $form = $event->getForm();
+            $form->add('boardPointsHome', TextType::class, ['disabled' => $result->hasMatches()])
+                 ->add('boardPointsAway', TextType::class, ['disabled' => $result->hasMatches()]);
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'data_class' => BundesligaResults::class,
-                'allow_extra_fields' => true,
+                'data_class' => BundesligaResults::class
         ]);
     }
-
-//    private function getDisabled(): string
-//    {
-//        return $this->authorizationChecker->isGranted('ROLE_NAKADE_TEAM_MANAGER') ? '' : 'disabled';
-//    }
 }

@@ -93,6 +93,19 @@
             margin-top: 20px;
             margin-left: 20px;
         }
+
+        td {
+            color: black;
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            input {
+                min-width: 40px !important;
+                width: 60px !important;
+                text-align: center;
+                color: blue;
+            }
+        }
     }
 
     .no-margin-top {

@@ -22,14 +22,16 @@ declare(strict_types=1);
 
 namespace App\Form\Model;
 
-use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Validator\TeamResult;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
+ *
+ * @TeamResult()
  */
 class TeamResultsModel
 {
@@ -51,11 +53,75 @@ class TeamResultsModel
         return $this->results;
     }
 
-    public function getSeason(): ?BundesligaSeason {
+    public function getNoResults(): int
+    {
+        if (!$this->results) {
+            return 0;
+        }
+
+        return count($this->results);
+    }
+
+    public function getSeason(): ?BundesligaSeason
+    {
         return $this->season;
     }
 
-    public function getMatchDay(): ?int {
+    public function getMatchDay(): ?int
+    {
         return $this->matchDay;
+    }
+
+    public function getMatch1(): ?BundesligaResults
+    {
+        return $this->getResults()[0];
+    }
+
+    public function setMatch1(BundesligaResults $result): self
+    {
+        $this->getResults()[1] = $result;
+
+        return $this;
+    }
+
+    public function getMatch2(): ?BundesligaResults
+    {
+        return $this->getResults()[1];
+    }
+
+    public function setMatch2(BundesligaResults $result): self
+    {
+        $this->getResults()[2] = $result;
+
+        return $this;
+    }
+
+    public function getMatch3(): ?BundesligaResults
+    {
+        return $this->getResults()[2];
+    }
+
+    public function setMatch3(BundesligaResults $result): self
+    {
+        $this->getResults()[3] = $result;
+
+        return $this;
+    }
+
+    public function getMatch4(): ?BundesligaResults
+    {
+        return $this->getResults()[3];
+    }
+
+    public function setMatch4(BundesligaResults $result): self
+    {
+        $this->getResults()[4] = $result;
+
+        return $this;
+    }
+
+    public function getMatch5(): ?BundesligaResults
+    {
+        return $this->getResults()[4];
     }
 }

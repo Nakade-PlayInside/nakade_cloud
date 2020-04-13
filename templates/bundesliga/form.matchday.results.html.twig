@@ -7,14 +7,25 @@
 
 {% block body %}
 
-    <h5 class="matchDay-info">{{ model.season.title }} - Liga {{ model.season.league }}: <span>{{ model.matchDay }}. Spieltag</span></h5>
+    <h5 class="matchDay-info">Ergebnisse {{ model.season.title }} - Liga {{ model.season.league }}</h5>
      {{ form_start(form) }}
         <div>
             {{ form_errors(form) }}
         </div>
 
         <div class="matchDay">
-
+            <fieldset><legend><span>{{ model.matchDay }}. Spieltag</span></legend>
+                <table>
+                    {% for result in model.results %}
+                        <tr>
+                            <td>{{ result.home.name }}</td>
+                            <td style="padding-left: 10px; padding-right: 10px;">-</td>
+                            <td>{{ result.away.name }}</td>
+                            <td>{{ form_widget(form["match" ~ loop.index].boardPointsHome) }} : {{ form_widget(form["match" ~ loop.index].boardPointsAway) }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </fieldset>
         </div>
 
     {% if is_granted('ROLE_NAKADE_TEAM_MANAGER') %}
