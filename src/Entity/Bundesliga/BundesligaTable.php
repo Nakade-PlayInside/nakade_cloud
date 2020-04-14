@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
@@ -18,6 +19,7 @@ declare(strict_types=1);
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace App\Entity\Bundesliga;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -41,13 +43,13 @@ class BundesligaTable
 {
     use TimestampableEntity;
 
-    const TENDENCY_CHAMPION   = 10;
+    const TENDENCY_CHAMPION = 10;
     const TENDENCY_AUFSTEIGER = 20;
     const TENDENCY_RELEGATION = 30;
-    const TENDENCY_ABSTEIGER  = 40;
-    const IMG_POS_SAME = "lmo-tab0.gif";
-    const IMG_POS_UP   = "lmo-tab1.gif";
-    const IMG_POS_DOWN = "lmo-tab2.gif";
+    const TENDENCY_ABSTEIGER = 40;
+    const IMG_POS_SAME = 'lmo-tab0.gif';
+    const IMG_POS_UP = 'lmo-tab1.gif';
+    const IMG_POS_DOWN = 'lmo-tab2.gif';
 
     /**
      * @ORM\Id()
@@ -157,7 +159,7 @@ class BundesligaTable
 
     public function addGame(): self
     {
-        $this->games++;
+        ++$this->games;
 
         return $this;
     }
@@ -176,7 +178,7 @@ class BundesligaTable
 
     public function addWin(): self
     {
-        $this->wins++;
+        ++$this->wins;
 
         return $this;
     }
@@ -195,7 +197,7 @@ class BundesligaTable
 
     public function addDraw(): self
     {
-        $this->draws++;
+        ++$this->draws;
 
         return $this;
     }
@@ -214,7 +216,7 @@ class BundesligaTable
 
     public function addLoss(): self
     {
-        $this->losses++;
+        ++$this->losses;
 
         return $this;
     }
@@ -368,6 +370,26 @@ class BundesligaTable
         return $this;
     }
 
+    public function addPenalty(): self
+    {
+        ++$this->penalty;
+        if ($this->boardPoints && $this->boardPoints > 0) {
+            --$this->boardPoints;
+        }
+
+        return $this;
+    }
+
+    public function removePenalty(): self
+    {
+        if ($this->penalty && $this->penalty > 0) {
+            --$this->penalty;
+            ++$this->boardPoints;
+        }
+
+        return $this;
+    }
+
     public function getFirstBoardPoints(): ?int
     {
         return $this->firstBoardPoints;
@@ -376,6 +398,22 @@ class BundesligaTable
     public function setFirstBoardPoints(?int $firstBoardPoints): self
     {
         $this->firstBoardPoints = $firstBoardPoints;
+
+        return $this;
+    }
+
+    public function addFirstBoardPoints(): self
+    {
+        ++$this->firstBoardPoints;
+
+        return $this;
+    }
+
+    public function removeFirstBoardPoints(): self
+    {
+        if ($this->firstBoardPoints && $this->firstBoardPoints > 0) {
+            --$this->firstBoardPoints;
+        }
 
         return $this;
     }

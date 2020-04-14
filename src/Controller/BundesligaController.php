@@ -25,16 +25,23 @@ use App\Entity\Bundesliga\BundesligaPlayer;
 use App\Entity\Bundesliga\BundesligaRelegationMatch;
 use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
+use App\Entity\Bundesliga\BundesligaTable;
 use App\Entity\Bundesliga\LineupMail;
 use App\Entity\Bundesliga\ResultMail;
 use App\Form\CaptainResultInputType;
 use App\Form\CaptainTeamResultsType;
 use App\Form\Model\ResultModel;
 use App\Form\Model\TeamResultsModel;
+use App\Services\ActualTableService;
+use App\Services\BundesligaTableCreator;
 use App\Services\BundesligaTableService;
+use App\Services\BundesligaTableUpdater;
 use App\Services\Model\TableModel;
 use App\Services\TeamStatsService;
 use App\Services\UpdateBundesligaTable;
+use App\Services\UpdateTableLogic\TablePositioner;
+use App\Services\UpdateTableLogic\TableSorter;
+use App\Services\UpdateTableLogic\TableTendency;
 use App\Tools\Bundesliga\Model\TeamModel;
 use App\Tools\Bundesliga\TableCalculator;
 use App\Tools\PlayerStats;
@@ -150,7 +157,7 @@ class BundesligaController extends AbstractController
      *
      * @IsGranted("ROLE_NAKADE_TEAM")
      */
-    public function actualResults(Request $request, UpdateBundesligaTable $tableUpdate)
+    public function actualResults(Request $request, BundesligaTableCreator $tableCreator, BundesligaTableUpdater $tableUpdater)
     {
         $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
         if (!$actualSeason) {
@@ -173,13 +180,14 @@ class BundesligaController extends AbstractController
             foreach ($model->getResults() as $result) {
                 $this->getDoctrine()->getManager()->persist($result);
             }
-//todo bugfixing Nakade result
-            $tables = $tableUpdate->create($model);
+
+            $tables = $tableCreator->create($model->getResults());
+            $tables = $tableUpdater->update($tables);
             foreach ($tables as $table) {
                 $this->getDoctrine()->getManager()->persist($table);
             }
 
-         //   $this->getDoctrine()->getManager()->flush();
+            $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'bundesliga.actual.matchDay.update.success');
 
             return $this->redirect($request->getUri());
@@ -192,6 +200,63 @@ class BundesligaController extends AbstractController
                         'model' => $model,
                 ]
         );
+    }
+
+    /**
+     * @Route("/bundesliga/actualTable", name="bundesliga_actual_table")
+     *
+     * @IsGranted("ROLE_NAKADE_TEAM")
+     */
+    public function actualTable(Request $request, ActualTableService $tableService)
+    {
+        try {
+            $model = $tableService->retrieveTable();
+
+            return $this->render(
+                    'bundesliga/form.matchday.table.html.twig',
+                    [
+                        //   'form' => $form->createView(),
+                            'model' => $model,
+                    ]
+            );
+        } catch (\Exception $exception) {
+            var_dump($exception);
+        }
+    }
+
+    /**
+     * @Route("/bundesliga/table/update/{id}/{action}/{type}", name="bundesliga_update_table")
+     *
+     * @IsGranted("ROLE_USER")
+     */
+    public function updateTable(int $id, string $action, string $type, BundesligaTableUpdater $updater)
+    {
+        $repo = $this->getDoctrine()->getRepository(BundesligaTable::class);
+        $table = $repo->find($id);
+
+        if ('add' === $action) {
+            if ('firstBoardPoints' === $type) {
+                $table->addFirstBoardPoints();
+            }
+            if ('penalty' === $type) {
+                $table->addPenalty();
+            }
+        }
+        if ('remove' === $action) {
+            if ('firstBoardPoints' === $type) {
+                $table->removeFirstBoardPoints();
+            }
+            if ('penalty' === $type) {
+                $table->removePenalty();
+            }
+        }
+        $this->getDoctrine()->getManager()->flush();
+        $tables = $repo->findTablesBySeasonAndMatchDay($table->getBundesligaSeason(), $table->getMatchDay());
+
+        $updater->update($tables);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('bundesliga_actual_table');
     }
 
     /**

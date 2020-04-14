@@ -22,13 +22,17 @@ declare(strict_types=1);
 
 namespace App\Services\UpdateTableLogic;
 
-use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
 
 class TableTendency
 {
-    public function create(BundesligaSeason $season, array $tables)
+    /**
+     * @param array | BundesligaTable[] $tables
+     */
+    public function create(array $tables)
     {
+        $season = $tables[0]->getBundesligaSeason();
+
         /** @var BundesligaTable[] $tables */
         foreach ($tables as $table) {
             if (1 === $table->getPosition()) {

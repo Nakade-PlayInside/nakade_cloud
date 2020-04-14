@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('bundesliga') }}
+{% endblock %}
+{% block title %}Ergebnisse eintragen{% endblock %}
+
+{% block body %}
+
+    <h5 class="matchDay-info">Tabelle {{ model.season.title }} - Liga {{ model.season.league }}</h5>
+{#     {{ form_start(form) }}#}
+        <div>
+{#            {{ form_errors(form) }}#}
+        </div>
+
+        <div class="matchDay">
+            <fieldset><legend><span>{{ model.matchDay }}. Spieltag</span></legend>
+                <div class="table-responsive-sm d-inline-flex p-2">
+                <table  class="bundesliga table">
+                    <tr class="head">
+                        <td colspan ="3"></td>
+                        <td class="points" data-toggle="tooltip" data-placement="top" title="Punkte am ersten Brett">FP</td>
+                        <td style="text-align: center" data-toggle="tooltip" data-placement="top" title="edit"><i class="fa fa-fw fa-pencil"></i></td>
+                        <td class="board" data-toggle="tooltip" data-placement="top" title="Brettpunkte">BP</td>
+                        <td class="points" data-toggle="tooltip" data-placement="top" title="Strafpunkte">SP</td>
+                        <td style="text-align: center" data-toggle="tooltip" data-placement="top" title="edit"><i class="fa fa-fw fa-pencil"></i></td>
+                        <td class="points" data-toggle="tooltip" data-placement="top" title="Punkte">P</td>
+                    </tr>
+                    {% for  data in model.actualTable %}
+                        <tr class="{{ data.cSS }}">
+                            <td>{{ data.position }}</td>
+                            <td data-toggle="tooltip" data-placement="right" title='Tendenz'><img alt='Tendenz' src="/images/{{ data.imgSrc }}"></td>
+                            <td class="team">{{ data.bundesligaTeam.name }}</td>
+                            <td class="board">{{ data.firstBoardPoints }}</td>
+                            <td><a href="{{ path('bundesliga_update_table', { 'id': data.id, 'action': 'add', 'type': 'firstBoardPoints'}) }}" data-toggle="tooltip" data-placement="top" title="hinzufügen">
+                                    <i style="color:green" class="fa fa-fw fa-plus-circle"></i>
+                                </a>
+                                {% if data.firstBoardPoints and data.firstBoardPoints > 0 %}
+                                <a href="{{ path('bundesliga_update_table', { 'id': data.id, 'action': 'remove', 'type': 'firstBoardPoints'}) }}" data-toggle="tooltip" data-placement="top" title="entfernen">
+                                    <i style="color:red" class="fa fa-fw fa-minus-circle"></i>
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td class="board">{{ data.boardPoints }}</td>
+                            <td class="board">{{ data.penalty }}</td>
+                            <td><a href="{{ path('bundesliga_update_table', { 'id': data.id, 'action': 'add', 'type': 'penalty'}) }}" data-toggle="tooltip" data-placement="top" title="hinzufügen">
+                                    <i style="color:green" class="fa fa-fw fa-plus-circle"></i>
+                                </a>
+                                {% if data.penalty and data.penalty > 0 %}
+                                    <a href="{{ path('bundesliga_update_table', { 'id': data.id, 'action': 'remove', 'type': 'penalty'}) }}" data-toggle="tooltip" data-placement="top" title="entfernen">
+                                        <i style="color:red" class="fa fa-fw fa-minus-circle"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td class="points">{{ data.points }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            </fieldset>
+        </div>
+
+    {% if is_granted('ROLE_NAKADE_TEAM_MANAGER') %}
+
+    {% endif %}
+{#    {{ form_end(form) }}#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('bundesliga') }}
+    {{ encore_entry_script_tags('autocomplete') }}
+{% endblock %}

@@ -20,58 +20,59 @@ declare(strict_types=1);
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace App\Services\UpdateTableLogic;
+namespace App\Services;
 
+use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaTable;
 use App\Repository\Bundesliga\BundesligaTableRepository;
+use App\Services\UpdateTableLogic\TableGenerator;
+use App\Services\UpdateTableLogic\TableStatsGenerator;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class TablePositioner
+class BundesligaTableCreator
 {
-    private $repos;
+    private $tableGenerator;
+    private $statsGenerator;
 
-    public function __construct(BundesligaTableRepository $repos)
+    public function __construct(BundesligaTableRepository $repository)
     {
-        $this->repos = $repos;
+        $this->tableGenerator = new TableGenerator($repository);
+        $this->statsGenerator = new TableStatsGenerator();
     }
 
-    public function create(array $tables): void
+    /**
+     * @param array | BundesligaResults $results
+     *
+     * @return array | BundesligaTable[]
+     */
+    public function create(array $results): array
     {
-        /** @var BundesligaTable[] $tables */
-        $position = 1;
-        foreach ($tables as $table) {
-            //no prev position on first macth day
-            if ($table->getPosition()) {
-                $prevPosition = $this->findPreviousPosition($table);
-                $img = $this->createImg($position, $prevPosition);
-                $table->setImgSrc($img);
-            }
-            $table->setPosition($position);
-            ++$position;
+        $tables = [];
+        foreach ($results as $result) {
+            $pairing = $this->processResult($result);
+            $tables = array_merge($tables, $pairing);
         }
+
+        return $tables;
     }
 
-    private function findPreviousPosition(BundesligaTable $table): int
+    //update
+    //calculate position by points, board points and previous position
+    //compare to previous position for background and tendency
+
+    private function processResult(BundesligaResults $result): array
     {
-        $prevMatchDay = $table->getMatchDay() - 1;
-        $table = $this->repos->findTableByTeamAndMatchDay($table->getBundesligaSeason(), $table->getBundesligaTeam(), $prevMatchDay);
+        //generate new table
+        $home = $this->tableGenerator->createTable($result, $result->getHome());
+        $away = $this->tableGenerator->createTable($result, $result->getAway());
 
-        return $table->getPosition();
-    }
+        //create stats
+        $this->statsGenerator->create($home, $away, $result);
 
-    private function createImg(int $newPosition, int $prevPosition): string
-    {
-        if ($newPosition > $prevPosition) {
-            return BundesligaTable::IMG_POS_DOWN;
-        }
-        if ($newPosition < $prevPosition) {
-            return BundesligaTable::IMG_POS_UP;
-        }
-
-        return BundesligaTable::IMG_POS_SAME;
+        return [$home, $away];
     }
 }

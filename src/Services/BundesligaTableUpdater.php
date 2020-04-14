@@ -22,74 +22,41 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Entity\Bundesliga\BundesligaResults;
-use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
-use App\Form\Model\ResultModel;
-use App\Form\Model\TeamResultsModel;
-use App\Services\UpdateTableLogic\TableGenerator;
+use App\Repository\Bundesliga\BundesligaTableRepository;
 use App\Services\UpdateTableLogic\TablePositioner;
 use App\Services\UpdateTableLogic\TableSorter;
-use App\Services\UpdateTableLogic\TableStatsGenerator;
 use App\Services\UpdateTableLogic\TableTendency;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class UpdateBundesligaTable
+class BundesligaTableUpdater
 {
-    private $manager;
-    private $tableGenerator;
-    private $statsGenerator;
     private $sorter;
     private $positioner;
     private $tendency;
 
-    public function __construct(EntityManagerInterface $manager, TableGenerator $tableGenerator)
+    public function __construct(BundesligaTableRepository $repository)
     {
-        $this->manager = $manager;
-        $this->tableGenerator = $tableGenerator;
-
-        $this->statsGenerator = new TableStatsGenerator();
         $this->sorter = new TableSorter();
-        $this->positioner = new TablePositioner();
+        $this->positioner = new TablePositioner($repository);
         $this->tendency = new TableTendency();
     }
 
     /**
+     * @param array | BundesligaTable[]
+     *
      * @return array | BundesligaTable[]
      */
-    public function create(TeamResultsModel $model): array
+    public function update(array $tables): array
     {
-        $tables = [];
-        foreach ($model->getResults() as $result) {
-            $pairing = $this->processResult($result);
-            $tables = array_merge($tables, $pairing);
-        }
-
         $this->sorter->sortTable($tables);
         $this->positioner->create($tables);
-        $this->tendency->create($model->getSeason(), $tables);
+        $this->tendency->create($tables);
 
         return $tables;
-    }
-
-    //update
-    //calculate position by points, board points and previous position
-    //compare to previous position for background and tendency
-
-    private function processResult(BundesligaResults $result): array
-    {
-        //generate new table
-        $home = $this->tableGenerator->createTable($result, $result->getHome());
-        $away = $this->tableGenerator->createTable($result, $result->getAway());
-
-        //create stats
-        $this->statsGenerator->create($home, $away, $result);
-
-        return [$home, $away];
     }
 }

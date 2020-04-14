@@ -95,4 +95,19 @@ class BundesligaTableRepository extends ServiceEntityRepository
                 ->getResult()
                 ;
     }
+
+    /**
+     * @return BundesligaTable[] array
+     */
+    public function findTablesBySeasonAndMatchDay(BundesligaSeason $season, int $matchDay): array
+    {
+        return $this->createQueryBuilder('t')
+                ->andWhere('t.bundesligaSeason=:season')
+                ->andWhere('t.matchDay=:matchDay')
+                ->setParameter('season', $season)
+                ->setParameter('matchDay', $matchDay)
+                ->getQuery()
+                ->getResult()
+                ;
+    }
 }
