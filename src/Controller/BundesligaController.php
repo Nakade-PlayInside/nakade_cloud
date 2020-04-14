@@ -151,7 +151,6 @@ class BundesligaController extends AbstractController
      */
     public function actualResults(Request $request, TeamResultsModelCreator $modelCreator, BundesligaTableCreator $tableCreator, BundesligaTableUpdater $tableUpdater)
     {
-        try {
             $model = $modelCreator->create();
             $form = $this->createForm(CaptainTeamResultsType::class, $model);
             $form->handleRequest($request);
@@ -185,9 +184,6 @@ class BundesligaController extends AbstractController
                             'model' => $model,
                     ]
             );
-        } catch (\Exception $e) {
-            dd($e);
-        }
     }
 
     /**
