@@ -22,53 +22,43 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Entity\Bundesliga\BundesligaResults;
-use App\Entity\Bundesliga\BundesligaTable;
-use App\Repository\Bundesliga\BundesligaTableRepository;
-use App\Services\UpdateTableLogic\TableGenerator;
-use App\Services\UpdateTableLogic\TableStatsGenerator;
+use App\Form\Model\TeamResultsModel;
+use App\Repository\Bundesliga\BundesligaResultsRepository;
+use App\Repository\Bundesliga\BundesligaSeasonRepository;
 
 /**
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2020 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class BundesligaTableCreator
+class TeamResultsModelCreator
 {
-    private $tableGenerator;
-    private $statsGenerator;
+    private $resultsRepository;
+    private $seasonRepository;
 
-    public function __construct(BundesligaTableRepository $repository)
+    public function __construct(BundesligaSeasonRepository $seasonRepository, BundesligaResultsRepository $resultsRepository)
     {
-        $this->tableGenerator = new TableGenerator($repository);
-        $this->statsGenerator = new TableStatsGenerator();
+        $this->resultsRepository = $resultsRepository;
+        $this->seasonRepository = $seasonRepository;
     }
 
-    /**
-     * @param array | BundesligaResults $results
-     *
-     * @return array | BundesligaTable[]
-     */
-    public function create(array $results): array
+    public function create(): ?TeamResultsModel
     {
-        $tables = [];
-        foreach ($results as $result) {
-            $pairing = $this->processResult($result);
-            $tables = array_merge($tables, $pairing);
+        $actualSeason = $this->seasonRepository->findOneBy(['actualSeason' => true]);
+        if (!$actualSeason) {
+            return null;
         }
 
-        return $tables;
-    }
+        $matchDay = $this->resultsRepository->findActualMatchDay($actualSeason);
+        if (!$matchDay) {
+            return null;
+        }
 
-    private function processResult(BundesligaResults $result): array
-    {
-        //generate new table
-        $home = $this->tableGenerator->createTable($result, $result->getHome());
-        $away = $this->tableGenerator->createTable($result, $result->getAway());
+        $results = $this->resultsRepository->findResultsByMatchDay($actualSeason, (int) $matchDay);
+        if (!$results) {
+            return null;
+        }
 
-        //create stats
-        $this->statsGenerator->create($home, $away, $result);
-
-        return [$home, $away];
+        return new TeamResultsModel($results);
     }
 }

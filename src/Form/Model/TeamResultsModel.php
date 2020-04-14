@@ -124,4 +124,18 @@ class TeamResultsModel
     {
         return $this->getResults()[4];
     }
+
+    public function isComplete(): bool
+    {
+        foreach ($this->results as $result) {
+            if (!$result->getBoardPointsHome() || !$result->getBoardPointsAway()) {
+                return false;
+            }
+            if (0 === $result->getBoardPointsHome() && 0 === $result->getBoardPointsAway()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

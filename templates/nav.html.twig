@@ -23,14 +23,14 @@
             {% if is_granted('ROLE_USER') %}
                 <li class="nav-item dropdown" style="margin-right: 75px;">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Bundesliga
+                        {% if is_match_day_complete() %}<i style="color:limegreen" class="fa fa-fw fa-bell"></i>{% endif %}Bundesliga
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{{ path('bundesliga_season_archive') }}"><i class="fa fa-fw fa-calendar"></i> {{'navigation.bundesliga.tables'|trans({}, 'messages') }}</a>
                         <a class="dropdown-item" href="{{ path('bundesliga_season_stats_team') }}"><i class="fa fa-fw fa-bar-chart"></i> {{'navigation.bundesliga.team.stats'|trans({}, 'messages') }}</a>
                         {% if is_granted('ROLE_NAKADE_TEAM') %}
-                            <a class="dropdown-item" href="{{ path('bundesliga_actual_table') }}"><i class="fa fa-fw fa-calendar-o"></i> Aktuelle Tabelle</a>
-                            <a class="dropdown-item" href="{{ path('bundesliga_actual_results') }}"><i class="fa fa-fw fa-calendar-o"></i> Aktuelle Ergebnisse</a>
+                            {% if true %}<a class="dropdown-item" href="{{ path('bundesliga_actual_table') }}"><i class="fa fa-fw fa-calendar-o"></i> Aktuelle Tabelle</a>{% endif %}
+                            {% if is_match_day_complete() %}<a class="dropdown-item" href="{{ path('bundesliga_actual_results') }}"><i class="fa fa-fw fa-calendar-o"></i> Aktuelle Ergebnisse</a>{% endif %}
                             <a class="dropdown-item" href="{{ path('bundesliga_actual_matchDay') }}"><i class="fa fa-fw fa-calendar-o"></i> Aktueller Spieltag</a>
                         {% endif %}
                     </div>

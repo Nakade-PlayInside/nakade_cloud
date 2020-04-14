@@ -72,11 +72,7 @@ class TableStatsGenerator
 
     private function isPlayed(BundesligaResults $result): bool
     {
-        if (!$result->getBoardPointsHome() || !$result->getBoardPointsAway()) {
-            return false;
-        }
-
-        if (0 === $result->getBoardPointsHome() && 0 === $result->getBoardPointsAway()) {
+        if (empty($result->getBoardPointsHome()) && empty($result->getBoardPointsAway())) {
             return false;
         }
 

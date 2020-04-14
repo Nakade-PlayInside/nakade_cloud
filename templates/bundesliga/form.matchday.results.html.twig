@@ -29,8 +29,11 @@
         </div>
 
     {% if is_granted('ROLE_NAKADE_TEAM_MANAGER') %}
+    {% if is_match_day_complete()==false %}
+        <h6 style="color:red">Zuerst die Ergebnisse unserer Mannschaft <a href="{{ path('bundesliga_actual_matchDay') }}">hier</a> eintragen!</h6>
+    {% endif %}
     <div class="matchDay-buttons">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary"{% if is_match_day_complete()==false %} disabled="disabled"{% endif %}>
             <span class="btn-label"> Update</span>
         </button>
     </div>

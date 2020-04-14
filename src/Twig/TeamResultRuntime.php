@@ -1,8 +1,10 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
- * Copyright (c) 2019 Dr. Holger Maerz
+ * Copyright (c) 2020 Dr. Holger Maerz
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -17,32 +19,28 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace App\Validator;
 
-use App\Entity\Bundesliga\BundesligaResults;
-use App\Form\Model\TeamResultsModel;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
+namespace App\Twig;
 
-class TeamResultValidator extends ConstraintValidator
+use App\Services\ResultModelCreator;
+use App\Services\TeamResultsModelCreator;
+use Twig\Extension\RuntimeExtensionInterface;
+
+class TeamResultRuntime implements RuntimeExtensionInterface
 {
-    public function validate($object, Constraint $constraint) {
-        /* @var $constraint \App\Validator\TeamResult */
-        if (!assert($object instanceof TeamResultsModel)) {
-            return;
+    private $creator;
+
+    public function __construct(TeamResultsModelCreator $creator)
+    {
+        $this->creator = $creator;
+    }
+
+    public function isComplete(): bool
+    {
+        if (!$model = $this->creator->create()) {
+            return false;
         }
 
-        if (null === $object || '' === $object) {
-            return;
-        }
-
-        /** @var BundesligaResults $result */
-        foreach ($object->getResults() as $result) {
-            if (empty($result->getBoardPointsHome()) && empty($result->getBoardPointsAway())) {
-                $this->context->buildViolation($constraint->message)->addViolation();
-
-                return;
-            }
-        }
+        return $model->isComplete();
     }
 }

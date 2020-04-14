@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @license MIT License <https://opensource.org/licenses/MIT>
  *
@@ -17,32 +19,33 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace App\Validator;
 
-use App\Entity\Bundesliga\BundesligaResults;
-use App\Form\Model\TeamResultsModel;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
+namespace App\Twig;
 
-class TeamResultValidator extends ConstraintValidator
+use App\Services\ResultModelCreator;
+use App\Services\TeamResultsModelCreator;
+use Twig\TwigFunction;
+
+class BundesligaCaptainExtension extends \Twig_Extension
 {
-    public function validate($object, Constraint $constraint) {
-        /* @var $constraint \App\Validator\TeamResult */
-        if (!assert($object instanceof TeamResultsModel)) {
-            return;
-        }
+    private $resultModelCreator;
+    private $teamResultsModelCreator;
 
-        if (null === $object || '' === $object) {
-            return;
-        }
+    public function __construct(ResultModelCreator $resultModelCreator, TeamResultsModelCreator $teamResultsModelCreator)
+    {
+        $this->resultModelCreator = $resultModelCreator;
+        $this->teamResultsModelCreator = $teamResultsModelCreator;
+    }
 
-        /** @var BundesligaResults $result */
-        foreach ($object->getResults() as $result) {
-            if (empty($result->getBoardPointsHome()) && empty($result->getBoardPointsAway())) {
-                $this->context->buildViolation($constraint->message)->addViolation();
-
-                return;
-            }
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions()
+    {
+        return [
+              //  new TwigFunction('bundesliga_get_match_result', [$this, 'getMatchResult']),
+                new TwigFunction('is_match_day_complete', [MatchDayRuntime::class, 'isComplete']),
+                new TwigFunction('is_team_results_complete', [TeamResultRuntime::class, 'isComplete']),
+        ];
     }
 }

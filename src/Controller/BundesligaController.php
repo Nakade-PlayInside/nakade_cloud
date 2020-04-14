@@ -20,10 +20,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Bundesliga\BundesligaMatch;
 use App\Entity\Bundesliga\BundesligaPlayer;
-use App\Entity\Bundesliga\BundesligaRelegationMatch;
-use App\Entity\Bundesliga\BundesligaResults;
 use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
 use App\Entity\Bundesliga\LineupMail;
@@ -37,18 +34,18 @@ use App\Services\BundesligaTableCreator;
 use App\Services\BundesligaTableService;
 use App\Services\BundesligaTableUpdater;
 use App\Services\Model\TableModel;
+use App\Services\ResultModelCreator;
+use App\Services\TeamResultsModelCreator;
 use App\Services\TeamStatsService;
-use App\Services\UpdateBundesligaTable;
-use App\Services\UpdateTableLogic\TablePositioner;
-use App\Services\UpdateTableLogic\TableSorter;
-use App\Services\UpdateTableLogic\TableTendency;
 use App\Tools\Bundesliga\Model\TeamModel;
 use App\Tools\Bundesliga\TableCalculator;
 use App\Tools\PlayerStats;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BundesligaController extends AbstractController
@@ -99,21 +96,15 @@ class BundesligaController extends AbstractController
     }
 
     /**
+     * Team lineup and results.
+     *
      * @Route("/bundesliga/actualMatchDay", name="bundesliga_actual_matchDay")
      *
      * @IsGranted("ROLE_NAKADE_TEAM")
      */
-    public function actualMatchDay(Request $request)
+    public function actualMatchDay(Request $request, ResultModelCreator $modelCreator)
     {
-        $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
-        if (!$actualSeason) {
-            return $actualSeason;
-        }
-
-        $matchDay = $this->getDoctrine()->getRepository(BundesligaResults::class)->findActualMatchDay($actualSeason);
-        $results = $this->getDoctrine()->getRepository(BundesligaResults::class)->findNakadeResult($actualSeason->getId(), $matchDay);
-
-        $model = new ResultModel($results);
+        $model = $modelCreator->create();
         $form = $this->createForm(CaptainResultInputType::class, $model);
         $form->handleRequest($request);
 
@@ -129,14 +120,15 @@ class BundesligaController extends AbstractController
 
             //create mail if not existing
             if (!$model->getResults()->getResultMail()) {
-                $mail = new ResultMail($results);
+                $mail = new ResultMail($model->getResults());
                 $this->getDoctrine()->getManager()->persist($mail);
             }
             //create mail if not existing
             if (!$model->getResults()->getLineupMail()) {
-                $lineupMail = new LineupMail($results);
+                $lineupMail = new LineupMail($model->getResults());
                 $this->getDoctrine()->getManager()->persist($lineupMail);
             }
+
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'bundesliga.actual.matchDay.update.success');
 
@@ -157,49 +149,45 @@ class BundesligaController extends AbstractController
      *
      * @IsGranted("ROLE_NAKADE_TEAM")
      */
-    public function actualResults(Request $request, BundesligaTableCreator $tableCreator, BundesligaTableUpdater $tableUpdater)
+    public function actualResults(Request $request, TeamResultsModelCreator $modelCreator, BundesligaTableCreator $tableCreator, BundesligaTableUpdater $tableUpdater)
     {
-        $actualSeason = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
-        if (!$actualSeason) {
-            return $actualSeason;
+        try {
+            $model = $modelCreator->create();
+            $form = $this->createForm(CaptainTeamResultsType::class, $model);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $model = $form->getData();
+                if (!assert($model instanceof TeamResultsModel)) {
+                    throw new UnexpectedTypeException($model, TeamResultsModel::class);
+                }
+
+                foreach ($model->getResults() as $result) {
+                    $this->getDoctrine()->getManager()->persist($result);
+                }
+
+                $tables = $tableCreator->create($model->getResults());
+                $tables = $tableUpdater->update($tables);
+                foreach ($tables as $table) {
+                    $this->getDoctrine()->getManager()->persist($table);
+                }
+
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', 'bundesliga.actual.matchDay.update.success');
+
+                return $this->redirect($request->getUri());
+            }
+
+            return $this->render(
+                    'bundesliga/form.matchday.results.html.twig',
+                    [
+                            'form' => $form->createView(),
+                            'model' => $model,
+                    ]
+            );
+        } catch (\Exception $e) {
+            dd($e);
         }
-
-        $matchDay = $this->getDoctrine()->getRepository(BundesligaResults::class)->findActualMatchDay($actualSeason);
-        $results = $this->getDoctrine()->getRepository(BundesligaResults::class)->findResultsByMatchDay($actualSeason, $matchDay);
-
-        $model = new TeamResultsModel($results);
-        $form = $this->createForm(CaptainTeamResultsType::class, $model);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $model = $form->getData();
-            if (!assert($model instanceof TeamResultsModel)) {
-                throw new UnexpectedTypeException($model, TeamResultsModel::class);
-            }
-
-            foreach ($model->getResults() as $result) {
-                $this->getDoctrine()->getManager()->persist($result);
-            }
-
-            $tables = $tableCreator->create($model->getResults());
-            $tables = $tableUpdater->update($tables);
-            foreach ($tables as $table) {
-                $this->getDoctrine()->getManager()->persist($table);
-            }
-
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'bundesliga.actual.matchDay.update.success');
-
-            return $this->redirect($request->getUri());
-        }
-
-        return $this->render(
-            'bundesliga/form.matchday.results.html.twig',
-            [
-                        'form' => $form->createView(),
-                        'model' => $model,
-                ]
-        );
     }
 
     /**
@@ -207,29 +195,19 @@ class BundesligaController extends AbstractController
      *
      * @IsGranted("ROLE_NAKADE_TEAM")
      */
-    public function actualTable(Request $request, ActualTableService $tableService)
+    public function actualTable(ActualTableService $tableService): Response
     {
-        try {
-            $model = $tableService->retrieveTable();
+        $model = $tableService->retrieveTable();
 
-            return $this->render(
-                    'bundesliga/form.matchday.table.html.twig',
-                    [
-                        //   'form' => $form->createView(),
-                            'model' => $model,
-                    ]
-            );
-        } catch (\Exception $exception) {
-            var_dump($exception);
-        }
+        return $this->render('bundesliga/form.matchday.table.html.twig', ['model' => $model]);
     }
 
     /**
-     * @Route("/bundesliga/table/update/{id}/{action}/{type}", name="bundesliga_update_table")
+     * @Route("/bundesliga/table/update/{id}/{action}/{type}", name="bundesliga_update_table", requirements={"id"="\d+", "action"="add|remove", "type"="firstBoardPoints|penalty"})
      *
      * @IsGranted("ROLE_USER")
      */
-    public function updateTable(int $id, string $action, string $type, BundesligaTableUpdater $updater)
+    public function updateTable(int $id, string $action, string $type, BundesligaTableUpdater $updater): RedirectResponse
     {
         $repo = $this->getDoctrine()->getRepository(BundesligaTable::class);
         $table = $repo->find($id);
