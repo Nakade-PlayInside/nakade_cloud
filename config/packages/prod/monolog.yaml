@@ -5,47 +5,22 @@ monolog:
             action_level: error
             handler: nested
             excluded_http_codes: [404, 405]
+            buffer_size: 50 # How many messages should be saved? Prevent memory leaks
         nested:
-            type: rotating_file
+            type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: info
-            max_files: 10
+            level: debug
         console:
             type: console
             process_psr_3_messages: false
             channels: ["!event", "!doctrine"]
-        deprecation:
-            type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
-        deprecation_filter:
-            type: filter
-            handler: deprecation
-            max_level: info
-            channels: ["php"]
-        mail_logging:
-            # log all messages (since debug is the lowest level)
-            level:    error
-            type:     rotating_file
-            path:     '%kernel.logs_dir%/mails.log'
-            channels: ["mails"]
-            max_files: 10
-        grabber_logging:
-            # log all messages (since debug is the lowest level)
-            level:    error
-            type:     rotating_file
-            path:     '%kernel.logs_dir%/grabber.log'
-            channels: ["grabber"]
-            max_files: 10
-        profile_logging:
-            # log all messages (since debug is the lowest level)
-            level:    error
-            type:     rotating_file
-            path:     '%kernel.logs_dir%/profile.log'
-            channels: ["profile"]
-            max_files: 10
-        kgs_logging:
-            # log all messages (since debug is the lowest level)
-            level:    error
-            type:     stream
-            path:     '%kernel.logs_dir%/kgsArchives.log'
-            channels: ["kgsArchives"]
+
+        # Uncomment to log deprecations
+        #deprecation:
+        #    type: stream
+        #    path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+        #deprecation_filter:
+        #    type: filter
+        #    handler: deprecation
+        #    max_level: info
+        #    channels: ["php"]
