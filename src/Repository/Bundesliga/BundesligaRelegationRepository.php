@@ -24,7 +24,7 @@ namespace App\Repository\Bundesliga;
 use App\Entity\Bundesliga\BundesligaRelegation;
 use App\Entity\Bundesliga\BundesligaTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr;
 
 /**

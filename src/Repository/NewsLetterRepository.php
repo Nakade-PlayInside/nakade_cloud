@@ -23,7 +23,7 @@ namespace App\Repository;
 
 use App\Entity\NewsLetter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method NewsLetter|null find($id, $lockMode = null, $lockVersion = null)

@@ -23,7 +23,7 @@ namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaPlayer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method BundesligaPlayer|null find($id, $lockMode = null, $lockVersion = null)

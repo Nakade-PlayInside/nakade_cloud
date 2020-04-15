@@ -22,7 +22,7 @@ namespace App\Repository;
 
 use App\Entity\ContactReply;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method ContactReply|null find($id, $lockMode = null, $lockVersion = null)

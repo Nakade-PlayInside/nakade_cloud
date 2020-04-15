@@ -4,7 +4,7 @@ namespace App\Repository\Bundesliga;
 
 use App\Entity\Bundesliga\BundesligaSgf;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method BundesligaSgf|null find($id, $lockMode = null, $lockVersion = null)

@@ -27,7 +27,7 @@ use App\Entity\Bundesliga\BundesligaTeam;
 use App\Services\Model\ResultsModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr;
 
 /**
