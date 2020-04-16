@@ -21,7 +21,6 @@
 namespace App\Command;
 
 use App\Repository\Bundesliga\BundesligaSeasonRepository;
-use App\Tools\DGoB\Transfer\ArchiveTransfer;
 use App\Tools\DGoB\Transfer\MatchDatesTransfer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,7 +56,7 @@ class MatchDatesGrabberCommand extends Command
         if (!$actualSeason) {
             $io->comment('No actual season found. Abort!');
 
-            return;
+            return 1;
         }
 
         // $transfer->transfer('2019_2020', '2');
@@ -65,9 +64,11 @@ class MatchDatesGrabberCommand extends Command
         if (!$table) {
             $io->comment('New season still not set. Probably Next time!');
 
-            return;
+            return 1;
         }
 
         $io->success('New season found. Match dates added!');
+
+        return 0;
     }
 }

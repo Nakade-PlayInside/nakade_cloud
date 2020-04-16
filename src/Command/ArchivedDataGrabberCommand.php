@@ -68,9 +68,11 @@ class ArchivedDataGrabberCommand extends Command
         if (!$table) {
             $io->caution('No data found! Did you provide correct data?');
 
-            return;
+            return 1;
         }
 
         $io->success('Data found and stored!');
+
+        return 0;
     }
 }

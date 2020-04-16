@@ -66,7 +66,7 @@ class NewsDeliverCommand extends Command
         if ($sendDate > new \DateTime()) {
             $io->caution('Delivery date is not yet.');
 
-            return;
+            return 1;
         }
 
         //news was already sent
@@ -74,7 +74,7 @@ class NewsDeliverCommand extends Command
         if ($newsletter) {
             $io->comment('News already delivered.');
 
-            return;
+            return 1;
         }
 
         $allReaders = $this->entityManager->getRepository(NewsReader::class)->findAll();
@@ -88,6 +88,8 @@ class NewsDeliverCommand extends Command
         $this->newsDeliverer->deliver($dueDate, $allReaders);
 
         $io->success('News delivered.');
+
+        return 0;
     }
 
     private function createDueDate(string $strDate): \DateTime

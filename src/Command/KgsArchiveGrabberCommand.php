@@ -64,5 +64,7 @@ class KgsArchiveGrabberCommand extends Command
         }
 
         $io->success('finished.');
+
+        return 0;
     }
 }

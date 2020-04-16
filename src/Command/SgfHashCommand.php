@@ -65,5 +65,7 @@ class SgfHashCommand extends Command
         $this->entityManager->flush();
 
         $io->success('finished.');
+
+        return 0;
     }
 }

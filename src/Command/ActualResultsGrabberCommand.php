@@ -56,15 +56,17 @@ class ActualResultsGrabberCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->warning('Disabled due to changes on the target website.');
-        return;
+        return 1;
 
         $table = $this->grabber->retrieveTable();
         if (!$table) {
             $io->caution('New results still not set. Probably Next time!');
 
-            return;
+            return 1;
         }
 
         $io->success('New results found.');
+
+        return 0;
     }
 }

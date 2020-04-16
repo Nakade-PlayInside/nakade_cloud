@@ -50,5 +50,7 @@ class CoronaNewsDeliverCommand extends Command
         $this->mail->handle();
 
         $io->success('News delivered.');
+
+        return 0;
     }
 }
