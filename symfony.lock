@@ -208,6 +208,9 @@
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/event-dispatcher": {
+        "version": "1.0.0"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
@@ -291,9 +294,6 @@
         ]
     },
     "symfony/css-selector": {
-        "version": "v4.2.8"
-    },
-    "symfony/debug": {
         "version": "v4.2.8"
     },
     "symfony/debug-bundle": {
@@ -520,6 +520,15 @@
         "files": [
             "config/packages/security.yaml"
         ]
+    },
+    "symfony/security-core": {
+        "version": "v5.0.7"
+    },
+    "symfony/security-csrf": {
+        "version": "v5.0.7"
+    },
+    "symfony/security-guard": {
+        "version": "v5.0.7"
     },
     "symfony/security-http": {
         "version": "v4.2.8"
