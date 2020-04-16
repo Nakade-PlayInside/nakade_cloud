@@ -30,3 +30,7 @@ yarn-error.log
 
 project.properties
 .reCaptchaKeys
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
