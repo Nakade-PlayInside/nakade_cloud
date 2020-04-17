@@ -22,7 +22,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Services\UpdateTableLogic;
 
+use App\Entity\Bundesliga\BundesligaSeason;
 use App\Entity\Bundesliga\BundesligaTable;
+use App\Entity\Bundesliga\BundesligaTeam;
+use App\Repository\Bundesliga\BundesligaTableRepository;
 use App\Services\UpdateTableLogic\TablePositioner;
 use PHPUnit\Framework\TestCase;
 
@@ -37,58 +40,88 @@ class TablePositionerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->positioner = new TablePositioner();
+        $mock = $this->createRepo();
+        $this->positioner = new TablePositioner($mock);
     }
 
     public function testPositionSetting()
     {
-        $tables = $this->generate(3);
+        $tables = $this->generateTables();
         $this->positioner->create($tables);
 
-        $first = array_shift($tables);
-        $this->assertEquals(1, $first->getPosition());
-
-        $last = array_pop($tables);
-        $this->assertEquals(3, $last->getPosition());
+        $i = 1;
+        /** @var BundesligaTable $table */
+        foreach ($tables as $table) {
+            $this->assertEquals($i++, $table->getPosition());
+        }
     }
 
     public function testDefaultImgSetting()
     {
-        $tables = $this->generate(3);
+        $tables = $this->generateTables();
         $this->positioner->create($tables);
 
-        $first = array_shift($tables);
-        $this->assertEquals(BundesligaTable::IMG_POS_SAME, $first->getImgSrc());
-
-        $last = array_pop($tables);
-        $this->assertEquals(BundesligaTable::IMG_POS_SAME, $last->getImgSrc());
+        /** @var BundesligaTable $table */
+        foreach ($tables as $table) {
+            $this->assertEquals(BundesligaTable::IMG_POS_SAME, $table->getImgSrc());
+        }
     }
 
     public function testImgSettingOnPositionChange()
     {
-        $tables = $this->generate(3, 2);
-        $this->positioner->create($tables);
+        $table = (new BundesligaTable())->setPosition(2);
+
+        $mock = $this->createRepo($table);
+        $positioner = new TablePositioner($mock);
+
+        $tables = $this->generateTables(2);
+        $positioner->create($tables);
 
         $first = array_shift($tables);
         $this->assertEquals(BundesligaTable::IMG_POS_UP, $first->getImgSrc());
 
+        $second = array_shift($tables);
+        $this->assertEquals(BundesligaTable::IMG_POS_SAME, $second->getImgSrc());
+
         $last = array_pop($tables);
         $this->assertEquals(BundesligaTable::IMG_POS_DOWN, $last->getImgSrc());
+    }
 
-        $middle = array_shift($tables);
-        $this->assertEquals(BundesligaTable::IMG_POS_SAME, $middle->getImgSrc());
+    private function createRepo(BundesligaTable $table = null): BundesligaTableRepository
+    {
+        $mock = $this->getMockBuilder(BundesligaTableRepository::class)->disableOriginalConstructor()->getMock();
+        $mock->expects(static::any())->method('findTableByTeamAndMatchDay')->willReturn($table);
+
+        /* @var BundesligaTableRepository $mock */
+        return $mock;
+    }
+
+    private function createSeason(): BundesligaSeason
+    {
+        /** @var BundesligaSeason $mock */
+        $mock = $this->getMockBuilder(BundesligaSeason::class)->disableOriginalConstructor()->getMock();
+        return $mock;
+    }
+
+    private function createTeam(): BundesligaTeam
+    {
+        /** @var BundesligaTeam $mock */
+        $mock = $this->getMockBuilder(BundesligaTeam::class)->disableOriginalConstructor()->getMock();
+        return $mock;
     }
 
     /**
      * @return BundesligaTable[]
      */
-    private function generate(int $count, int $prevPosition = null): array
+    private function generateTables(int $prevPosition = null): array
     {
         $tables = [];
-        for ($i = 0; $i < $count; ++$i) {
+        for ($i = 0; $i < 8; ++$i) {
             $table = new BundesligaTable();
             if ($prevPosition) {
                 $table->setPosition($prevPosition);
+                $table->setBundesligaSeason($this->createSeason());
+                $table->setBundesligaTeam($this->createTeam());
             }
             $tables[] = $table;
         }

@@ -35,56 +35,79 @@ use PHPUnit\Framework\TestCase;
 class TableTendencyTest extends TestCase
 {
     private $tendency = null;
-    private $tables = null;
 
     public function setUp(): void
     {
-        $this->tables = $this->createTables();
         $this->tendency = new TableTendency();
     }
 
-    /**
-     * @dataProvider tendencyProvider
-     */
-    public function testTendencySecondLeague()
+    public function testTendencyFirstLeague()
     {
-        $season = $this->createSeason('2');
-        $this->tendency->create($season, $this->tables);
+        $tables = $this->createTables('1');
+        $this->tendency->create($tables);
 
-        $this->assertEquals(BundesligaTable::TENDENCY_CHAMPION, $this->tables[1]->getTendency());
-        $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $this->tables[2]->getTendency());
-
-        if ('5' === $season->getLeague()) {
-            $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $this->tables[3]->getTendency());
-            $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $this->tables[4]->getTendency());
-        } else {
-            $this->assertNull($this->tables[3]->getTendency());
-            $this->assertNull($this->tables[4]->getTendency());
-        }
-        $this->assertNull($this->tables[5]->getTendency());
-        $this->assertNull($this->tables[6]->getTendency());
-        $this->assertNull($this->tables[7]->getTendency());
-
-        if ('2' === $season->getLeague()) {
-            $this->assertEquals(BundesligaTable::TENDENCY_RELEGATION, $this->tables[8]->getTendency());
-        } else {
-            $this->assertNull($this->tables[8]->getTendency());
-        }
-
-        if ('5' !== $season->getLeague()) {
-            $this->assertEquals(BundesligaTable::TENDENCY_ABSTEIGER, $this->tables[9]->getTendency());
-            $this->assertEquals(BundesligaTable::TENDENCY_ABSTEIGER, $this->tables[10]->getTendency());
-        } else {
-            $this->assertNull($this->tables[9]->getTendency());
-            $this->assertNull($this->tables[10]->getTendency());
-        }
+        $this->assertEquals(BundesligaTable::TENDENCY_CHAMPION, $tables[0]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $tables[1]->getTendency());
+        $this->assertNull($tables[2]->getTendency());
+        $this->assertNull($tables[3]->getTendency());
+        $this->assertNull($tables[3]->getTendency());
+        $this->assertNull($tables[4]->getTendency());
+        $this->assertNull($tables[5]->getTendency());
+        $this->assertNull($tables[6]->getTendency());
+        $this->assertNull($tables[7]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_ABSTEIGER, $tables[8]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_ABSTEIGER, $tables[9]->getTendency());
     }
 
-    public function tendencyProvider(): array
+    public function testTendencySecondLeague()
     {
-        return [
-                ['1'], ['2'], ['3a'], ['3b'], ['4a'], ['4b'], ['5'],
-        ];
+        $tables = $this->createTables('2');
+        $this->tendency->create($tables);
+
+        $this->assertEquals(BundesligaTable::TENDENCY_CHAMPION, $tables[0]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $tables[1]->getTendency());
+        $this->assertNull($tables[2]->getTendency());
+        $this->assertNull($tables[3]->getTendency());
+        $this->assertNull($tables[4]->getTendency());
+        $this->assertNull($tables[5]->getTendency());
+        $this->assertNull($tables[6]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_RELEGATION, $tables[7]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_ABSTEIGER, $tables[8]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_ABSTEIGER, $tables[9]->getTendency());
+    }
+
+    public function testTendencyThirdLeague()
+    {
+        $tables = $this->createTables('3a');
+        $this->tendency->create($tables);
+
+        $this->assertEquals(BundesligaTable::TENDENCY_CHAMPION, $tables[0]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $tables[1]->getTendency());
+        $this->assertNull($tables[2]->getTendency());
+        $this->assertNull($tables[3]->getTendency());
+        $this->assertNull($tables[4]->getTendency());
+        $this->assertNull($tables[5]->getTendency());
+        $this->assertNull($tables[6]->getTendency());
+        $this->assertNull($tables[7]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_ABSTEIGER, $tables[8]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_ABSTEIGER, $tables[9]->getTendency());
+    }
+
+    public function testTendencyFithLeague()
+    {
+        $tables = $this->createTables('5');
+        $this->tendency->create($tables);
+
+        $this->assertEquals(BundesligaTable::TENDENCY_CHAMPION, $tables[0]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $tables[1]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $tables[2]->getTendency());
+        $this->assertEquals(BundesligaTable::TENDENCY_AUFSTEIGER, $tables[3]->getTendency());
+        $this->assertNull($tables[4]->getTendency());
+        $this->assertNull($tables[5]->getTendency());
+        $this->assertNull($tables[6]->getTendency());
+        $this->assertNull($tables[7]->getTendency());
+        $this->assertNull($tables[8]->getTendency());
+        $this->assertNull($tables[9]->getTendency());
     }
 
     private function createSeason(string $league = '1'): BundesligaSeason
@@ -99,11 +122,12 @@ class TableTendencyTest extends TestCase
     /**
      * @return BundesligaTable[]|array
      */
-    private function createTables(): array
+    private function createTables(string $league): array
     {
+        $season = $this->createSeason($league);
         $tables = [];
-        for ($i = 1; $i <= 10; ++$i) {
-            $tables[$i] = (new BundesligaTable())->setPosition($i);
+        for ($i = 0; $i <= 9; ++$i) {
+            $tables[$i] = (new BundesligaTable())->setPosition($i+1)->setBundesligaSeason($season);
         }
 
         return $tables;

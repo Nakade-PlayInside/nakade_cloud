@@ -44,8 +44,8 @@ class TablePositioner
         /** @var BundesligaTable[] $tables */
         $position = 1;
         foreach ($tables as $table) {
-            //no prev position on first macth day
-            if ($table->getPosition()) {
+            //no prev position on first match day
+            if (!empty($table->getPosition())) {
                 $prevPosition = $this->findPreviousPosition($table);
                 $img = $this->createImg($position, $prevPosition);
                 $table->setImgSrc($img);
