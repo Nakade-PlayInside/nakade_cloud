@@ -35,10 +35,7 @@ class SubscribeFormModel
 {
     /**
      * @Assert\NotBlank
-     * @Assert\Email(
-     *     message="Die Email {{ value }} ist ungültig.",
-     *     checkMX=true
-     * )
+     * @Assert\Email(message="Die Email {{ value }} ist ungültig.")
      * @UniqueReader()
      */
     public $email;

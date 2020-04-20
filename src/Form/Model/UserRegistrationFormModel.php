@@ -38,10 +38,7 @@ class UserRegistrationFormModel
 {
     /**
      * @Assert\NotBlank
-     * @Assert\Email(
-     *     message="Die Email {{ value }} ist ungültig.",
-     *     checkMX=true
-     * )
+     * @Assert\Email(message="Die Email {{ value }} ist ungültig.")
      * @UniqueUser()
      */
     public $email;
