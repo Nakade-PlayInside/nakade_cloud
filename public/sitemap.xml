@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://nakade.de/</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://nakade.de/about</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://nakade.de/clubs</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://nakade.de/news/subscribe</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://nakade.de/login</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://nakade.de/register</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://nakade.de/imprint</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://nakade.de/contact</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://nakade.de/privacy</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://nakade.de/profile/forgotten</loc>
+  <lastmod>2020-04-20T12:50:14+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
+</urlset>
