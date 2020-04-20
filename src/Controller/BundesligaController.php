@@ -50,52 +50,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BundesligaController extends AbstractController
 {
-    /**
-     * @Route("/bundesliga/test", name="bundesliga_test")
-     */
-    public function actualSeason(TableCalculator $service)
-    {
-//        $league = $this->getDoctrine()->getRepository(BundesligaMatch::class)->findAllMatches();
-//        $relegation = $this->getDoctrine()->getRepository(BundesligaRelegationMatch::class)->findAllMatches();
-//
-//        $matches = array_merge($league, $relegation);
-//
-//        foreach ($matches as $match) {
-//            $service->extract($match);
-//        }
-        $season = $this->getDoctrine()->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => true]);
-        $results = $service->find($season, 5);
-
-        $table = new \App\Tools\Bundesliga\Model\TableModel();
-        foreach ($results as $result) {
-            $team = new TeamModel($result->getHome());
-            $team = $table->getTeam($team);
-            $team->boardPoints += $result->getBoardPointsHome();
-            if (4 === $result->getBoardPointsHome()) {
-                ++$team->points;
-            }
-            if ($result->getBoardPointsHome() > 4) {
-                $team->points += 2;
-            }
-
-            $team = new TeamModel($result->getAway());
-            $team = $table->getTeam($team);
-            $team->boardPoints += $result->getBoardPointsAway();
-            if (4 === $result->getBoardPointsAway()) {
-                ++$team->points;
-            }
-            if ($result->getBoardPointsAway() > 4) {
-                $team->points += 2;
-            }
-        }
-
-        dd($table);
-
-        return $this->render('bundesliga/index.html.twig', [
-        ]);
-    }
-
-    /**
+     /**
      * Team lineup and results.
      *
      * @Route("/bundesliga/actualMatchDay", name="bundesliga_actual_matchDay")
