@@ -31,6 +31,6 @@ class AccountDisabledException extends AccountStatusException
      */
     public function getMessageKey()
     {
-        return "account.disabled";
+        return 'account.disabled';
     }
 }

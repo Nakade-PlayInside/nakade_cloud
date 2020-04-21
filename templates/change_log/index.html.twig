@@ -4,17 +4,21 @@
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .change-log { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .change-log h5 { text-align: left; text-decoration: underline; margin-top: 1em; color: #2e6da4}
+    .change-log ul { flex-wrap: wrap; padding: 0; margin-top:20px; text-align: left; margin-bottom: 1em; margin-left: 1em;}
 </style>
 
-<div class="example-wrapper">
+<div class="change-log">
     <h3>Versionshinweise</h3>
-
-    This friendly message is coming from:
+    <h5>Nakade 3.2.x</h5>
     <ul>
-        <li>Your controller at <code><a href="{{ '/home/mumm/workspace/nakade_cloud_v3/nakade/src/Controller/ChangeLogController.php'|file_link(0) }}">src/Controller/ChangeLogController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/mumm/workspace/nakade_cloud_v3/nakade/templates/change_log/index.html.twig'|file_link(0) }}">templates/change_log/index.html.twig</a></code></li>
+        <li>Upgrade auf Symfony 5.0</li>
+        <li>neu: aktuelle Bundesliga Tabelle</li>
+        <li>neu: Versionshinweise für Nutzer</li>
+        <li>Bugfix: email Validierung bei Registrierung, Newsletter u.a.</li>
+        <li>Bugfix: SEO files robots.txt and sitemap.xml</li>
+        <li>Bugfix: Link auf der Spieltreffseite auf den Newsletter</li>
     </ul>
 </div>
 {% endblock %}
