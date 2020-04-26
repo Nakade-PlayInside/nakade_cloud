@@ -7,12 +7,14 @@
         "ext-curl": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-zip": "*",
         "beelab/recaptcha2-bundle": "^2.1",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/doctrine-migrations-bundle": "2.1.*",
         "doctrine/orm": "2.7.*",
         "easycorp/easy-log-handler": "^1.0",
         "easycorp/easyadmin-bundle": "^2.3",
+        "friendsofsymfony/ckeditor-bundle": "^2.2",
         "laminas/laminas-code": "^3.4",
         "laminas/laminas-eventmanager": "^3.2",
         "sensio/framework-extra-bundle": "^5.4",
@@ -96,6 +98,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
+            "ckeditor:install --clear=drop": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "security-checker security:check": "script"
         },

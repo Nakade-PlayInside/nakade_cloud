@@ -22,14 +22,14 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\ContactMail;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ContactType!
+ * Class CreateNewsType!
  *
  *
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -38,12 +38,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Dr. H.Maerz <holger@nakade.de>
  */
-class NewsType extends AbstractType
+class CreateNewsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('firstName', ChoiceType::class, [])
+                ->add('title', TextType::class, [])
+                ->add('body', CKEditorType::class, ['input_sync' => true])
 
         ;
     }
@@ -51,7 +52,7 @@ class NewsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'data_class' => ContactMail::class,
+               // 'data_class' => ContactMail::class,
         ]);
     }
 }

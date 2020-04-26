@@ -22,18 +22,20 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Services\CoronaNewsDeliverer;
-use App\Services\NewsDeliverer;
-use App\Tools\NextClubMeeting;
 use App\Entity\NewsReader;
 use App\Entity\User;
+use App\Form\CreateNewsType;
 use App\Form\Model\SubscribeFormModel;
 use App\Form\SubscribeType;
 use App\Message\ConfirmSubscription;
+use App\Services\CoronaNewsDeliverer;
+use App\Services\NewsDeliverer;
+use App\Tools\NextClubMeeting;
 use App\Tools\NextWeeklyMeeting;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -46,7 +48,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @copyright   Copyright (C) - 2019 Dr. Holger Maerz
  * @author Dr. H.Maerz <holger@nakade.de>
- *
  *
  * @Route("/news", name="news_")
  */
@@ -198,5 +199,22 @@ class NewsController extends AbstractController
         $this->addFlash('success', 'Der Newsletter wurde storniert!');
 
         return $this->render('news/unsubscribe.html.twig', ['email' => $email]);
+    }
+
+    /**
+     * @Route("/create", name="create")
+     */
+    public function create(Request $request): Response
+    {
+        $form = $this->createForm(CreateNewsType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //todo
+        }
+
+        return $this->render('news/create.html.twig', [
+                'form' => $form->createView(),
+        ]);
     }
 }

@@ -1,20 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello NewsController!{% endblock %}
+{% block title %}Hello NewsCreateController!{% endblock %}
+
 
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .example-wrapper form {  }
+    .example-wrapper form textarea {  }
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello ! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/mumm/workspace/nakade_cloud_v3/nakade/src/Controller/NewsController.php'|file_link(0) }}">src/Controller/NewsController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/mumm/workspace/nakade_cloud_v3/nakade/templates/news/index.html.twig'|file_link(0) }}">templates/news/index.html.twig</a></code></li>
-    </ul>
+    {{ form_start(form) }}
+    {{ form_row(form.title, {
+        label: 'Titel',
+        attr: { placeholder: 'Hier den Titel schreiben', autocomplete: "on" },
+    }) }}
+    {#    {{ form_widget(form, { attr: attr|merge({ 'style': 'display: none' }) }) }}#}
+    <div class="easyadmin-text-editor-wrapper">
+        {{ form_row(form.body, {
+            label: 'Text',
+            attr: { placeholder: 'Hier den Text schreiben', autocomplete: "on" },
+        }) }}
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ 'subscribe.send'|trans({}, 'messages') }}</button>
+    {{ form_end(form) }}
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}
