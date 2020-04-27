@@ -6,4 +6,22 @@ twig:
 fos_ck_editor:
     configs:
         my_config:
-            toolbar: standard
+            toolbar: full
+        news_config:
+            toolbar: "news_toolbar"
+    toolbars:
+        configs:
+            news_toolbar: [ "@templating", "@styles", "@color", "@paragraph", "@editing", "/",
+                            "@document", "@typing", "@links", "@list", "@justify", "@indent" ]
+        items:
+            document: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 'RemoveFormat' ]
+            paragraph: ['Blockquote', 'HorizontalRule']
+            justify: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+            links: ['Link', 'Unlink', 'Image', , 'SpecialChar', 'Smiley']
+            styles: ['Format', 'Font', 'FontSize']
+            color: ['TextColor', 'BGColor']
+            typing: ['Undo', 'Redo']
+            list: ['NumberedList', 'BulletedList']
+            editing: [ 'Find', 'Replace', '-', 'Scayt', '-', 'About' ]
+            indent: ['Outdent', 'Indent']
+            templating: ['Preview', 'Templates']

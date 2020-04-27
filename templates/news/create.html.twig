@@ -1,28 +1,41 @@
 {% extends 'base.html.twig' %}
+{% form_theme form _self %}
 
-{% block title %}Hello NewsCreateController!{% endblock %}
+{% block form_row %}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
 
+    {{- form_label(form, null, {
+        label_attr: { class: 'sr-only' }
+    }) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+{% endblock %}
+
+{% block title %}{{ 'news.create.title'|trans({}, 'messages') }}{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper { margin: 1em auto; max-width: 800px; font: 18px/1.5 sans-serif; }
     .example-wrapper form {  }
     .example-wrapper form textarea {  }
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello ! ✅</h1>
+    <h1>{{ 'news.create.title'|trans({}, 'messages') }}</h1>
 
     {{ form_start(form) }}
     {{ form_row(form.title, {
-        label: 'Titel',
-        attr: { placeholder: 'Hier den Titel schreiben', autocomplete: "on" },
+        label: 'news.create.title.label',
+        attr: { placeholder: 'news.create.title.placeholder', autocomplete: "on" },
     }) }}
-    {#    {{ form_widget(form, { attr: attr|merge({ 'style': 'display: none' }) }) }}#}
     <div class="easyadmin-text-editor-wrapper">
         {{ form_row(form.body, {
-            label: 'Text',
-            attr: { placeholder: 'Hier den Text schreiben', autocomplete: "on" },
+            label: 'news.create.text.label',
+            attr: { placeholder: 'news.create.text.placeholder', autocomplete: "on" },
         }) }}
 
     </div>

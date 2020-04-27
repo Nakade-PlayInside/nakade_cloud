@@ -249,7 +249,14 @@
   "privacy": "Datenschutz"
   "profile": "Profil"
   "register": "Registrieren"
-"news.homepage.hint": "besuche unsere Website"
+"news":
+  "homepage.hint": "besuche unsere Website"
+  "create":
+    "title": "News schreiben"
+    "title.label": "Titel"
+    "title.placeholder": "Hier den Titel reinschreiben"
+    "text.label": "Text"
+    "text.placeholder": "Hier den Text reinschreiben"
 "NewsLetter": "NewsLetter"
 "NewsReader": "NewsReader"
 "profile":

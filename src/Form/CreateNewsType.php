@@ -44,8 +44,7 @@ class CreateNewsType extends AbstractType
     {
         $builder
                 ->add('title', TextType::class, [])
-                ->add('body', CKEditorType::class, ['input_sync' => true])
-
+                ->add('body', CKEditorType::class, ['config_name' => 'news_config'])
         ;
     }
 
