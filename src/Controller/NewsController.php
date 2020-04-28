@@ -25,6 +25,7 @@ namespace App\Controller;
 use App\Entity\NewsReader;
 use App\Entity\User;
 use App\Form\CreateNewsType;
+use App\Form\Model\NewsModel;
 use App\Form\Model\SubscribeFormModel;
 use App\Form\SubscribeType;
 use App\Message\ConfirmSubscription;
@@ -207,7 +208,8 @@ class NewsController extends AbstractController
      */
     public function create(Request $request): Response
     {
-        $form = $this->createForm(CreateNewsType::class);
+        $model = new NewsModel();
+        $form = $this->createForm(CreateNewsType::class, $model);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
