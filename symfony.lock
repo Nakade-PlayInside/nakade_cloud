@@ -111,9 +111,6 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
-    "easycorp/easy-log-handler": {
-        "version": "v1.0.9"
-    },
     "easycorp/easyadmin-bundle": {
         "version": "2.0",
         "recipe": {
