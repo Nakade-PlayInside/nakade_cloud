@@ -250,6 +250,9 @@
   "profile": "Profil"
   "register": "Registrieren"
 "news":
+  "navigation":
+    "subscribe": "abonnieren"
+    "edit": "verfassen"
   "homepage.hint": "besuche unsere Website"
   "create":
     "title": "News schreiben"
