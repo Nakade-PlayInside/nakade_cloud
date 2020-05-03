@@ -255,9 +255,11 @@
     "edit": "verfassen"
   "homepage.hint": "besuche unsere Website"
   "create":
+    "name.label": "Name"
+    "name.placeholder": "Gib der News einen einzigartigen Namen"
     "title": "News schreiben"
     "title.label": "Titel"
-    "title.placeholder": "Hier den Titel reinschreiben"
+    "title.placeholder": "Gib der News eine Überschrift"
     "text.label": "Text"
     "text.placeholder": "Hier den Text reinschreiben"
 "NewsLetter": "NewsLetter"

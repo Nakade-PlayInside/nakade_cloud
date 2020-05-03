@@ -28,16 +28,25 @@
     <h1>{{ 'news.create.title'|trans({}, 'messages') }}</h1>
 
     {{ form_start(form) }}
+    {{ form_row(form.name, {
+        label: 'news.create.name.label',
+        attr: { placeholder: 'news.create.name.placeholder', autocomplete: "on" },
+    }) }}
     {{ form_row(form.title, {
         label: 'news.create.title.label',
         attr: { placeholder: 'news.create.title.placeholder', autocomplete: "on" },
     }) }}
     <div class="easyadmin-text-editor-wrapper">
-        {{ form_row(form.body, {
+        {{ form_row(form.text, {
             label: 'news.create.text.label',
             attr: { placeholder: 'news.create.text.placeholder', autocomplete: "on" },
         }) }}
-
+    </div>
+    <div class="easyadmin-text-editor-wrapper">
+        {{ form_row(form.footNote, {
+            label: 'news.create.text.label',
+            attr: { placeholder: 'news.create.text.placeholder', autocomplete: "on" },
+        }) }}
     </div>
 
     <button type="submit" class="btn btn-primary">{{ 'subscribe.send'|trans({}, 'messages') }}</button>

@@ -9,15 +9,19 @@ fos_ck_editor:
             toolbar: full
         news_config:
             toolbar: "news_toolbar"
+        foot_config:
+            toolbar: "foot_toolbar"
     toolbars:
         configs:
             news_toolbar: [ "@templating", "@styles", "@color", "@paragraph", "@editing", "/",
                             "@document", "@typing", "@links", "@list", "@justify", "@indent" ]
+            foot_toolbar: [ "@document", "@typing", "@color", "@foot_links", "@typing", "@editing" ]
         items:
             document: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 'RemoveFormat' ]
             paragraph: ['Blockquote', 'HorizontalRule']
             justify: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
-            links: ['Link', 'Unlink', 'Image', , 'SpecialChar', 'Smiley']
+            links: ['Link', 'Unlink', 'Image', 'SpecialChar', 'Smiley']
+            foot_links: ['Link', 'Unlink', 'SpecialChar']
             styles: ['Format', 'Font', 'FontSize']
             color: ['TextColor', 'BGColor']
             typing: ['Undo', 'Redo']

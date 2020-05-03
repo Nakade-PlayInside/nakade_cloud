@@ -22,10 +22,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\NewsContent;
 use App\Entity\NewsReader;
 use App\Entity\User;
 use App\Form\CreateNewsType;
-use App\Form\Model\NewsModel;
 use App\Form\Model\SubscribeFormModel;
 use App\Form\SubscribeType;
 use App\Message\ConfirmSubscription;
@@ -36,6 +36,7 @@ use App\Tools\NextWeeklyMeeting;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -208,12 +209,20 @@ class NewsController extends AbstractController
      */
     public function create(Request $request): Response
     {
-        $model = new NewsModel();
+        $model = new NewsContent();
         $form = $this->createForm(CreateNewsType::class, $model);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //todo
+            $content = $form->getData();
+            if (!assert($content instanceof NewsContent)) {
+                throw new UnexpectedTypeException($content, NewsContent::class);
+            }
+
+            $this->getDoctrine()->getManager()->persist($content);
+            //$this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Newsletter hinzugefügt!');
         }
 
         return $this->render('news/create.html.twig', [
