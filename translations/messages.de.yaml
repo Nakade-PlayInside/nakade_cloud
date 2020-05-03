@@ -260,8 +260,12 @@
     "title": "News schreiben"
     "title.label": "Titel"
     "title.placeholder": "Gib der News eine Überschrift"
+    "subject.label": "Betreff"
+    "subject.placeholder": "Gib der email einen Betreff"
     "text.label": "Text"
     "text.placeholder": "Hier den Text reinschreiben"
+    "success": "Newsletter hinzugefügt!"
+    "btn.label": "Abschicken"
 "NewsLetter": "NewsLetter"
 "NewsReader": "NewsReader"
 "profile":

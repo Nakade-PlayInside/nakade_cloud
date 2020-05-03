@@ -15,7 +15,7 @@ fos_ck_editor:
         configs:
             news_toolbar: [ "@templating", "@styles", "@color", "@paragraph", "@editing", "/",
                             "@document", "@typing", "@links", "@list", "@justify", "@indent" ]
-            foot_toolbar: [ "@document", "@typing", "@color", "@foot_links", "@typing", "@editing" ]
+            foot_toolbar: [ "@document", "@typing", "@foot_links", "@typing", "@editing" ]
         items:
             document: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 'RemoveFormat' ]
             paragraph: ['Blockquote', 'HorizontalRule']

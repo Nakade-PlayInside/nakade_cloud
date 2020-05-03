@@ -222,7 +222,7 @@ class NewsController extends AbstractController
             $this->getDoctrine()->getManager()->persist($content);
             //$this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Newsletter hinzugefügt!');
+            $this->addFlash('success', 'news.create.success');
         }
 
         return $this->render('news/create.html.twig', [

@@ -32,6 +32,10 @@
         label: 'news.create.name.label',
         attr: { placeholder: 'news.create.name.placeholder', autocomplete: "on" },
     }) }}
+    {{ form_row(form.subject, {
+        label: 'news.create.subject.label',
+        attr: { placeholder: 'news.create.subject.placeholder', autocomplete: "on" },
+    }) }}
     {{ form_row(form.title, {
         label: 'news.create.title.label',
         attr: { placeholder: 'news.create.title.placeholder', autocomplete: "on" },
@@ -49,7 +53,7 @@
         }) }}
     </div>
 
-    <button type="submit" class="btn btn-primary">{{ 'subscribe.send'|trans({}, 'messages') }}</button>
+    <button type="submit" class="btn btn-primary">{{ 'news.create.btn.label'|trans({}, 'messages') }}</button>
     {{ form_end(form) }}
 </div>
 {% endblock %}
