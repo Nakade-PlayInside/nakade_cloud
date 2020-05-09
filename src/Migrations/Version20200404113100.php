@@ -34,23 +34,23 @@ final class Version20200404113100 extends AbstractMigration implements Container
     public function postUp(Schema $schema): void
     {
         /** @var EntityManager $manager */
-        $manager = $this->container->get('doctrine.orm.entity_manager');
-        $allTables = $manager->getRepository(BundesligaTable::class)->findBy(['bundesligaSeason' => null]);
-        $season = $manager->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => 1]);
-
-        foreach ($allTables as $table) {
-            //season
-            $table->setBundesligaSeason($season);
-
-            //team
-            $teamName = $table->getTeam();
-            if (false !== strpos($teamName, 'Leipzig Glueck Auf!')) {
-                $teamName = 'Leipzig Glück Auf!';
-            }
-            $team = $manager->getRepository(BundesligaTeam::class)->findOneBy(['name' => $teamName]);
-            $table->setBundesligaTeam($team);
-        }
-        $manager->flush();
+//        $manager = $this->container->get('doctrine.orm.entity_manager');
+//        $allTables = $manager->getRepository(BundesligaTable::class)->findBy(['bundesligaSeason' => null]);
+//        $season = $manager->getRepository(BundesligaSeason::class)->findOneBy(['actualSeason' => 1]);
+//
+//        foreach ($allTables as $table) {
+//            //season
+//            $table->setBundesligaSeason($season);
+//
+//            //team
+//            $teamName = $table->getTeam();
+//            if (false !== strpos($teamName, 'Leipzig Glueck Auf!')) {
+//                $teamName = 'Leipzig Glück Auf!';
+//            }
+//            $team = $manager->getRepository(BundesligaTeam::class)->findOneBy(['name' => $teamName]);
+//            $table->setBundesligaTeam($team);
+//        }
+//        $manager->flush();
     }
 
     public function down(Schema $schema): void

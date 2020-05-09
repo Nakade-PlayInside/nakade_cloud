@@ -37,8 +37,6 @@ use App\Services\Model\TableModel;
 use App\Services\ResultModelCreator;
 use App\Services\TeamResultsModelCreator;
 use App\Services\TeamStatsService;
-use App\Tools\Bundesliga\Model\TeamModel;
-use App\Tools\Bundesliga\TableCalculator;
 use App\Tools\PlayerStats;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,7 +48,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BundesligaController extends AbstractController
 {
-     /**
+    /**
      * Team lineup and results.
      *
      * @Route("/bundesliga/actualMatchDay", name="bundesliga_actual_matchDay")
@@ -60,6 +58,10 @@ class BundesligaController extends AbstractController
     public function actualMatchDay(Request $request, ResultModelCreator $modelCreator)
     {
         $model = $modelCreator->create();
+        if (!$model) {
+            return $this->render('default/about.html.twig');
+        }
+
         $form = $this->createForm(CaptainResultInputType::class, $model);
         $form->handleRequest($request);
 
@@ -106,33 +108,34 @@ class BundesligaController extends AbstractController
      */
     public function actualResults(Request $request, TeamResultsModelCreator $modelCreator, BundesligaTableCreator $tableCreator, BundesligaTableUpdater $tableUpdater)
     {
-            $model = $modelCreator->create();
-            $form = $this->createForm(CaptainTeamResultsType::class, $model);
-            $form->handleRequest($request);
+        $model = $modelCreator->create();
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $model = $form->getData();
-                if (!assert($model instanceof TeamResultsModel)) {
-                    throw new UnexpectedTypeException($model, TeamResultsModel::class);
-                }
+        $form = $this->createForm(CaptainTeamResultsType::class, $model);
+        $form->handleRequest($request);
 
-                foreach ($model->getResults() as $result) {
-                    $this->getDoctrine()->getManager()->persist($result);
-                }
-
-                $tables = $tableCreator->create($model->getResults());
-                $tables = $tableUpdater->update($tables);
-                foreach ($tables as $table) {
-                    $this->getDoctrine()->getManager()->persist($table);
-                }
-
-                $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'bundesliga.actual.matchDay.update.success');
-
-                return $this->redirect($request->getUri());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $model = $form->getData();
+            if (!assert($model instanceof TeamResultsModel)) {
+                throw new UnexpectedTypeException($model, TeamResultsModel::class);
             }
 
-            return $this->render(
+            foreach ($model->getResults() as $result) {
+                $this->getDoctrine()->getManager()->persist($result);
+            }
+
+            $tables = $tableCreator->create($model->getResults());
+            $tables = $tableUpdater->update($tables);
+            foreach ($tables as $table) {
+                $this->getDoctrine()->getManager()->persist($table);
+            }
+
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'bundesliga.actual.matchDay.update.success');
+
+            return $this->redirect($request->getUri());
+        }
+
+        return $this->render(
                     'bundesliga/form.matchday.results.html.twig',
                     [
                             'form' => $form->createView(),

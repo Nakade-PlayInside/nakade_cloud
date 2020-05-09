@@ -32,17 +32,17 @@ final class Version20191213114235 extends AbstractMigration implements Container
     public function postUp(Schema $schema): void
     {
         /** @var EntityManager $manager */
-        $manager = $this->container->get('doctrine.orm.entity_manager');
-        $allTables = $manager->getRepository(BundesligaTable::class)->findAll();
-        foreach ($allTables as $table) {
-            if (empty($table->getImgSrc())) {
-                continue;
-            }
-            $parts = pathinfo($table->getImgSrc());
-            $basename = $parts['basename'];
-            $table->setImgSrc($basename);
-        }
-        $manager->flush();
+//        $manager = $this->container->get('doctrine.orm.entity_manager');
+//        $allTables = $manager->getRepository(BundesligaTable::class)->findAll();
+//        foreach ($allTables as $table) {
+//            if (empty($table->getImgSrc())) {
+//                continue;
+//            }
+//            $parts = pathinfo($table->getImgSrc());
+//            $basename = $parts['basename'];
+//            $table->setImgSrc($basename);
+//        }
+//        $manager->flush();
     }
 
     public function down(Schema $schema): void
