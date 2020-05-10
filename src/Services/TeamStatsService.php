@@ -62,6 +62,11 @@ class TeamStatsService
             }
         }
         $lastMatchDay = $this->findLastMatchDay($season);
+        if (!$lastMatchDay) {
+            $found = $this->manager->getRepository(BundesligaResults::class)->findLastMatchDay($season);
+            $lastMatchDay = $found ? $found : '9';
+        }
+
         $teamStats->setLastMatchDay($lastMatchDay);
 
         return $teamStats;

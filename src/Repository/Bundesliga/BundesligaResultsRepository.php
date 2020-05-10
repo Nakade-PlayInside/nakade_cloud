@@ -179,6 +179,24 @@ class BundesligaResultsRepository extends ServiceEntityRepository
         }
     }
 
+    //used in ResultsCatcher
+    //here you must use MIN
+    public function findLastMatchDay(BundesligaSeason $season): ?string
+    {
+        try {
+            return $this->createQueryBuilder('r')
+                    ->select('MAX(r.matchDay) as lastMatchDay')
+                    ->innerJoin('r.season', 's')
+                    ->andWhere('s.id=:id')
+                    ->setParameter('id', $season)
+                    ->getQuery()
+                    ->getSingleScalarResult()
+                    ;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     /**
      * @return BundesligaResults[] array
      */
